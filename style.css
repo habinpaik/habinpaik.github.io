@@ -1,0 +1,226 @@
+/* ============================================================
+   Habin Paik — personal site
+   Editorial flow. Black band only on Home. No rules except the
+   requested reporting table. Free photo utilities. KO=sans, EN=serif.
+   ============================================================ */
+
+:root {
+  --paper: #FBFBF9;
+  --ink:   #1A1A1A;
+  --dark:  #141414;
+  --stone: #6B6B66;
+  --line:  #E4E3DE;
+  --link:  #7C2128;
+
+  --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --sans:  "Pretendard", -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+
+  --s1: 0.25rem; --s2: 0.5rem; --s3: 0.875rem; --s4: 1.25rem;
+  --s5: 1.75rem; --s6: 2.5rem; --s7: 3.5rem; --s8: 5rem;
+
+  --t-small: 0.9rem;
+  --t-body:  1.0625rem;
+
+  --page-max: 62rem;
+  --gutter: clamp(1.25rem, 4vw, 3rem);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scrollbar-gutter: stable; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: var(--t-body);
+  line-height: 1.6;
+  font-feature-settings: "onum" 1, "kern" 1;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+:lang(ko), .ko { font-family: var(--sans); font-feature-settings: normal; }
+
+/* Secondary metadata (dates, authors, side-notes) in sans.
+   Photo captions deliberately excluded — they stay serif. */
+.date, .years, .fact .sep, .book .a,
+.work .desc, .table .cell .desc, .entry .date, .table .cell .date {
+  font-family: var(--sans);
+  font-feature-settings: normal;
+}
+
+.wrap { max-width: var(--page-max); margin-inline: auto; padding-inline: var(--gutter); }
+
+/* ---------- Header (sticky, translucent, blurred) ---------- */
+.site-head {
+  position: sticky; top: 0; z-index: 50;
+  background: color-mix(in srgb, var(--paper) 78%, transparent);
+  backdrop-filter: saturate(1.15) blur(10px);
+  -webkit-backdrop-filter: saturate(1.15) blur(10px);
+}
+.site-head .bar {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: var(--s4); padding-block: var(--s3);
+}
+.wordmark { font-family: var(--serif); font-size: var(--t-body); font-weight: 600; letter-spacing: -0.01em; color: var(--ink); text-decoration: none; }
+.nav { display: flex; gap: var(--s4); font-size: var(--t-body); }
+.nav a { color: var(--ink); text-decoration: none; font-weight: 400; }
+.nav a:hover { color: var(--link); }
+.nav a[aria-current="page"] { font-weight: 700; }   /* current = bold, not colored */
+
+/* affiliation line above the band (home) — same hierarchy as body */
+.affil { font-family: var(--serif); font-size: var(--t-body); line-height: 1.6; color: var(--ink); margin: var(--s7) 0 0; }
+
+/* space between the affiliation line and the black banner */
+.identity-band { margin-top: var(--s6); }
+
+/* bio block below the band (home) — each <p> auto-spaces */
+.bio { font-size: var(--t-body); line-height: 1.6; max-width: 42rem; margin: 0 0 var(--s7); }
+.bio p { margin: 0 0 var(--s3); }
+.bio p:last-child { margin-bottom: 0; }
+
+/* ---------- Identity band (HOME ONLY), tighter ---------- */
+.identity-band { background: var(--dark); color: #F4F2EC; }
+.identity-band .wrap { padding-block: var(--s5); }
+.identity-band p {
+  margin: 0;
+  font-size: clamp(1.3rem, 2.6vw, 1.75rem);
+  line-height: 1.35;
+  max-width: 42rem;
+  letter-spacing: -0.01em;
+}
+.identity-band .ko { color: #F4F2EC; }
+
+/* short plain page intro for non-home pages */
+.intro { font-size: var(--t-body); line-height: 1.6; color: var(--ink); max-width: 42rem; margin: 0 0 var(--s7); }
+
+main { padding-block: var(--s7) var(--s8); }
+
+h2.section-title {
+  font-family: var(--sans);
+  font-size: var(--t-body);
+  font-weight: 600;
+  margin: 0 0 var(--s4);
+}
+section + section { margin-top: var(--s8); }
+
+p { margin: 0 0 var(--s3); }
+p:last-child { margin-bottom: 0; }
+a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+
+/* ---------- Home: two columns, ID photo on the right ---------- */
+.home-top { display: grid; grid-template-columns: 1fr auto; gap: var(--s6); align-items: start; }
+.id-photo { width: clamp(140px, 16vw, 190px); }
+.id-photo img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; filter: grayscale(1); background: var(--line); display: block; }
+@media (max-width: 40rem) {
+  .home-top { grid-template-columns: 1fr; }
+  .id-photo { order: -1; width: 150px; }
+}
+
+/* facts */
+.fact { line-height: 1.6; margin: 0; }
+.fact .primary { font-weight: 600; }
+.fact .sep { color: var(--stone); }        /* ", " separator, single */
+.fact .years { color: var(--stone); }
+.linklist { list-style: none; margin: 0; padding: 0; display: flex; gap: var(--s4); flex-wrap: wrap; }
+
+/* ---------- Featured entries (important reports/projects) ---------- */
+.entry { margin-bottom: var(--s6); }
+.entry:last-child { margin-bottom: 0; }
+.entry .head { display: flex; align-items: baseline; gap: var(--s3); flex-wrap: wrap; }
+.entry h3 { font-size: 1.375rem; font-weight: 600; line-height: 1.2; margin: 0; letter-spacing: -0.01em; }
+.entry h3 a { color: var(--ink); text-decoration: none; }
+.entry h3 a:hover { color: var(--link); }
+.entry .date { color: var(--stone); font-size: var(--t-small); white-space: nowrap; }
+.entry .desc { margin: var(--s2) 0 0; max-width: 42rem; }
+
+/* ---------- Reporting TABLE (minor reports): 4 cols, lines allowed ---------- */
+.table {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--line);
+}
+.table .cell {
+  border-bottom: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  padding: var(--s3);
+}
+/* kill outer padding so content sits flush with the reading column edges */
+.table .cell:nth-child(4n+1) { padding-left: 0; }
+.table .cell:nth-child(4n)   { padding-right: 0; }
+.table .cell:nth-child(4n) { border-right: none; }
+.table .cell img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; filter: grayscale(1); background: var(--line); display: block; margin-bottom: var(--s2); }
+.table .cell .th { display: flex; align-items: baseline; gap: var(--s2); justify-content: space-between; }
+.table .cell .th a { color: var(--ink); text-decoration: none; font-weight: 600; font-size: 1rem; line-height: 1.25; }
+.table .cell .th a:hover { color: var(--link); }
+.table .cell .date { color: var(--stone); font-size: 0.8rem; white-space: nowrap; }
+.table .cell .desc { color: var(--stone); font-size: var(--t-small); margin: var(--s2) 0 0; line-height: 1.45; }
+@media (max-width: 52rem) {
+  .table { grid-template-columns: repeat(2, 1fr); }
+  .table .cell:nth-child(4n){border-right:1px solid var(--line);}
+  .table .cell:nth-child(2n){border-right:none;}
+  .table .cell { padding-left: var(--s3); padding-right: var(--s3); }
+  .table .cell:nth-child(2n+1) { padding-left: 0; }
+  .table .cell:nth-child(2n)   { padding-right: 0; }
+}
+@media (max-width: 30rem) {
+  .table { grid-template-columns: 1fr; }
+  .table .cell{border-right:none; padding-left:0; padding-right:0;}
+}
+
+/* ---------- Research bookshelf (cover grid) ---------- */
+.shelf {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+  gap: var(--s5) var(--s4);
+}
+.book { text-decoration: none; color: inherit; }
+.book img { width: 100%; aspect-ratio: 2 / 3; object-fit: cover; background: var(--line); display: block; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+.book .t { display: block; margin-top: var(--s2); font-weight: 600; font-size: 1rem; line-height: 1.2; }
+.book .a { display: block; color: var(--stone); font-size: var(--t-small); }
+
+/* ---------- Portfolio grid ---------- */
+.works {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: var(--s6) var(--s5);
+}
+.work { }
+.work .th { display: flex; align-items: baseline; gap: var(--s2); justify-content: space-between; }
+.work .th a { color: var(--ink); text-decoration: none; font-weight: 600; font-size: 1.125rem; line-height: 1.2; }
+.work .th a:hover { color: var(--link); }
+.work .date { color: var(--stone); font-size: var(--t-small); white-space: nowrap; }
+.work .desc { color: var(--stone); font-size: var(--t-small); margin: var(--s2) 0 0; }
+
+/* ---------- Free photo utilities (Journalism etc.) ---------- */
+figure.ph { margin: var(--s6) 0; }
+figure.ph img { width: 100%; display: block; filter: grayscale(1); background: var(--line); }
+figure.ph figcaption { font-size: var(--t-small); color: var(--stone); margin-top: var(--s2); }
+figure.ph.wide  { width: min(84rem, 96vw); margin-left: 50%; transform: translateX(-50%); }
+figure.ph.full  { width: 100vw; margin-left: 50%; transform: translateX(-50%); }
+figure.ph.wide img, figure.ph.full img { max-height: 78vh; object-fit: cover; }
+figure.ph.left  { float: left;  width: 46%; margin: var(--s1) var(--s5) var(--s4) 0; }
+figure.ph.right { float: right; width: 46%; margin: var(--s1) 0 var(--s4) var(--s5); }
+figure.ph.small.left, figure.ph.small.right { width: 32%; }
+.clear { clear: both; }
+figure.ph.tall:not(.wide):not(.full) img { aspect-ratio: 2 / 3; object-fit: cover; }
+figure.ph.land:not(.wide):not(.full) img { aspect-ratio: 3 / 2; object-fit: cover; }
+figure.ph.pano img { aspect-ratio: 16 / 6; object-fit: cover; }
+
+/* ---------- Footer (white, rolled back) ---------- */
+.site-foot { margin-top: var(--s8); background: var(--paper); }
+.site-foot .bar {
+  display: flex; justify-content: space-between; align-items: baseline;
+  gap: var(--s4); padding-block: var(--s5); font-size: var(--t-small); color: var(--stone);
+}
+.site-foot a { color: var(--stone); }
+
+@media (max-width: 40rem) {
+  figure.ph.left, figure.ph.right,
+  figure.ph.small.left, figure.ph.small.right { float: none; width: 100%; margin: var(--s5) 0; }
+  .site-head .bar { flex-direction: column; gap: var(--s2); align-items: flex-start; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+a:focus-visible { outline: 2px solid var(--link); outline-offset: 3px; }
