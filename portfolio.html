@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portfolio — Habin Paik</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-head">
+  <div class="wrap bar">
+    <a class="wordmark" href="index.html">Habin Paik <span class="ko" lang="ko">백하빈</span></a>
+    <nav class="nav" aria-label="Primary">
+      <a href="research.html">Research</a>
+      <a href="journalism.html">Journalism</a>
+      <a href="portfolio.html" aria-current="page">Portfolio</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <p class="epigraph">All is uncertain, all is possible.<br><span lang="ko">모든 것이 불확실하고 모든 것이 가능하다</span></p>
+
+  <p>Projects and other work I'm glad to have made — described a little more fully than a list would allow.</p>
+
+  <section>
+    <h2 class="section-title">A project title <span class="years">2025</span></h2>
+    <p>What you built, the role you played, and the result. This reads as running prose, so you can give context — the problem, your approach, what came of it — rather than squeezing it into one line.</p>
+    <p>Add a second paragraph if the project deserves it, and a link where readers can see more.</p>
+  </section>
+
+  <section>
+    <h2 class="section-title">A second project <span class="years">2024</span></h2>
+    <p>A description in your own words. Keep it as long or short as the work warrants; the spacing between projects stays consistent either way.</p>
+  </section>
+
+  <section>
+    <h2 class="section-title">A third project <span class="years">2023</span></h2>
+    <p>Another entry. Because these are sections rather than grid cells, the page reads top to bottom like an article, subheading then prose, subheading then prose.</p>
+  </section>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap bar">
+    <span>© 2026 Habin Paik</span>
+    <span><a href="mailto:downbeen100@korea.ac.kr">downbeen100@korea.ac.kr</a></span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var head = document.querySelector('.site-head');
+  function onScroll() {
+    if (window.scrollY > 8) head.classList.add('scrolled');
+    else head.classList.remove('scrolled');
+  }
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+})();
+</script>
+</body>
+</html>

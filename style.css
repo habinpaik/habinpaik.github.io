@@ -1,0 +1,371 @@
+/* ============================================================
+   Habin Paik — personal site
+   Editorial flow. Black band only on Home. KO+EN serif (Noto Serif KR),
+   metadata in sans (Pretendard). One body-text rule, one text width.
+   ============================================================ */
+
+:root {
+  --paper: #FBFBF9;
+  --ink:   #1A1A1A;
+  --dark:  #141414;
+  --stone: #6B6B66;
+  --line:  #E4E3DE;
+  --link:  #7C2128;
+
+  --serif: "Source Serif 4", "Noto Serif KR", Georgia, "Times New Roman", serif;
+  --serif-ko: "Noto Serif KR", Georgia, serif;
+  --sans:  "Pretendard", -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+
+  --s1: 0.25rem; --s2: 0.5rem; --s3: 0.875rem; --s4: 1.25rem;
+  --s5: 1.75rem; --s6: 2.5rem; --s7: 3.5rem; --s8: 5rem;
+
+  --t-small: 0.85rem;
+  --t-body:  1.075rem;
+
+  --page-max: 62rem;      /* full content width (grids, tables, wide photos) */
+  --measure:  34rem;      /* the single text measure — ALL body copy uses this */
+  --gutter: clamp(1.25rem, 4vw, 3rem);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scrollbar-gutter: stable; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: var(--t-body);
+  line-height: 1.6;
+  letter-spacing: -0.003em;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  font-feature-settings: "onum" 1, "kern" 1;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+:lang(ko), .ko { font-family: var(--sans); font-feature-settings: normal; }
+
+/* Secondary metadata (dates, authors, years) in sans. Captions stay serif. */
+.date, .years, .fact .sep, .book .a,
+.work .desc, .table .cell .desc, .entry .date, .table .cell .date {
+  font-family: var(--sans);
+  font-feature-settings: normal;
+}
+
+.wrap { max-width: var(--page-max); margin-inline: auto; padding-inline: var(--gutter); }
+
+/* One content column width everywhere: header, main, footer, home blocks.
+   Wide/full photos and grids break out of this on their own. */
+main.wrap, .site-head .wrap, .site-foot .wrap { max-width: 46rem; }
+.lead, .identity-band .wrap, .bio { max-width: 46rem; margin-inline: auto; }
+
+/* ============================================================
+   ONE body-text rule. Every paragraph of running copy is just <p>.
+   No .intro / .bio / .affil variants — they were all this.
+   ============================================================ */
+p { margin: 0 0 var(--s3); }
+p:last-child { margin-bottom: 0; }
+a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+
+/* ---------- Header (sticky; state changes on scroll) ---------- */
+.site-head {
+  position: sticky; top: 0; z-index: 50;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+  transition: background .25s ease, border-color .25s ease, backdrop-filter .25s ease;
+}
+/* once the page is scrolled a little, become translucent + blurred, drop the line */
+.site-head.scrolled {
+  background: color-mix(in srgb, var(--paper) 72%, transparent);
+  border-bottom-color: transparent;
+  backdrop-filter: saturate(1.15) blur(10px);
+  -webkit-backdrop-filter: saturate(1.15) blur(10px);
+}
+.site-head .bar {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: var(--s4); padding-block: var(--s3);
+}
+.wordmark { font-family: var(--serif); font-size: var(--t-body); font-weight: 700; letter-spacing: -0.01em; color: var(--ink); text-decoration: none; }
+.nav { display: flex; gap: var(--s4); font-size: var(--t-body); }
+.nav a { color: var(--ink); text-decoration: none; font-weight: 400; }
+.nav a:hover { color: var(--link); }
+.nav a[aria-current="page"] { font-weight: 700; }
+
+/* the leading top block (home) shares the plain <p> rule */
+.lead { padding-top: var(--s7); padding-bottom: var(--s7); }
+.bio { margin-bottom: var(--s7); }
+
+/* space between the leading block and the black banner (home) */
+.identity-band { margin-top: 0; }
+
+/* ---------- Identity band (HOME ONLY) ---------- */
+.identity-band { background: var(--dark); color: #F4F2EC; }
+.identity-band .wrap { padding-block: var(--s5); }
+.identity-band p {
+  margin: 0;
+  font-size: clamp(1.3rem, 2.6vw, 1.75rem);
+  line-height: 1.6;
+  max-width: var(--measure);
+  letter-spacing: -0.01em;
+}
+.identity-band .ko { color: #F4F2EC; }
+
+main { padding-block: var(--s7) var(--s8); }
+
+h2.section-title {
+  font-family: var(--sans);
+  font-size: var(--t-body);
+  font-weight: 600;
+  margin: 0 0 var(--s4);
+}
+section { margin-top: var(--s7); }
+/* a lead paragraph before the first section (research/journalism/portfolio) */
+main > p:first-child { margin-bottom: var(--s7); }
+
+/* ---------- Home: bio beside ID photo ---------- */
+.bio-row { display: grid; grid-template-columns: 1fr auto; gap: var(--s5); align-items: start; margin-bottom: var(--s7); }
+.bio-row .bio { margin-bottom: 0; max-width: none; }
+.id-photo { width: 150px; }
+.id-photo img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; filter: grayscale(1); background: var(--line); display: block; }
+.home-top { display: block; }
+@media (max-width: 34rem) {
+  .bio-row { grid-template-columns: 1fr; }
+  .id-photo { order: -1; width: 140px; }
+}
+
+/* facts */
+.fact { line-height: 1.6; margin: 0; }
+.fact .primary { font-weight: 600; }
+.fact .sep { color: var(--stone); }
+.fact .years { color: var(--stone); font-size: var(--t-small); }
+.linklist { list-style: none; margin: 0; padding: 0; display: flex; gap: var(--s2) var(--s4); flex-wrap: wrap; }
+
+/* ---------- Featured entries ---------- */
+.entry { margin-bottom: var(--s6); }
+.entry:last-child { margin-bottom: 0; }
+.entry .head { display: flex; align-items: baseline; gap: var(--s3); flex-wrap: wrap; }
+.entry h3 { font-family: var(--serif-ko); font-size: 1.3rem; font-weight: 400; line-height: 1.6; margin: 0; letter-spacing: -0.02em; word-break: keep-all; }
+.entry h3 a { color: var(--ink); text-decoration: none; }
+.entry h3 a:hover { color: var(--link); }
+.entry .date { color: var(--stone); font-size: var(--t-small); white-space: nowrap; }
+.entry .desc { margin: var(--s2) 0 0; }
+/* opt-in divider: centered in the EXISTING gap, adds no extra height.
+   Entries above have --s6 bottom margin; the rule sits in that gap. */
+/* opt-in divider centred in the existing --s6 gap with no net extra height:
+   pull up half the gap, then push the next entry down half the gap. */
+hr.rule { border: 0; border-top: 1px solid var(--line); height: 0; margin: calc(var(--s6) / -2) 0 calc(var(--s6) / 2); }
+
+/* centred closing line (portfolio) */
+main > p.epigraph:first-child { margin-bottom: var(--s3); }
+.epigraph {
+  text-align: left; max-width: none;
+  margin: 0 0 var(--s3); color: var(--ink);
+  line-height: 1.6;
+}
+.epigraph .ko { color: var(--stone); font-size: 0.95em; }
+/* date — description separator */
+.entry .desc .date + .dash { color: var(--stone); }
+.dash { color: var(--stone); }
+
+/* ---------- Key reporting TABLE: 3 cols, equal cells ---------- */
+/* Gap-based grid so every cell (and its image) is identical width. */
+.table {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--s5) var(--s4);
+}
+.table .cell { position: relative; }
+/* vertical divider centred in the column gap; not after the last col in a row */
+.table .cell::after {
+  content: ""; position: absolute; top: 0; bottom: 0;
+  right: calc(var(--s4) / -2); width: 1px; background: var(--line);
+}
+.table .cell:nth-child(3n)::after { display: none; }  /* no line on the right edge */
+.table .cell img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; filter: grayscale(1); background: var(--line); display: block; margin-bottom: var(--s2); }
+.table .cell .th { }
+.table .cell .th a { font-family: var(--serif-ko); color: var(--ink); text-decoration: none; font-weight: 400; font-size: 1.125rem; line-height: 1.6; letter-spacing: -0.02em; }
+.table .cell .th a:hover { color: var(--link); }
+.table .cell .desc { color: var(--stone); font-size: var(--t-small); margin: var(--s2) 0 0; line-height: 1.6; max-width: none; }
+.table .cell .date { color: var(--stone); font-size: var(--t-small); display: block; margin-top: var(--s1); }
+@media (max-width: 52rem) {
+  .table { grid-template-columns: repeat(2, 1fr); }
+  .table .cell:nth-child(3n)::after { display: block; }
+  .table .cell:nth-child(2n)::after { display: none; }
+}
+@media (max-width: 30rem) {
+  .table { grid-template-columns: 1fr; }
+  .table .cell::after { display: none; }
+}
+
+/* ---------- Research bookshelf ----------
+   Tinted panel. Four covers per row, the four together spanning the text
+   column width. "더보기" appends more rows below; a toast shows "+N". */
+.shelf-panel {
+  background: #EDEAE1;
+  padding-block: var(--s4);
+  margin-top: var(--s4);
+  position: relative;
+}
+/* the panel is full-bleed but the shelf grid is capped to the text column */
+.shelf-panel {
+  width: 100vw; margin-left: 50%; transform: translateX(-50%);
+}
+.shelf-wrap { max-width: 46rem; margin-inline: auto; padding-inline: var(--gutter); }
+
+.shelf {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--s5) var(--s4);
+}
+.book { text-decoration: none; color: inherit; }
+.book .cover { position: relative; }
+.book img {
+  width: 100%; aspect-ratio: 2 / 3; object-fit: cover; background: var(--line);
+  display: block;
+}
+.book .tag {
+  position: absolute; top: var(--s2); left: var(--s2);
+  font-family: var(--sans); font-size: 0.7rem; font-weight: 600;
+  color: #fff; background: rgba(20,20,20,.72);
+  padding: 2px 7px; border-radius: 2px; letter-spacing: .02em;
+}
+.book .t { display: block; margin-top: var(--s2); color: var(--stone); font-size: var(--t-small); line-height: 1.6; font-family: var(--sans); }
+
+/* books past the first row start hidden; revealed downward by 더보기 */
+.book.is-hidden { display: none; }
+
+.shelf-more { text-align: center; margin-top: var(--s5); }
+.shelf-more button {
+  font-family: var(--sans); font-size: var(--t-small); font-weight: 600;
+  color: var(--ink); background: transparent;
+  border: 1px solid #CFC9BB; border-radius: 999px;
+  padding: var(--s2) var(--s4); cursor: pointer; transition: background .15s ease;
+}
+.shelf-more button:hover { background: #E3DFD3; }
+.shelf-more button[hidden] { display: none; }
+
+.shelf-toast {
+  position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  z-index: 200;
+  font-family: var(--sans); font-weight: 700; font-size: 1.5rem;
+  color: #fff; background: rgba(20,20,20,.9);
+  padding: var(--s4) var(--s6); border-radius: 999px;
+  opacity: 0; transition: opacity .2s ease; pointer-events: none;
+}
+.shelf-toast.show { opacity: 1; }
+
+@media (max-width: 34rem) { .shelf { grid-template-columns: repeat(3, 1fr); } }
+
+/* ---------- Portfolio grid ---------- */
+.works {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: var(--s6) var(--s5);
+}
+.work .th { display: flex; align-items: baseline; gap: var(--s2); justify-content: space-between; }
+.work .th a { color: var(--ink); text-decoration: none; font-weight: 400; font-size: 1.3rem; line-height: 1.6; }
+.work .th a:hover { color: var(--link); }
+.work .date { color: var(--stone); font-size: var(--t-small); white-space: nowrap; }
+.work .desc { color: var(--stone); font-size: var(--t-small); margin: var(--s2) 0 0; max-width: none; }
+
+/* ---------- Free photo utilities (Journalism etc.) ---------- */
+figure.ph { margin: var(--s6) 0; }
+figure.ph img { width: 100%; display: block; filter: grayscale(1); background: var(--line); }
+figure.ph figcaption { font-size: var(--t-small); color: var(--stone); margin-top: var(--s2); }
+figure.ph.wide  { width: min(84rem, 96vw); margin-left: 50%; transform: translateX(-50%); }
+figure.ph.full  { width: 100vw; margin-left: 50%; transform: translateX(-50%); }
+figure.ph.wide img, figure.ph.full img { max-height: 78vh; object-fit: cover; }
+figure.ph.left  { float: left;  width: 46%; margin: var(--s1) var(--s5) var(--s4) 0; }
+figure.ph.right { float: right; width: 46%; margin: var(--s1) 0 var(--s4) var(--s5); }
+figure.ph.small.left, figure.ph.small.right { width: 32%; }
+.clear { clear: both; }
+figure.ph.tall:not(.wide):not(.full) img { aspect-ratio: 2 / 3; object-fit: cover; }
+figure.ph.land:not(.wide):not(.full) img { aspect-ratio: 3 / 2; object-fit: cover; }
+figure.ph.pano img { aspect-ratio: 16 / 6; object-fit: cover; }
+
+/* two or three photos splitting the width, flush together */
+figure.ph.duo, figure.ph.trio { display: grid; gap: var(--s2); }
+figure.ph.duo  { grid-template-columns: 1fr 1fr; }
+figure.ph.trio { grid-template-columns: 1fr 1fr 1fr; }
+figure.ph.duo img, figure.ph.trio img { aspect-ratio: 3 / 4; object-fit: cover; margin: 0; }
+figure.ph.duo figcaption, figure.ph.trio figcaption { grid-column: 1 / -1; }
+@media (max-width: 34rem) { figure.ph.trio { grid-template-columns: 1fr 1fr; } }
+
+/* text laid over the image (bottom-left), for a dramatic titled photo */
+figure.ph.overlay { position: relative; }
+figure.ph.overlay img { aspect-ratio: 16 / 9; object-fit: cover; }
+figure.ph.overlay figcaption {
+  position: absolute; left: 0; right: 0; bottom: 0; margin: 0;
+  color: #fff; padding: var(--s5) var(--s4) var(--s3);
+  font-size: 1.3rem; line-height: 1.6;
+  background: linear-gradient(to top, rgba(0,0,0,.72), rgba(0,0,0,0));
+}
+
+/* two clickable overlay cards side by side: image + title on it, links out */
+.overlay-duo { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s4); margin: var(--s6) 0; }
+.overlay-card { position: relative; display: block; text-decoration: none; overflow: hidden; }
+.overlay-card img {
+  width: 100%; aspect-ratio: 3 / 4; object-fit: cover; filter: grayscale(1);
+  background: var(--line); display: block;
+  transition: transform .4s ease;
+}
+.overlay-card:hover img { transform: scale(1.05); }
+.overlay-card .cap {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  color: #fff; padding: var(--s7) var(--s4) var(--s4);
+  background: linear-gradient(to top, rgba(0,0,0,.82), rgba(0,0,0,0));
+}
+.overlay-card .cap .title {
+  display: block;
+  font-family: var(--serif-ko); font-size: 1.3rem; font-weight: 400;
+  line-height: 1.6; letter-spacing: -0.02em; word-break: keep-all;
+  transition: color .15s ease;
+}
+.overlay-card .cap .meta {
+  display: block; margin-top: var(--s2);
+  font-family: var(--sans); font-size: var(--t-small); color: rgba(255,255,255,.8);
+  word-break: keep-all;
+}
+.overlay-card:hover .cap .title { color: #E8B4B8; }
+@media (max-width: 34rem) { .overlay-duo { grid-template-columns: 1fr; } }
+
+/* ---- Side photos: mounted in the empty space beside the text column ----
+   The entry is the positioning context; the photo is absolutely placed just
+   outside the column into the left/right gutter. On narrow screens where the
+   gutter is too small, it falls back to a normal inline photo below the text. */
+.entry { position: relative; }
+figure.ph.side-left, figure.ph.side-right {
+  position: absolute; top: 0; width: 12rem; margin: 0;
+}
+figure.ph.side-left  { right: calc(100% + var(--s5)); }  /* just left of the column */
+figure.ph.side-right { left:  calc(100% + var(--s5)); }  /* just right of the column */
+figure.ph.side-left img, figure.ph.side-right img { aspect-ratio: 3 / 4; object-fit: cover; }
+
+/* When the viewport can't fit a side photo (narrow), show it inline instead. */
+@media (max-width: 72rem) {
+  figure.ph.side-left, figure.ph.side-right {
+    position: static; width: 14rem; margin: var(--s4) 0;
+  }
+}
+
+/* legacy margin-left/right kept as simple inline blocks (no negative margins) */
+figure.ph.margin-left, figure.ph.margin-right { width: 12rem; margin: var(--s4) 0; }
+
+/* ---------- Footer ---------- */
+.site-foot { margin-top: var(--s8); background: var(--paper); }
+.site-foot .bar {
+  display: flex; justify-content: space-between; align-items: baseline;
+  gap: var(--s4); padding-block: var(--s5); font-size: var(--t-small); color: var(--stone);
+}
+.site-foot .bar span { max-width: none; }
+.site-foot a { color: var(--stone); }
+
+@media (max-width: 40rem) {
+  figure.ph.left, figure.ph.right,
+  figure.ph.small.left, figure.ph.small.right { float: none; width: 100%; margin: var(--s5) 0; }
+  .site-head .bar { flex-direction: column; gap: var(--s2); align-items: flex-start; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+a:focus-visible { outline: 2px solid var(--link); outline-offset: 3px; }
