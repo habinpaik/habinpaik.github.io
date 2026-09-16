@@ -36,6 +36,7 @@ body {
   color: var(--ink);
   font-family: var(--serif);
   font-size: var(--t-body);
+  font-weight: 450;
   line-height: 1.5;
   letter-spacing: -0.01em;
   word-break: keep-all;
@@ -89,9 +90,9 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
 }
 .wordmark { font-family: var(--serif); font-size: var(--t-body); font-weight: 700; letter-spacing: -0.01em; color: var(--ink); text-decoration: none; }
 .nav { display: flex; gap: var(--s4); font-size: var(--t-body); }
-.nav a { color: var(--ink); text-decoration: none; font-weight: 400; }
 .nav a:hover { color: var(--link); }
-.nav a[aria-current="page"] { font-weight: 700; }
+.nav a { color: var(--ink); text-decoration: none; font-weight: 400; padding-bottom: 3px; border-bottom: 2px solid transparent; }
+.nav a[aria-current="page"] { font-weight: 700; border-bottom-color: var(--ink); }
 
 /* the leading top block (home) shares the plain <p> rule */
 .lead { padding-top: var(--s7); padding-bottom: var(--s7); }
@@ -136,11 +137,13 @@ main > p:first-child { margin-bottom: var(--s7); }
 }
 
 /* facts */
-.fact { line-height: 1.6; margin: 0; }
+.fact { line-height: 1.6; margin: 0 0 var(--s2); }
+.fact:last-child { margin-bottom: 0; }
 .fact .primary { font-weight: 600; }
 .fact .sep { color: var(--stone); }
 .fact .years { color: var(--stone); font-size: var(--t-small); }
 .linklist { list-style: none; margin: 0; padding: 0; display: flex; gap: var(--s2) var(--s4); flex-wrap: wrap; }
+.linklist a { font-family: var(--sans); font-size: var(--t-small); }
 
 /* ---------- Featured entries ---------- */
 .entry { margin-bottom: var(--s6); }
@@ -195,8 +198,13 @@ main > p.epigraph:first-child { margin-bottom: var(--s3); }
   .table .cell:nth-child(2n)::after { display: none; }
 }
 @media (max-width: 30rem) {
-  .table { grid-template-columns: 1fr; }
+  .table { grid-template-columns: 1fr; gap: var(--s4); }
   .table .cell::after { display: none; }
+  /* compact horizontal layout: small thumbnail left, text right */
+  .table .cell { display: grid; grid-template-columns: 5.5rem 1fr; gap: var(--s3); align-items: start; }
+  .table .cell img { aspect-ratio: 1 / 1; margin-bottom: 0; grid-row: 1 / span 2; }
+  .table .cell .th { grid-column: 2; }
+  .table .cell .desc { grid-column: 2; }
 }
 
 /* ---------- Research bookshelf ----------
@@ -236,7 +244,7 @@ main > p.epigraph:first-child { margin-bottom: var(--s3); }
 /* books past the first row start hidden; revealed downward by 더보기 */
 .book.is-hidden { display: none; }
 
-.shelf-more { text-align: center; margin-top: var(--s5); }
+.shelf-more { text-align: center; margin-top: var(--s3); }
 .shelf-more button {
   font-family: var(--sans); font-size: var(--t-small); font-weight: 600;
   color: var(--ink); background: transparent;
