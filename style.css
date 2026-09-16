@@ -12,15 +12,15 @@
   --line:  #E4E3DE;
   --link:  #7C2128;
 
-  --serif: "Source Serif 4", "Noto Serif KR", Georgia, "Times New Roman", serif;
+  --serif: "Lora", "Noto Serif KR", Georgia, "Times New Roman", serif;
   --serif-ko: "Noto Serif KR", Georgia, serif;
   --sans:  "Pretendard", -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
 
   --s1: 0.25rem; --s2: 0.5rem; --s3: 0.875rem; --s4: 1.25rem;
   --s5: 1.75rem; --s6: 2.5rem; --s7: 3.5rem; --s8: 5rem;
 
-  --t-small: 0.85rem;
-  --t-body:  1.075rem;
+  --t-small: 0.82rem;
+  --t-body:  1.0rem;
 
   --page-max: 62rem;      /* full content width (grids, tables, wide photos) */
   --measure:  34rem;      /* the single text measure — ALL body copy uses this */
@@ -36,8 +36,8 @@ body {
   color: var(--ink);
   font-family: var(--serif);
   font-size: var(--t-body);
-  line-height: 1.6;
-  letter-spacing: -0.003em;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
   word-break: keep-all;
   overflow-wrap: break-word;
   font-feature-settings: "onum" 1, "kern" 1;
@@ -188,7 +188,7 @@ main > p.epigraph:first-child { margin-bottom: var(--s3); }
 .table .cell .th a { font-family: var(--serif-ko); color: var(--ink); text-decoration: none; font-weight: 400; font-size: var(--t-body); line-height: 1.6; letter-spacing: -0.02em; }
 .table .cell .th a:hover { color: var(--link); }
 .table .cell .desc { color: var(--stone); font-size: var(--t-small); margin: var(--s2) 0 0; line-height: 1.6; max-width: none; }
-.table .cell .date { color: var(--stone); font-size: var(--t-small); display: block; margin-top: var(--s1); }
+.table .cell .date { color: var(--stone); font-size: var(--t-small); }
 @media (max-width: 52rem) {
   .table { grid-template-columns: repeat(2, 1fr); }
   .table .cell:nth-child(3n)::after { display: block; }
