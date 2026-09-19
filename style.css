@@ -19,8 +19,9 @@
   --s1: 0.25rem; --s2: 0.5rem; --s3: 0.875rem; --s4: 1.25rem;
   --s5: 1.75rem; --s6: 2.5rem; --s7: 3.5rem; --s8: 5rem;
 
-  --t-small: 0.9rem;
-  --t-body:  1.1rem;
+  --t-small: clamp(0.8rem, 0.76rem + 0.2vw, 0.92rem);
+  --t-body:  clamp(1.0rem, 0.93rem + 0.35vw, 1.22rem);
+  --t-title: clamp(1.2rem, 1.05rem + 0.7vw, 1.65rem);
 
   --page-max: 62rem;      /* full content width (grids, tables, wide photos) */
   --measure:  34rem;      /* the single text measure — ALL body copy uses this */
@@ -149,7 +150,7 @@ main > p:first-child { margin-bottom: var(--s7); }
 .entry { margin-bottom: var(--s6); }
 .entry:last-child { margin-bottom: 0; }
 .entry .head { display: flex; align-items: baseline; gap: var(--s3); flex-wrap: wrap; }
-.entry h3 { font-family: var(--serif-ko); font-size: 1.3rem; font-weight: 400; line-height: 1.6; margin: 0; letter-spacing: -0.02em; word-break: keep-all; }
+.entry h3 { font-family: var(--serif-ko); font-size: var(--t-title); font-weight: 400; line-height: 1.6; margin: 0; letter-spacing: -0.02em; word-break: keep-all; }
 .entry h3 a { color: var(--ink); text-decoration: none; }
 .entry h3 a:hover { color: var(--link); }
 .entry .date { color: var(--stone); font-size: var(--t-small); white-space: nowrap; }
@@ -273,7 +274,7 @@ main > p.epigraph:first-child { margin-bottom: var(--s3); }
   gap: var(--s6) var(--s5);
 }
 .work .th { display: flex; align-items: baseline; gap: var(--s2); justify-content: space-between; }
-.work .th a { color: var(--ink); text-decoration: none; font-weight: 400; font-size: 1.3rem; line-height: 1.6; }
+.work .th a { color: var(--ink); text-decoration: none; font-weight: 400; font-size: var(--t-title); line-height: 1.6; }
 .work .th a:hover { color: var(--link); }
 .work .date { color: var(--stone); font-size: var(--t-small); white-space: nowrap; }
 .work .desc { color: var(--stone); font-size: var(--t-small); margin: var(--s2) 0 0; max-width: none; }
@@ -307,7 +308,7 @@ figure.ph.overlay img { aspect-ratio: 16 / 9; object-fit: cover; }
 figure.ph.overlay figcaption {
   position: absolute; left: 0; right: 0; bottom: 0; margin: 0;
   color: #fff; padding: var(--s5) var(--s4) var(--s3);
-  font-size: 1.3rem; line-height: 1.6;
+  font-size: var(--t-title); line-height: 1.6;
   background: linear-gradient(to top, rgba(0,0,0,.72), rgba(0,0,0,0));
 }
 
@@ -327,7 +328,7 @@ figure.ph.overlay figcaption {
 }
 .overlay-card .cap .title {
   display: block;
-  font-family: var(--serif-ko); font-size: 1.3rem; font-weight: 400;
+  font-family: var(--serif-ko); font-size: var(--t-title); font-weight: 400;
   line-height: 1.6; letter-spacing: -0.02em; word-break: keep-all;
   transition: color .15s ease;
 }
