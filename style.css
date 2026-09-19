@@ -19,8 +19,8 @@
   --s1: 0.25rem; --s2: 0.5rem; --s3: 0.875rem; --s4: 1.25rem;
   --s5: 1.75rem; --s6: 2.5rem; --s7: 3.5rem; --s8: 5rem;
 
-  --t-small: 0.82rem;
-  --t-body:  1.0rem;
+  --t-small: 0.9rem;
+  --t-body:  1.1rem;
 
   --page-max: 62rem;      /* full content width (grids, tables, wide photos) */
   --measure:  34rem;      /* the single text measure — ALL body copy uses this */
