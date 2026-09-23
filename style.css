@@ -5,12 +5,14 @@
    ============================================================ */
 
 :root {
-  --paper: #FBFBF9;
+  --paper: #FFFFFF;   /* NYT 페이지 배경 */
   --ink:   #1A1A1A;
   --dark:  #141414;
   --stone: #6B6B66;
-  --line:  #E4E3DE;
-  --link:  #7C2128;
+  --line:  #DFDFDF;   /* NYT 광고 띠 경계선 */
+  --brand:      #F8F8F8;   /* NYT 광고 띠 배경: 배너·표지책장 배경 */
+  --brand-deep: #424245;   /* 같은 계열의 진한 회색: 본문 링크 */
+  --link:  var(--brand-deep);
 
   --serif: "Lora", "Noto Serif KR", Georgia, "Times New Roman", serif;
   --serif-ko: "Noto Serif KR", Georgia, serif;
@@ -19,9 +21,9 @@
   --s1: 0.25rem; --s2: 0.5rem; --s3: 0.875rem; --s4: 1.25rem;
   --s5: 1.75rem; --s6: 2.5rem; --s7: 3.5rem; --s8: 5rem;
 
-  --t-small: clamp(0.8rem, 0.76rem + 0.2vw, 0.92rem);
-  --t-body:  clamp(1.0rem, 0.93rem + 0.35vw, 1.22rem);
-  --t-title: clamp(1.2rem, 1.05rem + 0.7vw, 1.65rem);
+  --t-small: clamp(0.76rem, 0.72rem + 0.18vw, 0.87rem);
+  --t-body:  clamp(0.94rem, 0.88rem + 0.3vw, 1.14rem);
+  --t-title: clamp(1.12rem, 1.0rem + 0.6vw, 1.5rem);
 
   --page-max: 62rem;      /* full content width (grids, tables, wide photos) */
   --measure:  34rem;      /* the single text measure — ALL body copy uses this */
@@ -91,9 +93,15 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
 }
 .wordmark { font-family: var(--serif); font-size: var(--t-body); font-weight: 700; letter-spacing: -0.01em; color: var(--ink); text-decoration: none; }
 .nav { display: flex; gap: var(--s4); font-size: var(--t-body); }
-.nav a:hover { color: var(--link); }
-.nav a { color: var(--ink); text-decoration: none; font-weight: 400; padding-bottom: 3px; border-bottom: 2px solid transparent; }
-.nav a[aria-current="page"] { font-weight: 700; border-bottom-color: var(--ink); }
+.nav a { position: relative; color: var(--stone); text-decoration: none; font-weight: 700; font-size: var(--t-body); transition: color .15s ease; }
+.nav a:hover { color: var(--ink); }
+.nav a[aria-current="page"] { color: var(--ink); }
+/* thick bar sitting on the header's bottom edge (not an underline under the text) */
+.nav a[aria-current="page"]::after {
+  content: ""; position: absolute; left: 0; right: 0;
+  bottom: calc(-1 * var(--s3) - 1px);   /* sit exactly on the header's bottom edge */
+  height: 3px; background: var(--ink);
+}
 
 /* the leading top block (home) shares the plain <p> rule */
 .lead { padding-top: var(--s7); padding-bottom: var(--s7); }
@@ -103,16 +111,16 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
 .identity-band { margin-top: 0; }
 
 /* ---------- Identity band (HOME ONLY) ---------- */
-.identity-band { background: var(--dark); color: #F4F2EC; }
+.identity-band { background: var(--brand); color: var(--ink); border-block: 1px solid var(--line); }
 .identity-band .wrap { padding-block: var(--s5); }
 .identity-band p {
   margin: 0;
   font-size: clamp(1.3rem, 2.6vw, 1.75rem);
   line-height: 1.6;
-  max-width: var(--measure);
+  max-width: none;
   letter-spacing: -0.01em;
 }
-.identity-band .ko { color: #F4F2EC; }
+.identity-band .ko { color: var(--ink); }
 
 main { padding-block: var(--s7) var(--s8); }
 
@@ -153,6 +161,8 @@ main > p:first-child { margin-bottom: var(--s7); }
 .entry h3 { font-family: var(--serif-ko); font-size: var(--t-title); font-weight: 400; line-height: 1.6; margin: 0; letter-spacing: -0.02em; word-break: keep-all; }
 .entry h3 a { color: var(--ink); text-decoration: none; }
 .entry h3 a:hover { color: var(--link); }
+.shelf-note { margin: calc(var(--s3) - var(--s4)) 0 0; font-family: var(--sans); font-size: var(--t-small); line-height: 1.6; color: #2E3A46; }
+.shelf-note a { color: inherit; }
 .entry .date { color: var(--stone); font-size: var(--t-small); white-space: nowrap; }
 .entry .desc { margin: var(--s2) 0 0; }
 /* opt-in divider: centered in the EXISTING gap, adds no extra height.
@@ -208,32 +218,162 @@ main > p.epigraph:first-child { margin-bottom: var(--s3); }
   .table .cell .desc { grid-column: 2; }
 }
 
-/* ---------- Research bookshelf ----------
-   Tinted panel. Four covers per row, the four together spanning the text
-   column width. "더보기" appends more rows below; a toast shows "+N". */
-.shelf-panel {
-  background: #EDEAE1;
-  padding-block: var(--s4);
+/* ---------- Spine shelf: books stood on end, browse by swiping ----------
+   Full-bleed tinted panel. Each book is a vertical spine with a rotated
+   title, aligned to a common baseline (a shelf). Height/thickness vary by
+   category: classic = short & thick, science = tall & thin, humanities = mid. */
+.spine-panel {
+  width: calc(100vw - var(--sbw, 0px)); margin-left: calc(50% - (100vw - var(--sbw, 0px)) / 2); transform: none;
+  padding-block: 0;
   margin-top: var(--s4);
+}
+.spine-wrap { max-width: 46rem; margin-inline: auto; padding-inline: var(--gutter); position: relative; }
+.spine-shelf {
+  overflow-x: auto; padding-top: 12px; padding-bottom: 0;
+  position: relative; z-index: 1;
+  scrollbar-width: none;
+  scroll-snap-type: x proximity;
+  scroll-behavior: smooth;
+}
+.spine-track {
+  display: flex; align-items: flex-end; gap: 6px;
+  width: max-content; position: relative;
+}
+.spine-shelf::-webkit-scrollbar { display: none; }
+.spine-board {
+  position: absolute; bottom: 0; z-index: 0;
+  left: calc(var(--gutter) - 20px); right: calc(var(--gutter) - 20px);
+  height: 52px;
+  background: linear-gradient(#C08552, #A9703F);
+  border: 1px solid #9A9A9A;
+}
+.spine { position: relative; z-index: 1; }
+.spine {
+  flex: 0 0 auto; scroll-snap-align: start;
+  position: relative;
+  border-radius: 2px 2px 0 0;
+  box-shadow: inset -3px 0 6px rgba(0,0,0,.10), 0 1px 2px rgba(0,0,0,.12);
+  text-decoration: none;
+  transition: transform .15s ease;
+  overflow: hidden;
+}
+.spine:hover { transform: translateY(-4px); }
+/* text laid on its side (works for Korean + English alike), starting at the
+   top of the spine and reading downward, aligned to a common start. */
+.spine .t {
+  writing-mode: vertical-rl;
+  text-orientation: sideways;
+  font-family: var(--sans);
+  font-size: var(--t-small); font-weight: 400;
+  line-height: 1; letter-spacing: -0.01em; white-space: nowrap;
+  color: #fff;
+  padding: 12px 0;      /* 위아래 여백 */
+  margin: 0 auto;       /* center across the spine's width */
+  display: block; height: 100%; box-sizing: border-box;
+  overflow: hidden; text-overflow: ellipsis;   /* 길면 … */
+}
+.spine { display: flex; }
+/* three categories: classic/humanities = short & thick, journalism = mid, science = tall & thin */
+.spine.humanities { width: 44px; height: 150px; background: #4a5d40; }  /* 고전·인문·문학 — 낮고 두껍게 */
+.spine.journalism { width: 34px; height: 188px; background: #6d2b2f; }  /* 저널리즘·사회 — 중간 */
+.spine.science    { width: 26px; height: 225px; background: #2f4058; }  /* 과학·물리·수학 — 높고 얇게 */
+@media (max-width: 40rem) {
+  .spine.humanities { width: 40px; height: 128px; }
+  .spine.journalism { width: 32px; height: 160px; }
+  .spine.science    { width: 26px; height: 192px; }
+}
+/* left/right scroll arrows — bottom-right, translucent */
+.spine-nav { position: absolute; bottom: calc(var(--s4) + 0.9rem); right: calc(var(--gutter) + 0.6rem); display: flex; gap: var(--s2); z-index: 3; }
+.spine-nav button {
+  width: 2.1rem; height: 2.1rem; border-radius: 999px;
+  border: 1px solid rgba(0,0,0,.12);
+  background: rgba(255,255,255,.55);
+  -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+  color: var(--ink); cursor: pointer; font-size: 0.9rem; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .15s ease;
+}
+.spine-nav button:hover { background: rgba(255,255,255,.85); }
+
+/* hover tooltip near cursor */
+.spine-tip {
+  position: fixed; z-index: 100; pointer-events: none;
+  max-width: 16rem; padding: var(--s2) var(--s3);
+  background: rgba(20,20,20,.92); color: #fff; border-radius: 4px;
+  font-family: var(--sans); font-size: var(--t-small); line-height: 1.4;
+  opacity: 0; transition: opacity .12s ease;
+  box-shadow: 0 4px 14px rgba(0,0,0,.25);
+}
+.spine-tip.show { opacity: 1; }
+.spine-tip .tt-title { font-weight: 700; display: block; margin-bottom: 2px; }
+.spine-tip .tt-en { color: #C9C7C0; font-style: italic; }
+.spine-tip .tt-meta { color: #C9C7C0; }
+
+/* ---------- Cover shelf: books at their natural proportions on a shelf ----------
+   Covers keep their own aspect ratio (only height is normalised), standing
+   side by side on a long shelf board. Scrolls horizontally. */
+.cover-shelf-wrap { max-width: 46rem; margin-inline: auto; padding-inline: var(--gutter); position: relative; margin-top: var(--s5); }
+.cover-shelf {
+  display: flex; align-items: flex-end; gap: 8px;
+  overflow-x: auto; scroll-behavior: smooth;
+  padding: 0 2px 10px;
+  position: relative;
+}
+.cover-shelf::-webkit-scrollbar { height: 6px; }
+.cover-shelf::-webkit-scrollbar-thumb { background: #CFC9BB; border-radius: 3px; }
+.cover-shelf .bk { flex: 0 0 auto; text-decoration: none; display: block; transition: transform .15s ease; }
+.cover-shelf .bk img {
+  height: 130px; width: auto; display: block;
+  box-shadow: 0 2px 5px rgba(0,0,0,.25);
+}
+.cover-shelf .bk:hover { transform: translateY(-5px); }
+/* the shelf board the books stand on */
+.cover-shelf-board {
+  height: 10px; border-radius: 2px;
+  background: linear-gradient(#C9B79C, #A9906F);
+  box-shadow: 0 2px 5px rgba(0,0,0,.22);
+  margin-top: -4px;
+}
+@media (max-width: 40rem) { .cover-shelf .bk img { height: 105px; } }
+
+/* ---------- Research bookshelf (legacy cover grid) ---------- */
+.shelf-panel {
+  background: var(--brand);
+  border-block: 1px solid var(--line);   /* NYT 광고 띠처럼 위아래 1px 선 */
+  padding-block: var(--s3);   /* 박스 안 맨 위 여백 = 줄 사이 간격(s3) */
+  margin-top: var(--s6);
   position: relative;
 }
 /* the panel is full-bleed but the shelf grid is capped to the text column */
 .shelf-panel {
-  width: 100vw; margin-left: 50%; transform: translateX(-50%);
+  width: calc(100vw - var(--sbw, 0px)); margin-left: calc(50% - (100vw - var(--sbw, 0px)) / 2); transform: none;
 }
 .shelf-wrap { max-width: 46rem; margin-inline: auto; padding-inline: var(--gutter); }
 
 .shelf {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: var(--s5) var(--s4);
+  gap: var(--s3) var(--s4);   /* 줄 사이 간격 축소 */
+  position: relative;
 }
-.book { text-decoration: none; color: inherit; }
+/* 독서대: 줄마다 뒤에 깔리는 가로로 긴 직사각형 (JS가 행 위치를 재서 그림) */
+.shelf-boards { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+.shelf-boards .board {
+  position: absolute; left: -20px; right: -20px;
+  background: linear-gradient(#C08552, #A9703F);
+  border: 1px solid #9A9A9A;
+}
+.shelf .book { position: relative; z-index: 1; }
+.book { text-decoration: none; color: inherit; position: relative; }
 .book .cover { position: relative; }
-.book img {
-  width: 100%; aspect-ratio: 2 / 3; object-fit: cover; background: var(--line);
-  display: block;
-}
+.book .cover img { position: relative; z-index: 1; }
+.book .cover { position: relative; }
+/* 틀은 2:3로 고정, 표지는 원본 비율 그대로 틀 바닥에 세움 */
+.book .cover { display: flex; flex-direction: column; justify-content: flex-end; aspect-ratio: 2 / 3; width: 100%; min-height: 0; overflow: visible; }
+.book .face { flex: 0 0 auto; align-self: center; }
+.book .tag { z-index: 2; }
+.book .face { position: relative; display: block; }
+.book img { width: 100%; height: auto; display: block; box-shadow: 0 2px 5px rgba(0,0,0,.22); }
 .book .tag {
   position: absolute; top: var(--s2); left: var(--s2);
   font-family: var(--sans); font-size: 0.7rem; font-weight: 600;
@@ -284,7 +424,7 @@ figure.ph { margin: var(--s6) 0; }
 figure.ph img { width: 100%; display: block; filter: grayscale(1); background: var(--line); }
 figure.ph figcaption { font-size: var(--t-small); color: var(--stone); margin-top: var(--s2); }
 figure.ph.wide  { width: min(84rem, 96vw); margin-left: 50%; transform: translateX(-50%); }
-figure.ph.full  { width: 100vw; margin-left: 50%; transform: translateX(-50%); }
+figure.ph.full  { width: calc(100vw - var(--sbw, 0px)); margin-left: calc(50% - (100vw - var(--sbw, 0px)) / 2); transform: none; }
 figure.ph.wide img, figure.ph.full img { max-height: 78vh; object-fit: cover; }
 figure.ph.left  { float: left;  width: 46%; margin: var(--s1) var(--s5) var(--s4) 0; }
 figure.ph.right { float: right; width: 46%; margin: var(--s1) 0 var(--s4) var(--s5); }
@@ -378,3 +518,11 @@ figure.ph.margin-left, figure.ph.margin-right { width: 12rem; margin: var(--s4) 
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 a:focus-visible { outline: 2px solid var(--link); outline-offset: 3px; }
+
+/* 디자인 색 배경의 표지 책장 위 요소 */
+.shelf-panel .book .t { color: #2E3A46; }
+.shelf-panel .shelf-more button { color: var(--ink); border-color: rgba(0,0,0,.25); background: transparent; }
+.shelf-panel .shelf-more button:hover { background: rgba(255,255,255,.35); }
+
+/* 책은 링크가 아니므로 일반 커서 */
+.spine, .book { cursor: default; }

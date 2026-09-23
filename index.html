@@ -11,6 +11,12 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<script>
+/* 스크롤바 폭 측정: 전체 폭 패널이 스크롤바만큼 밀리지 않게 */
+(function(){function f(){document.documentElement.style.setProperty('--sbw',(window.innerWidth-document.documentElement.getBoundingClientRect().width)+'px');}
+f(); window.addEventListener('resize',f);})();
+</script>
+
 
 <header class="site-head">
   <div class="wrap bar">
@@ -52,7 +58,7 @@
         <h2 class="section-title">Education</h2>
         <p class="fact"><span class="primary">B.S. Mechanical Engineering, Korea University</span> <span class="years">2024–present</span></p>
         <p class="fact"><span class="primary">B.S. Physics, Korea University</span> <span class="years">2026–present</span></p>
-        <p class="fact"><span class="primary">Sejong Academy of Science and Arts <span lang="ko">(세종과학예술영재학교)</span></span> <span class="years">2021–2024</span></p>
+        <p class="fact"><span class="primary">Sejong Academy of Science and Arts <span lang="ko">(세종과학예술영재학교)</span></span><br><span class="years">2021–2024</span></p>
       </section>
 
       <section>

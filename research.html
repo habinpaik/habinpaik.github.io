@@ -11,6 +11,12 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<script>
+/* 스크롤바 폭 측정: 전체 폭 패널이 스크롤바만큼 밀리지 않게 */
+(function(){function f(){document.documentElement.style.setProperty('--sbw',(window.innerWidth-document.documentElement.getBoundingClientRect().width)+'px');}
+f(); window.addEventListener('resize',f);})();
+</script>
+
 
 <header class="site-head">
   <div class="wrap bar">
@@ -35,44 +41,145 @@
 
   <section>
     <h2 class="section-title">Bookshelf</h2>
+    <p class="shelf-note">각주: 표지·책등은 <a href="#">실제 소장 도서</a> 기준이며, 목록은 계속 업데이트됩니다.</p>
+
+    <div class="spine-panel">
+    <div class="spine-wrap">
+    <div class="spine-nav"><button type="button" data-dir="-1" aria-label="이전">&#10094;</button><button type="button" data-dir="1" aria-label="다음">&#10095;</button></div>
+    <div class="spine-board" aria-hidden="true"></div>
+    <div class="spine-shelf">
+    <div class="spine-track">
+      <span class="spine journalism" data-title="리처드 닉슨" data-author="김형곤" data-year="2022" data-en="[KOR] Richard Nixon" data-subject="역사"><span class="t">Richard Nixon</span></span>
+      <span class="spine science" data-title="피타고라스로 푸는 상대성이론" data-author="임성민" data-year="2020" data-en="[KOR] Relativity via Pythagoras" data-subject="상대성이론"><span class="t">Relativity via Pythagoras</span></span>
+      <span class="spine humanities" data-title="인간 실격" data-author="다자이 오사무" data-year="1948" data-en="人間失格" data-subject="문학"><span class="t">No Longer Human</span></span>
+      <span class="spine journalism" data-title="최암흑의 도쿄" data-author="마쓰바라 이와고로" data-year="1893" data-en="最暗黒の東京" data-subject="르포"><span class="t">In Darkest Tokyo</span></span>
+      <span class="spine journalism" data-title="풀종다리의 노래" data-author="손석희" data-year="1993" data-en="[KOR] Song of the Tree Cricket" data-subject="에세이"><span class="t">Song of the Tree Cricket</span></span>
+      <span class="spine journalism" data-title="말을 부수는 말" data-author="이라영" data-year="2022" data-en="[KOR] Words That Break Words" data-subject="언어·권력"><span class="t">Words That Break Words</span></span>
+      <span class="spine humanities" data-title="리더를 위한 논리훈련" data-author="송하석" data-year="2017" data-en="[KOR] Logic Training for Leaders" data-subject="논리·사고"><span class="t">Logic Training for Leaders</span></span>
+      <span class="spine journalism" data-title="일본의 가장 긴 하루" data-author="한도 가즈토시" data-year="1965" data-en="日本のいちばん長い日" data-subject="역사"><span class="t">Japan's Longest Day</span></span>
+      <span class="spine science" data-title="케네스 포드의 양자물리학 강의" data-author="케네스 포드" data-year="2004" data-en="The Quantum World" data-subject="양자물리"><span class="t">The Quantum World</span></span>
+      <span class="spine humanities" data-title="마르크스주의 입문" data-author="이찬용" data-year="2025" data-en="[KOR] Introduction to Marxism" data-subject="사상"><span class="t">Introduction to Marxism</span></span>
+      <span class="spine journalism" data-title="뉴욕타임스 편집장의 글을 잘 쓰는 법" data-author="트리시 홀" data-year="2019" data-en="Writing to Persuade" data-subject="글쓰기"><span class="t">Writing to Persuade</span></span>
+      <span class="spine journalism" data-title="가짜뉴스의 고고학" data-author="최은창" data-year="2020" data-en="[KOR] An Archaeology of Fake News" data-subject="가짜뉴스"><span class="t">An Archaeology of Fake News</span></span>
+      <span class="spine science" data-title="수리 물리학의 기하학적 방법" data-author="버나드 셜츠" data-year="1980" data-en="Geometrical Methods of Mathematical Physics" data-subject="수리물리"><span class="t">Geometrical Methods of Mathematical Physics</span></span>
+      <span class="spine humanities" data-title="노인과 바다" data-author="어니스트 헤밍웨이" data-year="1952" data-en="The Old Man and the Sea" data-subject="문학"><span class="t">The Old Man and the Sea</span></span>
+      <span class="spine journalism" data-title="미국 자본주의의 역사" data-author="앨런 그린스펀" data-year="2018" data-en="Capitalism in America" data-subject="경제사"><span class="t">Capitalism in America</span></span>
+      <span class="spine science" data-title="거의 모든 것의 역사" data-author="빌 브라이슨" data-year="2003" data-en="A Short History of Nearly Everything" data-subject="과학교양"><span class="t">A Short History of Nearly Everything</span></span>
+      <span class="spine journalism" data-title="뉴스 스토리" data-author="박재영" data-year="2020" data-en="[KOR] News Story" data-subject="내러티브 기사"><span class="t">News Story</span></span>
+      <span class="spine journalism" data-title="묘사의 힘" data-author="샌드라 거스" data-year="2021" data-en="Show, Don't Tell" data-subject="글쓰기"><span class="t">Show, Don't Tell</span></span>
+      <span class="spine humanities" data-title="정치는 왜 실패하는가" data-author="벤 안셀" data-year="2023" data-en="Why Politics Fails" data-subject="정치철학"><span class="t">Why Politics Fails</span></span>
+      <span class="spine journalism" data-title="9.11의 진실" data-author="다나카 사카이" data-year="2002" data-en="仕組まれた9.11" data-subject="시사"><span class="t">9/11, Orchestrated</span></span>
+      <span class="spine science" data-title="미분기하학 바이블" data-author="만프레도 두 카르모" data-year="1976" data-en="Differential Geometry of Curves and Surfaces" data-subject="기하학"><span class="t">Differential Geometry of Curves and Surfaces</span></span>
+      <span class="spine humanities" data-title="동물농장" data-author="조지 오웰" data-year="1945" data-en="Animal Farm" data-subject="문학"><span class="t">Animal Farm</span></span>
+      <span class="spine journalism" data-title="월스트리트저널 인포그래픽 가이드" data-author="도나 웡" data-year="2010" data-en="The Wall Street Journal Guide to Information Graphics" data-subject="인포그래픽"><span class="t">The Wall Street Journal Guide to Information Graphics</span></span>
+      <span class="spine journalism" data-title="포스트트루스" data-author="리 매킨타이어" data-year="2018" data-en="Post-Truth" data-subject="탈진실"><span class="t">Post-Truth</span></span>
+      <span class="spine science" data-title="기후변화, 그게 좀 심각합니다" data-author="빌 맥과이어" data-year="2022" data-en="Hothouse Earth" data-subject="기후·환경"><span class="t">Hothouse Earth</span></span>
+      <span class="spine humanities" data-title="마음과 철학: 서양편(상)" data-author="이태수" data-year="2012" data-en="[KOR] Mind and Philosophy: The West I" data-subject="철학"><span class="t">Mind and Philosophy: The West I</span></span>
+      <span class="spine journalism" data-title="제인스빌 이야기" data-author="에이미 골드스타인" data-year="2017" data-en="Janesville: An American Story" data-subject="사회 르포"><span class="t">Janesville: An American Story</span></span>
+      <span class="spine science" data-title="파인만의 여섯가지 물리 이야기" data-author="리처드 파인만" data-year="1994" data-en="Six Easy Pieces" data-subject="물리학"><span class="t">Six Easy Pieces</span></span>
+      <span class="spine humanities" data-title="돈 (L'Argent)" data-author="에밀 졸라" data-year="1891" data-en="L'Argent" data-subject="문학"><span class="t">Money</span></span>
+      <span class="spine journalism" data-title="기자의 글쓰기" data-author="박종인" data-year="2016" data-en="[KOR] A Reporter's Writing" data-subject="글쓰기"><span class="t">A Reporter's Writing</span></span>
+      <span class="spine journalism" data-title="시크릿 맨" data-author="밥 우드워드" data-year="2005" data-en="The Secret Man" data-subject="정치 르포"><span class="t">The Secret Man</span></span>
+      <span class="spine science" data-title="파동의 법칙: 푸리에에서 양자까지" data-author="임성민" data-year="2021" data-en="[KOR] The Law of Waves" data-subject="물리학"><span class="t">The Law of Waves</span></span>
+      <span class="spine humanities" data-title="4 3 2 1" data-author="폴 오스터" data-year="2017" data-en="4 3 2 1" data-subject="문학"><span class="t">4 3 2 1</span></span>
+      <span class="spine journalism" data-title="독일의 가을" data-author="스티그 다게르만" data-year="1947" data-en="Tysk höst" data-subject="르포"><span class="t">German Autumn</span></span>
+      <span class="spine journalism" data-title="언론 혐오 사회" data-author="정상근" data-year="2022" data-en="[KOR] A Society That Hates the Press" data-subject="미디어 비판"><span class="t">A Society That Hates the Press</span></span>
+      <span class="spine journalism" data-title="신문 언어 어떻게 이해할 것인가?" data-author="김병홍" data-year="2022" data-en="[KOR] How to Understand the Language of Newspapers" data-subject="미디어 언어"><span class="t">How to Understand the Language of Newspapers</span></span>
+      <span class="spine humanities" data-title="숙론" data-author="최재천" data-year="2024" data-en="[KOR] Discourse" data-subject="대화·사고"><span class="t">Discourse</span></span>
+      <span class="spine journalism" data-title="일본 제국 패망사" data-author="존 톨랜드" data-year="1970" data-en="The Rising Sun" data-subject="역사"><span class="t">The Rising Sun</span></span>
+      <span class="spine science" data-title="시간과 공간에 관하여" data-author="스티븐 호킹" data-year="1996" data-en="The Nature of Space and Time" data-subject="물리학"><span class="t">The Nature of Space and Time</span></span>
+      <span class="spine humanities" data-title="차라투스트라는 이렇게 말했다" data-author="프리드리히 니체" data-year="1885" data-en="Also sprach Zarathustra" data-subject="철학"><span class="t">Thus Spoke Zarathustra</span></span>
+      <span class="spine journalism" data-title="글쓰기 생각쓰기" data-author="윌리엄 진서" data-year="1976" data-en="On Writing Well" data-subject="글쓰기"><span class="t">On Writing Well</span></span>
+      <span class="spine journalism" data-title="개소리는 어떻게 세상을 정복했는가" data-author="제임스 볼" data-year="2017" data-en="Post-Truth: How Bullshit Conquered the World" data-subject="탈진실"><span class="t">Post-Truth: How Bullshit Conquered the World</span></span>
+      <span class="spine science" data-title="열 물리학" data-author="스티븐 블런델" data-year="2006" data-en="Concepts in Thermal Physics" data-subject="물리학"><span class="t">Concepts in Thermal Physics</span></span>
+      <span class="spine humanities" data-title="월요 이야기" data-author="알퐁스 도데" data-year="1873" data-en="Contes du lundi" data-subject="문학"><span class="t">Monday Tales</span></span>
+      <span class="spine journalism" data-title="권력과 통치" data-author="마틴 돈턴" data-year="2023" data-en="The Economic Government of the World" data-subject="정치경제"><span class="t">The Economic Government of the World</span></span>
+      <span class="spine science" data-title="이중나선" data-author="제임스 왓슨" data-year="1968" data-en="The Double Helix" data-subject="생물학"><span class="t">The Double Helix</span></span>
+      <span class="spine journalism" data-title="탐사 저널리즘" data-author="제임스 L. 어코인" data-year="2007" data-en="The Evolution of American Investigative Journalism" data-subject="탐사보도"><span class="t">The Evolution of American Investigative Journalism</span></span>
+      <span class="spine journalism" data-title="문장강화" data-author="이태준" data-year="1940" data-en="[KOR] Lectures on Style" data-subject="글쓰기"><span class="t">Lectures on Style</span></span>
+      <span class="spine humanities" data-title="우리는 맞고 너희는 틀렸다" data-author="마이클 린치" data-year="2019" data-en="Know-It-All Society" data-subject="정치철학"><span class="t">Know-It-All Society</span></span>
+      <span class="spine journalism" data-title="촘스키, 9-11" data-author="노엄 촘스키" data-year="2001" data-en="9-11" data-subject="사회비판"><span class="t">9-11</span></span>
+      <span class="spine science" data-title="(수학으로 배우는) 파동의 법칙" data-author="트랜스내셔널 칼리지 오브 렉스" data-year="1988" data-en="フーリエの冒険" data-subject="수리물리"><span class="t">Who Is Fourier?</span></span>
+      <span class="spine humanities" data-title="파리와 런던의 따라지 인생" data-author="조지 오웰" data-year="1933" data-en="Down and Out in Paris and London" data-subject="문학·르포"><span class="t">Down and Out in Paris and London</span></span>
+      <span class="spine journalism" data-title="전쟁 25시" data-author="박선규" data-year="2021" data-en="[KOR] War, 25 Hours" data-subject="종군기"><span class="t">War, 25 Hours</span></span>
+      <span class="spine journalism" data-title="영자신문을 읽는 10가지 공식" data-author="이창섭" data-year="2011" data-en="How to read The Korea Times" data-subject="영어저널리즘"><span class="t">How to read The Korea Times</span></span>
+      <span class="spine journalism" data-title="유튜브는 책을 집어삼킬 것인가" data-author="김성우" data-year="2020" data-en="[KOR] Will YouTube Devour the Book?" data-subject="미디어"><span class="t">Will YouTube Devour the Book?</span></span>
+      <span class="spine humanities" data-title="知의 편집공학" data-author="마쓰오카 세이고" data-year="1996" data-en="知の編集工学" data-subject="편집·사고"><span class="t">The Editorial Engineering of Knowledge</span></span>
+      <span class="spine journalism" data-title="나는 고발한다" data-author="에밀 졸라" data-year="1898" data-en="J'Accuse…!" data-subject="사회 고발"><span class="t">I Accuse…!</span></span>
+      <span class="spine science" data-title="양자역학의 역사" data-author="데이비드 카이저" data-year="2011" data-en="How the Hippies Saved Physics" data-subject="과학사"><span class="t">How the Hippies Saved Physics</span></span>
+      <span class="spine humanities" data-title="세이 낫씽" data-author="패트릭 라든 키프" data-year="2018" data-en="Say Nothing" data-subject="논픽션·르포"><span class="t">Say Nothing</span></span>
+      <span class="spine journalism" data-title="23시 30분 1면이 바뀐다" data-author="주영훈" data-year="2018" data-en="[KOR] At 23:30 the Front Page Changes" data-subject="편집·제작"><span class="t">At 23:30 the Front Page Changes</span></span>
+      <span class="spine journalism" data-title="워터게이트: 모두가 대통령의 사람들" data-author="밥 우드워드" data-year="1974" data-en="All the President's Men" data-subject="정치 르포"><span class="t">All the President's Men</span></span>
+      <span class="spine science" data-title="양자역학의 핵심: 복소평면과 힐베르트 공간" data-author="임성민" data-year="2020" data-en="[KOR] The Core of Quantum Mechanics" data-subject="양자역학"><span class="t">The Core of Quantum Mechanics</span></span>
+      <span class="spine humanities" data-title="데미안" data-author="헤르만 헤세" data-year="1919" data-en="Demian" data-subject="문학"><span class="t">Demian</span></span>
+      <span class="spine journalism" data-title="내 인생의 취재기" data-author="강기석" data-year="2019" data-en="[KOR] The Reporting of My Life" data-subject="취재기"><span class="t">The Reporting of My Life</span></span>
+      <span class="spine science" data-title="물고기는 존재하지 않는다" data-author="룰루 밀러" data-year="2020" data-en="Why Fish Don't Exist" data-subject="과학·에세이"><span class="t">Why Fish Don't Exist</span></span>
+      <span class="spine journalism" data-title="버릴 관행, 지킬 원칙" data-author="김경모" data-year="2021" data-en="[KOR] Practices to Discard, Principles to Keep" data-subject="취재·보도"><span class="t">Practices to Discard, Principles to Keep</span></span>
+      <span class="spine journalism" data-title="편집 만세" data-author="리베카 리" data-year="2022" data-en="How Words Get Good" data-subject="편집"><span class="t">How Words Get Good</span></span>
+      <span class="spine humanities" data-title="현실 없는 현실" data-author="요아힘 바우어" data-year="2023" data-en="Realitätsverlust" data-subject="사회비판"><span class="t">Loss of Reality</span></span>
+      <span class="spine journalism" data-title="콜디스트 윈터" data-author="데이비드 핼버스탬" data-year="2007" data-en="The Coldest Winter" data-subject="역사·르포"><span class="t">The Coldest Winter</span></span>
+      <span class="spine science" data-title="위상수학" data-author="제임스 멍크레스" data-year="1975" data-en="Topology" data-subject="위상수학"><span class="t">Topology</span></span>
+      <span class="spine humanities" data-title="1984" data-author="조지 오웰" data-year="1949" data-en="Nineteen Eighty-Four" data-subject="문학"><span class="t">Nineteen Eighty-Four</span></span>
+      <span class="spine journalism" data-title="스타일의 요소" data-author="윌리엄 스트렁크" data-year="1918" data-en="The Elements of Style" data-subject="글쓰기"><span class="t">The Elements of Style</span></span>
+      <span class="spine journalism" data-title="진실 따위는 중요하지 않다" data-author="미치코 카쿠타니" data-year="2018" data-en="The Death of Truth" data-subject="탈진실"><span class="t">The Death of Truth</span></span>
+      <span class="spine science" data-title="핵 및 입자물리학" data-author="아쇼크 다스" data-year="2003" data-en="Introduction to Nuclear and Particle Physics" data-subject="물리학"><span class="t">Introduction to Nuclear and Particle Physics</span></span>
+      <span class="spine humanities" data-title="처음 읽는 윤리학" data-author="박찬국" data-year="2013" data-en="[KOR] Ethics for Beginners" data-subject="윤리학"><span class="t">Ethics for Beginners</span></span>
+      <span class="spine journalism" data-title="컬트" data-author="맥스 커틀러" data-year="2022" data-en="Cults: Inside the World's Most Notorious Groups and How to Escape Them" data-subject="사회"><span class="t">Cults: Inside the World's Most Notorious Groups and How to Escape Them</span></span>
+      <span class="spine science" data-title="우주, 상상력 공장" data-author="권재술" data-year="2022" data-en="[KOR] The Universe, a Factory of Imagination" data-subject="우주·교양"><span class="t">The Universe, a Factory of Imagination</span></span>
+      <span class="spine journalism" data-title="저널리즘의 기본요소" data-author="빌 코바치" data-year="2001" data-en="The Elements of Journalism" data-subject="저널리즘 원칙"><span class="t">The Elements of Journalism</span></span>
+      <span class="spine journalism" data-title="퓰리처상 문장 수업" data-author="잭 하트" data-year="2011" data-en="Storycraft" data-subject="글쓰기"><span class="t">Storycraft</span></span>
+    </div>
+    </div>
+    </div>
+    </div>
+
     <div class="shelf-panel">
     <div class="shelf-wrap">
     <div class="shelf">
-      <a class="book" href="#"><span class="cover"><img src="images/book-1.jpg" alt=""><span class="tag">ME</span></span><span class="t">Book Title 1</span></a>
-      <a class="book" href="#"><span class="cover"><img src="images/book-2.jpg" alt=""><span class="tag">Phys</span></span><span class="t">Book Title 2</span></a>
-      <a class="book" href="#"><span class="cover"><img src="images/book-3.jpg" alt=""><span class="tag">Media</span></span><span class="t">Book Title 3</span></a>
-      <a class="book" href="#"><span class="cover"><img src="images/book-4.jpg" alt=""><span class="tag">ME</span></span><span class="t">Book Title 4</span></a>
-      <a class="book is-hidden" href="#"><span class="cover"><img src="images/book-5.jpg" alt=""><span class="tag">Phys</span></span><span class="t">Book Title 5</span></a>
-      <a class="book is-hidden" href="#"><span class="cover"><img src="images/book-6.jpg" alt=""><span class="tag">Media</span></span><span class="t">Book Title 6</span></a>
-      <a class="book is-hidden" href="#"><span class="cover"><img src="images/book-7.jpg" alt=""><span class="tag">ME</span></span><span class="t">Book Title 7</span></a>
-      <a class="book is-hidden" href="#"><span class="cover"><img src="images/book-8.jpg" alt=""><span class="tag">Phys</span></span><span class="t">Book Title 8</span></a>
-      <a class="book is-hidden" href="#"><span class="cover"><img src="images/book-9.jpg" alt=""><span class="tag">Media</span></span><span class="t">Book Title 9</span></a>
-      <a class="book is-hidden" href="#"><span class="cover"><img src="images/book-10.jpg" alt=""><span class="tag">ME</span></span><span class="t">Book Title 10</span></a>
-      <a class="book is-hidden" href="#"><span class="cover"><img src="images/book-11.jpg" alt=""><span class="tag">Phys</span></span><span class="t">Book Title 11</span></a>
-      <a class="book is-hidden" href="#"><span class="cover"><img src="images/book-12.jpg" alt=""><span class="tag">Media</span></span><span class="t">Book Title 12</span></a>
-      <a class="book is-hidden" href="#"><span class="cover"><img src="images/book-13.jpg" alt=""><span class="tag">ME</span></span><span class="t">Book Title 13</span></a>
-      <a class="book is-hidden" href="#"><span class="cover"><img src="images/book-14.jpg" alt=""><span class="tag">Phys</span></span><span class="t">Book Title 14</span></a>
-      <a class="book is-hidden" href="#"><span class="cover"><img src="images/book-15.jpg" alt=""><span class="tag">Media</span></span><span class="t">Book Title 15</span></a>
-      <a class="book is-hidden" href="#"><span class="cover"><img src="images/book-16.jpg" alt=""><span class="tag">ME</span></span><span class="t">Book Title 16</span></a>
-      <a class="book is-hidden" href="#"><span class="cover"><img src="images/book-17.jpg" alt=""><span class="tag">Phys</span></span><span class="t">Book Title 17</span></a>
-      <a class="book is-hidden" href="#"><span class="cover"><img src="images/book-18.jpg" alt=""><span class="tag">Media</span></span><span class="t">Book Title 18</span></a>
-      <a class="book is-hidden" href="#"><span class="cover"><img src="images/book-19.jpg" alt=""><span class="tag">ME</span></span><span class="t">Book Title 19</span></a>
-      <a class="book is-hidden" href="#"><span class="cover"><img src="images/book-20.jpg" alt=""><span class="tag">Phys</span></span><span class="t">Book Title 20</span></a>
-      <a class="book is-hidden" href="#"><span class="cover"><img src="images/book-21.jpg" alt=""><span class="tag">Media</span></span><span class="t">Book Title 21</span></a>
-      <a class="book is-hidden" href="#"><span class="cover"><img src="images/book-22.jpg" alt=""><span class="tag">ME</span></span><span class="t">Book Title 22</span></a>
-      <a class="book is-hidden" href="#"><span class="cover"><img src="images/book-23.jpg" alt=""><span class="tag">Phys</span></span><span class="t">Book Title 23</span></a>
-      <a class="book is-hidden" href="#"><span class="cover"><img src="images/book-24.jpg" alt=""><span class="tag">Media</span></span><span class="t">Book Title 24</span></a>
-      <a class="book is-hidden" href="#"><span class="cover"><img src="images/book-25.jpg" alt=""><span class="tag">ME</span></span><span class="t">Book Title 25</span></a>
-      <a class="book is-hidden" href="#"><span class="cover"><img src="images/book-26.jpg" alt=""><span class="tag">Phys</span></span><span class="t">Book Title 26</span></a>
-      <a class="book is-hidden" href="#"><span class="cover"><img src="images/book-27.jpg" alt=""><span class="tag">Media</span></span><span class="t">Book Title 27</span></a>
-      <a class="book is-hidden" href="#"><span class="cover"><img src="images/book-28.jpg" alt=""><span class="tag">ME</span></span><span class="t">Book Title 28</span></a>
+      <div class="shelf-boards" aria-hidden="true"></div>
+      <div class="book" data-title="Thomas' Calculus" data-author="George B. Thomas" data-year="1951" data-en="Pearson" data-subject="Math"><span class="cover"><span class="face" style="width:94.7%"><img src="images/covers/34_Thomas_Calculus.jpg" alt="Thomas' Calculus"><span class="tag">Math</span></span></span><span class="t">Calculus</span></div>
+      <div class="book" data-title="Numerical Methods for Engineers" data-author="Steven C. Chapra" data-year="1985" data-en="McGraw-Hill" data-subject="ME"><span class="cover"><span class="face" style="width:96.1%"><img src="images/covers/13_Chapra_Numerical_Methods.jpg" alt="Numerical Methods for Engineers"><span class="tag">ME</span></span></span><span class="t">Numerical Methods</span></div>
+      <div class="book" data-title="Elementary Number Theory" data-author="David M. Burton" data-year="1976" data-en="McGraw-Hill" data-subject="Math"><span class="cover"><span class="face" style="width:88.6%"><img src="images/covers/26_Burton_Elementary_Number_Theory.jpg" alt="Elementary Number Theory"><span class="tag">Math</span></span></span><span class="t">Number Theory</span></div>
+      <div class="book" data-title="Engineering Mechanics: Dynamics" data-author="J. L. Meriam" data-year="1978" data-en="John Wiley &amp; Sons" data-subject="ME"><span class="cover"><span class="face" style="width:95.1%"><img src="images/covers/05_Meriam_Dynamics.jpg" alt="Engineering Mechanics: Dynamics"><span class="tag">ME</span></span></span><span class="t">Dynamics</span></div>
+      <div class="book" data-title="Introduction to Quantum Mechanics" data-author="David J. Griffiths" data-year="1995" data-en="Cambridge University Press" data-subject="Phys"><span class="cover"><span class="face" style="width:93.0%"><img src="images/covers/18_Griffiths_Quantum_Mechanics.jpg" alt="Introduction to Quantum Mechanics"><span class="tag">Phys</span></span></span><span class="t">Quantum Mechanics</span></div>
+      <div class="book" data-title="Elementary Differential Equations and Boundary Value Problems" data-author="William E. Boyce" data-year="1965" data-en="John Wiley &amp; Sons" data-subject="Math"><span class="cover"><span class="face" style="width:94.9%"><img src="images/covers/31_Boyce_Differential_Equations.jpg" alt="Elementary Differential Equations and Boundary Value Problems"><span class="tag">Math</span></span></span><span class="t">Differential Equations</span></div>
+      <div class="book" data-title="Introduction to Microelectronic Fabrication" data-author="Richard C. Jaeger" data-year="1988" data-en="Addison-Wesley" data-subject="ME"><span class="cover"><span class="face" style="width:88.3%"><img src="images/covers/10_Jaeger_Microelectronic_Fabrication.jpg" alt="Introduction to Microelectronic Fabrication"><span class="tag">ME</span></span></span><span class="t">Microfabrication</span></div>
+      <div class="book" data-title="Quantum Physics" data-author="Stephen Gasiorowicz" data-year="1974" data-en="John Wiley &amp; Sons" data-subject="Phys"><span class="cover"><span class="face" style="width:87.7%"><img src="images/covers/23_Gasiorowicz_Quantum_Physics.jpg" alt="Quantum Physics"><span class="tag">Phys</span></span></span><span class="t">Quantum Physics</span></div>
+      <div class="book" data-title="Mechanism Design: Analysis and Synthesis" data-author="Arthur G. Erdman" data-year="1984" data-en="Prentice Hall" data-subject="ME"><span class="cover"><span class="face" style="width:92.9%"><img src="images/covers/02_Erdman_Mechanism_Design.jpg" alt="Mechanism Design: Analysis and Synthesis"><span class="tag">ME</span></span></span><span class="t">Mechanism Design</span></div>
+      <div class="book" data-title="Introduction to Nuclear and Particle Physics" data-author="Ashok Das" data-year="1993" data-en="World Scientific" data-subject="Phys"><span class="cover"><span class="face" style="width:88.5%"><img src="images/covers/15_Das_Nuclear_Particle_Physics.jpg" alt="Introduction to Nuclear and Particle Physics"><span class="tag">Phys</span></span></span><span class="t">Nuclear & Particle Physics</span></div>
+      <div class="book" data-title="Fourier Analysis: An Introduction" data-author="Elias M. Stein" data-year="2003" data-en="Princeton University Press" data-subject="Math"><span class="cover"><span class="face" style="width:88.7%"><img src="images/covers/28_Stein_Fourier_Analysis.jpg" alt="Fourier Analysis: An Introduction"><span class="tag">Math</span></span></span><span class="t">Fourier Analysis</span></div>
+      <div class="book" data-title="Fundamentals of Engineering Thermodynamics" data-author="Michael J. Moran" data-year="1988" data-en="John Wiley &amp; Sons" data-subject="ME"><span class="cover"><span class="face" style="width:95.4%"><img src="images/covers/07_Moran_Thermodynamics.jpg" alt="Fundamentals of Engineering Thermodynamics"><span class="tag">ME</span></span></span><span class="t">Thermodynamics</span></div>
+      <div class="book" data-title="Quantum Computation and Quantum Information" data-author="Michael A. Nielsen" data-year="2000" data-en="Cambridge University Press" data-subject="Phys"><span class="cover"><span class="face" style="width:89.4%"><img src="images/covers/20_Nielsen_Quantum_Computation.jpg" alt="Quantum Computation and Quantum Information"><span class="tag">Phys</span></span></span><span class="t">Quantum Information</span></div>
+      <div class="book" data-title="Reinforcement Learning: An Introduction" data-author="Richard S. Sutton" data-year="1998" data-en="The MIT Press" data-subject="AI"><span class="cover"><span class="face" style="width:91.6%"><img src="images/covers/33_Sutton_Reinforcement_Learning.jpg" alt="Reinforcement Learning: An Introduction"><span class="tag">AI</span></span></span><span class="t">Reinforcement Learning</span></div>
+      <div class="book" data-title="Mechanics of Materials" data-author="Russell C. Hibbeler" data-year="1991" data-en="Pearson" data-subject="ME"><span class="cover"><span class="face" style="width:100.0%"><img src="images/covers/12_Hibbeler_Mechanics_of_Materials.jpg" alt="Mechanics of Materials"><span class="tag">ME</span></span></span><span class="t">Mechanics of Materials</span></div>
+      <div class="book" data-title="Chemistry" data-author="Steven S. Zumdahl" data-year="1986" data-en="Cengage Learning" data-subject="Sci"><span class="cover"><span class="face" style="width:94.8%"><img src="images/covers/25_Zumdahl_Chemistry.jpg" alt="Chemistry"><span class="tag">Sci</span></span></span><span class="t">Chemistry</span></div>
+      <div class="book" data-title="Nanoscale Energy Transport and Conversion" data-author="Gang Chen" data-year="2005" data-en="Oxford University Press" data-subject="ME"><span class="cover"><span class="face" style="width:84.6%"><img src="images/covers/04_Chen_Nanoscale_Energy.jpg" alt="Nanoscale Energy Transport and Conversion"><span class="tag">ME</span></span></span><span class="t">Nanoscale Energy</span></div>
+      <div class="book" data-title="Atomic Physics" data-author="Christopher J. Foot" data-year="2004" data-en="Oxford University Press" data-subject="Phys"><span class="cover"><span class="face" style="width:96.9%"><img src="images/covers/17_Foot_Atomic_Physics.jpg" alt="Atomic Physics"><span class="tag">Phys</span></span></span><span class="t">Atomic Physics</span></div>
+      <div class="book" data-title="선형대수와 군" data-author="이인석" data-year="2005" data-en="서울대학교출판문화원" data-subject="Math"><span class="cover"><span class="face" style="width:91.1%"><img src="images/covers/30_Lee_Linear_Algebra_and_Groups.jpg" alt="선형대수와 군"><span class="tag">Math</span></span></span><span class="t">Linear Algebra & Group Theory</span></div>
+      <div class="book" data-title="Advanced Engineering Mathematics" data-author="Peter V. O'Neil" data-year="1983" data-en="Cengage Learning" data-subject="ME"><span class="cover"><span class="face" style="width:96.1%"><img src="images/covers/09_ONeil_Advanced_Engineering_Math.jpg" alt="Advanced Engineering Mathematics"><span class="tag">ME</span></span></span><span class="t">Engineering Mathematics</span></div>
+      <div class="book" data-title="Concepts in Thermal Physics" data-author="Stephen J. Blundell" data-year="2006" data-en="Oxford University Press" data-subject="Phys"><span class="cover"><span class="face" style="width:94.3%"><img src="images/covers/22_Blundell_Thermal_Physics.jpg" alt="Concepts in Thermal Physics"><span class="tag">Phys</span></span></span><span class="t">Thermal Physics</span></div>
+      <div class="book" data-title="Hydraulic and Compressible Flow Turbomachines" data-author="A. T. Sayers" data-year="1990" data-en="McGraw-Hill" data-subject="ME"><span class="cover"><span class="face" style="width:85.6%"><img src="images/covers/01_Sayers_Turbomachines.jpg" alt="Hydraulic and Compressible Flow Turbomachines"><span class="tag">ME</span></span></span><span class="t">Turbomachinery</span></div>
+      <div class="book" data-title="Nano/Microscale Heat Transfer" data-author="Zhuomin M. Zhang" data-year="2007" data-en="McGraw-Hill" data-subject="ME"><span class="cover"><span class="face" style="width:97.2%"><img src="images/covers/14_Zhang_Nano_Microscale_Heat.jpg" alt="Nano/Microscale Heat Transfer"><span class="tag">ME</span></span></span><span class="t">Micro/Nanoscale Heat Transfer</span></div>
+      <div class="book" data-title="Linear Algebra" data-author="Stephen H. Friedberg" data-year="1979" data-en="Pearson" data-subject="Math"><span class="cover"><span class="face" style="width:87.7%"><img src="images/covers/27_Friedberg_Linear_Algebra.jpg" alt="Linear Algebra"><span class="tag">Math</span></span></span><span class="t">Linear Algebra</span></div>
+      <div class="book" data-title="Modern Robotics: Mechanics, Planning, and Control" data-author="Kevin M. Lynch" data-year="2017" data-en="Cambridge University Press" data-subject="ME"><span class="cover"><span class="face" style="width:89.1%"><img src="images/covers/06_Lynch_Modern_Robotics.jpg" alt="Modern Robotics: Mechanics, Planning, and Control"><span class="tag">ME</span></span></span><span class="t">Robotics</span></div>
+      <div class="book" data-title="Introduction to Electrodynamics" data-author="David J. Griffiths" data-year="1981" data-en="Cambridge University Press" data-subject="Phys"><span class="cover"><span class="face" style="width:89.7%"><img src="images/covers/19_Griffiths_Electrodynamics.jpg" alt="Introduction to Electrodynamics"><span class="tag">Phys</span></span></span><span class="t">Electrodynamics</span></div>
+      <div class="book" data-title="Machine Learning: A Probabilistic Perspective" data-author="Kevin P. Murphy" data-year="2012" data-en="The MIT Press" data-subject="AI"><span class="cover"><span class="face" style="width:99.2%"><img src="images/covers/32_Murphy_Machine_Learning.jpg" alt="Machine Learning: A Probabilistic Perspective"><span class="tag">AI</span></span></span><span class="t">Machine Learning</span></div>
+      <div class="book" data-title="Fox and McDonald's Introduction to Fluid Mechanics" data-author="Robert W. Fox" data-year="1973" data-en="John Wiley &amp; Sons" data-subject="ME"><span class="cover"><span class="face" style="width:95.0%"><img src="images/covers/11_Fox_Fluid_Mechanics.jpg" alt="Fox and McDonald's Introduction to Fluid Mechanics"><span class="tag">ME</span></span></span><span class="t">Fluid Mechanics</span></div>
+      <div class="book" data-title="Campbell Biology" data-author="Lisa A. Urry" data-year="1987" data-en="Pearson" data-subject="Sci"><span class="cover"><span class="face" style="width:97.7%"><img src="images/covers/24_Campbell_Biology.jpg" alt="Campbell Biology"><span class="tag">Sci</span></span></span><span class="t">Biology</span></div>
+      <div class="book" data-title="Fundamentals of Heat and Mass Transfer" data-author="Frank P. Incropera" data-year="1981" data-en="John Wiley &amp; Sons" data-subject="ME"><span class="cover"><span class="face" style="width:96.3%"><img src="images/covers/03_Incropera_Heat_Mass_Transfer.jpg" alt="Fundamentals of Heat and Mass Transfer"><span class="tag">ME</span></span></span><span class="t">Heat Transfer</span></div>
+      <div class="book" data-title="Introduction to Solid State Physics" data-author="Charles Kittel" data-year="1953" data-en="John Wiley &amp; Sons" data-subject="Phys"><span class="cover"><span class="face" style="width:96.2%"><img src="images/covers/16_Kittel_Solid_State_Physics.jpg" alt="Introduction to Solid State Physics"><span class="tag">Phys</span></span></span><span class="t">Solid State Physics</span></div>
+      <div class="book" data-title="Understanding Analysis" data-author="Stephen Abbott" data-year="2001" data-en="Springer" data-subject="Math"><span class="cover"><span class="face" style="width:87.5%"><img src="images/covers/29_Abbott_Understanding_Analysis.jpg" alt="Understanding Analysis"><span class="tag">Math</span></span></span><span class="t">Real Analysis</span></div>
+      <div class="book" data-title="Control Systems Engineering" data-author="Norman S. Nise" data-year="1992" data-en="John Wiley &amp; Sons" data-subject="ME"><span class="cover"><span class="face" style="width:96.1%"><img src="images/covers/08_Nise_Control_Systems.jpg" alt="Control Systems Engineering"><span class="tag">ME</span></span></span><span class="t">Control Engineering</span></div>
+      <div class="book" data-title="The Feynman Lectures on Physics" data-author="Richard P. Feynman" data-year="1963" data-en="Basic Books" data-subject="Phys"><span class="cover"><span class="face" style="width:93.0%"><img src="images/covers/21_Feynman_Lectures.jpg" alt="The Feynman Lectures on Physics"><span class="tag">Phys</span></span></span><span class="t">General Physics</span></div>
     </div>
-    <div class="shelf-more"><button type="button" data-more>A prime more</button></div>
+    <div class="shelf-more"><button type="button" data-more>A prime more +2</button></div>
     </div>
     </div>
   </section>
 
 </main>
+
+<div class="spine-tip" aria-hidden="true"></div>
 
 <div class="shelf-toast" aria-hidden="true"></div>
 
@@ -98,7 +205,10 @@
   var moreBtn = document.querySelector('[data-more]');
   var toast = document.querySelector('.shelf-toast');
   if (shelf && moreBtn) {
-    var CHUNKS = [2, 3, 5, 7];
+    // 처음엔 정확히 두 줄만 보이기 (데스크톱 4열→8권, 모바일 3열→6권)
+    var cols = getComputedStyle(shelf).gridTemplateColumns.split(' ').filter(Boolean).length || 4;
+    shelf.querySelectorAll('.book').forEach(function (b, i) { b.classList.toggle('is-hidden', i >= cols * 2); });
+    var CHUNKS = [2, 3, 5, 7, 11];
     var step = 0;
     var toastTimer = null;
     function showToast(n) {
@@ -108,20 +218,128 @@
       clearTimeout(toastTimer);
       toastTimer = setTimeout(function () { toast.classList.remove('show'); }, 1200);
     }
+    function setLabel() {
+      var n = CHUNKS[Math.min(step, CHUNKS.length - 1)];
+      moreBtn.textContent = 'A prime more +' + n;
+    }
+    setLabel();
     moreBtn.addEventListener('click', function () {
       var hidden = shelf.querySelectorAll('.book.is-hidden');
       if (!hidden.length) return;
-      var n = CHUNKS[Math.min(step, CHUNKS.length - 1)];
-      var revealed = 0;
-      for (var i = 0; i < hidden.length && revealed < n; i++) {
-        hidden[i].classList.remove('is-hidden');
-        revealed++;
-      }
-      showToast(revealed);
+      var n = CHUNKS[Math.min(step, CHUNKS.length - 1)];   // 실제 남은 수와 무관하게 정해진 숫자를 그대로 표시
+      var i = 0;
+      hidden.forEach(function (b) { if (i < n) { b.classList.remove('is-hidden'); i++; } });
+      showToast(n);
+      if (window.drawBoards) window.drawBoards();
       step++;
-      if (!shelf.querySelectorAll('.book.is-hidden').length) moreBtn.hidden = true;
+      if (!shelf.querySelectorAll('.book.is-hidden').length) { moreBtn.hidden = true; } else { setLabel(); }
     });
   }
+
+  // Spine shelf: left/right arrows scroll the row
+  var spineShelf = document.querySelector('.spine-shelf');
+  if (spineShelf) {
+    document.querySelectorAll('.spine-nav button').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var dir = parseInt(btn.getAttribute('data-dir'), 10);
+        spineShelf.scrollBy({ left: dir * spineShelf.clientWidth * 0.8, behavior: 'smooth' });
+      });
+    });
+  }
+
+  // Spine hover tooltip (title / author / year / English / subject)
+  var tip = document.querySelector('.spine-tip');
+  if (tip && spineShelf) {
+    var subjName = { humanities: '고전·인문·문학', journalism: '저널리즘·사회', science: '과학·물리·수학' };
+    function fill(a) {
+      var t = a.getAttribute('data-title') || '';
+      var au = a.getAttribute('data-author') || '';
+      var yr = a.getAttribute('data-year') || '';
+      var en = a.getAttribute('data-en') || '';
+      var subj = a.getAttribute('data-subject') || '';
+      var html = '<span class="tt-title">' + t + '</span>';
+      if (en) html += '<span class="tt-en">' + en + '</span><br>';
+      var meta = [];
+      if (au) meta.push(au);
+      if (yr) meta.push(yr);
+      if (subj) meta.push(subj);
+      if (meta.length) html += '<span class="tt-meta">' + meta.join(' · ') + '</span>';
+      tip.innerHTML = html;
+    }
+    function move(e) {
+      var pad = 14, tw = tip.offsetWidth, th = tip.offsetHeight;
+      var x = e.clientX + pad, y = e.clientY + pad;
+      if (x + tw > window.innerWidth - 8) x = e.clientX - tw - pad;
+      if (y + th > window.innerHeight - 8) y = e.clientY - th - pad;
+      x = Math.max(8, Math.min(x, window.innerWidth - tw - 8));   // 화면 밖으로 안 나가게
+      y = Math.max(8, Math.min(y, window.innerHeight - th - 8));
+      tip.style.left = x + 'px'; tip.style.top = y + 'px';
+    }
+    var canHover = window.matchMedia('(hover: hover)').matches;
+    var openFor = null;
+    function hide() { tip.classList.remove('show'); openFor = null; }
+    document.querySelectorAll('.spine, .book').forEach(function (a) {
+      if (canHover) {
+        a.addEventListener('mouseenter', function (e) { fill(a); tip.classList.add('show'); move(e); });
+        a.addEventListener('mousemove', move);
+        a.addEventListener('mouseleave', hide);
+      }
+      a.addEventListener('click', function (e) {
+        if (canHover) return;
+        e.stopPropagation();
+        if (openFor === a) { hide(); return; }
+        fill(a); tip.classList.add('show'); move(e); openFor = a;
+      });
+    });
+    if (!canHover) {
+      document.addEventListener('pointerdown', function (e) { if (!e.target.closest('.spine, .book')) hide(); });
+      window.addEventListener('scroll', hide, { passive: true });
+      if (spineShelf) spineShelf.addEventListener('scroll', hide, { passive: true });
+    }
+  }
+  // 독서대: 표지 그리드의 각 줄 뒤에 긴 직사각형을 그린다 (표지 아래 1/3 높이)
+  var grid = document.querySelector('.shelf');
+  // 줄마다 틀 높이 = 그 줄에서 가장 키 큰 표지 높이 → 표지 위 빈 공간 제거
+  function sizeRows() {
+    var rows = {};
+    grid.querySelectorAll('.book:not(.is-hidden)').forEach(function (b) {
+      (rows[b.offsetTop] = rows[b.offsetTop] || []).push(b);
+    });
+    Object.keys(rows).forEach(function (k) {
+      var h = 0;
+      rows[k].forEach(function (b) {
+        var img = b.querySelector('img'), pct = parseFloat(b.querySelector('.face').style.width) / 100;
+        if (img.naturalWidth) h = Math.max(h, b.clientWidth * pct * img.naturalHeight / img.naturalWidth);   // 칸 폭 × 표지 폭 비율 × 세로/가로
+      });
+      if (h) rows[k].forEach(function (b) { b.querySelector('.cover').style.height = h + 'px'; });
+    });
+  }
+  function drawBoards() {
+    if (!grid) return;
+    sizeRows();
+    var layer = grid.querySelector('.shelf-boards');
+    layer.innerHTML = '';
+    var gTop = grid.getBoundingClientRect().top;
+    var rows = {};
+    grid.querySelectorAll('.book:not(.is-hidden) .cover').forEach(function (img) {
+      var r = img.getBoundingClientRect();
+      var key = Math.round(r.bottom);
+      if (!rows[key] || r.bottom > rows[key].bottom) rows[key] = { top: r.top, bottom: r.bottom };
+    });
+    Object.keys(rows).forEach(function (k) {
+      var row = rows[k], h = (row.bottom - row.top) * 0.34;
+      var el = document.createElement('div');
+      el.className = 'board';
+      el.style.top = (row.bottom - gTop - h) + 'px';
+      el.style.height = h + 'px';
+      layer.appendChild(el);
+    });
+  }
+  window.drawBoards = drawBoards;
+  window.addEventListener('load', drawBoards);
+  window.addEventListener('resize', drawBoards);
+  grid && grid.querySelectorAll('img').forEach(function (im) { im.addEventListener('load', drawBoards); });
+  drawBoards();
 })();
 </script>
 </body>

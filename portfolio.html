@@ -11,6 +11,12 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<script>
+/* 스크롤바 폭 측정: 전체 폭 패널이 스크롤바만큼 밀리지 않게 */
+(function(){function f(){document.documentElement.style.setProperty('--sbw',(window.innerWidth-document.documentElement.getBoundingClientRect().width)+'px');}
+f(); window.addEventListener('resize',f);})();
+</script>
+
 
 <header class="site-head">
   <div class="wrap bar">
