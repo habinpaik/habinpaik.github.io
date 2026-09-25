@@ -224,7 +224,7 @@ main > p.epigraph:first-child { margin-bottom: var(--s3); }
    category: classic = short & thick, science = tall & thin, humanities = mid. */
 .spine-panel {
   width: calc(100vw - var(--sbw, 0px)); margin-left: calc(50% - (100vw - var(--sbw, 0px)) / 2); transform: none;
-  padding-top: var(--s2); padding-bottom: 0;
+  padding-top: calc(var(--s2) - 4px); padding-bottom: 0;   /* 트랙 위 여유 4px과 합쳐 박스 위→첫 책 8px 유지 */
 }
 .spine-wrap { max-width: 46rem; margin-inline: auto; padding-inline: var(--gutter); position: relative; }
 .spine-shelf {
@@ -239,16 +239,18 @@ main > p.epigraph:first-child { margin-bottom: var(--s3); }
 .spine-track {
   display: flex; align-items: flex-end; gap: 10px;
   width: max-content; position: relative;
+  padding: 4px 8px 0 0;   /* 위 4px: 경계 여유, 오른쪽 8px: 마지막 더미 호버 때 안 잘리게 */
 }
 .spine-board {
   position: absolute; bottom: 0; z-index: 0;
   left: calc(var(--gutter) - 20px); right: calc(var(--gutter) - 20px);
   height: 8px; border-radius: 2px;
-  background: linear-gradient(#C08552, #A9703F);
-  border: 1px solid #9A9A9A;
+  background: linear-gradient(#E8DAC4, #DCCAAE);
+  border: 1px solid #CDBDA3;
 }
 /* 더미: 아래부터 위로 쌓임 */
 .pile { display: flex; flex-direction: column-reverse; align-items: flex-start; flex: 0 0 auto; }
+.pile > .spine:last-child { margin-top: 0; }   /* 맨 위 책은 올리지 않음 → 위쪽 경계에 안 잘림 */
 /* 눕힌 책: 옆면(책등)이 보이는 띠. 채움 없이 테두리와 글자만 */
 .spine {
   --cat: #888; --rot: 0deg;
@@ -257,7 +259,7 @@ main > p.epigraph:first-child { margin-bottom: var(--s3); }
   background: var(--paper);
   border: 1.5px solid var(--cat);
   border-radius: 5px;
-  margin-top: 0;                    /* 책끼리 딱 붙음 (각자 테두리라 선은 안 겹침) */
+  margin-top: -1.5px;               /* 위아래 책 테두리가 한 줄로 겹침 (두 겹으로 두꺼워지지 않게) */
   padding: 0 10px;
   transition: transform .15s ease;
 }
@@ -333,7 +335,8 @@ main > p.epigraph:first-child { margin-bottom: var(--s3); }
 
 /* ---------- Research bookshelf (legacy cover grid) ---------- */
 .shelf-panel {
-  padding-block: var(--s2);              /* 모든 세로 간격 8px로 통일 */
+  padding-top: 16px;                     /* 가로책장 바닥 막대 ↔ 표지 첫 줄 */
+  padding-bottom: var(--s2);
   margin-top: 0;
   position: relative;
 }
@@ -353,8 +356,8 @@ main > p.epigraph:first-child { margin-bottom: var(--s3); }
 .shelf-boards { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
 .shelf-boards .board {
   position: absolute; left: -20px; right: -20px;
-  background: linear-gradient(#C08552, #A9703F);
-  border: 1px solid #9A9A9A;
+  background: linear-gradient(#E8DAC4, #DCCAAE);
+  border: 1px solid #CDBDA3;
 }
 .shelf .book { position: relative; z-index: 1; }
 .book { text-decoration: none; color: inherit; position: relative; }
@@ -363,14 +366,17 @@ main > p.epigraph:first-child { margin-bottom: var(--s3); }
 .book .cover { position: relative; }
 /* 틀은 2:3로 고정, 표지는 원본 비율 그대로 틀 바닥에 세움 */
 .book .cover { display: flex; flex-direction: column; justify-content: flex-end; aspect-ratio: 2 / 3; width: 100%; min-height: 0; overflow: visible; }
-.book .face { flex: 0 0 auto; align-self: center; }
+.book .face { flex: 0 0 auto; align-self: flex-start; }   /* 표지 왼쪽 정렬 */
 .book .tag { z-index: 2; }
 .book .face { position: relative; display: block; }
 .book img { width: 100%; height: auto; display: block; box-shadow: 0 2px 5px rgba(0,0,0,.22); }
-.book .tag {   /* 위 분류 버튼과 같은 모양 */
-  position: absolute; top: var(--s2); left: var(--s2);
+.book .tag {   /* 위 분류 버튼과 같은 모양, 반투명, 표지 모서리 밖으로 반쯤 걸침 */
+  position: absolute; top: 0; left: 0;
+  transform: translateY(-35%);   /* 왼쪽 끝은 표지 왼쪽 선에 맞춤, 위로만 반쯤 걸침 */
   font-family: var(--sans); font-size: var(--t-small); font-weight: 400; line-height: 1.6;
-  color: var(--stone); background: var(--paper); border: 1px solid #CFCFCF;
+  color: var(--stone); border: 1px solid rgba(0,0,0,.18);
+  background: rgba(255,255,255,.6);
+  -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
   padding: 0 10px; border-radius: 999px;
 }
 .book .t { display: block; margin-top: var(--s2); color: var(--stone); font-size: var(--t-small); line-height: 1.6; font-family: var(--sans); }

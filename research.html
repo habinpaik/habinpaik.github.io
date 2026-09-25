@@ -266,7 +266,7 @@ f(); window.addEventListener('resize',f);})();
       if (spineSel.length && spineSel.indexOf(b.classList[1]) < 0) { pileHold.appendChild(b); return; }
       var t = b.offsetHeight;
       if (!pile || h + t > max) { pile = document.createElement('div'); pile.className = 'pile'; pileTrack.appendChild(pile); h = 0; }
-      pile.appendChild(b); h += t;
+      pile.appendChild(b); h += t - 1.5;   // 겹친 테두리만큼 빼기
     });
   }
   packPiles();
