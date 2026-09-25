@@ -89,7 +89,7 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
 }
 .site-head .bar {
   display: flex; align-items: baseline; justify-content: space-between;
-  gap: var(--s4); padding-block: var(--s3);
+  gap: var(--s4); padding-top: var(--s3); padding-bottom: var(--s2);   /* 메뉴 글자와 아래 굵은 바 사이를 좁게 */
 }
 .wordmark { font-family: var(--serif); font-size: var(--t-body); font-weight: 700; letter-spacing: -0.01em; color: var(--ink); text-decoration: none; }
 .nav { display: flex; gap: var(--s4); font-size: var(--t-body); }
@@ -99,7 +99,7 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
 /* thick bar sitting on the header's bottom edge (not an underline under the text) */
 .nav a[aria-current="page"]::after {
   content: ""; position: absolute; left: 0; right: 0;
-  bottom: calc(-1 * var(--s3) - 1px);   /* sit exactly on the header's bottom edge */
+  bottom: calc(-1 * var(--s2) - 1px);   /* sit exactly on the header's bottom edge */
   height: 3px; background: var(--ink);
 }
 
@@ -224,63 +224,58 @@ main > p.epigraph:first-child { margin-bottom: var(--s3); }
    category: classic = short & thick, science = tall & thin, humanities = mid. */
 .spine-panel {
   width: calc(100vw - var(--sbw, 0px)); margin-left: calc(50% - (100vw - var(--sbw, 0px)) / 2); transform: none;
-  padding-block: 0;
-  margin-top: var(--s4);
+  padding-top: var(--s2); padding-bottom: 0;
 }
 .spine-wrap { max-width: 46rem; margin-inline: auto; padding-inline: var(--gutter); position: relative; }
 .spine-shelf {
-  overflow-x: auto; padding-top: 12px; padding-bottom: 0;
+  --pile-max: 260px;   /* 더미 최대 높이: 넘치면 오른쪽 새 더미로 */
+  --floor: 8px;        /* 바닥 막대 두께 */
+  overflow-x: auto; padding-top: 0; padding-bottom: var(--floor);
   position: relative; z-index: 1;
   scrollbar-width: none;
-  scroll-snap-type: x proximity;
   scroll-behavior: smooth;
 }
+.spine-shelf::-webkit-scrollbar { display: none; }
 .spine-track {
-  display: flex; align-items: flex-end; gap: 6px;
+  display: flex; align-items: flex-end; gap: 10px;
   width: max-content; position: relative;
 }
-.spine-shelf::-webkit-scrollbar { display: none; }
 .spine-board {
   position: absolute; bottom: 0; z-index: 0;
   left: calc(var(--gutter) - 20px); right: calc(var(--gutter) - 20px);
-  height: 52px;
+  height: 8px; border-radius: 2px;
   background: linear-gradient(#C08552, #A9703F);
   border: 1px solid #9A9A9A;
 }
-.spine { position: relative; z-index: 1; }
+/* 더미: 아래부터 위로 쌓임 */
+.pile { display: flex; flex-direction: column-reverse; align-items: flex-start; flex: 0 0 auto; }
+/* 눕힌 책: 옆면(책등)이 보이는 띠. 채움 없이 테두리와 글자만 */
 .spine {
-  flex: 0 0 auto; scroll-snap-align: start;
-  position: relative;
-  border-radius: 2px 2px 0 0;
-  box-shadow: inset -3px 0 6px rgba(0,0,0,.10), 0 1px 2px rgba(0,0,0,.12);
-  text-decoration: none;
+  --cat: #888; --rot: 0deg;
+  display: flex; align-items: center; box-sizing: border-box;
+  position: relative; z-index: 1;
+  background: var(--paper);
+  border: 1.5px solid var(--cat);
+  border-radius: 5px;
+  margin-top: 0;                    /* 책끼리 딱 붙음 (각자 테두리라 선은 안 겹침) */
+  padding: 0 10px;
   transition: transform .15s ease;
-  overflow: hidden;
 }
-.spine:hover { transform: translateY(-4px); }
-/* text laid on its side (works for Korean + English alike), starting at the
-   top of the spine and reading downward, aligned to a common start. */
+.spine:hover { transform: translateX(6px); z-index: 2; }   /* 살짝 빼내는 느낌 */
 .spine .t {
-  writing-mode: vertical-rl;
-  text-orientation: sideways;
-  font-family: var(--sans);
-  font-size: var(--t-small); font-weight: 400;
-  line-height: 1; letter-spacing: -0.01em; white-space: nowrap;
-  color: #fff;
-  padding: 12px 0;      /* 위아래 여백 */
-  margin: 0 auto;       /* center across the spine's width */
-  display: block; height: 100%; box-sizing: border-box;
-  overflow: hidden; text-overflow: ellipsis;   /* 길면 … */
+  font-family: var(--sans); font-size: var(--t-small); font-weight: 400;
+  line-height: 1; letter-spacing: -0.01em; color: var(--cat);   /* 글자도 분류색 */
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;   /* 길면 … */
 }
-.spine { display: flex; }
-/* three categories: classic/humanities = short & thick, journalism = mid, science = tall & thin */
-.spine.humanities { width: 44px; height: 150px; background: #4a5d40; }  /* 고전·인문·문학 — 낮고 두껍게 */
-.spine.journalism { width: 34px; height: 188px; background: #6d2b2f; }  /* 저널리즘·사회 — 중간 */
-.spine.science    { width: 26px; height: 225px; background: #2f4058; }  /* 과학·물리·수학 — 높고 얇게 */
+/* 분류별 지정 두께(띠 높이)·길이·테두리색 — 기존 책등 규칙 그대로 */
+.spine.humanities { --cat: #4a5d40; height: 44px; width: 150px; }  /* 고전·인문·문학 */
+.spine.journalism { --cat: #6d2b2f; height: 34px; width: 188px; }  /* 저널리즘·사회 */
+.spine.science    { --cat: #2f4058; height: 26px; width: 225px; }  /* 과학·물리·수학 */
 @media (max-width: 40rem) {
-  .spine.humanities { width: 40px; height: 128px; }
-  .spine.journalism { width: 32px; height: 160px; }
-  .spine.science    { width: 26px; height: 192px; }
+  .spine-shelf { --pile-max: 220px; }
+  .spine.humanities { height: 40px; width: 128px; }
+  .spine.journalism { height: 32px; width: 160px; }
+  .spine.science    { height: 26px; width: 192px; }
 }
 /* left/right scroll arrows — bottom-right, translucent */
 .spine-nav { position: absolute; bottom: calc(var(--s4) + 0.9rem); right: calc(var(--gutter) + 0.6rem); display: flex; gap: var(--s2); z-index: 3; }
@@ -338,10 +333,8 @@ main > p.epigraph:first-child { margin-bottom: var(--s3); }
 
 /* ---------- Research bookshelf (legacy cover grid) ---------- */
 .shelf-panel {
-  background: var(--brand);
-  border-block: 1px solid var(--line);   /* NYT 광고 띠처럼 위아래 1px 선 */
-  padding-block: var(--s3);   /* 박스 안 맨 위 여백 = 줄 사이 간격(s3) */
-  margin-top: var(--s6);
+  padding-block: var(--s2);              /* 모든 세로 간격 8px로 통일 */
+  margin-top: 0;
   position: relative;
 }
 /* the panel is full-bleed but the shelf grid is capped to the text column */
@@ -353,7 +346,7 @@ main > p.epigraph:first-child { margin-bottom: var(--s3); }
 .shelf {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: var(--s3) var(--s4);   /* 줄 사이 간격 축소 */
+  gap: var(--s2) var(--s4);   /* 줄 사이 간격 8px */
   position: relative;
 }
 /* 독서대: 줄마다 뒤에 깔리는 가로로 긴 직사각형 (JS가 행 위치를 재서 그림) */
@@ -374,18 +367,18 @@ main > p.epigraph:first-child { margin-bottom: var(--s3); }
 .book .tag { z-index: 2; }
 .book .face { position: relative; display: block; }
 .book img { width: 100%; height: auto; display: block; box-shadow: 0 2px 5px rgba(0,0,0,.22); }
-.book .tag {
+.book .tag {   /* 위 분류 버튼과 같은 모양 */
   position: absolute; top: var(--s2); left: var(--s2);
-  font-family: var(--sans); font-size: 0.7rem; font-weight: 600;
-  color: #fff; background: rgba(20,20,20,.72);
-  padding: 2px 7px; border-radius: 2px; letter-spacing: .02em;
+  font-family: var(--sans); font-size: var(--t-small); font-weight: 400; line-height: 1.6;
+  color: var(--stone); background: var(--paper); border: 1px solid #CFCFCF;
+  padding: 0 10px; border-radius: 999px;
 }
 .book .t { display: block; margin-top: var(--s2); color: var(--stone); font-size: var(--t-small); line-height: 1.6; font-family: var(--sans); }
 
 /* books past the first row start hidden; revealed downward by 더보기 */
 .book.is-hidden { display: none; }
 
-.shelf-more { text-align: center; margin-top: var(--s3); }
+.shelf-more { text-align: center; margin-top: var(--s2); }
 .shelf-more button {
   font-family: var(--sans); font-size: var(--t-small); font-weight: 600;
   color: var(--ink); background: transparent;
@@ -526,3 +519,30 @@ a:focus-visible { outline: 2px solid var(--link); outline-offset: 3px; }
 
 /* 책은 링크가 아니므로 일반 커서 */
 .spine, .book { cursor: default; }
+
+/* ---------- 책장 박스: 분류 버튼 줄 + 가로책장 + 표지책장을 하나의 회색 박스로 ---------- */
+.shelf-box {
+  width: calc(100vw - var(--sbw, 0px)); margin-left: calc(50% - (100vw - var(--sbw, 0px)) / 2);
+  background: var(--brand);
+  border-block: 1px solid var(--line);
+  margin-top: var(--s3);
+}
+.shelf-box [hidden] { display: none !important; }
+.shelf-box.no-covers .spine-panel { padding-bottom: var(--s2); }   /* 표지책장이 숨으면 바닥 막대 아래 여백 8px */
+.shelf-filter { margin-top: var(--s3); }   /* 각주 아래, 회색 박스 밖 */
+.filter-wrap { display: flex; flex-wrap: wrap; gap: 6px; }
+.filter-btn {
+  font-family: var(--sans); font-size: var(--t-small); line-height: 1.6;
+  padding: 2px 12px; border-radius: 999px; cursor: pointer;
+  background: var(--paper); color: var(--stone); border: 1px solid #CFCFCF;
+  transition: background .15s ease, color .15s ease, border-color .15s ease;
+}
+.filter-btn:hover { color: var(--ink); border-color: var(--ink); }
+.filter-btn[aria-pressed="true"] { background: var(--ink); color: #fff; border-color: var(--ink); }
+.book.is-filtered { display: none; }
+
+/* 두꺼운 고전·인문 책은 두께 그대로 제목 두 줄까지 */
+.spine.humanities .t {
+  white-space: normal; line-height: 1.25;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+}

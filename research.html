@@ -43,6 +43,8 @@ f(); window.addEventListener('resize',f);})();
     <h2 class="section-title">Bookshelf</h2>
     <p class="shelf-note">각주: 표지·책등은 <a href="#">실제 소장 도서</a> 기준이며, 목록은 계속 업데이트됩니다.</p>
 
+    <div class="shelf-filter"><div class="filter-wrap" role="group" aria-label="Filter by category"></div></div>
+    <div class="shelf-box">
     <div class="spine-panel">
     <div class="spine-wrap">
     <div class="spine-nav"><button type="button" data-dir="-1" aria-label="이전">&#10094;</button><button type="button" data-dir="1" aria-label="다음">&#10095;</button></div>
@@ -152,7 +154,7 @@ f(); window.addEventListener('resize',f);})();
       <div class="book" data-title="Quantum Computation and Quantum Information" data-author="Michael A. Nielsen" data-year="2000" data-en="Cambridge University Press" data-subject="Phys"><span class="cover"><span class="face" style="width:89.4%"><img src="images/covers/20_Nielsen_Quantum_Computation.jpg" alt="Quantum Computation and Quantum Information"><span class="tag">Phys</span></span></span><span class="t">Quantum Information</span></div>
       <div class="book" data-title="Reinforcement Learning: An Introduction" data-author="Richard S. Sutton" data-year="1998" data-en="The MIT Press" data-subject="AI"><span class="cover"><span class="face" style="width:91.6%"><img src="images/covers/33_Sutton_Reinforcement_Learning.jpg" alt="Reinforcement Learning: An Introduction"><span class="tag">AI</span></span></span><span class="t">Reinforcement Learning</span></div>
       <div class="book" data-title="Mechanics of Materials" data-author="Russell C. Hibbeler" data-year="1991" data-en="Pearson" data-subject="ME"><span class="cover"><span class="face" style="width:100.0%"><img src="images/covers/12_Hibbeler_Mechanics_of_Materials.jpg" alt="Mechanics of Materials"><span class="tag">ME</span></span></span><span class="t">Mechanics of Materials</span></div>
-      <div class="book" data-title="Chemistry" data-author="Steven S. Zumdahl" data-year="1986" data-en="Cengage Learning" data-subject="Sci"><span class="cover"><span class="face" style="width:94.8%"><img src="images/covers/25_Zumdahl_Chemistry.jpg" alt="Chemistry"><span class="tag">Sci</span></span></span><span class="t">Chemistry</span></div>
+      <div class="book" data-title="Chemistry" data-author="Steven S. Zumdahl" data-year="1986" data-en="Cengage Learning" data-subject="Science"><span class="cover"><span class="face" style="width:94.8%"><img src="images/covers/25_Zumdahl_Chemistry.jpg" alt="Chemistry"><span class="tag">Science</span></span></span><span class="t">Chemistry</span></div>
       <div class="book" data-title="Nanoscale Energy Transport and Conversion" data-author="Gang Chen" data-year="2005" data-en="Oxford University Press" data-subject="ME"><span class="cover"><span class="face" style="width:84.6%"><img src="images/covers/04_Chen_Nanoscale_Energy.jpg" alt="Nanoscale Energy Transport and Conversion"><span class="tag">ME</span></span></span><span class="t">Nanoscale Energy</span></div>
       <div class="book" data-title="Atomic Physics" data-author="Christopher J. Foot" data-year="2004" data-en="Oxford University Press" data-subject="Phys"><span class="cover"><span class="face" style="width:96.9%"><img src="images/covers/17_Foot_Atomic_Physics.jpg" alt="Atomic Physics"><span class="tag">Phys</span></span></span><span class="t">Atomic Physics</span></div>
       <div class="book" data-title="선형대수와 군" data-author="이인석" data-year="2005" data-en="서울대학교출판문화원" data-subject="Math"><span class="cover"><span class="face" style="width:91.1%"><img src="images/covers/30_Lee_Linear_Algebra_and_Groups.jpg" alt="선형대수와 군"><span class="tag">Math</span></span></span><span class="t">Linear Algebra & Group Theory</span></div>
@@ -165,7 +167,7 @@ f(); window.addEventListener('resize',f);})();
       <div class="book" data-title="Introduction to Electrodynamics" data-author="David J. Griffiths" data-year="1981" data-en="Cambridge University Press" data-subject="Phys"><span class="cover"><span class="face" style="width:89.7%"><img src="images/covers/19_Griffiths_Electrodynamics.jpg" alt="Introduction to Electrodynamics"><span class="tag">Phys</span></span></span><span class="t">Electrodynamics</span></div>
       <div class="book" data-title="Machine Learning: A Probabilistic Perspective" data-author="Kevin P. Murphy" data-year="2012" data-en="The MIT Press" data-subject="AI"><span class="cover"><span class="face" style="width:99.2%"><img src="images/covers/32_Murphy_Machine_Learning.jpg" alt="Machine Learning: A Probabilistic Perspective"><span class="tag">AI</span></span></span><span class="t">Machine Learning</span></div>
       <div class="book" data-title="Fox and McDonald's Introduction to Fluid Mechanics" data-author="Robert W. Fox" data-year="1973" data-en="John Wiley &amp; Sons" data-subject="ME"><span class="cover"><span class="face" style="width:95.0%"><img src="images/covers/11_Fox_Fluid_Mechanics.jpg" alt="Fox and McDonald's Introduction to Fluid Mechanics"><span class="tag">ME</span></span></span><span class="t">Fluid Mechanics</span></div>
-      <div class="book" data-title="Campbell Biology" data-author="Lisa A. Urry" data-year="1987" data-en="Pearson" data-subject="Sci"><span class="cover"><span class="face" style="width:97.7%"><img src="images/covers/24_Campbell_Biology.jpg" alt="Campbell Biology"><span class="tag">Sci</span></span></span><span class="t">Biology</span></div>
+      <div class="book" data-title="Campbell Biology" data-author="Lisa A. Urry" data-year="1987" data-en="Pearson" data-subject="Science"><span class="cover"><span class="face" style="width:97.7%"><img src="images/covers/24_Campbell_Biology.jpg" alt="Campbell Biology"><span class="tag">Science</span></span></span><span class="t">Biology</span></div>
       <div class="book" data-title="Fundamentals of Heat and Mass Transfer" data-author="Frank P. Incropera" data-year="1981" data-en="John Wiley &amp; Sons" data-subject="ME"><span class="cover"><span class="face" style="width:96.3%"><img src="images/covers/03_Incropera_Heat_Mass_Transfer.jpg" alt="Fundamentals of Heat and Mass Transfer"><span class="tag">ME</span></span></span><span class="t">Heat Transfer</span></div>
       <div class="book" data-title="Introduction to Solid State Physics" data-author="Charles Kittel" data-year="1953" data-en="John Wiley &amp; Sons" data-subject="Phys"><span class="cover"><span class="face" style="width:96.2%"><img src="images/covers/16_Kittel_Solid_State_Physics.jpg" alt="Introduction to Solid State Physics"><span class="tag">Phys</span></span></span><span class="t">Solid State Physics</span></div>
       <div class="book" data-title="Understanding Analysis" data-author="Stephen Abbott" data-year="2001" data-en="Springer" data-subject="Math"><span class="cover"><span class="face" style="width:87.5%"><img src="images/covers/29_Abbott_Understanding_Analysis.jpg" alt="Understanding Analysis"><span class="tag">Math</span></span></span><span class="t">Real Analysis</span></div>
@@ -173,6 +175,7 @@ f(); window.addEventListener('resize',f);})();
       <div class="book" data-title="The Feynman Lectures on Physics" data-author="Richard P. Feynman" data-year="1963" data-en="Basic Books" data-subject="Phys"><span class="cover"><span class="face" style="width:93.0%"><img src="images/covers/21_Feynman_Lectures.jpg" alt="The Feynman Lectures on Physics"><span class="tag">Phys</span></span></span><span class="t">General Physics</span></div>
     </div>
     <div class="shelf-more"><button type="button" data-more>A prime more +2</button></div>
+    </div>
     </div>
     </div>
   </section>
@@ -205,11 +208,16 @@ f(); window.addEventListener('resize',f);})();
   var moreBtn = document.querySelector('[data-more]');
   var toast = document.querySelector('.shelf-toast');
   if (shelf && moreBtn) {
-    // 처음엔 정확히 두 줄만 보이기 (데스크톱 4열→8권, 모바일 3열→6권)
-    var cols = getComputedStyle(shelf).gridTemplateColumns.split(' ').filter(Boolean).length || 4;
-    shelf.querySelectorAll('.book').forEach(function (b, i) { b.classList.toggle('is-hidden', i >= cols * 2); });
     var CHUNKS = [2, 3, 5, 7, 11];
     var step = 0;
+    // 처음엔 정확히 두 줄만 보이기 (데스크톱 4열→8권, 모바일 3열→6권). 필터가 바뀌면 다시 시작
+    window.resetReveal = function () {
+      var cols = getComputedStyle(shelf).gridTemplateColumns.split(' ').filter(Boolean).length || 4;
+      var shown = shelf.querySelectorAll('.book:not(.is-filtered)');
+      shown.forEach(function (b, i) { b.classList.toggle('is-hidden', i >= cols * 2); });
+      step = 0; setLabel();
+      moreBtn.hidden = shown.length <= cols * 2;
+    };
     var toastTimer = null;
     function showToast(n) {
       if (!toast) return;
@@ -222,9 +230,9 @@ f(); window.addEventListener('resize',f);})();
       var n = CHUNKS[Math.min(step, CHUNKS.length - 1)];
       moreBtn.textContent = 'A prime more +' + n;
     }
-    setLabel();
+    window.resetReveal();
     moreBtn.addEventListener('click', function () {
-      var hidden = shelf.querySelectorAll('.book.is-hidden');
+      var hidden = shelf.querySelectorAll('.book.is-hidden:not(.is-filtered)');
       if (!hidden.length) return;
       var n = CHUNKS[Math.min(step, CHUNKS.length - 1)];   // 실제 남은 수와 무관하게 정해진 숫자를 그대로 표시
       var i = 0;
@@ -232,9 +240,42 @@ f(); window.addEventListener('resize',f);})();
       showToast(n);
       if (window.drawBoards) window.drawBoards();
       step++;
-      if (!shelf.querySelectorAll('.book.is-hidden').length) { moreBtn.hidden = true; } else { setLabel(); }
+      if (!shelf.querySelectorAll('.book.is-hidden:not(.is-filtered)').length) { moreBtn.hidden = true; } else { setLabel(); }
     });
   }
+
+  // 세로책장 → 눕혀 쌓은 더미: 매번 무작위로 섞고, 아래부터 쌓다가 최대 높이를 넘으면 오른쪽 새 더미로
+  var pileTrack = document.querySelector('.spine-track');
+  var pileBooks = pileTrack ? [].slice.call(pileTrack.querySelectorAll('.spine')) : [];
+  for (var i = pileBooks.length - 1; i > 0; i--) {             // Fisher–Yates: 진짜 랜덤
+    var j = Math.floor(Math.random() * (i + 1)), tmp = pileBooks[i]; pileBooks[i] = pileBooks[j]; pileBooks[j] = tmp;
+  }
+  pileBooks.forEach(function (b) {                              // 자유분방하게: 좌우 어긋남 0~16px
+    b.style.marginLeft = Math.round(Math.random() * 16) + 'px';
+  });
+  var spineSel = [];                                             // 선택된 가로책장 분류 (비어 있으면 전부)
+  var pileHold = document.createElement('div'); pileHold.hidden = true;
+  if (pileTrack) pileTrack.appendChild(pileHold);
+  function packPiles() {
+    if (!pileTrack) return;
+    pileBooks.forEach(function (b) { pileTrack.appendChild(b); });
+    [].slice.call(pileTrack.querySelectorAll('.pile')).forEach(function (p) { p.remove(); });
+    var max = parseFloat(getComputedStyle(document.querySelector('.spine-shelf')).getPropertyValue('--pile-max')) || 260;
+    var pile = null, h = 0;
+    pileBooks.forEach(function (b) {
+      if (spineSel.length && spineSel.indexOf(b.classList[1]) < 0) { pileHold.appendChild(b); return; }
+      var t = b.offsetHeight;
+      if (!pile || h + t > max) { pile = document.createElement('div'); pile.className = 'pile'; pileTrack.appendChild(pile); h = 0; }
+      pile.appendChild(b); h += t;
+    });
+  }
+  packPiles();
+  var lastMax = null;
+  window.addEventListener('resize', function () {
+    var m = getComputedStyle(document.querySelector('.spine-shelf')).getPropertyValue('--pile-max');
+    if (m !== lastMax) { lastMax = m; packPiles(); }
+  });
+  lastMax = getComputedStyle(document.querySelector('.spine-shelf')).getPropertyValue('--pile-max');
 
   // Spine shelf: left/right arrows scroll the row
   var spineShelf = document.querySelector('.spine-shelf');
@@ -302,7 +343,7 @@ f(); window.addEventListener('resize',f);})();
   // 줄마다 틀 높이 = 그 줄에서 가장 키 큰 표지 높이 → 표지 위 빈 공간 제거
   function sizeRows() {
     var rows = {};
-    grid.querySelectorAll('.book:not(.is-hidden)').forEach(function (b) {
+    grid.querySelectorAll('.book:not(.is-hidden):not(.is-filtered)').forEach(function (b) {
       (rows[b.offsetTop] = rows[b.offsetTop] || []).push(b);
     });
     Object.keys(rows).forEach(function (k) {
@@ -321,7 +362,7 @@ f(); window.addEventListener('resize',f);})();
     layer.innerHTML = '';
     var gTop = grid.getBoundingClientRect().top;
     var rows = {};
-    grid.querySelectorAll('.book:not(.is-hidden) .cover').forEach(function (img) {
+    grid.querySelectorAll('.book:not(.is-hidden):not(.is-filtered) .cover').forEach(function (img) {
       var r = img.getBoundingClientRect();
       var key = Math.round(r.bottom);
       if (!rows[key] || r.bottom > rows[key].bottom) rows[key] = { top: r.top, bottom: r.bottom };
@@ -336,6 +377,46 @@ f(); window.addEventListener('resize',f);})();
     });
   }
   window.drawBoards = drawBoards;
+
+  // 분류 버튼: 순서는 매번 무작위, 여러 개 선택 가능
+  var FILTERS = [   // spine: 가로책장 분류 / cover: 표지책장 분류. Science는 둘 다
+    { label: 'ME', cover: 'ME' }, { label: 'Phys', cover: 'Phys' }, { label: 'Math', cover: 'Math' }, { label: 'AI', cover: 'AI' },
+    { label: 'Science', spine: 'science', cover: 'Science' },
+    { label: 'Classics', spine: 'humanities' }, { label: 'Journalism', spine: 'journalism' }
+  ];
+  for (var fi = FILTERS.length - 1; fi > 0; fi--) {
+    var fj = Math.floor(Math.random() * (fi + 1)), ft = FILTERS[fi]; FILTERS[fi] = FILTERS[fj]; FILTERS[fj] = ft;
+  }
+  var fwrap = document.querySelector('.filter-wrap'), selected = [];
+  var box = document.querySelector('.shelf-box');
+  var spinePanel = document.querySelector('.spine-panel'), coverPanel = document.querySelector('.shelf-panel');
+  function applyFilter() {
+    var on = FILTERS.filter(function (f) { return selected.indexOf(f.label) >= 0; });
+    var sp = on.filter(function (f) { return f.spine; }).map(function (f) { return f.spine; });
+    var cv = on.filter(function (f) { return f.cover; }).map(function (f) { return f.cover; });
+    var any = selected.length > 0;
+    spinePanel.hidden = any && !sp.length;                       // 표지책장 분류만 골랐으면 가로책장 숨김
+    coverPanel.hidden = any && !cv.length;                       // 가로책장 분류만 골랐으면 표지책장 숨김
+    box.classList.toggle('no-covers', coverPanel.hidden);
+    spineSel = sp; packPiles(); if (spineShelf) spineShelf.scrollLeft = 0;
+    grid.querySelectorAll('.book').forEach(function (b) {
+      b.classList.toggle('is-filtered', cv.length > 0 && cv.indexOf(b.getAttribute('data-subject')) < 0);
+    });
+    if (window.resetReveal) window.resetReveal();
+    drawBoards();
+  }
+  if (fwrap) FILTERS.forEach(function (f) {
+    var btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'filter-btn'; btn.textContent = f.label;
+    btn.setAttribute('aria-pressed', 'false');
+    btn.addEventListener('click', function () {
+      var i = selected.indexOf(f.label);
+      if (i >= 0) selected.splice(i, 1); else selected.push(f.label);
+      btn.setAttribute('aria-pressed', i >= 0 ? 'false' : 'true');
+      applyFilter();
+    });
+    fwrap.appendChild(btn);
+  });
   window.addEventListener('load', drawBoards);
   window.addEventListener('resize', drawBoards);
   grid && grid.querySelectorAll('img').forEach(function (im) { im.addEventListener('load', drawBoards); });
