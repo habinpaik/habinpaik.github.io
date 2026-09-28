@@ -13,6 +13,7 @@
   --brand:      #F8F8F8;   /* NYT 광고 띠 배경: 배너·표지책장 배경 */
   --brand-deep: #424245;   /* 같은 계열의 진한 회색: 본문 링크 */
   --link:  var(--brand-deep);
+  --hero-bg: var(--brand-deep);   /* Home 상단 이름 영역 + 그때의 메뉴 배경 */
 
   --serif: "Lora", "Noto Serif KR", Georgia, "Times New Roman", serif;
   --serif-ko: "Noto Serif KR", Georgia, serif;
@@ -91,7 +92,7 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
   display: flex; align-items: baseline; justify-content: space-between;
   gap: var(--s4); padding-top: var(--s3); padding-bottom: var(--s2);   /* 메뉴 글자와 아래 굵은 바 사이를 좁게 */
 }
-.wordmark { font-family: var(--serif); font-size: var(--t-body); font-weight: 700; letter-spacing: -0.01em; color: var(--ink); text-decoration: none; }
+.wordmark { font-family: var(--serif); font-size: var(--t-body); font-weight: 700; letter-spacing: -0.01em; color: var(--ink); text-decoration: none; transition: opacity .25s ease, visibility .25s; }
 .nav { display: flex; gap: var(--s4); font-size: var(--t-body); }
 .nav a { position: relative; color: var(--stone); text-decoration: none; font-weight: 700; font-size: var(--t-body); transition: color .15s ease; }
 .nav a:hover { color: var(--ink); }
@@ -102,6 +103,43 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
   bottom: calc(-1 * var(--s2) - 1px);   /* sit exactly on the header's bottom edge */
   height: 3px; background: var(--ink);
 }
+
+/* ---------- Hero (HOME ONLY) ----------
+   Sits above the sticky header in normal flow: visible at the top of the page,
+   scrolls away on the way down, returns at the top. While any of it is on screen
+   (body.hero-on) the header joins it in dark gray and hides its wordmark. */
+.hero {
+  margin-top: 0;   /* override the generic section spacing */
+  background: var(--hero-bg); color: #fff;
+}
+/* bottom: unchanged (--s5 below the name, then the menu bar).
+   top: the same distance, i.e. --s5 + the menu bar height (--head-h, measured by script) */
+.hero .wrap {
+  width: 100%; max-width: 46rem;
+  padding-top: calc(var(--s5) + var(--head-h, 3rem));
+  padding-bottom: var(--s5);
+}
+.hero-name {
+  margin: 0;
+  font-family: var(--serif); font-weight: 700;
+  font-size: clamp(2.6rem, 5.2vw, 3.5rem);   /* 2x the identity-band line */
+  line-height: 1.15; letter-spacing: -0.02em;
+  margin-top: -0.04em;   /* cap top sits slightly lower in its line than 한글 bottom does: evens the two gaps */
+}
+.hero-name .ko { display: block; }
+
+.hero-on .site-head,
+.hero-on .site-head.scrolled {
+  background: var(--hero-bg);
+  border-bottom-color: var(--hero-bg);
+  backdrop-filter: none; -webkit-backdrop-filter: none;
+}
+/* hidden but keeps its space, so the menu doesn't shift when it returns */
+.hero-on .wordmark { opacity: 0; visibility: hidden; }
+.hero-on .nav a { color: rgba(255,255,255,.72); }
+.hero-on .nav a:hover,
+.hero-on .nav a[aria-current="page"] { color: #fff; }
+.hero-on .nav a[aria-current="page"]::after { background: #fff; }
 
 /* the leading top block (home) shares the plain <p> rule */
 .lead { padding-top: var(--s7); padding-bottom: var(--s7); }

@@ -10,13 +10,20 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="hero-on">
 <script>
 /* 스크롤바 폭 측정: 전체 폭 패널이 스크롤바만큼 밀리지 않게 */
 (function(){function f(){document.documentElement.style.setProperty('--sbw',(window.innerWidth-document.documentElement.getBoundingClientRect().width)+'px');}
 f(); window.addEventListener('resize',f);})();
 </script>
 
+
+<!-- Home only: large name above the menu, visible at the top of the page -->
+<section class="hero">
+  <div class="wrap">
+    <h1 class="hero-name">Habin Paik<span class="ko" lang="ko">백하빈</span></h1>
+  </div>
+</section>
 
 <header class="site-head">
   <div class="wrap bar">
@@ -28,6 +35,16 @@ f(); window.addEventListener('resize',f);})();
     </nav>
   </div>
 </header>
+<script>
+/* menu bar height -> --head-h, so the hero's two gaps can be made equal */
+(function () {
+  var head = document.querySelector('.site-head'), root = document.documentElement;
+  function set() { root.style.setProperty('--head-h', head.offsetHeight + 'px'); }
+  set();
+  if ('ResizeObserver' in window) new ResizeObserver(set).observe(head);
+  else window.addEventListener('resize', set);
+})();
+</script>
 
 <div class="wrap lead">
   <p>Engineer, Physician, Journalist.</p>
@@ -99,6 +116,15 @@ f(); window.addEventListener('resize',f);})();
   }
   onScroll();
   window.addEventListener('scroll', onScroll, { passive: true });
+})();
+
+/* hero-on while any part of the hero is on screen; off once it has scrolled away */
+(function () {
+  var hero = document.querySelector('.hero');
+  if (!hero || !('IntersectionObserver' in window)) return;
+  new IntersectionObserver(function (entries) {
+    document.body.classList.toggle('hero-on', entries[0].isIntersecting);
+  }).observe(hero);
 })();
 </script>
 </body>
