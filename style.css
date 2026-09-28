@@ -160,8 +160,20 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
   background: linear-gradient(to bottom, transparent var(--head-h, 3rem), var(--paper) var(--head-h, 3rem));
 }
 
+/* once the bar reaches the top and turns blurred, the see-through band behind it
+   gets a gradient -- clear at the top, page colour at the bottom -- fading in at the
+   same speed as the menu text turns dark (.15s), so the photo melts into the page */
+.home .sheet::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: var(--head-h, 3rem);
+  background: linear-gradient(to bottom, transparent, var(--paper));
+  opacity: 0; pointer-events: none;
+  transition: opacity .15s ease;
+}
+.home:not(.hero-on) .sheet::before { opacity: 1; }
+
 /* menu bar on Home: line appears/disappears instantly (no fade) */
-.home .site-head { transition: background .25s ease, backdrop-filter .25s ease; }
+.home .site-head { transition: background .15s ease, backdrop-filter .15s ease; }
+.home .wordmark { transition: opacity .25s ease, visibility .25s, color .15s ease; }
 .home .site-head.scrolled.lined { border-bottom-color: var(--line); }
 .hero-on .site-head,
 .hero-on .site-head.scrolled {
