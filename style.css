@@ -150,6 +150,7 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
   line-height: 1.15; letter-spacing: -0.02em;
   margin-top: -0.04em;   /* evens the gaps above the letters and below them */
 }
+.hero-name .alt { display: block; font-family: var(--serif), "Noto Serif Devanagari", "Noto Naskh Arabic", serif; }   /* serif in every script */
 .hero-name .ko { display: block; }
 
 /* the page: its first --head-h is see-through (the menu bar sits there over the photo) */
@@ -195,7 +196,7 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
 }
 .identity-band .ko { color: var(--ink); }
 
-main { padding-block: var(--s7) var(--s8); }
+main { padding-block: var(--s7); }
 
 h2.section-title {
   font-family: var(--sans);
@@ -611,7 +612,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card)):hover {
    page links large on the left, contact details on the right,
    then one closing line: copyright + name, and the time in Seoul / New York / Washington. */
 .site-foot {
-  margin-top: var(--s8);
+  margin-top: 0;   /* no blank band above the dark footer */
   background: var(--dark); color: #fff;
   --link-hover: rgba(255, 255, 255, .6);
   --rule: rgba(255, 255, 255, .18);
