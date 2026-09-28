@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <link rel="stylesheet" href="style.css">
 </head>
-<body class="hero-on">
+<body class="home hero-on">
 <script>
 /* 스크롤바 폭 측정: 전체 폭 패널이 스크롤바만큼 밀리지 않게 */
 (function(){function f(){document.documentElement.style.setProperty('--sbw',(window.innerWidth-document.documentElement.getBoundingClientRect().width)+'px');}
@@ -20,6 +20,8 @@ f(); window.addEventListener('resize',f);})();
 
 <!-- Home only: large name above the menu, visible at the top of the page -->
 <section class="hero">
+  <div class="hero-photo portrait" aria-hidden="true"></div>
+  <div class="hero-photo campus" aria-hidden="true"></div>
   <div class="wrap">
     <h1 class="hero-name">Habin Paik<span class="ko" lang="ko">백하빈</span></h1>
   </div>
@@ -104,9 +106,35 @@ f(); window.addEventListener('resize',f);})();
 </main>
 
 <footer class="site-foot">
-  <div class="wrap bar">
-    <span>© 2026 Habin Paik</span>
-    <span><a href="mailto:downbeen100@korea.ac.kr">downbeen100@korea.ac.kr</a></span>
+  <div class="wrap">
+    <div class="foot-main">
+      <nav class="foot-pages" aria-label="Pages">
+        <a href="index.html">Home</a>
+        <a href="research.html">Research</a>
+        <a href="journalism.html">Journalism</a>
+        <a href="portfolio.html">Portfolio</a>
+      </nav>
+      <div class="foot-side">
+        <address class="foot-contact">
+          <strong>Korea University</strong>
+          <span>Mechanical Engineering &amp; Physics</span>
+          <span>145 Anam-ro, Seongbuk, Seoul 02841</span>
+        </address>
+        <div class="clocks">
+          <p><time data-tz="Asia/Seoul">--:--</time><span>Seoul</span></p>
+          <p><time data-tz="America/New_York">--:--</time><span>New York</span></p>
+          <p><time data-tz="America/New_York">--:--</time><span>Washington</span></p>
+        </div>
+        <address class="foot-contact">
+          <a href="mailto:downbeen100@korea.ac.kr">downbeen100@korea.ac.kr</a>
+          <span>habinpaik in <a href="https://www.linkedin.com/in/habinpaik/" target="_blank" rel="noopener">LinkedIn</a> &amp; <a href="https://github.com/habinpaik" target="_blank" rel="noopener">GitHub</a></span>
+          <span>downbeen100 in <a href="https://www.instagram.com/downbeen100/" target="_blank" rel="noopener">Instagram</a> &amp; <a href="https://blog.naver.com/downbeen100" target="_blank" rel="noopener">NAVER blog</a></span>
+        </address>
+      </div>
+    </div>
+    <div class="foot-end">
+      <p class="foot-copy">&copy; 2026 Habin Paik <span class="ko" lang="ko">백하빈</span></p>
+    </div>
   </div>
 </footer>
 
@@ -123,17 +151,56 @@ f(); window.addEventListener('resize',f);})();
   window.addEventListener('scroll', onScroll, { passive: true });
 })();
 
-/* hero-on until the sheet has fully covered the hero (menu bar reaches the top) */
+/* Home scroll states
+   hero-on : menu bar not yet at the top -> transparent bar over the photo
+   fade    : the big name fades out from the moment the photo switches
+             until the page touches the bottom of "Habin Paik" (fully transparent exactly then)
+   .named  : the page has fully covered the big name -> name shows in the menu bar
+   .lined  : bar is at the top (blurred) and hasn't reached "Engineer" yet -> line under the bar
+   .campus : the page has risen half of the way it used to need (to the bottom of "백하빈")
+             -> building photo, centred in the photo area visible at that moment */
 (function () {
   var hero = document.querySelector('.hero');
   if (!hero) return;
+  var head = document.querySelector('.site-head'),
+      name = document.querySelector('.hero-name'),
+      ko = name.querySelector('.ko'),
+      first = document.querySelector('.lead p'),
+      root = document.documentElement;
+
+  /* letter edges (not line-box edges) of the big name, in screen px */
+  function fs() { return parseFloat(getComputedStyle(name).fontSize); }
+  function nameTop() { return name.getBoundingClientRect().top + 0.17 * fs(); }          /* top of the tallest letters (b, k) */
+  function enBottom() { return name.getBoundingClientRect().top + 0.95 * fs(); }       /* bottom of "Habin Paik" */
+  function koBottom() { return ko.getBoundingClientRect().bottom - 0.145 * fs(); }    /* bottom of "백하빈" */
+  function switchAt() {              /* halfway between the page's starting edge and the bottom of "백하빈" */
+    return (hero.getBoundingClientRect().bottom + koBottom()) / 2;
+  }
+  function inkTop(el) {              /* top of the first line's letters */
+    var cs = getComputedStyle(el), f = parseFloat(cs.fontSize),
+        lh = parseFloat(cs.lineHeight) || f * 1.6;
+    return el.getBoundingClientRect().top + (lh - f) / 2;
+  }
   function update() {
-    document.body.classList.toggle('hero-on', window.scrollY < hero.offsetHeight - 1);
+    var hb = head.getBoundingClientRect(), edge = hb.bottom, mid = switchAt();
+    var heroOn = hb.top > 0.5;
+    document.body.classList.toggle('hero-on', heroOn);
+    var from = mid, to = enBottom();
+    name.style.opacity = Math.max(0, Math.min(1, (edge - to) / (from - to))).toFixed(3);
+    document.body.classList.toggle('named', !heroOn || edge <= nameTop());
+    head.classList.toggle('lined', !heroOn && inkTop(first) > edge);
+    var campus = edge <= mid;
+    if (campus && !hero.classList.contains('campus')) root.style.setProperty('--campus-h', mid + 'px');
+    hero.classList.toggle('campus', campus);
   }
   update();
   window.addEventListener('scroll', update, { passive: true });
-  window.addEventListener('resize', update);
+  window.addEventListener('resize', function () {
+    if (hero.classList.contains('campus')) root.style.setProperty('--campus-h', switchAt() + 'px');
+    update();
+  });
 })();
 </script>
+<script src="site.js"></script>
 </body>
 </html>

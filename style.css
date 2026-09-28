@@ -105,42 +105,73 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
 }
 
 /* ---------- Hero (HOME ONLY) ----------
-   Sits above the sticky header in normal flow: visible at the top of the page,
-   scrolls away on the way down, returns at the top. While any of it is on screen
-   (body.hero-on) the header joins it in dark gray and hides its wordmark. */
+   Photo area = top 40% of the screen, menu bar included (the bar floats over it).
+   The hero stays put; the page (.sheet) slides up over it. */
 .hero {
   margin-top: 0;   /* override the generic section spacing */
-  background: var(--hero-bg); color: #fff;
-  /* stays put at the top; the sheet below scrolls up over it */
   position: sticky; top: 0; z-index: 0;
+  height: 40vh; height: 40svh;
+  display: flex; align-items: center;
+  overflow: hidden;
+  background: var(--hero-bg); color: #fff;
+  --hero-dim: .32;   /* darkening over the photos so white text stays legible */
 }
-/* the rest of the page: one opaque sheet above the hero */
-.sheet { position: relative; z-index: 1; background: var(--paper); }
-/* bottom: unchanged (--s5 below the name, then the menu bar).
-   top: the same distance, i.e. --s5 + the menu bar height (--head-h, measured by script) */
-.hero .wrap {
-  width: 100%; max-width: 46rem;
-  padding-top: calc(var(--s5) + var(--head-h, 3rem));
-  padding-bottom: var(--s5);
+.hero-photo {
+  position: absolute; left: 0; right: 0; top: 0; height: 100%;
+  container-type: size;   /* lets the photo read this layer's width/height (cqw/cqh) */
+  transition: opacity .3s ease;
 }
+/* Photo: fills the layer, never squashed.
+   Layer taller than the photo's ratio -> centred, as before.
+   Layer wider -> the photo is cropped top/bottom; the focus point (--fy, share of photo height)
+   is pulled toward the middle of the layer as far as the photo's edges allow, so the wider the
+   layer, the closer the view gets to the focus point. --ratio = photo width / height. */
+.hero-photo::before {
+  content: ""; position: absolute; inset: 0;
+  background-repeat: no-repeat; background-size: cover;
+  background-position: 50% min(0px, max(
+    calc(50cqh - var(--fy) * 100cqw / var(--ratio)),
+    calc(100cqh - 100cqw / var(--ratio))
+  ));
+}
+.hero-photo::after { content: ""; position: absolute; inset: 0; background: rgba(0,0,0,var(--hero-dim)); }
+.hero-photo.portrait { --ratio: 1.5; --fy: .40; }        /* 2400x1600, focus: throat */
+.hero-photo.portrait::before { background-image: url("images/hero-portrait.jpg"); }
+/* sized to the visible photo area at the moment it appears (set by script) */
+.hero-photo.campus { --ratio: 1.3333; --fy: .65; height: var(--campus-h, 100%); opacity: 0; }   /* 2400x1800, focus: below centre */
+.hero-photo.campus::before { background-image: url("images/hero-campus.jpg"); }
+.hero.campus .hero-photo.campus { opacity: 1; }
+
+.hero .wrap { position: relative; z-index: 1; width: 100%; max-width: 46rem; text-align: right; }
 .hero-name {
   margin: 0;
   font-family: var(--serif); font-weight: 700;
   font-size: clamp(2.6rem, 5.2vw, 3.5rem);   /* 2x the identity-band line */
   line-height: 1.15; letter-spacing: -0.02em;
-  margin-top: -0.04em;   /* cap top sits slightly lower in its line than 한글 bottom does: evens the two gaps */
+  margin-top: -0.04em;   /* evens the gaps above the letters and below them */
 }
 .hero-name .ko { display: block; }
 
+/* the page: its first --head-h is see-through (the menu bar sits there over the photo) */
+.sheet {
+  position: relative; z-index: 1;
+  margin-top: calc(-1 * var(--head-h, 3rem));
+  background: linear-gradient(to bottom, transparent var(--head-h, 3rem), var(--paper) var(--head-h, 3rem));
+}
+
+/* menu bar on Home: line appears/disappears instantly (no fade) */
+.home .site-head { transition: background .25s ease, backdrop-filter .25s ease; }
+.home .site-head.scrolled.lined { border-bottom-color: var(--line); }
 .hero-on .site-head,
 .hero-on .site-head.scrolled {
-  background: var(--hero-bg);
-  border-bottom-color: var(--hero-bg);
+  background: transparent;
+  border-bottom-color: transparent;
   backdrop-filter: none; -webkit-backdrop-filter: none;
 }
-/* hidden but keeps its space, so the menu doesn't shift when it returns */
-.hero-on .wordmark { opacity: 0; visibility: hidden; }
-.hero-on .nav a { color: rgba(255,255,255,.72); }
+/* hidden (space kept, so the menu doesn't shift) until the page has covered the big name */
+.hero-on:not(.named) .wordmark { opacity: 0; visibility: hidden; }
+.hero-on .wordmark { color: #fff; }
+.hero-on .nav a { color: rgba(255,255,255,.85); }
 .hero-on .nav a:hover,
 .hero-on .nav a[aria-current="page"] { color: #fff; }
 .hero-on .nav a[aria-current="page"]::after { background: #fff; }
@@ -543,14 +574,89 @@ figure.ph.side-left img, figure.ph.side-right img { aspect-ratio: 3 / 4; object-
 /* legacy margin-left/right kept as simple inline blocks (no negative margins) */
 figure.ph.margin-left, figure.ph.margin-right { width: 12rem; margin: var(--s4) 0; }
 
-/* ---------- Footer ---------- */
-.site-foot { margin-top: var(--s8); background: var(--paper); }
-.site-foot .bar {
-  display: flex; justify-content: space-between; align-items: baseline;
-  gap: var(--s4); padding-block: var(--s5); font-size: var(--t-small); color: var(--stone);
+/* ---------- Links ----------
+   Text links: on hover the colour changes and the underline is redrawn left -> right.
+   (Menu, wordmark, image cards and the footer's big mail button are excluded.)
+   Links that normally have no underline get one drawn on hover. */
+:root { --link-hover: var(--stone); }
+a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card)) {
+  text-decoration: none;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 100% 1px;
+  transition: color .15s ease;
 }
-.site-foot .bar span { max-width: none; }
-.site-foot a { color: var(--stone); }
+a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card)):hover {
+  color: var(--link-hover);
+  animation: link-draw .45s cubic-bezier(.2, .7, .2, 1) both;
+}
+@keyframes link-draw { from { background-size: 0 1px; } to { background-size: 100% 1px; } }
+.entry h3 a, .table .cell .th a, .work .th a, .foot-contact a { background-size: 0 1px; }
+
+/* address that follows the pointer over a link (site.js) */
+.link-tip {
+  position: fixed; left: 0; top: 0; z-index: 100; pointer-events: none;
+  font-family: var(--sans); font-size: 0.75rem; line-height: 1.3; letter-spacing: 0;
+  color: #fff; background: rgba(20, 20, 20, .88);
+  padding: 0.3rem 0.5rem; border-radius: 4px;
+  white-space: nowrap; max-width: 60vw; overflow: hidden; text-overflow: ellipsis;
+  opacity: 0; transition: opacity .12s ease;
+}
+.link-tip.on { opacity: 1; }
+.link-tip.inv { color: var(--dark); background: rgba(255, 255, 255, .92); }   /* over the dark footer */
+
+/* ---------- Footer ----------
+   A full dark block that ends the page at full strength:
+   page links large on the left, contact details on the right,
+   then one closing line: copyright + name, and the time in Seoul / New York / Washington. */
+.site-foot {
+  margin-top: var(--s8);
+  background: var(--dark); color: #fff;
+  --link-hover: rgba(255, 255, 255, .6);
+  --rule: rgba(255, 255, 255, .18);
+}
+.site-foot .wrap { padding-block: var(--s7) var(--s5); }
+.foot-main { display: grid; grid-template-columns: 1fr auto; gap: var(--s6); align-items: start; }
+
+.foot-pages a {
+  display: block; width: fit-content; color: #fff;
+  font-size: var(--t-title); line-height: 1.3; margin-bottom: 0.4em;
+}
+.foot-pages a:last-child { margin-bottom: 0; }
+
+.foot-contact {
+  font-style: normal; font-family: var(--sans); font-feature-settings: normal;
+  font-size: var(--t-small); line-height: 1.65; color: rgba(255, 255, 255, .72);
+}
+.foot-contact > * { display: block; width: fit-content; }
+.foot-contact strong { color: #fff; font-weight: 600; }
+.foot-contact a { color: #fff; }
+
+/* times: large serif figures, the city small underneath;
+   between the address (above) and the ways to reach me (below) */
+.clocks { display: flex; gap: var(--s5); margin-block: var(--s4); }
+.clocks p { margin: 0; }
+.clocks time {
+  display: block;
+  font-family: var(--serif); font-weight: 400; color: #fff;
+  font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.4rem); line-height: 1.05; letter-spacing: -0.01em;
+  font-feature-settings: "lnum" 1, "tnum" 1;   /* even, same-width digits (body text uses old-style) */
+}
+.clocks span {
+  display: block; margin-top: var(--s1);
+  font-family: var(--sans); font-feature-settings: normal; font-size: var(--t-small);
+  color: rgba(255, 255, 255, .55);
+}
+
+.foot-end { margin-top: var(--s7); padding-top: var(--s4); border-top: 1px solid var(--rule); }
+.foot-copy { margin: 0; font-family: var(--serif); font-weight: 600; font-size: var(--t-body); }
+.foot-copy .ko { font-weight: 700; }
+
+@media (max-width: 40rem) {
+  .foot-main { grid-template-columns: 1fr; gap: var(--s6); }
+}
+@media (prefers-reduced-motion: reduce) { a { animation: none !important; } }
 
 @media (max-width: 40rem) {
   figure.ph.left, figure.ph.right,
