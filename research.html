@@ -398,6 +398,7 @@ f(); window.addEventListener('resize',f);})();
     spinePanel.hidden = any && !sp.length;                       // 표지책장 분류만 골랐으면 가로책장 숨김
     coverPanel.hidden = any && !cv.length;                       // 가로책장 분류만 골랐으면 표지책장 숨김
     box.classList.toggle('no-covers', coverPanel.hidden);
+    box.classList.toggle('no-spines', spinePanel.hidden);
     spineSel = sp; packPiles(); if (spineShelf) spineShelf.scrollLeft = 0;
     grid.querySelectorAll('.book').forEach(function (b) {
       b.classList.toggle('is-filtered', cv.length > 0 && cv.indexOf(b.getAttribute('data-subject')) < 0);
