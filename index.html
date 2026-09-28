@@ -25,6 +25,9 @@ f(); window.addEventListener('resize',f);})();
   </div>
 </section>
 
+<!-- everything below the hero is one sheet that slides up over it -->
+<div class="sheet">
+
 <header class="site-head">
   <div class="wrap bar">
     <a class="wordmark" href="index.html">Habin Paik <span class="ko" lang="ko">백하빈</span></a>
@@ -107,6 +110,8 @@ f(); window.addEventListener('resize',f);})();
   </div>
 </footer>
 
+</div><!-- /.sheet -->
+
 <script>
 (function () {
   var head = document.querySelector('.site-head');
@@ -118,13 +123,16 @@ f(); window.addEventListener('resize',f);})();
   window.addEventListener('scroll', onScroll, { passive: true });
 })();
 
-/* hero-on while any part of the hero is on screen; off once it has scrolled away */
+/* hero-on until the sheet has fully covered the hero (menu bar reaches the top) */
 (function () {
   var hero = document.querySelector('.hero');
-  if (!hero || !('IntersectionObserver' in window)) return;
-  new IntersectionObserver(function (entries) {
-    document.body.classList.toggle('hero-on', entries[0].isIntersecting);
-  }).observe(hero);
+  if (!hero) return;
+  function update() {
+    document.body.classList.toggle('hero-on', window.scrollY < hero.offsetHeight - 1);
+  }
+  update();
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
 })();
 </script>
 </body>

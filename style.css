@@ -111,7 +111,11 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
 .hero {
   margin-top: 0;   /* override the generic section spacing */
   background: var(--hero-bg); color: #fff;
+  /* stays put at the top; the sheet below scrolls up over it */
+  position: sticky; top: 0; z-index: 0;
 }
+/* the rest of the page: one opaque sheet above the hero */
+.sheet { position: relative; z-index: 1; background: var(--paper); }
 /* bottom: unchanged (--s5 below the name, then the menu bar).
    top: the same distance, i.e. --s5 + the menu bar height (--head-h, measured by script) */
 .hero .wrap {
