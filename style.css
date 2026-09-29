@@ -643,16 +643,21 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .foot-mail)):hover {
   --link-hover: rgba(255, 255, 255, .6);
   --rule: rgba(255, 255, 255, .18);
 }
-.site-foot .wrap { padding-block: var(--s6) var(--s5); }
+/* Footer spacing uses exactly two sizes, measured on what you see (letters and the pill's edge):
+   --fg (40px) for every small gap -- top, mail -> clocks, address -> copyright, bottom --
+   and the body's section gap for clocks -> address. The em offsets below remove each
+   font's built-in space above/below its letters so the visible gaps come out equal. */
+.site-foot { --fg: var(--s6); }
+.site-foot .wrap { padding-block: var(--fg) calc(var(--fg) - 0.16em); }
 /* mail button, clocks, then the address with the copyright on its right */
-.foot-main { display: grid; grid-template-columns: auto 1fr; column-gap: var(--s6); row-gap: var(--s4); }
+.foot-main { display: grid; grid-template-columns: auto 1fr; column-gap: var(--s6); row-gap: 0; }
 .foot-side { display: contents; }
-.foot-side > .foot-mail { grid-column: 1 / -1; grid-row: 1; justify-self: start; margin-bottom: var(--s2); }   /* mail -> clocks matches clocks -> address, as seen */
+.foot-side > .foot-mail { grid-column: 1 / -1; grid-row: 1; justify-self: start; }
 .foot-side > .clocks { grid-column: 1 / -1; grid-row: 2; }
 .foot-side > .foot-contact { grid-column: 1; grid-row: 3;
   /* clocks -> address: the same visible gap as a paragraph -> the next section title in the body
      ("... own p tag." -> "Education"): 63px on a phone, 80px on a 1280 screen */
-  margin-top: clamp(1.94rem, calc(1.525rem + 1.685vw), 2.875rem); }
+  margin-top: calc(var(--s4) + clamp(1.94rem, calc(1.525rem + 1.685vw), 2.875rem)); }
 .foot-copy { grid-column: 2; grid-row: 3; justify-self: end; align-self: end; white-space: nowrap; }   /* level with the last address line */
 
 .foot-mail {
@@ -674,6 +679,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .foot-mail)):hover {
 /* times: large serif figures, the city small underneath; between the mail button and the address */
 .clocks { display: flex; gap: var(--s5); }
 .clocks p { margin: 0; }
+.clocks time { margin-top: calc(var(--fg) - 0.173em); }
 .clocks time {
   display: flex; align-items: baseline;   /* weekday sits on the digits' baseline */
   font-family: var(--serif); font-weight: 400; color: #fff;
@@ -693,7 +699,8 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .foot-mail)):hover {
 
 @media (max-width: 40rem) {
   .foot-main { grid-template-columns: 1fr; }
-  .foot-copy { grid-column: 1; grid-row: 4; justify-self: start; }
+  .foot-copy { grid-column: 1; grid-row: 4; justify-self: start; margin-top: calc(var(--fg) - 0.44em); }
+  .site-foot .wrap { padding-bottom: calc(var(--fg) - 0.31em); }
   /* three clocks must fit a phone width */
   .clocks { gap: var(--s4); }
   .clocks time { font-size: 1.4rem; }
@@ -707,6 +714,8 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .foot-mail)):hover {
   figure.ph.left, figure.ph.right,
   figure.ph.small.left, figure.ph.small.right { float: none; width: 100%; margin: var(--s5) 0; }
   .site-head .bar { flex-direction: column; gap: var(--s2); align-items: flex-start; }
+  /* two-row header on phones: the name sits on its own row, so no current-page bar under it */
+  .wordmark[aria-current="page"]::after { display: none; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 a:focus-visible { outline: 2px solid var(--link); outline-offset: 3px; }

@@ -184,11 +184,23 @@ f(); window.addEventListener('resize',f);})();
   /* Arriving from the name link on another page (index.html#closed):
      open with the photo area already closed -- menu bar at the top -- and drop the #closed. */
   if (location.hash === '#closed') {
-    var close = function () { window.scrollTo(0, Math.max(0, hero.offsetHeight - head.offsetHeight)); };   /* bar just reaching the top */
+    /* The bar must end up exactly at the top (blurred state), on every device.
+       Target = where the page sheet starts (= where the bar sticks), +1px so rounding
+       can never leave it a hair short (that left phones in the see-through state).
+       Re-applied once fonts and images have settled, since both can shift the layout,
+       and the browser's own scroll restoration is switched off. */
+    var sheet = document.querySelector('.sheet');
+    var close = function () {
+      var y = window.scrollY + sheet.getBoundingClientRect().top;
+      window.scrollTo(0, Math.ceil(y) + 1);
+      update();
+    };
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-    close();
-    window.addEventListener('load', close);   /* again once fonts/images have settled */
     history.replaceState(null, '', location.pathname + location.search);
+    close();
+    requestAnimationFrame(close);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(close);
+    window.addEventListener('load', function () { close(); setTimeout(close, 60); });
   }
   update();
   window.addEventListener('scroll', update, { passive: true });
