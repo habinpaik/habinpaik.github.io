@@ -25,6 +25,11 @@
   --t-small: clamp(0.8rem, 0.76rem + 0.19vw, 0.92rem);
   --t-body:  clamp(1rem, 0.93rem + 0.32vw, 1.2rem);
   --t-title: clamp(1.18rem, 1.06rem + 0.62vw, 1.58rem);
+  /* subject colours (Research bookshelf): filter buttons, cover tags and spines all use these */
+  --c-meche: #7a5a2b; --c-phys: #1f5a63; --c-math: #5a3d6b;
+  --c-gensci: #2f4058; --c-classics: #4a5d40; --c-journalism: #6d2b2f;
+  --t-display: clamp(1.3rem, 2.6vw, 1.75rem);   /* identity line */
+  --t-name: clamp(1.75rem, 0.75rem + 4.6vw, 3.5rem);   /* big name = clocks: 56px on desktop, ~29–31px on phones */
 
   --page-max: 62rem;      /* full content width (grids, tables, wide photos) */
   --measure:  34rem;      /* the single text measure — ALL body copy uses this */
@@ -160,7 +165,7 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
 .hero-name {
   margin: 0;
   font-family: var(--serif); font-weight: 700;
-  font-size: clamp(2.6rem, 5.2vw, 3.5rem);   /* 2x the identity-band line */
+  font-size: var(--t-name);
   line-height: 1.15; letter-spacing: -0.02em;
   margin-top: -0.04em;   /* evens the gaps above the letters and below them */
 }
@@ -216,7 +221,7 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
 .identity-band .wrap { padding-block: var(--s5); }
 .identity-band p {
   margin: 0;
-  font-size: clamp(1.3rem, 2.6vw, 1.75rem);
+  font-size: var(--t-display);
   line-height: 1.6;
   max-width: none;
   letter-spacing: -0.01em;
@@ -252,6 +257,7 @@ main > p:first-child { margin-bottom: var(--s7); }
 .fact .primary { font-weight: 600; }
 .fact .sep { color: var(--stone); }
 .fact .years { color: var(--stone); font-size: var(--t-small); }
+.contact-note a { white-space: nowrap; }
 .linklist { list-style: none; margin: 0; padding: 0; display: flex; gap: var(--s2) var(--s4); flex-wrap: wrap; }
 .linklist a { font-family: var(--sans); font-size: var(--t-small); }
 
@@ -357,23 +363,23 @@ main > p.epigraph:first-child { margin-bottom: var(--s3); }
   --cat: #888; --rot: 0deg;
   display: flex; align-items: center; box-sizing: border-box;
   position: relative; z-index: 1;
-  background: var(--paper);
-  border: 1.5px solid var(--cat);
+  background: var(--cat);             /* filled with the subject colour */
+  border: 1px solid rgba(255, 255, 255, .75);   /* thin light outline: stacked books stay distinct */
   border-radius: 5px;
-  margin-top: -1.5px;               /* 위아래 책 테두리가 한 줄로 겹침 (두 겹으로 두꺼워지지 않게) */
+  margin-top: -1px;                 /* 위아래 책 테두리가 한 줄로 겹침 (두 겹으로 두꺼워지지 않게) */
   padding: 0 10px;
   transition: transform .15s ease;
 }
 .spine:hover { transform: translateX(6px); z-index: 2; }   /* 살짝 빼내는 느낌 */
 .spine .t {
   font-family: var(--sans); font-size: var(--t-small); font-weight: 400;
-  line-height: 1; letter-spacing: -0.01em; color: var(--cat);   /* 글자도 분류색 */
+  line-height: 1; letter-spacing: -0.01em; color: #fff;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;   /* 길면 … */
 }
 /* 분류별 지정 두께(띠 높이)·길이·테두리색 — 기존 책등 규칙 그대로 */
-.spine.humanities { --cat: #4a5d40; height: 44px; width: 150px; }  /* 고전·인문·문학 */
-.spine.journalism { --cat: #6d2b2f; height: 34px; width: 188px; }  /* 저널리즘·사회 */
-.spine.science    { --cat: #2f4058; height: 26px; width: 225px; }  /* 과학·물리·수학 */
+.spine.humanities { --cat: var(--c-classics); height: 44px; width: 150px; }  /* Classics */
+.spine.journalism { --cat: var(--c-journalism); height: 34px; width: 188px; }  /* Journalism */
+.spine.science    { --cat: var(--c-gensci); height: 26px; width: 225px; }  /* General Sci */
 @media (max-width: 40rem) {
   .spine-shelf { --pile-max: 220px; }
   .spine.humanities { height: 40px; width: 128px; }
@@ -469,14 +475,18 @@ main > p.epigraph:first-child { margin-bottom: var(--s3); }
 .book .cover { display: flex; flex-direction: column; justify-content: flex-end; aspect-ratio: 2 / 3; width: 100%; min-height: 0; overflow: visible; }
 .book .face { flex: 0 0 auto; align-self: flex-start; }   /* 표지 왼쪽 정렬 */
 .book .tag { z-index: 2; }
+.book[data-subject="MechE"]       { --cat: var(--c-meche); }
+.book[data-subject="Phys"]        { --cat: var(--c-phys); }
+.book[data-subject="Math"]        { --cat: var(--c-math); }
+.book[data-subject="General Sci"] { --cat: var(--c-gensci); }
 .book .face { position: relative; display: block; }
 .book img { width: 100%; height: auto; display: block; box-shadow: 0 2px 5px rgba(0,0,0,.22); }
 .book .tag {   /* 위 분류 버튼과 같은 모양, 반투명, 표지 모서리 밖으로 반쯤 걸침 */
   position: absolute; top: 0; left: 0;
   transform: translateY(-35%);   /* 왼쪽 끝은 표지 왼쪽 선에 맞춤, 위로만 반쯤 걸침 */
   font-family: var(--sans); font-size: var(--t-small); font-weight: 400; line-height: 1.6;
-  color: var(--stone); border: 1px solid rgba(0,0,0,.18);
-  background: rgba(255,255,255,.6);
+  color: #fff; border: 1px solid transparent;
+  background: color-mix(in srgb, var(--cat, #666) 88%, transparent);
   -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
   padding: 0 10px; border-radius: 999px;
 }
@@ -677,17 +687,25 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .foot-mail)):hover {
 .foot-contact > * { display: block; }
 
 /* times: large serif figures, the city small underneath; between the mail button and the address */
-.clocks { display: flex; gap: var(--s5); }
+.clocks { --clk-gap: var(--s5); display: flex; gap: var(--clk-gap); }
 .clocks p { margin: 0; }
-.clocks time { margin-top: calc(var(--fg) - 0.173em); }
+.clocks time { margin-top: calc(var(--fg) - 0.11em); }   /* Lora proportional digits start ~0.11em into the line (measured on the row) */
 .clocks time {
   display: flex; align-items: baseline;   /* weekday sits on the digits' baseline */
   font-family: var(--serif); font-weight: 400; color: #fff;
-  font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.4rem); line-height: 1.05; letter-spacing: -0.01em;
-  font-feature-settings: "lnum" 1, "tnum" 1;   /* even, same-width digits (body text uses old-style) */
+  /* same size as the big name; on a screen too narrow for three clocks at that size,
+     shrinks just enough to fit. 12.78vw - 24px = the largest size at which three clocks always fit
+     (widest times like 20:08, "Wed"), measured at 320–640px wide, minus 1px to spare */
+  font-size: min(var(--t-name), calc(12.78vw - 1.5rem));
+  line-height: 1.05; letter-spacing: -0.02em;   /* slightly tighter tracking for the figures */
+  /* Lora's own proportional lining figures: tabular ones put a narrow "1" in a wide slot,
+     which left a gap before it (the row looked indented) and uneven spacing */
+  font-feature-settings: "lnum" 1, "pnum" 1;
 }
 /* weekday beside each time, bottom-aligned with the digits (small, serif) */
-.clocks .dow { margin-left: 0.22em; font-size: 0.46em; line-height: 1; }
+/* the digits' built-in left side-bearing, removed so the row lines up with the mail button and address */
+.clocks .hm { margin-left: -0.02em; }
+.clocks .dow { margin-left: 0.3rem; font-size: var(--t-small); line-height: 1; letter-spacing: 0; }   /* same size as "Seoul" */
 .clocks .city {
   display: block; margin-top: var(--s1);
   font-family: var(--sans); font-feature-settings: normal; font-size: var(--t-small);
@@ -701,12 +719,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .foot-mail)):hover {
   .foot-main { grid-template-columns: 1fr; }
   .foot-copy { grid-column: 1; grid-row: 4; justify-self: start; margin-top: calc(var(--fg) - 0.44em); }
   .site-foot .wrap { padding-bottom: calc(var(--fg) - 0.31em); }
-  /* three clocks must fit a phone width */
-  .clocks { gap: var(--s4); }
-  .clocks time { font-size: 1.4rem; }
-}
-@media (max-width: 23.5rem) {   /* the narrowest phones */
-  .clocks time { font-size: 1.25rem; }
+  .clocks { --clk-gap: var(--s3); }
 }
 @media (prefers-reduced-motion: reduce) { a { animation: none !important; } }
 
@@ -743,11 +756,12 @@ a:focus-visible { outline: 2px solid var(--link); outline-offset: 3px; }
 .filter-btn {
   font-family: var(--sans); font-size: var(--t-small); line-height: 1.6;
   padding: 2px 12px; border-radius: 999px; cursor: pointer;
-  background: var(--paper); color: var(--stone); border: 1px solid #CFCFCF;
+  background: var(--paper); color: var(--cat, var(--stone));
+  border: 1px solid color-mix(in srgb, var(--cat, #999) 45%, transparent);
   transition: background .15s ease, color .15s ease, border-color .15s ease;
 }
-.filter-btn:hover { color: var(--ink); border-color: var(--ink); }
-.filter-btn[aria-pressed="true"] { background: var(--ink); color: #fff; border-color: var(--ink); }
+.filter-btn:hover { border-color: var(--cat, var(--ink)); }
+.filter-btn[aria-pressed="true"] { background: var(--cat, var(--ink)); color: #fff; border-color: var(--cat, var(--ink)); }
 .book.is-filtered { display: none; }
 
 /* 두꺼운 고전·인문 책은 두께 그대로 제목 두 줄까지 */
