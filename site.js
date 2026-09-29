@@ -1,16 +1,19 @@
 /* Shared by every page. */
 
-/* Footer clocks: <time data-tz="..."> shows the current HH:MM in that time zone. */
+/* Footer clocks: <time data-tz="..."> shows HH:MM in that time zone, updated on the minute.
+   Each also shows its weekday (.dow). */
 (function () {
   var els = document.querySelectorAll('time[data-tz]');
   if (!els.length || !window.Intl) return;
+  function fmt(tz, o) { o.timeZone = tz; return new Intl.DateTimeFormat('en-US', o); }
   function tick() {
     var now = new Date();
     els.forEach(function (el) {
+      var tz = el.getAttribute('data-tz');
       try {
-        el.textContent = new Intl.DateTimeFormat('en-GB', {
-          hour: '2-digit', minute: '2-digit', hour12: false, timeZone: el.getAttribute('data-tz')
-        }).format(now);
+        el.querySelector('.hm').textContent = fmt(tz, { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).format(now);
+        var dow = el.querySelector('.dow');
+        if (dow) dow.textContent = fmt(tz, { weekday: 'short' }).format(now);
       } catch (e) {}
     });
     setTimeout(tick, 60000 - (now.getSeconds() * 1000 + now.getMilliseconds()) + 50);   /* on the minute */
@@ -30,6 +33,7 @@
 
   function label(a) {
     var h = a.getAttribute('href') || '';
+    if (a.hasAttribute('data-no-tip')) return '';
     if (!h || h.charAt(0) === '#' || /^javascript:/i.test(h)) return '';
     if (/^mailto:/i.test(h)) return h.replace(/^mailto:/i, '').split('?')[0];
     if (/^tel:/i.test(h)) return h.replace(/^tel:/i, '');

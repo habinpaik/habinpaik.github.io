@@ -92,13 +92,27 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
   display: flex; align-items: baseline; justify-content: space-between;
   gap: var(--s4); padding-top: var(--s3); padding-bottom: var(--s2);   /* 메뉴 글자와 아래 굵은 바 사이를 좁게 */
 }
-.wordmark { font-family: var(--serif); font-size: var(--t-body); font-weight: 700; letter-spacing: -0.01em; color: var(--ink); text-decoration: none; transition: opacity .25s ease, visibility .25s; }
+/* the name is the Home button: grey, dark on hover, dark + bar when you're on Home -- like the menu */
+.brand { display: flex; align-items: baseline; gap: var(--s2); }
+.wordmark {
+  position: relative;
+  font-family: var(--serif); font-size: var(--t-body); font-weight: 700; letter-spacing: -0.01em;
+  color: var(--stone); text-decoration: none;
+  transition: opacity .25s ease, visibility .25s, color .15s ease;
+}
+.wordmark:hover, .wordmark[aria-current="page"] { color: var(--ink); }
+/* back arrow on Research / Journalism / Portfolio: part of the same name link */
+.wordmark .back-ico {
+  display: inline-block; width: 0.8em; height: 0.8em; margin-right: 0.3em; vertical-align: -0.04em;
+  fill: none; stroke: currentColor; stroke-width: 2.8; stroke-linecap: round; stroke-linejoin: round;
+}
 .nav { display: flex; gap: var(--s4); font-size: var(--t-body); }
 .nav a { position: relative; color: var(--stone); text-decoration: none; font-weight: 700; font-size: var(--t-body); transition: color .15s ease; }
 .nav a:hover { color: var(--ink); }
 .nav a[aria-current="page"] { color: var(--ink); }
 /* thick bar sitting on the header's bottom edge (not an underline under the text) */
-.nav a[aria-current="page"]::after {
+.nav a[aria-current="page"]::after,
+.wordmark[aria-current="page"]::after {
   content: ""; position: absolute; left: 0; right: 0;
   bottom: calc(-1 * var(--s2) - 1px);   /* sit exactly on the header's bottom edge */
   height: 3px; background: var(--ink);
@@ -173,7 +187,6 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
 
 /* menu bar on Home: line appears/disappears instantly (no fade) */
 .home .site-head { transition: background .15s ease, backdrop-filter .15s ease; }
-.home .wordmark { transition: opacity .25s ease, visibility .25s, color .15s ease; }
 .home .site-head.scrolled.lined { border-bottom-color: var(--line); }
 .hero-on .site-head,
 .hero-on .site-head.scrolled {
@@ -183,7 +196,9 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
 }
 /* hidden (space kept, so the menu doesn't shift) until the page has covered the big name */
 .hero-on:not(.named) .wordmark { opacity: 0; visibility: hidden; }
-.hero-on .wordmark { color: #fff; }
+.hero-on .wordmark { color: rgba(255,255,255,.85); }
+.hero-on .wordmark:hover, .hero-on .wordmark[aria-current="page"] { color: #fff; }
+.hero-on .wordmark[aria-current="page"]::after { background: #fff; }
 .hero-on .nav a { color: rgba(255,255,255,.85); }
 .hero-on .nav a:hover,
 .hero-on .nav a[aria-current="page"] { color: #fff; }
@@ -592,7 +607,7 @@ figure.ph.margin-left, figure.ph.margin-right { width: 12rem; margin: var(--s4) 
    (Menu, wordmark, image cards and the footer's big mail button are excluded.)
    Links that normally have no underline get one drawn on hover. */
 :root { --link-hover: var(--stone); }
-a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card)) {
+a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .foot-mail)) {
   text-decoration: none;
   background-image: linear-gradient(currentColor, currentColor);
   background-repeat: no-repeat;
@@ -600,7 +615,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card)) {
   background-size: 100% 1px;
   transition: color .15s ease;
 }
-a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card)):hover {
+a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .foot-mail)):hover {
   color: var(--link-hover);
   animation: link-draw .45s cubic-bezier(.2, .7, .2, 1) both;
 }
@@ -621,53 +636,70 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card)):hover {
 
 /* ---------- Footer ----------
    A full dark block that ends the page at full strength:
-   page links large on the left, contact details on the right,
-   then one closing line: copyright + name, and the time in Seoul / New York / Washington. */
+   mail button, clocks (Seoul / LA / New York), then the address with the copyright at its right. */
 .site-foot {
   margin-top: 0;   /* no blank band above the dark footer */
   background: var(--dark); color: #fff;
   --link-hover: rgba(255, 255, 255, .6);
   --rule: rgba(255, 255, 255, .18);
 }
-.site-foot .wrap { padding-block: var(--s7) var(--s5); }
-.foot-main { display: grid; grid-template-columns: 1fr auto; gap: var(--s6); align-items: start; }
+.site-foot .wrap { padding-block: var(--s6) var(--s5); }
+/* mail button, clocks, then the address with the copyright on its right */
+.foot-main { display: grid; grid-template-columns: auto 1fr; column-gap: var(--s6); row-gap: var(--s4); }
+.foot-side { display: contents; }
+.foot-side > .foot-mail { grid-column: 1 / -1; grid-row: 1; justify-self: start; margin-bottom: var(--s2); }   /* mail -> clocks matches clocks -> address, as seen */
+.foot-side > .clocks { grid-column: 1 / -1; grid-row: 2; }
+.foot-side > .foot-contact { grid-column: 1; grid-row: 3;
+  /* clocks -> address: the same visible gap as a paragraph -> the next section title in the body
+     ("... own p tag." -> "Education"): 63px on a phone, 80px on a 1280 screen */
+  margin-top: clamp(1.94rem, calc(1.525rem + 1.685vw), 2.875rem); }
+.foot-copy { grid-column: 2; grid-row: 3; justify-self: end; align-self: end; white-space: nowrap; }   /* level with the last address line */
 
-.foot-pages a {
-  display: block; width: fit-content; color: #fff;
-  font-size: var(--t-title); line-height: 1.3; margin-bottom: 0.4em;
+.foot-mail {
+  display: inline-block;
+  border: 1px solid rgba(255, 255, 255, .55); border-radius: 999px;
+  padding: 0.3em 0.85em;
+  color: #fff; text-decoration: none;
+  font-family: var(--serif); font-weight: 600; font-size: var(--t-body); line-height: 1.3;
+  transition: background .2s ease, color .2s ease;
 }
-.foot-pages a:last-child { margin-bottom: 0; }
+.foot-mail:hover { background: #fff; color: var(--dark); }
 
-.foot-contact {
-  font-style: normal; font-family: var(--sans); font-feature-settings: normal;
-  font-size: var(--t-small); line-height: 1.65; color: rgba(255, 255, 255, .72);
-}
-.foot-contact > * { display: block; width: fit-content; }
-.foot-contact strong { color: #fff; font-weight: 600; }
-.foot-contact a { color: #fff; }
+/* address: plain body text, no hierarchy -- only the colour is dimmer */
+.foot-contact { font-style: normal; font-size: var(--t-body); line-height: 1.5; color: rgba(255, 255, 255, .72); }
+/* white text on a dark ground renders heavier than dark on light; greyscale smoothing keeps it at body weight */
+.site-foot { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+.foot-contact > * { display: block; }
 
-/* times: large serif figures, the city small underneath;
-   between the address (above) and the ways to reach me (below) */
-.clocks { display: flex; gap: var(--s5); margin-block: var(--s4); }
+/* times: large serif figures, the city small underneath; between the mail button and the address */
+.clocks { display: flex; gap: var(--s5); }
 .clocks p { margin: 0; }
 .clocks time {
-  display: block;
+  display: flex; align-items: baseline;   /* weekday sits on the digits' baseline */
   font-family: var(--serif); font-weight: 400; color: #fff;
   font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.4rem); line-height: 1.05; letter-spacing: -0.01em;
   font-feature-settings: "lnum" 1, "tnum" 1;   /* even, same-width digits (body text uses old-style) */
 }
-.clocks span {
+/* weekday beside each time, bottom-aligned with the digits (small, serif) */
+.clocks .dow { margin-left: 0.22em; font-size: 0.46em; line-height: 1; }
+.clocks .city {
   display: block; margin-top: var(--s1);
   font-family: var(--sans); font-feature-settings: normal; font-size: var(--t-small);
   color: rgba(255, 255, 255, .55);
 }
 
-.foot-end { margin-top: var(--s7); padding-top: var(--s4); border-top: 1px solid var(--rule); }
 .foot-copy { margin: 0; font-family: var(--serif); font-weight: 600; font-size: var(--t-body); }
-.foot-copy .ko { font-weight: 700; }
+.foot-copy .ko { font-weight: 600; }
 
 @media (max-width: 40rem) {
-  .foot-main { grid-template-columns: 1fr; gap: var(--s6); }
+  .foot-main { grid-template-columns: 1fr; }
+  .foot-copy { grid-column: 1; grid-row: 4; justify-self: start; }
+  /* three clocks must fit a phone width */
+  .clocks { gap: var(--s4); }
+  .clocks time { font-size: 1.4rem; }
+}
+@media (max-width: 23.5rem) {   /* the narrowest phones */
+  .clocks time { font-size: 1.25rem; }
 }
 @media (prefers-reduced-motion: reduce) { a { animation: none !important; } }
 
