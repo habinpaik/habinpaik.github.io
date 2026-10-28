@@ -235,10 +235,20 @@ f(); window.addEventListener('resize',f);})();
   });
   cover.appendChild(grid);
 
+  var pair = GROUPS[Math.floor(Math.random() * GROUPS.length)];
+
   /* the line in the middle: white, and black wherever it lies over the left photo.
      Two copies cut to exactly complementary areas -- black: the left photo's rectangle,
      white: everything else -- so the white never shows round the edges of the black letters. */
-  var LINE = ['Every story has', 'two sides.'];
+  var LINES = {           /* one line per pair */
+    morning: ['Seeking stories', 'morning and night.'],
+    one:     ['Meeting each one,', 'embracing all.'],
+    inside:  ['Different stories', 'inside and outside.'],
+    sunny:   ['Going out', 'in sun and rain.'],
+    summer:  ['Writing through', 'summer and winter.'],
+    black:   ['Seeing the world', 'in black and in color.']
+  };
+  var LINE = LINES[pair[0]];
   var words = ['white', 'black'].map(function (tone) {
     var t = document.createElement('p'); t.className = 'jc-line ' + tone;
     LINE.forEach(function (l) { var sp = document.createElement('span'); sp.textContent = l; t.appendChild(sp); });
@@ -274,8 +284,7 @@ f(); window.addEventListener('resize',f);})();
   }
   layoutGrid();
 
-  /* the pair */
-  var pair = GROUPS[Math.floor(Math.random() * GROUPS.length)];
+  /* the pair (chosen above) */
   var panes = pair.map(function (n) {
     var p = document.createElement('div'); p.className = 'jc-pane';
     var im = document.createElement('img'); im.src = DIR + n + '.webp'; im.alt = '';
@@ -307,21 +316,39 @@ f(); window.addEventListener('resize',f);})();
     return { left: c.left - o.left, top: c.top - o.top, width: c.width, height: c.height };
   }
 
-  var open = false, raf = 0;
-  function update() { raf = 0; if (!open) return; var t = targets(); place(panes[0], t[0]); place(panes[1], t[1]); clipBlack(); }
+  var open = false, intro = false, raf = 0;
+  var MOVE = 2800;           /* how long the pair takes to move out of the grid (ms) -- same as the grid dimming */
+  function update() {
+    raf = 0;
+    if (!open || intro) return;   /* during the move-out the frame loop below does the drawing */
+    var t = targets(); place(panes[0], t[0]); place(panes[1], t[1]); clipBlack();
+  }
   function schedule() { if (!raf) raf = requestAnimationFrame(update); }
 
+  /* Move-out, drawn frame by frame: each frame sits between the grid cell and where the photo
+     belongs RIGHT NOW (which follows the cursor), by an even ease-in-out. A cursor moving during
+     the move-out is simply blended in -- nothing restarts or jumps. */
   function reveal() {
-    /* start exactly over their grid cells, then move out into place; the cells they left stay empty */
-    panes.forEach(function (p, i) { place(p, cellRect(pair[i])); cover.appendChild(p); cells[pair[i]].classList.add('lifted'); });
+    var from = pair.map(cellRect);
+    panes.forEach(function (p, i) { place(p, from[i]); cover.appendChild(p); cells[pair[i]].classList.add('lifted'); });
     words.forEach(function (w) { cover.appendChild(w); });
-    cover.offsetWidth;   /* commit the start position before animating */
+    cover.offsetWidth;
     cover.classList.add('open');
-    open = true; update();
-    /* while the photos move out, keep the black copy cut to the left photo, frame by frame */
-    var until = Date.now() + 2900;
-    (function follow() { clipBlack(); if (Date.now() < until) requestAnimationFrame(follow); })();
-    setTimeout(function () { cover.classList.add('live'); }, 2900);   /* after the move-out (2.8s), follow the cursor without lag */
+    open = true; intro = true;
+    var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var start = performance.now();
+    function mix(a, b, e) {
+      return { left: a.left + (b.left - a.left) * e, top: a.top + (b.top - a.top) * e,
+               width: a.width + (b.width - a.width) * e, height: a.height + (b.height - a.height) * e };
+    }
+    (function frame(now) {
+      var k = still ? 1 : Math.min(1, (now - start) / MOVE),
+          e = (1 - Math.cos(Math.PI * k)) / 2,          /* even ease in and out */
+          to = targets();
+      place(panes[0], mix(from[0], to[0], e)); place(panes[1], mix(from[1], to[1], e)); clipBlack();
+      if (k < 1) requestAnimationFrame(frame);
+      else { intro = false; update(); }
+    })(start);
   }
 
   /* go once the pair has loaded and the grid has had its moment */
