@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="j-page">
 <script>
 /* 스크롤바 폭 측정: 전체 폭 패널이 스크롤바만큼 밀리지 않게 */
 (function(){function f(){document.documentElement.style.setProperty('--sbw',(window.innerWidth-document.documentElement.getBoundingClientRect().width)+'px');}
@@ -28,6 +28,21 @@ f(); window.addEventListener('resize',f);})();
     </nav>
   </div>
 </header>
+<script>
+/* menu bar height -> --head-h, so the photo can start right at the top, behind the bar */
+(function () {
+  var head = document.querySelector('.site-head'), root = document.documentElement;
+  function set() { root.style.setProperty('--head-h', head.getBoundingClientRect().height + 'px'); }
+  set();
+  if ('ResizeObserver' in window) new ResizeObserver(set).observe(head);
+  else window.addEventListener('resize', set);
+})();
+</script>
+
+<!-- Journalism only: fills the whole first screen, behind the menu bar.
+     12 photos in a grid; a few seconds later one pair (e.g. morning / night) grows out of it,
+     split at the cursor: the first photo left of it, the second right of it. Built by script. -->
+<div class="j-cover" aria-hidden="true"></div>
 
 <main class="wrap">
 
@@ -171,6 +186,159 @@ f(); window.addEventListener('resize',f);})();
   }
   onScroll();
   window.addEventListener('scroll', onScroll, { passive: true });
+})();
+
+/* once the photo has scrolled away, keep the line under the menu until the first line of text
+   goes under it -- so the page then looks exactly as it does without the photo */
+(function () {
+  var head = document.querySelector('.site-head'), cover = document.querySelector('.j-cover'),
+      first = document.querySelector('main > p');
+  if (!cover || !first) return;
+  function inkTop(el) {
+    var cs = getComputedStyle(el), f = parseFloat(cs.fontSize),
+        lh = parseFloat(cs.lineHeight) || f * 1.6;
+    return el.getBoundingClientRect().top + (lh - f) / 2;
+  }
+  function update() {
+    var edge = head.getBoundingClientRect().bottom;
+    head.classList.toggle('lined', cover.getBoundingClientRect().bottom <= edge + 0.5 && inkTop(first) > edge);
+  }
+  update();
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+})();
+</script>
+<script>
+/* Cover: photo grid -> one pair split at the cursor
+   Photos: images/journalism/<name>.webp (full size, used for the pair) and
+   images/journalism/grid/<name>.webp (small copies for the grid) -- any ratio; each keeps its own. */
+(function () {
+  var cover = document.querySelector('.j-cover');
+  if (!cover) return;
+  var DIR = 'images/journalism/';
+  var GROUPS = [['morning', 'night'], ['one', 'embracing'], ['inside', 'outside'],
+                ['sunny', 'rain'], ['summer', 'winter'], ['black', 'color']];
+  var DELAY = 0;             /* how long the grid stays on its own (ms): none, it starts at once */
+  var head = document.querySelector('.site-head');
+
+  /* grid: 12 photos, in the order of GROUPS, each pair side by side */
+  var grid = document.createElement('div');
+  grid.className = 'jc-grid';
+  var cells = {};
+  GROUPS.forEach(function (g, gi) {
+    g.forEach(function (n, k) {
+      var c = document.createElement('div'); c.className = 'jc-cell';
+      c.setAttribute('data-g', gi); c.setAttribute('data-k', k);
+      var im = document.createElement('img'); im.src = DIR + 'grid/' + n + '.webp'; im.alt = '';   /* small copies for the grid */
+      c.appendChild(im); grid.appendChild(c); cells[n] = c;
+    });
+  });
+  cover.appendChild(grid);
+
+  /* the line in the middle: white, and black wherever it lies over the left photo.
+     Two copies cut to exactly complementary areas -- black: the left photo's rectangle,
+     white: everything else -- so the white never shows round the edges of the black letters. */
+  var LINE = ['Every story has', 'two sides.'];
+  var words = ['white', 'black'].map(function (tone) {
+    var t = document.createElement('p'); t.className = 'jc-line ' + tone;
+    LINE.forEach(function (l) { var sp = document.createElement('span'); sp.textContent = l; t.appendChild(sp); });
+    return t;
+  });
+  function clipBlack() {
+    if (!open) return;
+    var o = cover.getBoundingClientRect(), r = panes[0].getBoundingClientRect(),
+        l = r.left - o.left, t = r.top - o.top, rr = r.right - o.left, b = r.bottom - o.top;
+    words[1].style.clipPath = 'polygon(' + l + 'px ' + t + 'px,' + rr + 'px ' + t + 'px,' + rr + 'px ' + b + 'px,' + l + 'px ' + b + 'px)';
+    words[0].style.clipPath = "path(evenodd,'M0 0H" + o.width + 'V' + o.height + 'H0Z' +
+                              'M' + l + ' ' + t + 'H' + rr + 'V' + b + 'H' + l + "Z')";
+  }
+
+  /* columns x rows to suit the screen: the arrangement whose cells come closest to 5:4 */
+  function layoutGrid() {
+    var W = cover.clientWidth, H = cover.clientHeight, best = null, bestD = 1e9;
+    [[6, 2], [4, 3], [3, 4], [2, 6]].forEach(function (cr) {
+      var d = Math.abs(Math.log((W / cr[0]) / (H / cr[1]) / 1.25));
+      if (d < bestD) { bestD = d; best = cr; }
+    });
+    var cols = best[0];
+    grid.style.gridTemplateColumns = 'repeat(' + cols + ', 1fr)';
+    grid.style.gridTemplateRows = 'repeat(' + best[1] + ', 1fr)';
+    /* keep each pair together: side by side when the columns divide into pairs (6, 4, 2),
+       one above the other when they don't (3 columns) */
+    grid.querySelectorAll('.jc-cell').forEach(function (c) {
+      var g = +c.getAttribute('data-g'), k = +c.getAttribute('data-k'), row, col;
+      if (cols % 2 === 0) { var per = cols / 2; row = Math.floor(g / per); col = (g % per) * 2 + k; }
+      else { row = Math.floor(g / cols) * 2 + k; col = g % cols; }
+      c.style.gridRow = String(row + 1); c.style.gridColumn = String(col + 1);
+    });
+  }
+  layoutGrid();
+
+  /* the pair */
+  var pair = GROUPS[Math.floor(Math.random() * GROUPS.length)];
+  var panes = pair.map(function (n) {
+    var p = document.createElement('div'); p.className = 'jc-pane';
+    var im = document.createElement('img'); im.src = DIR + n + '.webp'; im.alt = '';
+    p.appendChild(im); return p;
+  });
+  var x = null;              /* split point (px from the cover's left edge); null = middle */
+
+  function ratio(p) { var im = p.firstChild; return (im.naturalWidth / im.naturalHeight) || 1.5; }
+  function place(p, r) {
+    p.style.left = r.left + 'px'; p.style.top = r.top + 'px';
+    p.style.width = r.width + 'px'; p.style.height = r.height + 'px';
+  }
+  /* widths: left photo = cursor to the left edge, right photo = cursor to the right edge.
+     Each keeps its own ratio, so its height follows from its width; both are centred
+     vertically in the area below the menu bar. */
+  function targets() {
+    var W = cover.clientWidth, H = cover.clientHeight,
+        top = head.getBoundingClientRect().height, h = H - top,
+        sx = x == null ? W / 2 : x,
+        wa = sx, wb = W - sx,
+        ha = wa / ratio(panes[0]), hb = wb / ratio(panes[1]);
+    return [
+      { left: 0,  top: top + (h - ha) / 2, width: wa, height: ha },
+      { left: sx, top: top + (h - hb) / 2, width: wb, height: hb }
+    ];
+  }
+  function cellRect(n) {
+    var c = cells[n].getBoundingClientRect(), o = cover.getBoundingClientRect();
+    return { left: c.left - o.left, top: c.top - o.top, width: c.width, height: c.height };
+  }
+
+  var open = false, raf = 0;
+  function update() { raf = 0; if (!open) return; var t = targets(); place(panes[0], t[0]); place(panes[1], t[1]); clipBlack(); }
+  function schedule() { if (!raf) raf = requestAnimationFrame(update); }
+
+  function reveal() {
+    /* start exactly over their grid cells, then move out into place; the cells they left stay empty */
+    panes.forEach(function (p, i) { place(p, cellRect(pair[i])); cover.appendChild(p); cells[pair[i]].classList.add('lifted'); });
+    words.forEach(function (w) { cover.appendChild(w); });
+    cover.offsetWidth;   /* commit the start position before animating */
+    cover.classList.add('open');
+    open = true; update();
+    /* while the photos move out, keep the black copy cut to the left photo, frame by frame */
+    var until = Date.now() + 2900;
+    (function follow() { clipBlack(); if (Date.now() < until) requestAnimationFrame(follow); })();
+    setTimeout(function () { cover.classList.add('live'); }, 2900);   /* after the move-out (2.8s), follow the cursor without lag */
+  }
+
+  /* go once the pair has loaded and the grid has had its moment */
+  var t0 = Date.now(), pending = 2;
+  panes.forEach(function (p) {
+    var im = p.firstChild;
+    function done() { if (--pending === 0) setTimeout(reveal, Math.max(0, DELAY - (Date.now() - t0))); }
+    if (im.complete && im.naturalWidth) done(); else { im.addEventListener('load', done); im.addEventListener('error', done); }
+  });
+
+  /* split follows the cursor (mouse) or the finger (drag sideways; vertical drags still scroll) */
+  cover.addEventListener('pointermove', function (e) {
+    var o = cover.getBoundingClientRect();
+    x = Math.max(0, Math.min(o.width, e.clientX - o.left));
+    schedule();
+  });
+  window.addEventListener('resize', function () { layoutGrid(); if (x != null) x = Math.min(x, cover.clientWidth); schedule(); });
 })();
 </script>
 <script src="site.js"></script>

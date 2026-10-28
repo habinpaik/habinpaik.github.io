@@ -172,6 +172,54 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
 .hero-name .alt { display: block; font-family: var(--serif), "Noto Serif Devanagari", "Noto Naskh Arabic", serif; }   /* serif in every script */
 .hero-name .ko { display: block; }
 
+/* ---------- Journalism: cover photo (JOURNALISM ONLY) ----------
+   Fills the whole first screen, running up behind the menu bar; scrolling past it
+   brings up the page as usual. */
+.j-cover {
+  margin-top: calc(-1 * var(--head-h, 3rem));   /* start at the very top, behind the bar */
+  height: 100vh; height: 100svh;
+  position: relative; overflow: hidden;
+  background: var(--dark);
+  touch-action: pan-y;   /* sideways drags move the split; vertical ones still scroll */
+}
+/* 12 photos edge to edge; columns x rows set by script to suit the screen */
+.jc-grid { position: absolute; inset: 0; display: grid; transition: filter 2.8s cubic-bezier(.37,0,.63,1); }
+.jc-cell { overflow: hidden; min-width: 0; min-height: 0; }
+.jc-cell img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.jc-cell.lifted img { visibility: hidden; }   /* its photo has moved out of the grid */
+/* once the pair is up, the grid stays behind it, a little darker */
+.j-cover.open .jc-grid { filter: brightness(.45); }
+/* the pair: each photo whole, in its own ratio */
+.jc-pane {
+  position: absolute; z-index: 1; overflow: hidden;
+  --move: 2.8s cubic-bezier(.37,0,.63,1);   /* plain, even ease in and out */
+  transition: left var(--move), top var(--move), width var(--move), height var(--move);
+}
+.jc-pane img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.j-cover.live .jc-pane { transition: none; }
+/* the line in the dead centre of the screen, two lines; fades in with the photos */
+.jc-line {
+  position: absolute; inset: 0; z-index: 2; margin: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  font-family: var(--serif); font-weight: 700; font-size: var(--t-name);
+  line-height: 1.15; letter-spacing: -0.02em; text-align: center;
+  pointer-events: none; opacity: 0;
+  transition: opacity 2.8s cubic-bezier(.37,0,.63,1);
+}
+.jc-line.white { color: #fff; }
+.jc-line.black { color: #000; clip-path: inset(100%); }
+.j-cover.open .jc-line { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .jc-grid, .jc-pane, .jc-line { transition: none; } }
+/* the bar is always the blurred see-through one here, so the photo shows through it from the start */
+.j-page .site-head,
+.j-page .site-head.scrolled {
+  background: color-mix(in srgb, var(--paper) 72%, transparent);
+  border-bottom-color: transparent;
+  backdrop-filter: saturate(1.15) blur(10px);
+  -webkit-backdrop-filter: saturate(1.15) blur(10px);
+}
+.j-page .site-head.lined { border-bottom-color: var(--line); }
+
 /* the page: its first --head-h is see-through (the menu bar sits there over the photo) */
 .sheet {
   position: relative; z-index: 1;
