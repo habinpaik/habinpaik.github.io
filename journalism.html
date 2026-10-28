@@ -265,6 +265,9 @@ f(); window.addEventListener('resize',f);})();
   }
 
   /* columns x rows to suit the screen: the arrangement whose cells come closest to 5:4 */
+  var vertical = false;      /* true when the grid stacks each pair (odd number of columns) */
+  var pos = null, shown = null;
+  var TAU = 110;             /* smoothing time constant (ms): bigger = calmer but laggier */
   function layoutGrid() {
     var W = cover.clientWidth, H = cover.clientHeight, best = null, bestD = 1e9;
     [[6, 2], [4, 3], [3, 4], [2, 6]].forEach(function (cr) {
@@ -272,6 +275,8 @@ f(); window.addEventListener('resize',f);})();
       if (d < bestD) { bestD = d; best = cr; }
     });
     var cols = best[0];
+    var was = vertical; vertical = cols % 2 !== 0;          /* pairs stacked in the grid -> pair stacked when it grows */
+    if (was !== vertical) { pos = null; shown = null; }     /* the split changed axis: start again from the middle */
     grid.style.gridTemplateColumns = 'repeat(' + cols + ', 1fr)';
     grid.style.gridTemplateRows = 'repeat(' + best[1] + ', 1fr)';
     /* keep each pair together: side by side when the columns divide into pairs (6, 4, 2),
@@ -291,25 +296,34 @@ f(); window.addEventListener('resize',f);})();
     var im = document.createElement('img'); im.src = DIR + n + '.webp'; im.alt = '';
     p.appendChild(im); return p;
   });
-  var x = null;              /* split point (px from the cover's left edge); null = middle */
+  /* pos: where the cursor is along the split's axis -- px from the left edge, or from the top edge
+     when the pair is stacked; null = middle. shown: where the split is drawn; it eases toward pos. */
 
   function ratio(p) { var im = p.firstChild; return (im.naturalWidth / im.naturalHeight) || 1.5; }
   function place(p, r) {
     p.style.left = r.left + 'px'; p.style.top = r.top + 'px';
     p.style.width = r.width + 'px'; p.style.height = r.height + 'px';
   }
-  /* widths: left photo = cursor to the left edge, right photo = cursor to the right edge.
-     Each keeps its own ratio, so its height follows from its width; both are centred
-     vertically on the whole screen (menu bar included), the same as the line of text. */
+  /* Side by side: left photo's width = cursor to the left edge, right photo's = cursor to the right edge;
+     heights follow from each photo's own ratio; both centred vertically on the whole screen.
+     Stacked: the same turned 90 degrees -- top photo's height = top edge to the cursor, bottom
+     photo's = cursor to the bottom edge; widths follow from the ratios; both centred horizontally. */
   function targets() {
-    var W = cover.clientWidth, H = cover.clientHeight,
-        top = 0, h = H,
-        sx = x == null ? W / 2 : x,
+    var W = cover.clientWidth, H = cover.clientHeight;
+    if (vertical) {
+      var sy = shown == null ? H / 2 : shown,
+          ha = sy, hb = H - sy, wa2 = ha * ratio(panes[0]), wb2 = hb * ratio(panes[1]);
+      return [
+        { left: (W - wa2) / 2, top: 0,  width: wa2, height: ha },
+        { left: (W - wb2) / 2, top: sy, width: wb2, height: hb }
+      ];
+    }
+    var sx = shown == null ? W / 2 : shown,
         wa = sx, wb = W - sx,
-        ha = wa / ratio(panes[0]), hb = wb / ratio(panes[1]);
+        ha1 = wa / ratio(panes[0]), hb1 = wb / ratio(panes[1]);
     return [
-      { left: 0,  top: top + (h - ha) / 2, width: wa, height: ha },
-      { left: sx, top: top + (h - hb) / 2, width: wb, height: hb }
+      { left: 0,  top: (H - ha1) / 2, width: wa, height: ha1 },
+      { left: sx, top: (H - hb1) / 2, width: wb, height: hb1 }
     ];
   }
   function cellRect(n) {
@@ -360,13 +374,36 @@ f(); window.addEventListener('resize',f);})();
     if (im.complete && im.naturalWidth) done(); else { im.addEventListener('load', done); im.addEventListener('error', done); }
   });
 
-  /* split follows the cursor (mouse) or the finger (drag sideways; vertical drags still scroll) */
-  cover.addEventListener('pointermove', function (e) {
+  /* split follows the cursor (mouse) or the finger (drag sideways; vertical drags still scroll).
+     each frame it covers part of the remaining distance (exponential smoothing), so tiny fast tremors are absorbed and big moves arrive softly */
+  var easing = 0, last = 0;
+  function ease(now) {
+    var dt = last ? now - last : 16; last = now;
+    var L = vertical ? cover.clientHeight : cover.clientWidth, target = pos == null ? L / 2 : pos;
+    if (shown == null) shown = L / 2;
+    shown += (target - shown) * (1 - Math.exp(-dt / TAU));
+    if (Math.abs(target - shown) < 0.25) shown = target;
+    update();
+    if (shown !== target) easing = requestAnimationFrame(ease);
+    else { easing = 0; last = 0; }
+  }
+  function kick() { if (!easing) easing = requestAnimationFrame(ease); }
+
+  function follow(e) {
     var o = cover.getBoundingClientRect();
-    x = Math.max(0, Math.min(o.width, e.clientX - o.left));
-    schedule();
+    pos = vertical ? Math.max(0, Math.min(o.height, e.clientY - o.top))
+                   : Math.max(0, Math.min(o.width, e.clientX - o.left));
+    kick();
+  }
+  cover.addEventListener('pointermove', follow);
+  cover.addEventListener('pointerdown', follow);   /* touch: a tap sets the split (vertical drags scroll the page) */
+  window.addEventListener('resize', function () {
+    layoutGrid();
+    var L = vertical ? cover.clientHeight : cover.clientWidth;
+    if (pos != null) pos = Math.min(pos, L);
+    if (shown != null) shown = Math.min(shown, L);
+    schedule(); kick();
   });
-  window.addEventListener('resize', function () { layoutGrid(); if (x != null) x = Math.min(x, cover.clientWidth); schedule(); });
 })();
 </script>
 <script src="site.js"></script>
