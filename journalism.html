@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <link rel="stylesheet" href="style.css">
 </head>
-<body class="j-page">
+<body class="j-page cover-on">
 <script>
 /* 스크롤바 폭 측정: 전체 폭 패널이 스크롤바만큼 밀리지 않게 */
 (function(){function f(){document.documentElement.style.setProperty('--sbw',(window.innerWidth-document.documentElement.getBoundingClientRect().width)+'px');}
@@ -200,8 +200,9 @@ f(); window.addEventListener('resize',f);})();
     return el.getBoundingClientRect().top + (lh - f) / 2;
   }
   function update() {
-    var edge = head.getBoundingClientRect().bottom;
-    head.classList.toggle('lined', cover.getBoundingClientRect().bottom <= edge + 0.5 && inkTop(first) > edge);
+    var edge = head.getBoundingClientRect().bottom, past = cover.getBoundingClientRect().bottom <= edge + 0.5;
+    document.body.classList.toggle('cover-on', !past);   /* bar see-through, white text, while the cover is in view */
+    head.classList.toggle('lined', past && inkTop(first) > edge);
   }
   update();
   window.addEventListener('scroll', update, { passive: true });
@@ -299,10 +300,10 @@ f(); window.addEventListener('resize',f);})();
   }
   /* widths: left photo = cursor to the left edge, right photo = cursor to the right edge.
      Each keeps its own ratio, so its height follows from its width; both are centred
-     vertically in the area below the menu bar. */
+     vertically on the whole screen (menu bar included), the same as the line of text. */
   function targets() {
     var W = cover.clientWidth, H = cover.clientHeight,
-        top = head.getBoundingClientRect().height, h = H - top,
+        top = 0, h = H,
         sx = x == null ? W / 2 : x,
         wa = sx, wb = W - sx,
         ha = wa / ratio(panes[0]), hb = wb / ratio(panes[1]);

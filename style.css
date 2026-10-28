@@ -220,6 +220,20 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
   -webkit-backdrop-filter: saturate(1.15) blur(10px);
 }
 .j-page .site-head.lined { border-bottom-color: var(--line); }
+/* while the cover is in view: no bar at all, white text straight on the picture.
+   Once the page has filled the screen, the bar turns into the usual blurred one. */
+.j-page .site-head { transition: background .15s ease, backdrop-filter .15s ease, border-color .15s ease; }
+.j-page.cover-on .site-head,
+.j-page.cover-on .site-head.scrolled {
+  background: transparent; border-bottom-color: transparent;
+  backdrop-filter: none; -webkit-backdrop-filter: none;
+}
+.j-page.cover-on .wordmark,
+.j-page.cover-on .nav a { color: rgba(255,255,255,.85); }
+.j-page.cover-on .wordmark:hover,
+.j-page.cover-on .nav a:hover,
+.j-page.cover-on .nav a[aria-current="page"] { color: #fff; }
+.j-page.cover-on .nav a[aria-current="page"]::after { background: #fff; }
 
 /* the page: its first --head-h is see-through (the menu bar sits there over the photo) */
 .sheet {
