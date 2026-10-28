@@ -127,7 +127,7 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
   .wordmark:not([aria-current="page"]):hover::after {
     content: ""; position: absolute; left: 0; right: 0;
     bottom: calc(-1 * var(--s2) - 1px);
-    height: 5px; background: var(--stone);   /* same bar as the current page, in grey */
+    height: 5px; background: #D2D2CE;   /* same bar as the current page, in a light grey */
   }
   .hero-on .nav a:not([aria-current="page"]):hover::after,
   .hero-on .wordmark:not([aria-current="page"]):hover::after,
@@ -210,6 +210,9 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
 /* the pair: each photo whole, in its own ratio */
 .jc-pane { position: absolute; z-index: 1; overflow: hidden; }   /* moved frame by frame by script */
 .jc-pane img { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* the full-size photo, laid over the small copy, fades in once it has loaded */
+.jc-pane img.full { position: absolute; inset: 0; opacity: 0; transition: opacity .6s ease; }
+.jc-pane img.full.on { opacity: 1; }
 /* the line in the dead centre of the screen, two lines; fades in with the photos */
 .jc-line {
   position: absolute; inset: 0; z-index: 2; margin: 0;
@@ -748,9 +751,9 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .foot-mail)):hover {
 .foot-side > .foot-mail { grid-column: 1 / -1; grid-row: 1; justify-self: start; }
 .foot-side > .clocks { grid-column: 1 / -1; grid-row: 2; }
 .foot-side > .foot-contact { grid-column: 1; grid-row: 3;
-  /* clocks -> address: the same visible gap as a paragraph -> the next section title in the body
-     ("... own p tag." -> "Education"): 63px on a phone, 80px on a 1280 screen */
-  margin-top: calc(var(--s4) + clamp(1.94rem, calc(1.525rem + 1.685vw), 2.875rem)); }
+  /* clocks -> address: the same visible gap as mail button -> clocks (measured on the letters);
+     0.6em takes off the space the address font keeps above its letters */
+  margin-top: calc(var(--fg) - 0.6em); }
 .foot-copy { grid-column: 2; grid-row: 3; justify-self: end; align-self: end; white-space: nowrap; }   /* level with the last address line */
 
 .foot-mail {
@@ -788,8 +791,8 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .foot-mail)):hover {
 }
 /* weekday: WED, the size of the city name */
 .clocks .dow { font-size: var(--t-small); letter-spacing: 0; }
-.clocks .colon { animation: clock-blink 1s steps(1, end) infinite; }
-@keyframes clock-blink { 50% { opacity: 0; } }
+.clocks .colon { animation: clock-blink 2s ease-in-out infinite; }   /* a soft fade out and back, every 2s */
+@keyframes clock-blink { 0%, 100% { opacity: 1; } 50% { opacity: .15; } }
 @media (prefers-reduced-motion: reduce) { .clocks .colon { animation: none; } }
 
 .foot-copy { margin: 0; font-family: var(--serif); font-weight: 600; font-size: var(--t-body); }

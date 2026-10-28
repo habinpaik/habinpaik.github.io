@@ -9,6 +9,32 @@
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Serif+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <link rel="stylesheet" href="style.css">
+<script>
+/* Journalism cover, decided before anything else loads: which pair to show, and which size of
+   photo this screen needs -- so those downloads start first, at the top of the page. */
+(function () {
+  var G = [['morning', 'night'], ['one', 'embracing'], ['inside', 'outside'],
+           ['sunny', 'rain'], ['summer', 'winter'], ['black', 'color']];
+  var pair = G[Math.floor(Math.random() * G.length)];
+  var W = window.innerWidth, H = window.innerHeight, best = null, bestD = 1e9;
+  [[6, 2], [4, 3], [3, 4], [2, 6]].forEach(function (cr) {   /* the same grid choice the cover makes */
+    var d = Math.abs(Math.log((W / cr[0]) / (H / cr[1]) / 1.25));
+    if (d < bestD) { bestD = d; best = cr; }
+  });
+  /* a photo is at most as wide as the screen (side by side) or as tall (stacked) */
+  var need = (best[0] % 2 ? H : W) * (window.devicePixelRatio || 1);
+  var full = 'images/journalism/' + (need <= 1200 ? '1200/' : need <= 1800 ? '1800/' : '');
+  window.JC = { groups: G, pair: pair, full: full };
+  function pre(href, high) {
+    var l = document.createElement('link'); l.rel = 'preload'; l.as = 'image'; l.href = href;
+    if (high) l.setAttribute('fetchpriority', 'high');
+    document.head.appendChild(l);
+  }
+  pair.forEach(function (n) { pre('images/journalism/grid/' + n + '.webp', true); });   /* first: the pair, small */
+  G.forEach(function (g) { g.forEach(function (n) { if (pair.indexOf(n) < 0) pre('images/journalism/grid/' + n + '.webp'); }); });
+  pair.forEach(function (n) { pre(full + n + '.webp'); });                               /* then the pair, full size */
+})();
+</script>
 </head>
 <body class="j-page cover-on">
 <script>
@@ -54,7 +80,7 @@ f(); window.addEventListener('resize',f);})();
     <p>A second one or two sentences on what the story was, what you found, and why it mattered.</p>
 
     <figure class="ph wide pano">
-      <img src="images/wide-1.jpg" alt="">
+      <img loading="lazy" decoding="async" src="images/wide-1.jpg" alt="">
       <figcaption>A dramatic image, wider than the column — drop these in wherever a moment deserves it.</figcaption>
     </figure>
 
@@ -65,7 +91,7 @@ f(); window.addEventListener('resize',f);})();
     </div>
 
     <figure class="ph overlay">
-      <img src="images/wide-1.jpg" alt="">
+      <img loading="lazy" decoding="async" src="images/wide-1.jpg" alt="">
       <figcaption>Text laid over an image — for a report you want to headline visually.</figcaption>
     </figure>
 
@@ -75,7 +101,7 @@ f(); window.addEventListener('resize',f);})();
     </div>
 
     <div class="entry">
-      <figure class="ph side-left"><img src="images/ex-tall-1.jpg" alt=""></figure>
+      <figure class="ph side-left"><img loading="lazy" decoding="async" src="images/ex-tall-1.jpg" alt=""></figure>
       <div class="head"><h3><a href="https://www.kunews.ac.kr/news/articleView.html?idxno=44378" target="_blank" rel="noopener">비자·언어 장벽에 취업 못하고 떠나는 이공계 유학생</a></h3></div>
       <p class="desc"><span class="date">Mar 2025</span> <span class="dash">—</span> a photo mounted in the left gutter, beside the column like a newspaper.</p>
     </div>
@@ -86,14 +112,14 @@ f(); window.addEventListener('resize',f);})();
 
     <div class="overlay-duo">
       <a class="overlay-card" href="https://www.kunews.ac.kr/news/articleView.html?idxno=44377" target="_blank" rel="noopener">
-        <img src="images/land-1.jpg" alt="">
+        <img loading="lazy" decoding="async" src="images/land-1.jpg" alt="">
         <span class="cap">
           <span class="title">대학 AI데이터센터 전력난, 냉각 효율화·지방 이전 필요</span>
           <span class="meta">Mar 2025 — a short description of the piece, laid over the image.</span>
         </span>
       </a>
       <a class="overlay-card" href="https://www.kunews.ac.kr/news/articleView.html?idxno=44724" target="_blank" rel="noopener">
-        <img src="images/tall-1.jpg" alt="">
+        <img loading="lazy" decoding="async" src="images/tall-1.jpg" alt="">
         <span class="cap">
           <span class="title">취업난에 질린 청년들, 경력 쌓으러 해외 나간다</span>
           <span class="meta">Mar 2025 — a short description of the piece, laid over the image.</span>
@@ -111,12 +137,12 @@ f(); window.addEventListener('resize',f);})();
       <p class="desc"><span class="date">Nov 2024</span> <span class="dash">—</span> The angle, the sources, the outcome. With the photo placed full-width below instead of floated, the description keeps the full column and never gets clipped.</p>
     </div>
     <figure class="ph">
-      <img src="images/land-1.jpg" alt="">
+      <img loading="lazy" decoding="async" src="images/land-1.jpg" alt="">
       <figcaption>A column-width photo — the safe default when you just want an image with an entry.</figcaption>
     </figure>
 
     <div class="entry">
-      <figure class="ph side-right"><img src="images/ex-tall-2.jpg" alt=""></figure>
+      <figure class="ph side-right"><img loading="lazy" decoding="async" src="images/ex-tall-2.jpg" alt=""></figure>
       <div class="head"><h3><a href="https://www.kunews.ac.kr/news/articleView.html?idxno=43606" target="_blank" rel="noopener">[사람들] 작은 브랜드 로고 안에 세계를 주입하다</a></h3></div>
       <p class="desc"><span class="date">Mar 2025</span> <span class="dash">—</span> a photo mounted in the right gutter.</p>
     </div>
@@ -142,15 +168,15 @@ f(); window.addEventListener('resize',f);})();
   <section>
     <h2 class="section-title">Key reporting</h2>
     <div class="table">
-      <div class="cell"><img src="images/land-1.jpg" alt=""><div class="th"><a href="https://www.kunews.ac.kr/news/articleView.html?idxno=43975" target="_blank" rel="noopener">경쟁 과열에 관리 미비, 불만 커지는 녹지 대관</a></div><p class="desc"><span class="date">May 2025</span> <span class="dash">—</span> One line on the piece.</p></div>
-      <div class="cell"><img src="images/land-1.jpg" alt=""><div class="th"><a href="https://www.kunews.ac.kr/news/articleView.html?idxno=43742" target="_blank" rel="noopener">선본 바다, 항해하는 모두의 터전이어야</a></div><p class="desc"><span class="date">May 2025</span> <span class="dash">—</span> One line on the piece.</p></div>
-      <div class="cell"><img src="images/land-1.jpg" alt=""><div class="th"><a href="https://www.kunews.ac.kr/news/articleView.html?idxno=44058" target="_blank" rel="noopener">고려대, 미국 내 학업 중단 교수자·유학생 지원 추진</a></div><p class="desc"><span class="date">May 2025</span> <span class="dash">—</span> One line on the piece.</p></div>
-      <div class="cell"><img src="images/land-1.jpg" alt=""><div class="th"><a href="https://www.kunews.ac.kr/news/articleView.html?idxno=43613" target="_blank" rel="noopener">“신진연구자에 해외 연수·연구실 구축 지원”</a></div><p class="desc"><span class="date">May 2025</span> <span class="dash">—</span> One line on the piece.</p></div>
-      <div class="cell"><img src="images/land-1.jpg" alt=""><div class="th"><a href="https://www.kunews.ac.kr/news/articleView.html?idxno=43311" target="_blank" rel="noopener">서울총학, 비상계엄에 학생총회 연다</a></div><p class="desc"><span class="date">May 2025</span> <span class="dash">—</span> One line on the piece.</p></div>
-      <div class="cell"><img src="images/land-1.jpg" alt=""><div class="th"><a href="https://www.kunews.ac.kr/news/articleView.html?idxno=43692" target="_blank" rel="noopener">찬란한 저 빛처럼 우린 함께 할 거야!</a></div><p class="desc"><span class="date">May 2025</span> <span class="dash">—</span> One line on the piece.</p></div>
-      <div class="cell"><img src="images/land-1.jpg" alt=""><div class="th"><a href="https://www.kunews.ac.kr/news/articleView.html?idxno=43931" target="_blank" rel="noopener">모국에서 온 추억, 고대인의 세계로 녹아들다</a></div><p class="desc"><span class="date">May 2025</span> <span class="dash">—</span> One line on the piece.</p></div>
-      <div class="cell"><img src="images/land-1.jpg" alt=""><div class="th"><a href="https://www.kunews.ac.kr/news/articleView.html?idxno=43797" target="_blank" rel="noopener">“국내·국제법 점검해야 한일 갈등 종식한다”</a></div><p class="desc"><span class="date">May 2025</span> <span class="dash">—</span> One line on the piece.</p></div>
-      <div class="cell"><img src="images/land-1.jpg" alt=""><div class="th"><a href="https://www.kunews.ac.kr/news/articleView.html?idxno=44476" target="_blank" rel="noopener">“정치권이 해결 못한 갈등의 역사, 양국 시민사회 연대로 풀어야”</a></div><p class="desc"><span class="date">May 2025</span> <span class="dash">—</span> One line on the piece.</p></div>
+      <div class="cell"><img loading="lazy" decoding="async" src="images/land-1.jpg" alt=""><div class="th"><a href="https://www.kunews.ac.kr/news/articleView.html?idxno=43975" target="_blank" rel="noopener">경쟁 과열에 관리 미비, 불만 커지는 녹지 대관</a></div><p class="desc"><span class="date">May 2025</span> <span class="dash">—</span> One line on the piece.</p></div>
+      <div class="cell"><img loading="lazy" decoding="async" src="images/land-1.jpg" alt=""><div class="th"><a href="https://www.kunews.ac.kr/news/articleView.html?idxno=43742" target="_blank" rel="noopener">선본 바다, 항해하는 모두의 터전이어야</a></div><p class="desc"><span class="date">May 2025</span> <span class="dash">—</span> One line on the piece.</p></div>
+      <div class="cell"><img loading="lazy" decoding="async" src="images/land-1.jpg" alt=""><div class="th"><a href="https://www.kunews.ac.kr/news/articleView.html?idxno=44058" target="_blank" rel="noopener">고려대, 미국 내 학업 중단 교수자·유학생 지원 추진</a></div><p class="desc"><span class="date">May 2025</span> <span class="dash">—</span> One line on the piece.</p></div>
+      <div class="cell"><img loading="lazy" decoding="async" src="images/land-1.jpg" alt=""><div class="th"><a href="https://www.kunews.ac.kr/news/articleView.html?idxno=43613" target="_blank" rel="noopener">“신진연구자에 해외 연수·연구실 구축 지원”</a></div><p class="desc"><span class="date">May 2025</span> <span class="dash">—</span> One line on the piece.</p></div>
+      <div class="cell"><img loading="lazy" decoding="async" src="images/land-1.jpg" alt=""><div class="th"><a href="https://www.kunews.ac.kr/news/articleView.html?idxno=43311" target="_blank" rel="noopener">서울총학, 비상계엄에 학생총회 연다</a></div><p class="desc"><span class="date">May 2025</span> <span class="dash">—</span> One line on the piece.</p></div>
+      <div class="cell"><img loading="lazy" decoding="async" src="images/land-1.jpg" alt=""><div class="th"><a href="https://www.kunews.ac.kr/news/articleView.html?idxno=43692" target="_blank" rel="noopener">찬란한 저 빛처럼 우린 함께 할 거야!</a></div><p class="desc"><span class="date">May 2025</span> <span class="dash">—</span> One line on the piece.</p></div>
+      <div class="cell"><img loading="lazy" decoding="async" src="images/land-1.jpg" alt=""><div class="th"><a href="https://www.kunews.ac.kr/news/articleView.html?idxno=43931" target="_blank" rel="noopener">모국에서 온 추억, 고대인의 세계로 녹아들다</a></div><p class="desc"><span class="date">May 2025</span> <span class="dash">—</span> One line on the piece.</p></div>
+      <div class="cell"><img loading="lazy" decoding="async" src="images/land-1.jpg" alt=""><div class="th"><a href="https://www.kunews.ac.kr/news/articleView.html?idxno=43797" target="_blank" rel="noopener">“국내·국제법 점검해야 한일 갈등 종식한다”</a></div><p class="desc"><span class="date">May 2025</span> <span class="dash">—</span> One line on the piece.</p></div>
+      <div class="cell"><img loading="lazy" decoding="async" src="images/land-1.jpg" alt=""><div class="th"><a href="https://www.kunews.ac.kr/news/articleView.html?idxno=44476" target="_blank" rel="noopener">“정치권이 해결 못한 갈등의 역사, 양국 시민사회 연대로 풀어야”</a></div><p class="desc"><span class="date">May 2025</span> <span class="dash">—</span> One line on the piece.</p></div>
     </div>
   </section>
 
@@ -217,8 +243,10 @@ f(); window.addEventListener('resize',f);})();
   var cover = document.querySelector('.j-cover');
   if (!cover) return;
   var DIR = 'images/journalism/';
-  var GROUPS = [['morning', 'night'], ['one', 'embracing'], ['inside', 'outside'],
+  var JC = window.JC || {};
+  var GROUPS = JC.groups || [['morning', 'night'], ['one', 'embracing'], ['inside', 'outside'],
                 ['sunny', 'rain'], ['summer', 'winter'], ['black', 'color']];
+  var FULL = JC.full || DIR;   /* folder with the size this screen needs (set in <head>) */
   var DELAY = 0;             /* how long the grid stays on its own (ms): none, it starts at once */
   var head = document.querySelector('.site-head');
 
@@ -236,7 +264,7 @@ f(); window.addEventListener('resize',f);})();
   });
   cover.appendChild(grid);
 
-  var pair = GROUPS[Math.floor(Math.random() * GROUPS.length)];
+  var pair = JC.pair || GROUPS[Math.floor(Math.random() * GROUPS.length)];
 
   /* the line in the middle: white, and black wherever it lies over the left photo.
      Two copies cut to exactly complementary areas -- black: the left photo's rectangle,
@@ -291,10 +319,15 @@ f(); window.addEventListener('resize',f);})();
   layoutGrid();
 
   /* the pair (chosen above) */
+  /* Each photo starts as the small copy the grid has already loaded, so the move-out can begin at once;
+     the full-size photo is laid over it and fades in as soon as it has arrived. */
   var panes = pair.map(function (n) {
     var p = document.createElement('div'); p.className = 'jc-pane';
-    var im = document.createElement('img'); im.src = DIR + n + '.webp'; im.alt = '';
-    p.appendChild(im); return p;
+    var im = document.createElement('img'); im.src = DIR + 'grid/' + n + '.webp'; im.alt = '';
+    var big = document.createElement('img'); big.className = 'full'; big.alt = ''; big.decoding = 'async';
+    big.addEventListener('load', function () { big.classList.add('on'); });
+    big.src = FULL + n + '.webp';
+    p.appendChild(im); p.appendChild(big); return p;
   });
   /* pos: where the cursor is along the split's axis -- px from the left edge, or from the top edge
      when the pair is stacked; null = middle. shown: where the split is drawn; it eases toward pos. */
@@ -424,7 +457,7 @@ f(); window.addEventListener('resize',f);})();
     })(start);
   }
 
-  /* go once the pair has loaded and the grid has had its moment */
+  /* go as soon as the pair's small copies are in (they're the first thing the page downloads) */
   var t0 = Date.now(), pending = 2;
   panes.forEach(function (p) {
     var im = p.firstChild;
