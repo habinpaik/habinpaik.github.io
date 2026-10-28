@@ -120,7 +120,7 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
 .wordmark[aria-current="page"]::after {
   content: ""; position: absolute; left: 0; right: 0;
   bottom: calc(-1 * var(--s2) - 1px);   /* sit exactly on the header's bottom edge */
-  height: 3px; background: var(--ink);
+  height: 5px; background: var(--ink);
 }
 
 /* ---------- Hero (HOME ONLY) ----------
@@ -210,6 +210,16 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
 .jc-line.white { color: #fff; }
 .jc-line.black { color: #000; clip-path: inset(100%); }
 .j-cover.open .jc-line { opacity: 1; }
+/* arrow at the bottom of the cover, appears with the line */
+.jc-down {
+  position: absolute; z-index: 3; left: 50%; bottom: 20px; transform: translateX(-50%);
+  width: 44px; height: 44px; padding: 10px; margin: 0;
+  background: none; border: 0; cursor: pointer; color: #fff;
+  opacity: 0; transition: opacity 2.8s cubic-bezier(.37,0,.63,1);
+}
+.jc-down svg { display: block; width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.j-cover.open .jc-down { opacity: .8; }
+.jc-down:hover { opacity: 1; }
 @media (prefers-reduced-motion: reduce) { .jc-grid::after, .jc-line { transition: none; } }
 /* the bar is always the blurred see-through one here, so the photo shows through it from the start */
 .j-page .site-head,
@@ -280,11 +290,12 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
 .identity-band { margin-top: 0; }
 
 /* ---------- Identity band (HOME ONLY) ---------- */
-.identity-band { background: var(--brand); color: var(--ink); border-block: 1px solid var(--line); }
+.identity-band { background: var(--brand); color: var(--ink); }   /* grey band, no lines above/below */
 .identity-band .wrap { padding-block: var(--s5); }
 .identity-band p {
   margin: 0;
   font-size: var(--t-display);
+  font-weight: 700;   /* same weight as the line over the Journalism cover */
   line-height: 1.6;
   max-width: none;
   letter-spacing: -0.01em;
@@ -506,7 +517,7 @@ main > p.epigraph:first-child { margin-bottom: var(--s3); }
 /* ---------- Research bookshelf (legacy cover grid) ---------- */
 .shelf-panel {
   padding-top: 40px;                     /* 가로책장 바닥 막대 ↔ 표지 첫 줄 */
-  padding-bottom: 20px;                  /* 버튼 ↔ 박스 아래 */
+  padding-bottom: 40px;                  /* 버튼 ↔ 박스 아래 (바로 아래가 푸터라 넉넉히) */
   margin-top: 0;
   position: relative;
 }
@@ -790,6 +801,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .foot-mail)):hover {
   figure.ph.left, figure.ph.right,
   figure.ph.small.left, figure.ph.small.right { float: none; width: 100%; margin: var(--s5) 0; }
   .site-head .bar { flex-direction: column; gap: var(--s2); align-items: flex-start; }
+  .site-head .bar .nav { align-self: center; }   /* the menu row is centred */
   /* two-row header on phones: the name sits on its own row, so no current-page bar under it */
   .wordmark[aria-current="page"]::after { display: none; }
 }
@@ -807,10 +819,11 @@ a:focus-visible { outline: 2px solid var(--link); outline-offset: 3px; }
 /* ---------- 책장 박스: 분류 버튼 줄 + 가로책장 + 표지책장을 하나의 회색 박스로 ---------- */
 .shelf-box {
   width: calc(100vw - var(--sbw, 0px)); margin-left: calc(50% - (100vw - var(--sbw, 0px)) / 2);
-  background: var(--brand);
-  border-block: 1px solid var(--line);
+  background: var(--brand);   /* no lines above/below */
   margin-top: var(--s3);
 }
+/* Research: the bookshelf box runs straight into the dark footer -- no white strip between */
+main.shelf-end { padding-bottom: 0; }
 .shelf-box [hidden] { display: none !important; }
 .shelf-box.no-covers .spine-panel { padding-bottom: 20px; }
 .shelf-box.no-spines .shelf-panel { padding-top: 20px; }   /* 가로책장이 숨으면 박스 위→표지 첫 줄도 20px */   /* 표지책장이 숨으면 바닥 막대 아래 여백 8px */

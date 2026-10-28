@@ -343,7 +343,63 @@ f(); window.addEventListener('resize',f);})();
   /* Move-out, drawn frame by frame: each frame sits between the grid cell and where the photo
      belongs RIGHT NOW (which follows the cursor), by an even ease-in-out. A cursor moving during
      the move-out is simply blended in -- nothing restarts or jumps. */
+  /* Colour for the line over the left photo, taken from that photo.
+     Looks at where the line sits on it (the right half, middle band), finds its average brightness
+     and its main hue, then picks the colour in that hue -- or, failing that, the opposite hue --
+     that stands out most from it. Never near-black or near-white. If the photo can't be read
+     (e.g. opened as a local file), the line stays black. */
+  function lum(c) {
+    return c.map(function (v) { return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); })
+            .reduce(function (s, v, i) { return s + v * [0.2126, 0.7152, 0.0722][i]; }, 0);
+  }
+  function hsl(h, sa, l) {
+    function f(n) { var k = (n + h / 30) % 12, a = sa * Math.min(l, 1 - l); return l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1)); }
+    return [f(0), f(8), f(4)];
+  }
+  function lineColour(im) {
+    try {
+      var n = 48, cv = document.createElement('canvas'); cv.width = cv.height = n;
+      var g = cv.getContext('2d', { willReadFrequently: true }), w = im.naturalWidth, h = im.naturalHeight;
+      if (vertical) g.drawImage(im, w * 0.3, h * 0.5, w * 0.4, h * 0.5, 0, 0, n, n);   /* stacked: bottom middle */
+      else g.drawImage(im, w * 0.5, h * 0.3, w * 0.5, h * 0.4, 0, 0, n, n);            /* side by side: right middle */
+      var d = g.getImageData(0, 0, n, n).data, R = 0, G = 0, B = 0, hx = 0, hy = 0, m = d.length / 4;
+      for (var i = 0; i < d.length; i += 4) {
+        var r = d[i] / 255, gg = d[i + 1] / 255, b = d[i + 2] / 255, mx = Math.max(r, gg, b), mn = Math.min(r, gg, b);
+        R += r; G += gg; B += b;
+        if (mx - mn > 0.02) {
+          var hu = mx === r ? ((gg - b) / (mx - mn)) % 6 : mx === gg ? (b - r) / (mx - mn) + 2 : (r - gg) / (mx - mn) + 4;
+          var a = hu * Math.PI / 3, wgt = mx - mn;          /* weight by how colourful the pixel is */
+          hx += Math.cos(a) * wgt; hy += Math.sin(a) * wgt;
+        }
+      }
+      var Lb = lum([R / m, G / m, B / m]),
+          hue = Math.hypot(hx, hy) > 1e-3 ? (Math.atan2(hy, hx) * 180 / Math.PI + 360) % 360 : 215,
+          best = null, bestC = 0;
+      [hue, (hue + 180) % 360].forEach(function (hh, side) {
+        for (var l = 0.18; l <= 0.821; l += 0.02) {
+          var c = hsl(hh, 0.7, l), L = lum(c),
+              cr = (Math.max(L, Lb) + 0.05) / (Math.min(L, Lb) + 0.05);
+          if (side === 1 && bestC >= 4.5) return;      /* the photo's own hue already reads well */
+          if (cr > bestC) { bestC = cr; best = c; }
+        }
+      });
+      return 'rgb(' + best.map(function (v) { return Math.round(v * 255); }).join(',') + ')';
+    } catch (e) { return null; }
+  }
+
+  /* small arrow at the bottom of the cover: there's more below. Click/tap scrolls to the page. */
+  var down = document.createElement('button');
+  down.type = 'button'; down.className = 'jc-down'; down.setAttribute('aria-label', 'Scroll to the page');
+  down.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg>';
+  down.addEventListener('click', function () {
+    var y = window.scrollY + cover.getBoundingClientRect().bottom - head.getBoundingClientRect().height;
+    window.scrollTo({ top: y, behavior: 'smooth' });
+  });
+  cover.appendChild(down);
+
   function reveal() {
+    var col = lineColour(panes[0].firstChild);
+    if (col) words[1].style.color = col;
     var from = pair.map(cellRect);
     panes.forEach(function (p, i) { place(p, from[i]); cover.appendChild(p); cells[pair[i]].classList.add('lifted'); });
     words.forEach(function (w) { cover.appendChild(w); });
