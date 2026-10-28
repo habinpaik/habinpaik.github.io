@@ -162,9 +162,9 @@ f(); window.addEventListener('resize',f);})();
       <div class="foot-side">
         <a class="foot-mail" href="mailto:downbeen100@korea.ac.kr">downbeen100@korea.ac.kr</a>
         <div class="clocks">
-          <p><time data-tz="Asia/Seoul"><span class="hm">--:--</span><span class="dow">---</span></time><span class="city">Seoul</span></p>
-          <p><time data-tz="America/Los_Angeles"><span class="hm">--:--</span><span class="dow">---</span></time><span class="city">LA</span></p>
-          <p><time data-tz="America/New_York"><span class="hm">--:--</span><span class="dow">---</span></time><span class="city">New York</span></p>
+          <p><span class="city">Seoul</span><time data-tz="Asia/Seoul"><span class="hm">--:--</span><span class="dow">-</span></time></p>
+          <p><span class="city">LA</span><time data-tz="America/Los_Angeles"><span class="hm">--:--</span><span class="dow">-</span></time></p>
+          <p><span class="city">New York</span><time data-tz="America/New_York"><span class="hm">--:--</span><span class="dow">-</span></time></p>
         </div>
         <address class="foot-contact">
           <span>Mechanical Engineering &amp; Physics,</span>
@@ -346,7 +346,8 @@ f(); window.addEventListener('resize',f);})();
   /* Colour for the line over the left photo, taken from that photo.
      Looks at where the line sits on it (the right half, middle band), finds its average brightness
      and its main hue, then picks the colour in that hue -- or, failing that, the opposite hue --
-     that stands out most from it. Never near-black or near-white. If the photo can't be read
+     that stands out most from it. Never near-black, and never pale enough to be mistaken
+     for the white on the right (pink, peach, mint...). If the photo can't be read
      (e.g. opened as a local file), the line stays black. */
   function lum(c) {
     return c.map(function (v) { return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); })
@@ -377,8 +378,9 @@ f(); window.addEventListener('resize',f);})();
           best = null, bestC = 0;
       [hue, (hue + 180) % 360].forEach(function (hh, side) {
         for (var l = 0.18; l <= 0.821; l += 0.02) {
-          var c = hsl(hh, 0.7, l), L = lum(c),
+          var c = hsl(hh, 0.75, l), L = lum(c),
               cr = (Math.max(L, Lb) + 0.05) / (Math.min(L, Lb) + 0.05);
+          if (1.05 / (L + 0.05) < 3) continue;          /* too pale: would blur into the white words beside it */
           if (side === 1 && bestC >= 4.5) return;      /* the photo's own hue already reads well */
           if (cr > bestC) { bestC = cr; best = c; }
         }

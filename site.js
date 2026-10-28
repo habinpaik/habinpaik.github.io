@@ -1,7 +1,7 @@
 /* Shared by every page. */
 
 /* Footer clocks: <time data-tz="..."> shows HH:MM in that time zone, updated on the minute.
-   Each also shows its weekday (.dow). */
+   Each also shows its weekday as WED (.dow). */
 (function () {
   var els = document.querySelectorAll('time[data-tz]');
   if (!els.length || !window.Intl) return;
@@ -11,9 +11,10 @@
     els.forEach(function (el) {
       var tz = el.getAttribute('data-tz');
       try {
-        el.querySelector('.hm').textContent = fmt(tz, { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).format(now);
+        var hm = fmt(tz, { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).format(now).split(':');
+        el.querySelector('.hm').innerHTML = hm[0] + '<span class="colon">:</span>' + hm[1];   /* the colon blinks (CSS) */
         var dow = el.querySelector('.dow');
-        if (dow) dow.textContent = fmt(tz, { weekday: 'short' }).format(now);
+        if (dow) dow.textContent = fmt(tz, { weekday: 'short' }).format(now).toUpperCase();   /* WED */
       } catch (e) {}
     });
     setTimeout(tick, 60000 - (now.getSeconds() * 1000 + now.getMilliseconds()) + 50);   /* on the minute */

@@ -97,7 +97,7 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
   display: flex; align-items: baseline; justify-content: space-between;
   gap: var(--s4); padding-top: var(--s3); padding-bottom: var(--s2);   /* 메뉴 글자와 아래 굵은 바 사이를 좁게 */
 }
-/* the name is the Home button: grey, dark on hover, dark + bar when you're on Home -- like the menu */
+/* the name is the Home button: grey, a thin grey bar on hover, dark + bar when you're on Home -- like the menu */
 .brand { display: flex; align-items: baseline; gap: var(--s2); }
 .wordmark {
   position: relative;
@@ -105,7 +105,7 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
   color: var(--stone); text-decoration: none;
   transition: opacity .25s ease, visibility .25s, color .15s ease;
 }
-.wordmark:hover, .wordmark[aria-current="page"] { color: var(--ink); }
+.wordmark[aria-current="page"] { color: var(--ink); }
 /* back arrow on Research / Journalism / Portfolio: part of the same name link */
 .wordmark .back-ico {
   display: inline-block; width: 0.8em; height: 0.8em; margin-right: 0.3em; vertical-align: -0.04em;
@@ -113,7 +113,6 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
 }
 .nav { display: flex; gap: var(--s4); font-size: var(--t-body); }
 .nav a { position: relative; color: var(--stone); text-decoration: none; font-weight: 700; font-size: var(--t-body); transition: color .15s ease; }
-.nav a:hover { color: var(--ink); }
 .nav a[aria-current="page"] { color: var(--ink); }
 /* thick bar sitting on the header's bottom edge (not an underline under the text) */
 .nav a[aria-current="page"]::after,
@@ -121,6 +120,19 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
   content: ""; position: absolute; left: 0; right: 0;
   bottom: calc(-1 * var(--s2) - 1px);   /* sit exactly on the header's bottom edge */
   height: 5px; background: var(--ink);
+}
+/* hover (not the current page): the text stays as it is; the same bar, same place, in grey */
+@media (hover: hover) {
+  .nav a:not([aria-current="page"]):hover::after,
+  .wordmark:not([aria-current="page"]):hover::after {
+    content: ""; position: absolute; left: 0; right: 0;
+    bottom: calc(-1 * var(--s2) - 1px);
+    height: 5px; background: var(--stone);   /* same bar as the current page, in grey */
+  }
+  .hero-on .nav a:not([aria-current="page"]):hover::after,
+  .hero-on .wordmark:not([aria-current="page"]):hover::after,
+  .j-page.cover-on .nav a:not([aria-current="page"]):hover::after,
+  .j-page.cover-on .wordmark:not([aria-current="page"]):hover::after { background: rgba(255,255,255,.85); }
 }
 
 /* ---------- Hero (HOME ONLY) ----------
@@ -212,12 +224,12 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
 .j-cover.open .jc-line { opacity: 1; }
 /* arrow at the bottom of the cover, appears with the line */
 .jc-down {
-  position: absolute; z-index: 3; left: 50%; bottom: 20px; transform: translateX(-50%);
-  width: 44px; height: 44px; padding: 10px; margin: 0;
+  position: absolute; z-index: 3; left: 50%; bottom: 12px; transform: translateX(-50%);
+  width: 64px; height: 64px; padding: 10px; margin: 0;
   background: none; border: 0; cursor: pointer; color: #fff;
   opacity: 0; transition: opacity 2.8s cubic-bezier(.37,0,.63,1);
 }
-.jc-down svg { display: block; width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.jc-down svg { display: block; width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 .j-cover.open .jc-down { opacity: .8; }
 .jc-down:hover { opacity: 1; }
 @media (prefers-reduced-motion: reduce) { .jc-grid::after, .jc-line { transition: none; } }
@@ -240,8 +252,6 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
 }
 .j-page.cover-on .wordmark,
 .j-page.cover-on .nav a { color: rgba(255,255,255,.85); }
-.j-page.cover-on .wordmark:hover,
-.j-page.cover-on .nav a:hover,
 .j-page.cover-on .nav a[aria-current="page"] { color: #fff; }
 .j-page.cover-on .nav a[aria-current="page"]::after { background: #fff; }
 
@@ -275,10 +285,9 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
 /* hidden (space kept, so the menu doesn't shift) until the page has covered the big name */
 .hero-on:not(.named) .wordmark { opacity: 0; visibility: hidden; }
 .hero-on .wordmark { color: rgba(255,255,255,.85); }
-.hero-on .wordmark:hover, .hero-on .wordmark[aria-current="page"] { color: #fff; }
+.hero-on .wordmark[aria-current="page"] { color: #fff; }
 .hero-on .wordmark[aria-current="page"]::after { background: #fff; }
 .hero-on .nav a { color: rgba(255,255,255,.85); }
-.hero-on .nav a:hover,
 .hero-on .nav a[aria-current="page"] { color: #fff; }
 .hero-on .nav a[aria-current="page"]::after { background: #fff; }
 
@@ -760,31 +769,28 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .foot-mail)):hover {
 .site-foot { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
 .foot-contact > * { display: block; }
 
-/* times: large serif figures, the city small underneath; between the mail button and the address */
-.clocks { --clk-gap: var(--s5); display: flex; gap: var(--clk-gap); }
-.clocks p { margin: 0; }
-.clocks time { margin-top: calc(var(--fg) - 0.11em); }   /* Lora proportional digits start ~0.11em into the line (measured on the row) */
-.clocks time {
-  display: flex; align-items: baseline;   /* weekday sits on the digits' baseline */
-  font-family: var(--serif); font-weight: 400; color: #fff;
-  /* same size as the big name; on a screen too narrow for three clocks at that size,
-     shrinks just enough to fit. 12.78vw - 24px = the largest size at which three clocks always fit
-     (widest times like 20:08, "Wed"), measured at 320–640px wide, minus 1px to spare */
-  font-size: min(var(--t-name), calc(12.78vw - 1.5rem));
-  line-height: 1.05; letter-spacing: -0.02em;   /* slightly tighter tracking for the figures */
-  /* Lora's own proportional lining figures: tabular ones put a narrow "1" in a wide slot,
-     which left a gap before it (the row looked indented) and uneven spacing */
-  font-feature-settings: "lnum" 1, "pnum" 1;
+/* times: city small and grey, then the time in bold white at twice the body size,
+   the colon blinking once a second, and the weekday (WED) small like the city */
+.clocks {
+  display: flex; flex-wrap: wrap; column-gap: var(--s5); row-gap: var(--s2);
+  margin-top: calc(var(--fg) - 0.25em);   /* Lora's space above its figures, so the gap under the mail button reads as --fg */
 }
-/* weekday beside each time, bottom-aligned with the digits (small, serif) */
-/* the digits' built-in left side-bearing, removed so the row lines up with the mail button and address */
-.clocks .hm { margin-left: -0.02em; }
-.clocks .dow { margin-left: 0.3rem; font-size: var(--t-small); line-height: 1; letter-spacing: 0; }   /* same size as "Seoul" */
+.clocks p { margin: 0; display: flex; align-items: baseline; gap: 0.5rem; }
 .clocks .city {
-  display: block; margin-top: var(--s1);
   font-family: var(--sans); font-feature-settings: normal; font-size: var(--t-small);
   color: rgba(255, 255, 255, .55);
 }
+.clocks time {
+  display: flex; align-items: baseline; gap: 0.35rem;
+  font-family: var(--serif); font-weight: 700; font-size: calc(var(--t-body) * 2); line-height: 1.3;
+  letter-spacing: -0.01em; color: #fff;   /* the body's own tracking */
+  font-feature-settings: "lnum" 1, "pnum" 1, "kern" 1;   /* natural-width lining figures (no fixed-width gaps) */
+}
+/* weekday: WED, the size of the city name */
+.clocks .dow { font-size: var(--t-small); letter-spacing: 0; }
+.clocks .colon { animation: clock-blink 1s steps(1, end) infinite; }
+@keyframes clock-blink { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .clocks .colon { animation: none; } }
 
 .foot-copy { margin: 0; font-family: var(--serif); font-weight: 600; font-size: var(--t-body); }
 .foot-copy .ko { font-weight: 600; }
@@ -793,7 +799,10 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .foot-mail)):hover {
   .foot-main { grid-template-columns: 1fr; }
   .foot-copy { grid-column: 1; grid-row: 4; justify-self: start; margin-top: calc(var(--fg) - 0.44em); }
   .site-foot .wrap { padding-bottom: calc(var(--fg) - 0.31em); }
-  .clocks { --clk-gap: var(--s3); }
+  /* one city per line on phones, as a two-column table: city names in one column,
+     times in the next, so every time starts at the same left edge */
+  .clocks { display: grid; grid-template-columns: max-content max-content; column-gap: 0.75rem; row-gap: var(--s1); align-items: baseline; }
+  .clocks p { display: contents; }
 }
 @media (prefers-reduced-motion: reduce) { a { animation: none !important; } }
 
@@ -802,6 +811,10 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .foot-mail)):hover {
   figure.ph.small.left, figure.ph.small.right { float: none; width: 100%; margin: var(--s5) 0; }
   .site-head .bar { flex-direction: column; gap: var(--s2); align-items: flex-start; }
   .site-head .bar .nav { align-self: center; }   /* the menu row is centred */
+  .site-head .bar .brand { align-self: center; }  /* so is the name row: "Habin Paik 백하빈" itself is centred, */
+  .wordmark .back-ico {                            /* and the back arrow hangs to its left */
+    position: absolute; right: 100%; top: 50%; margin-right: 0.3em; transform: translateY(-50%);
+  }
   /* two-row header on phones: the name sits on its own row, so no current-page bar under it */
   .wordmark[aria-current="page"]::after { display: none; }
 }
