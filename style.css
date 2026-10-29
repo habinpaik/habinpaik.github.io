@@ -912,11 +912,11 @@ main.shelf-end { padding-bottom: 0; }
 .rail-btn[disabled] { color: #C9C9C6; cursor: default; }
 @media (hover: hover) and (pointer: fine) { .rail-btn { display: block; } }   /* phones swipe instead */
 
-/* ---------- Journalism: headlines bold (Korean serif, like a newspaper headline) ---------- */
+/* ---------- Journalism: headlines in Noto Serif KR SemiBold, as JoongAng's opinion headlines
+   (their "400" is in fact the SemiBold file), tracking -0.4px at 32px = -0.0125em ---------- */
 .j-page .entry h3,
 .j-page .table .cell .th a,
-.j-page .overlay-card .cap .title,
-.j-page .blur-card .cap .title { font-weight: 700; }
+.j-page .overlay-card .cap .title { font-weight: 600; letter-spacing: -0.0125em; }
 
 /* small label above a headline (e.g. "세종시장 후보 인터뷰") */
 .entry .kicker { margin: 0 0 var(--s1); font-family: var(--sans); font-size: var(--t-small); color: var(--stone); }
@@ -948,10 +948,16 @@ main.shelf-end { padding-bottom: 0; }
           mask-image: linear-gradient(to top, #000 55%, transparent);
 }
 .blur-card .cap .meta { display: block; font-family: var(--sans); font-size: var(--t-small); color: rgba(255,255,255,.8); }
-.blur-card .cap .title {
+.blur-card .cap .title {   /* smaller, in the sans (gothic) */
   display: block; margin-top: var(--s2);
-  font-family: var(--serif-ko); font-size: var(--t-title); line-height: 1.6;
-  letter-spacing: -0.02em; word-break: keep-all; transition: color .15s ease;
+  font-family: var(--sans); font-size: var(--t-body); font-weight: 600; line-height: 1.5;
+  letter-spacing: -0.01em; word-break: keep-all; transition: color .15s ease;
+}
+/* a short English description under the title: room for two or three lines */
+.blur-card .cap .desc {
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden;
+  margin-top: var(--s2); min-height: calc(3 * 1.5em);
+  font-family: var(--sans); font-size: var(--t-small); line-height: 1.5; color: rgba(255,255,255,.78);
 }
 .blur-card:hover .cap .title { color: #E8B4B8; }   /* same hover colour as the overlay cards */
 .blur-card.no-img .cap::before { display: none; }   /* no photo: plain deep grey */
