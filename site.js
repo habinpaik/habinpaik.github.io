@@ -70,3 +70,25 @@
   document.addEventListener('mouseleave', hide);
   window.addEventListener('blur', hide);
 })();
+
+/* Card rails (Portfolio): the thin bar under each row shows how far along you are;
+   the arrows move one card at a time. */
+(function () {
+  document.querySelectorAll('.card-rail').forEach(function (rail) {
+    var track = rail.querySelector('.rail-track'), thumb = rail.querySelector('.rail-thumb'),
+        prev = rail.querySelector('.rail-btn.prev'), next = rail.querySelector('.rail-btn.next');
+    function step() { var c = track.querySelector('.card, .blur-card'); return c ? c.getBoundingClientRect().width + parseFloat(getComputedStyle(track).columnGap || 0) : 300; }
+    function update() {
+      var max = track.scrollWidth - track.clientWidth, w = track.clientWidth / track.scrollWidth;
+      thumb.style.width = (Math.min(1, w) * 100) + '%';
+      thumb.style.left = (max > 0 ? (track.scrollLeft / max) * (1 - w) * 100 : 0) + '%';
+      if (prev) prev.disabled = track.scrollLeft <= 1;
+      if (next) next.disabled = track.scrollLeft >= max - 1;
+    }
+    if (prev) prev.addEventListener('click', function () { track.scrollBy({ left: -step(), behavior: 'smooth' }); });
+    if (next) next.addEventListener('click', function () { track.scrollBy({ left: step(), behavior: 'smooth' }); });
+    track.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  });
+})();
