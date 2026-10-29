@@ -186,7 +186,6 @@ f(); window.addEventListener('resize',f);})();
   <div class="wrap">
     <div class="foot-main">
       <div class="foot-side">
-        <a class="foot-mail" href="mailto:downbeen100@korea.ac.kr">downbeen100@korea.ac.kr</a>
         <div class="clocks">
           <p class="clock-main"><time data-tz="Asia/Seoul"><span class="hm">--:--</span><span class="sec">--</span><span class="dow">---</span></time><span class="city">in Seoul</span></p>
           <p class="clock-row">
@@ -196,6 +195,13 @@ f(); window.addEventListener('resize',f);})();
             <span class="clk"><span class="city">Beijing</span><time data-tz="Asia/Shanghai"><span class="hm">--:--</span></time></span>
           </p>
         </div>
+        <nav class="foot-links" aria-label="Footer">
+          <a class="foot-mail" href="mailto:downbeen100@korea.ac.kr">downbeen100@korea.ac.kr</a>
+          <a href="index.html#closed">About</a>
+          <a href="research.html">Research</a>
+          <a href="journalism.html">Journalism</a>
+          <a href="portfolio.html">Portfolio</a>
+        </nav>
         <address class="foot-contact">
           <span>Mechanical Engineering &amp; Physics,</span>
           <span>Korea University,</span>
@@ -457,7 +463,11 @@ f(); window.addEventListener('resize',f);})();
           to = targets();
       place(panes[0], mix(from[0], to[0], e)); place(panes[1], mix(from[1], to[1], e)); clipBlack();
       if (k < 1) requestAnimationFrame(frame);
-      else { intro = false; update(); }
+      else {
+        intro = false; update();
+        /* both photos are in place, centred; a second later the split starts following the cursor */
+        setTimeout(function () { tracking = true; kick(); }, HOLD);
+      }
     })(start);
   }
 
@@ -482,7 +492,9 @@ f(); window.addEventListener('resize',f);})();
     if (shown !== target) easing = requestAnimationFrame(ease);
     else { easing = 0; last = 0; }
   }
-  function kick() { if (!easing) easing = requestAnimationFrame(ease); }
+  var tracking = false;      /* off while the photos come out and for HOLD ms after: the split stays centred */
+  var HOLD = 1000;
+  function kick() { if (tracking && !easing) easing = requestAnimationFrame(ease); }
 
   function follow(e) {
     var o = cover.getBoundingClientRect();

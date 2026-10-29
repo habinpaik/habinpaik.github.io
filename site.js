@@ -1,8 +1,8 @@
 /* Shared by every page. */
 
 /* Footer clocks: <time data-tz="..."> shows HH:MM in that time zone.
-   Where present, .sec shows the seconds and .dow the weekday as THU. Updated every second;
-   HH:MM is only rewritten when it changes, so the colon's blink is never restarted. */
+   Where present, .sec shows the seconds and .dow the weekday (Thursday). Updated every second;
+   HH:MM is only rewritten when it changes. */
 (function () {
   var els = document.querySelectorAll('time[data-tz]');
   if (!els.length || !window.Intl) return;
@@ -16,12 +16,12 @@
         var hm = el.querySelector('.hm'), key = t[0] + ':' + t[1];
         if (hm.getAttribute('data-v') !== key) {
           hm.setAttribute('data-v', key);
-          hm.innerHTML = t[0] + '<span class="colon">:</span>' + t[1];   /* the colon blinks (CSS) */
+          hm.textContent = key;
         }
         var sec = el.querySelector('.sec');
         if (sec) sec.textContent = t[2];
         var dow = el.querySelector('.dow');
-        if (dow) dow.textContent = fmt(tz, { weekday: 'short' }).format(now).toUpperCase();   /* THU */
+        if (dow) dow.textContent = fmt(tz, { weekday: 'long' }).format(now);   /* Thursday */
       } catch (e) {}
     });
     setTimeout(tick, 1000 - now.getMilliseconds() + 20);   /* on the second */
@@ -64,7 +64,6 @@
     var t = a ? label(a) : '';
     if (!t) { hide(); return; }
     cur = a; tip.textContent = t;
-    tip.classList.toggle('inv', !!a.closest('.site-foot'));
     tip.classList.add('on'); place(e);
   });
   document.addEventListener('mousemove', function (e) { if (cur) place(e); }, { passive: true });

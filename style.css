@@ -703,7 +703,7 @@ figure.ph.margin-left, figure.ph.margin-right { width: 12rem; margin: var(--s4) 
    (Menu, wordmark, image cards and the footer's big mail button are excluded.)
    Links that normally have no underline get one drawn on hover. */
 :root { --link-hover: var(--stone); }
-a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .foot-mail)) {
+a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .foot-links a)) {
   text-decoration: none;
   background-image: linear-gradient(currentColor, currentColor);
   background-repeat: no-repeat;
@@ -711,7 +711,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .foot-mail)) {
   background-size: 100% 1px;
   transition: color .15s ease;
 }
-a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .foot-mail)):hover {
+a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .foot-links a)):hover {
   color: var(--link-hover);
   animation: link-draw .45s cubic-bezier(.2, .7, .2, 1) both;
 }
@@ -728,16 +728,14 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .foot-mail)):hover {
   opacity: 0; transition: opacity .12s ease;
 }
 .link-tip.on { opacity: 1; }
-.link-tip.inv { color: var(--dark); background: rgba(255, 255, 255, .92); }   /* over the dark footer */
 
 /* ---------- Footer ----------
    A full dark block that ends the page at full strength:
    mail button, clocks (Seoul / LA / New York), then the address with the copyright at its right. */
 .site-foot {
-  margin-top: 0;   /* no blank band above the dark footer */
-  background: var(--dark); color: #fff;
-  --link-hover: rgba(255, 255, 255, .6);
-  --rule: rgba(255, 255, 255, .18);
+  margin-top: 0;
+  background: var(--brand); color: var(--ink);   /* light grey, the same as the Home banner */
+  border-top: 1px solid var(--line);             /* a line to set it apart from the page above */
 }
 /* Footer spacing uses exactly two sizes, measured on what you see (letters and the pill's edge):
    --fg (40px) for every small gap -- top, mail -> clocks, address -> copyright, bottom --
@@ -745,45 +743,44 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .foot-mail)):hover {
    font's built-in space above/below its letters so the visible gaps come out equal. */
 .site-foot { --fg: var(--s6); }
 .site-foot .wrap { padding-block: var(--fg) calc(var(--fg) - 0.16em); }
-/* mail button, clocks, then the address with the copyright on its right */
+/* clocks, then a row of buttons (mail + the four pages), then the address with the copyright on its right */
 .foot-main { display: grid; grid-template-columns: auto 1fr; column-gap: var(--s6); row-gap: 0; }
 .foot-side { display: contents; }
-.foot-side > .foot-mail { grid-column: 1 / -1; grid-row: 1; justify-self: start; }
-.foot-side > .clocks { grid-column: 1 / -1; grid-row: 2; }
+.foot-side > .clocks { grid-column: 1 / -1; grid-row: 1; }
+.foot-side > .foot-links { grid-column: 1 / -1; grid-row: 2; }
 .foot-side > .foot-contact { grid-column: 1; grid-row: 3;
-  /* clocks -> address: the same visible gap as mail button -> clocks (measured on the letters);
-     0.3em takes off the space the fonts keep above and below their letters */
-  margin-top: calc(var(--fg) - 0.3em); }
+  /* buttons -> address: the same visible gap as clocks -> buttons (measured on the edges and letters) */
+  margin-top: var(--fg); }
 .foot-copy { grid-column: 2; grid-row: 3; justify-self: end; align-self: end; white-space: nowrap; }   /* level with the last address line */
 
-.foot-mail {
+/* buttons: plain rectangles, text the size of the city names */
+.foot-links { display: flex; flex-wrap: wrap; gap: var(--s2); margin-top: var(--fg); }
+.foot-links a {
   display: inline-block;
-  border: 1px solid rgba(255, 255, 255, .55); border-radius: 0;   /* plain rectangle */
-  padding: 0.3em 0.85em;
-  color: #fff; text-decoration: none;
-  font-family: var(--serif); font-weight: 400; font-size: var(--t-body); line-height: 1.3;
-  transition: background .2s ease, color .2s ease;
+  border: 1px solid #C9C9C6; border-radius: 0;
+  padding: 0.35em 0.9em;
+  color: var(--ink); text-decoration: none;
+  font-family: var(--serif); font-weight: 400; font-size: var(--t-small); line-height: 1.3;
+  transition: background .2s ease, color .2s ease, border-color .2s ease;
 }
-.foot-mail:hover { background: #fff; color: var(--dark); }
+.foot-links a:hover { background: var(--ink); border-color: var(--ink); color: #fff; }
 
 /* address: plain body text, no hierarchy -- only the colour is dimmer */
-.foot-contact { font-style: normal; font-size: var(--t-body); line-height: 1.5; color: rgba(255, 255, 255, .72); }
-/* white text on a dark ground renders heavier than dark on light; greyscale smoothing keeps it at body weight */
-.site-foot { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+.foot-contact { font-style: normal; font-size: var(--t-body); line-height: 1.5; color: #4A4A47; }
 .foot-contact > * { display: block; }
 
 /* clocks, two lines:
-   1) Seoul -- the time large (twice the body, regular weight), then the seconds and the weekday small,
-      then "in Seoul" small and grey; the colon blinks softly
+   1) Seoul -- the time large (twice the body, regular weight), then the seconds and the weekday
+      (Thursday) small, then "in Seoul" small and grey
    2) New York, California, London, Beijing -- the city small and grey, the time at body size */
-.clocks { margin-top: calc(var(--fg) - 0.25em); }   /* Lora's space above its figures, so the gap under the mail button reads as --fg */
+.clocks { margin-top: -0.25em; }   /* Lora's space above its figures: the top gap then reads as --fg */
 .clocks p { margin: 0; }
 .clocks .city {
   font-family: var(--sans); font-feature-settings: normal; font-size: var(--t-small);
-  color: rgba(255, 255, 255, .55);
+  color: var(--stone);
 }
 .clocks time {
-  font-family: var(--serif); color: #fff; letter-spacing: -0.01em;   /* the body's own tracking */
+  font-family: var(--serif); color: var(--ink); letter-spacing: -0.01em;   /* the body's own tracking */
   font-feature-settings: "lnum" 1, "pnum" 1, "kern" 1;               /* natural-width lining figures */
 }
 .clock-main { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 0.5rem; }
@@ -792,10 +789,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .foot-mail)):hover {
   font-weight: 400; font-size: calc(var(--t-body) * 2); line-height: 1.3;
 }
 .clock-main .sec, .clock-main .dow { font-size: var(--t-small); letter-spacing: 0; }
-.clock-main .sec { font-feature-settings: "lnum" 1, "tnum" 1; }   /* the seconds tick: even widths so THU doesn't twitch */
-.clock-main .colon { animation: clock-blink 2s ease-in-out infinite; }   /* a soft fade out and back, every 2s */
-@keyframes clock-blink { 0%, 100% { opacity: 1; } 50% { opacity: .15; } }
-@media (prefers-reduced-motion: reduce) { .clock-main .colon { animation: none; } }
+.clock-main .sec { font-feature-settings: "lnum" 1, "tnum" 1; }   /* the seconds tick: even widths so the weekday doesn't twitch */
 .clock-row { display: flex; flex-wrap: wrap; column-gap: var(--s5); row-gap: var(--s1); margin-top: var(--s2); }
 .clock-row .clk { display: inline-flex; align-items: baseline; gap: 0.4rem; }
 .clock-row time { font-size: var(--t-body); font-weight: 400; line-height: 1.5; }
