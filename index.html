@@ -106,9 +106,13 @@ f(); window.addEventListener('resize',f);})();
       <div class="foot-side">
         <a class="foot-mail" href="mailto:downbeen100@korea.ac.kr">downbeen100@korea.ac.kr</a>
         <div class="clocks">
-          <p><span class="city">Seoul</span><time data-tz="Asia/Seoul"><span class="hm">--:--</span><span class="dow">-</span></time></p>
-          <p><span class="city">LA</span><time data-tz="America/Los_Angeles"><span class="hm">--:--</span><span class="dow">-</span></time></p>
-          <p><span class="city">New York</span><time data-tz="America/New_York"><span class="hm">--:--</span><span class="dow">-</span></time></p>
+          <p class="clock-main"><time data-tz="Asia/Seoul"><span class="hm">--:--</span><span class="sec">--</span><span class="dow">---</span></time><span class="city">in Seoul</span></p>
+          <p class="clock-row">
+            <span class="clk"><span class="city">New York</span><time data-tz="America/New_York"><span class="hm">--:--</span></time></span>
+            <span class="clk"><span class="city">California</span><time data-tz="America/Los_Angeles"><span class="hm">--:--</span></time></span>
+            <span class="clk"><span class="city">London</span><time data-tz="Europe/London"><span class="hm">--:--</span></time></span>
+            <span class="clk"><span class="city">Beijing</span><time data-tz="Asia/Shanghai"><span class="hm">--:--</span></time></span>
+          </p>
         </div>
         <address class="foot-contact">
           <span>Mechanical Engineering &amp; Physics,</span>

@@ -1,7 +1,8 @@
 /* Shared by every page. */
 
-/* Footer clocks: <time data-tz="..."> shows HH:MM in that time zone, updated on the minute.
-   Each also shows its weekday as WED (.dow). */
+/* Footer clocks: <time data-tz="..."> shows HH:MM in that time zone.
+   Where present, .sec shows the seconds and .dow the weekday as THU. Updated every second;
+   HH:MM is only rewritten when it changes, so the colon's blink is never restarted. */
 (function () {
   var els = document.querySelectorAll('time[data-tz]');
   if (!els.length || !window.Intl) return;
@@ -11,13 +12,19 @@
     els.forEach(function (el) {
       var tz = el.getAttribute('data-tz');
       try {
-        var hm = fmt(tz, { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).format(now).split(':');
-        el.querySelector('.hm').innerHTML = hm[0] + '<span class="colon">:</span>' + hm[1];   /* the colon blinks (CSS) */
+        var t = fmt(tz, { hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23' }).format(now).split(':');
+        var hm = el.querySelector('.hm'), key = t[0] + ':' + t[1];
+        if (hm.getAttribute('data-v') !== key) {
+          hm.setAttribute('data-v', key);
+          hm.innerHTML = t[0] + '<span class="colon">:</span>' + t[1];   /* the colon blinks (CSS) */
+        }
+        var sec = el.querySelector('.sec');
+        if (sec) sec.textContent = t[2];
         var dow = el.querySelector('.dow');
-        if (dow) dow.textContent = fmt(tz, { weekday: 'short' }).format(now).toUpperCase();   /* WED */
+        if (dow) dow.textContent = fmt(tz, { weekday: 'short' }).format(now).toUpperCase();   /* THU */
       } catch (e) {}
     });
-    setTimeout(tick, 60000 - (now.getSeconds() * 1000 + now.getMilliseconds()) + 50);   /* on the minute */
+    setTimeout(tick, 1000 - now.getMilliseconds() + 20);   /* on the second */
   }
   tick();
 })();
