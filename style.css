@@ -775,7 +775,7 @@ figure.ph.margin-left, figure.ph.margin-right { width: 12rem; margin: var(--s4) 
 }
 .side-head .en { color: var(--stone); }
 .side-head:hover { color: var(--link); }
-.side-photo { grid-column: 2 / 4; grid-row: 1; display: block; overflow: hidden; background: var(--line); }
+.side-photo { grid-column: 2 / 4; grid-row: 1; display: block; overflow: hidden; background: var(--line); border: 1px solid var(--line); }   /* same hairline as the box: a pale photo or chart still has an edge */
 .side-photo img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; filter: grayscale(1); }
 
 @media (max-width: 34rem) {
@@ -864,7 +864,37 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   transition: background .2s ease, color .2s ease, border-color .2s ease;
 }
 .foot-mail:hover { background: var(--ink); border-color: var(--ink); color: #fff; }
-.clock-mail + .clock-row { margin-top: var(--s2); }   /* same gap above and below the mail box, so it sits evenly between */
+
+/* one small dial for all five cities: the minutes are the same everywhere, so one minute hand
+   and an hour hand per city. Every hand is the same 1px hairline: the minute hand is the long grey
+   one, Seoul's hour hand the short grey one, the other cities' hour hands short and dark. Each hour
+   hand is named just outside the dial where it points; hands pointing the same way share one label.
+   Drawn by site.js. */
+.aclock { position: relative; width: 88px; height: 88px; }
+/* wider screens: the dial sits at the right, level with the Seoul time and the mail, taking no rows
+   of its own, its outermost label on the right edge of the column */
+.clocks { display: grid; grid-template-columns: 1fr auto; column-gap: var(--s6); align-items: center; }
+.clocks > .clock-main, .clocks > .clock-mail { grid-column: 1; }
+.clocks > .aclock { grid-column: 2; grid-row: 1 / span 2; justify-self: end; }
+@media (max-width: 40rem) {   /* phones: Seoul time, then the dial with its circle centred, then the mail */
+  .clocks { display: flex; flex-direction: column; align-items: flex-start; }
+  .clocks > .clock-main { order: 1; }
+  .clocks > .aclock { order: 2; --ac-gap: var(--s1);   /* time, dial and mail read as one group: about 15px of clear space between each, as between the time and the mail on wider screens */ align-self: center; margin-left: 0 !important; margin-right: 0 !important; }
+  .clocks > .clock-mail { order: 3; margin-top: var(--s2) !important; }
+}
+.aclock svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.aclock .face { fill: none; stroke: var(--line); stroke-width: 1; }
+.aclock .tick { stroke: var(--line); stroke-width: 1; }
+.aclock .tick.q { stroke: #C9C9C6; }
+.aclock .hand { stroke-linecap: round; }
+.aclock .hand.min { stroke: var(--stone); stroke-width: 1; }
+.aclock .hand.home { stroke: var(--stone); stroke-width: 1; }
+.aclock .hand.city { stroke: var(--ink); stroke-width: 1; }
+.aclock .pin { fill: var(--ink); }
+.aclock .lab {
+  position: absolute; white-space: nowrap; pointer-events: none;
+  font-family: var(--sans); font-feature-settings: normal; font-size: 0.75rem; line-height: 1.2; color: var(--stone);
+}
 
 /* address: plain body text, no hierarchy -- only the colour is dimmer */
 .foot-contact { font-style: normal; font-size: var(--t-body); line-height: 1.5; color: var(--stone); }   /* same grey as the city names */
@@ -890,10 +920,9 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   font-weight: 400; font-size: calc(var(--t-body) * 2); line-height: 1.3;
 }
 .clock-main .sec, .clock-main .dow { font-size: var(--t-small); letter-spacing: 0; }
-.clock-main .sec { font-feature-settings: "lnum" 1, "tnum" 1; }   /* the seconds tick: even widths so the weekday doesn't twitch */
-.clock-row { display: flex; flex-wrap: wrap; column-gap: var(--s5); row-gap: var(--s1); margin-top: var(--s2); }
-.clock-row .clk { display: inline-flex; align-items: baseline; gap: 0.4rem; }
-.clock-row time { font-size: var(--t-body); font-weight: 400; line-height: 1.5; }
+/* seconds: the same natural-width figures and tracking as the hours and minutes, so they read alike;
+   a fixed-width slot (wide enough for "00") keeps the weekday from twitching as they tick */
+.clock-main .sec { letter-spacing: -0.01em; display: inline-block; width: 1.3em; }
 
 .foot-copy { margin: 0; font-family: var(--serif); font-weight: 600; font-size: var(--t-body); color: var(--stone); }   /* same grey as the city names */
 .foot-copy .ko { font-weight: 600; }
@@ -902,10 +931,6 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   .foot-main { grid-template-columns: 1fr; }
   .foot-copy { grid-column: 1; grid-row: 4; justify-self: start; margin-top: 0; line-height: 1.5; }   /* phones: straight on from the address, as one paragraph */
   .site-foot .wrap { padding-bottom: calc(var(--fg) - 0.31em); }
-  /* second line on phones: two cities a line, as a table so the times line up */
-  .clock-row { display: grid; grid-template-columns: max-content max-content max-content max-content; column-gap: 0.4rem; align-items: baseline; }
-  .clock-row .clk { display: contents; }
-  .clock-row .clk:nth-child(even) .city { padding-left: var(--s4); }
 }
 @media (prefers-reduced-motion: reduce) { a { animation: none !important; } }
 
