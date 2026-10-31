@@ -237,6 +237,8 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
 .jc-line.white { color: #fff; }
 .jc-line.black { color: #000; clip-path: inset(100%); }
 .j-cover.open .jc-line { opacity: 1; }
+/* tall phone screens: the line sits above the photos (placed by script), just clear of them */
+.j-cover.line-above .jc-line { justify-content: flex-end; padding-bottom: var(--s4); }
 /* arrow at the bottom of the cover, appears with the line */
 .jc-down {
   position: absolute; z-index: 3; left: 50%; bottom: 12px; transform: translateX(-50%);
@@ -634,6 +636,11 @@ figure.ph figcaption { font-size: var(--t-small); color: var(--stone); margin-to
 figure.ph.wide  { width: min(84rem, 96vw); margin-left: 50%; transform: translateX(-50%); }
 figure.ph.full  { width: calc(100vw - var(--sbw, 0px)); margin-left: calc(50% - (100vw - var(--sbw, 0px)) / 2); transform: none; }
 figure.ph.wide img, figure.ph.full img { max-height: 78vh; object-fit: cover; }
+/* phones: a wide photo runs edge to edge; its caption stays on the text column */
+@media (max-width: 34rem) {
+  figure.ph.wide { width: calc(100vw - var(--sbw, 0px)); margin-left: calc(50% - (100vw - var(--sbw, 0px)) / 2); transform: none; }
+  figure.ph.wide figcaption, figure.ph.full figcaption { padding-inline: var(--gutter); }
+}
 figure.ph.left  { float: left;  width: 46%; margin: var(--s1) var(--s5) var(--s4) 0; }
 figure.ph.right { float: right; width: 46%; margin: var(--s1) 0 var(--s4) var(--s5); }
 figure.ph.small.left, figure.ph.small.right { width: 32%; }
@@ -784,7 +791,7 @@ figure.ph.margin-left, figure.ph.margin-right { width: 12rem; margin: var(--s4) 
    (Menu, wordmark, image cards and the footer's big mail button are excluded.)
    Links that normally have no underline get one drawn on hover. */
 :root { --link-hover: var(--stone); }
-a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .foot-links a)) {
+a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .foot-links a, .foot-mail)) {
   text-decoration: none;
   background-image: linear-gradient(currentColor, currentColor);
   background-repeat: no-repeat;
@@ -792,7 +799,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   background-size: 100% 1px;
   transition: color .15s ease;
 }
-a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .foot-links a)):hover {
+a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .foot-links a, .foot-mail)):hover {
   color: var(--link-hover);
   animation: link-draw .45s cubic-bezier(.2, .7, .2, 1) both;
 }
@@ -846,7 +853,18 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 }
 .foot-links a:hover { background: var(--ink); border-color: var(--ink); color: #fff; }
 .foot-links { align-items: center; }
-.foot-links .foot-mail { font-size: var(--t-body); }   /* the address at body size; the page buttons stay small */
+/* mail, right under the Seoul time: the same plain rectangle as the page buttons, at body size */
+.clock-mail { margin-top: var(--s2) !important; display: flex; flex-wrap: nowrap; align-items: baseline; column-gap: calc(var(--t-body) * 0.75); white-space: nowrap; }   /* gap = the box's inner left padding: "open" -> edge = edge -> "d" */   /* a short line, small and grey like "in Seoul", then the mail -- always on one line */
+.foot-mail {
+  display: inline-block;
+  border: 1px solid #C9C9C6; border-radius: 0;
+  padding: 0.35em 0.75em;
+  color: var(--stone); text-decoration: none;
+  font-family: var(--serif); font-weight: 400; font-size: var(--t-body); line-height: 1.3;
+  transition: background .2s ease, color .2s ease, border-color .2s ease;
+}
+.foot-mail:hover { background: var(--ink); border-color: var(--ink); color: #fff; }
+.clock-mail + .clock-row { margin-top: var(--s2); }   /* same gap above and below the mail box, so it sits evenly between */
 
 /* address: plain body text, no hierarchy -- only the colour is dimmer */
 .foot-contact { font-style: normal; font-size: var(--t-body); line-height: 1.5; color: var(--stone); }   /* same grey as the city names */
@@ -882,7 +900,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 
 @media (max-width: 40rem) {
   .foot-main { grid-template-columns: 1fr; }
-  .foot-copy { grid-column: 1; grid-row: 4; justify-self: start; margin-top: calc(var(--fg) - 0.44em); }
+  .foot-copy { grid-column: 1; grid-row: 4; justify-self: start; margin-top: 0; line-height: 1.5; }   /* phones: straight on from the address, as one paragraph */
   .site-foot .wrap { padding-bottom: calc(var(--fg) - 0.31em); }
   /* second line on phones: two cities a line, as a table so the times line up */
   .clock-row { display: grid; grid-template-columns: max-content max-content max-content max-content; column-gap: 0.4rem; align-items: baseline; }
@@ -1044,3 +1062,4 @@ main.shelf-end { padding-bottom: 0; }
 }
 .blur-card:hover .cap .title { color: #E8B4B8; }   /* same hover colour as the overlay cards */
 .blur-card.no-img .cap::before { display: none; }   /* no photo: plain deep grey */
+@media (max-width: 23rem) { .foot-mail { font-size: var(--t-small); } }   /* very narrow phones: still one line */

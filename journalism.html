@@ -303,6 +303,7 @@ f(); window.addEventListener('resize',f);})();
       <div class="foot-side">
         <div class="clocks">
           <p class="clock-main"><time data-tz="Asia/Seoul"><span class="hm">--:--</span><span class="sec">--</span><span class="dow">---</span></time><span class="city">in Seoul</span></p>
+          <p class="clock-mail"><span class="city">Always open</span><a class="foot-mail" href="mailto:downbeen100@korea.ac.kr">downbeen100@korea.ac.kr</a></p>
           <p class="clock-row">
             <span class="clk"><span class="city">New York</span><time data-tz="America/New_York"><span class="hm">--:--</span></time></span>
             <span class="clk"><span class="city">California</span><time data-tz="America/Los_Angeles"><span class="hm">--:--</span></time></span>
@@ -311,7 +312,6 @@ f(); window.addEventListener('resize',f);})();
           </p>
         </div>
         <nav class="foot-links" aria-label="Footer">
-          <a class="foot-mail" href="mailto:downbeen100@korea.ac.kr">downbeen100@korea.ac.kr</a>
           <a href="index.html#closed">About</a>
           <a href="research.html">Research</a>
           <a href="journalism.html">Journalism</a>
@@ -408,8 +408,25 @@ f(); window.addEventListener('resize',f);})();
     LINE.forEach(function (l) { var sp = document.createElement('span'); sp.textContent = l; t.appendChild(sp); });
     return t;
   });
+  /* On a tall phone screen the photos sit side by side with plenty of empty space above them,
+     so the line goes there -- between the menu and the photos, all white -- instead of on them.
+     Placed for the photos at rest (split in the middle), so it stays put while the split moves. */
+  var above = false;
+  function placeLine() {
+    var W = cover.clientWidth, H = cover.clientHeight, ok = false, top = 0, headH = 0;
+    if (!vertical) {
+      top = (H - (W / 2) / Math.min(ratio(panes[0]), ratio(panes[1]))) / 2;
+      headH = head.getBoundingClientRect().height;
+      var sp = words[0].firstChild, lineH = sp ? sp.getBoundingClientRect().height * LINE.length : 0;
+      ok = lineH > 0 && top - headH >= lineH + 24;
+    }
+    above = ok;
+    cover.classList.toggle('line-above', ok);
+    words.forEach(function (w) { w.style.top = ok ? headH + 'px' : ''; w.style.bottom = ok ? (H - top) + 'px' : ''; });
+  }
   function clipBlack() {
     if (!open) return;
+    if (above) { words[0].style.clipPath = 'none'; words[1].style.clipPath = 'inset(100%)'; return; }
     var o = cover.getBoundingClientRect(), r = panes[0].getBoundingClientRect(),
         l = r.left - o.left, t = r.top - o.top, rr = r.right - o.left, b = r.bottom - o.top;
     words[1].style.clipPath = 'polygon(' + l + 'px ' + t + 'px,' + rr + 'px ' + t + 'px,' + rr + 'px ' + b + 'px,' + l + 'px ' + b + 'px)';
@@ -563,6 +580,7 @@ f(); window.addEventListener('resize',f);})();
     var from = pair.map(cellRect);
     panes.forEach(function (p, i) { place(p, from[i]); cover.appendChild(p); cells[pair[i]].classList.add('lifted'); });
     words.forEach(function (w) { cover.appendChild(w); });
+    placeLine();
     cover.offsetWidth;
     cover.classList.add('open');
     open = true; intro = true;
@@ -624,6 +642,7 @@ f(); window.addEventListener('resize',f);})();
     var L = vertical ? cover.clientHeight : cover.clientWidth;
     if (pos != null) pos = Math.min(pos, L);
     if (shown != null) shown = Math.min(shown, L);
+    if (open) placeLine();
     schedule(); kick();
   });
 })();
