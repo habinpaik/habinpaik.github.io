@@ -2,6 +2,18 @@
    Habin Paik — personal site
    Editorial flow. Black band only on Home. KO+EN serif (Noto Serif KR),
    metadata in sans (Pretendard). One body-text rule, one text width.
+
+   How the site behaves (keep to this when adding anything):
+   - A CV, not a portal. Pages are read straight down; the reader never has to press
+     arrows or open tabs to follow the story. Side-scrolling rails are only for extra
+     material at the end of a section.
+   - The text leads. Articles are mentioned along the way of the narrative, not listed
+     as a feed. Photos stay within the text column and short on desktop.
+   - One headline style: Noto Serif KR SemiBold (600) at the headline size, nothing heavier.
+     Dates and labels small, in sans, grey. Descriptions under a block, not inside photos.
+   - Photos greyscale, hairlines #DFDFDF, square corners. Hover: text goes link-grey,
+     text on photos goes #E8B4B8.
+   - New pieces reuse these tokens and components rather than bringing in a look of their own.
    ============================================================ */
 
 :root {
@@ -698,12 +710,81 @@ figure.ph.side-left img, figure.ph.side-right img { aspect-ratio: 3 / 4; object-
 /* legacy margin-left/right kept as simple inline blocks (no negative margins) */
 figure.ph.margin-left, figure.ph.margin-right { width: 12rem; margin: var(--s4) 0; }
 
+/* ---------- Story pair: two articles mentioned inside the narrative ----------
+   Articles always come in twos, and they sit inside running text — so they read top to bottom,
+   with nothing to click through. Both are the width of the text column, never wider.
+     1. .feat — photo with the headline centred along its bottom edge (white on a dark fade).
+     2. .side — headline in a white box that overlaps the photo on its right.
+   Headline = Noto Serif KR SemiBold at the headline size, with an optional small English
+   title (.en) under it. Date and description go below the block as an ordinary .desc,
+   never inside the photo or the box. Break a long headline by hand at its comma (<br>).
+   Desktop photos are kept short (2:1, 16:9) so the reader isn't scrolling past pictures;
+   phones use 3:2 and put the box under the photo, lifted onto its bottom edge.
+   Markup:
+     <div class="feat">
+       <a class="feat-photo" href="…"><img src="…" alt="">
+         <span class="feat-head">헤드<span class="en">English headline</span></span></a>
+       <p class="desc"><span class="date">Sep 2025</span> <span class="dash">—</span> …</p>
+     </div>
+     <div class="side">
+       <div class="side-row">
+         <a class="side-head" href="…">헤드,<br> 이어지는 헤드<span class="en">English headline</span></a>
+         <a class="side-photo" href="…" tabindex="-1" aria-hidden="true"><img src="…" alt=""></a>
+       </div>
+       <p class="desc">…</p>
+     </div> */
+.feat { margin: var(--s6) 0 0; }
+.side { margin: var(--s6) 0; }
+.feat > .desc, .side > .desc { margin: var(--s3) 0 0; }
+.feat .date, .side .date { color: var(--stone); font-size: var(--t-small); white-space: nowrap; }
+.feat .date + .dash, .side .date + .dash { color: var(--stone); }
+
+.feat-head, .side-head {
+  font-family: var(--serif-ko); font-size: var(--t-title); font-weight: 600; line-height: 1.5;
+  letter-spacing: -0.0125em; word-break: keep-all; transition: color .15s ease;
+}
+.feat-head .en, .side-head .en {   /* small English title under the Korean one */
+  display: block; margin-top: var(--s2);
+  font-family: var(--serif); font-size: var(--t-small); font-weight: 400; line-height: 1.5; letter-spacing: 0;
+}
+
+/* 1. photo, headline on it */
+.feat-photo { position: relative; display: block; overflow: hidden; background: var(--line); }
+.feat-photo img { display: block; width: 100%; aspect-ratio: 2 / 1; object-fit: cover; filter: grayscale(1); }
+.feat-photo::after { content: ""; position: absolute; inset: 45% 0 0; background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,.6)); pointer-events: none; }
+.feat-head {
+  position: absolute; z-index: 1; left: 50%; bottom: var(--s4); transform: translateX(-50%);
+  width: min(36rem, 86%); text-align: center; color: #fff; text-wrap: balance;
+}
+.feat-head .en { color: rgba(255,255,255,.85); }
+.feat-photo:hover .feat-head { color: #E8B4B8; }   /* same hover colour as the overlay cards */
+
+/* 2. headline box overlapping the photo */
+.side-row { display: grid; grid-template-columns: 6fr 1fr 5fr; align-items: center; }
+.side-head {
+  grid-column: 1 / 3; grid-row: 1; position: relative; z-index: 1;
+  padding: var(--s4) var(--s5); background: var(--paper); border: 1px solid var(--line);
+  color: var(--ink); text-decoration: none;
+}
+.side-head .en { color: var(--stone); }
+.side-head:hover { color: var(--link); }
+.side-photo { grid-column: 2 / 4; grid-row: 1; display: block; overflow: hidden; background: var(--line); }
+.side-photo img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; filter: grayscale(1); }
+
+@media (max-width: 34rem) {
+  .feat-photo img, .side-photo img { aspect-ratio: 3 / 2; }
+  .feat-head { width: 90%; bottom: var(--s3); }
+  .side-row { grid-template-columns: 1fr; }
+  .side-photo { grid-column: 1; grid-row: 1; }
+  .side-head { grid-column: 1; grid-row: 2; margin: calc(-1 * var(--s6)) var(--s4) 0; padding: var(--s3) var(--s4); }
+}
+
 /* ---------- Links ----------
    Text links: on hover the colour changes and the underline is redrawn left -> right.
    (Menu, wordmark, image cards and the footer's big mail button are excluded.)
    Links that normally have no underline get one drawn on hover. */
 :root { --link-hover: var(--stone); }
-a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .foot-links a)) {
+a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .foot-links a)) {
   text-decoration: none;
   background-image: linear-gradient(currentColor, currentColor);
   background-repeat: no-repeat;
@@ -711,7 +792,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .foot-links a)) {
   background-size: 100% 1px;
   transition: color .15s ease;
 }
-a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .foot-links a)):hover {
+a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .foot-links a)):hover {
   color: var(--link-hover);
   animation: link-draw .45s cubic-bezier(.2, .7, .2, 1) both;
 }
@@ -754,16 +835,18 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .foot-links a)):hover
 .foot-copy { grid-column: 2; grid-row: 3; justify-self: end; align-self: end; white-space: nowrap; }   /* level with the last address line */
 
 /* buttons: plain rectangles, text the size of the city names */
-.foot-links { display: flex; flex-wrap: wrap; gap: var(--s2); margin-top: var(--fg); }
+.foot-links { display: flex; flex-wrap: wrap; gap: 6px; margin-top: var(--fg); }
 .foot-links a {
   display: inline-block;
   border: 1px solid #C9C9C6; border-radius: 0;
-  padding: 0.35em 0.9em;
+  padding: 0.35em 0.75em;
   color: var(--stone); text-decoration: none;   /* same grey as the city names */
   font-family: var(--serif); font-weight: 400; font-size: var(--t-small); line-height: 1.3;
   transition: background .2s ease, color .2s ease, border-color .2s ease;
 }
 .foot-links a:hover { background: var(--ink); border-color: var(--ink); color: #fff; }
+.foot-links { align-items: center; }
+.foot-links .foot-mail { font-size: var(--t-body); }   /* the address at body size; the page buttons stay small */
 
 /* address: plain body text, no hierarchy -- only the colour is dimmer */
 .foot-contact { font-style: normal; font-size: var(--t-body); line-height: 1.5; color: var(--stone); }   /* same grey as the city names */
@@ -948,10 +1031,10 @@ main.shelf-end { padding-bottom: 0; }
           mask-image: linear-gradient(to top, #000 55%, transparent);
 }
 .blur-card .cap .meta { display: block; font-family: var(--sans); font-size: var(--t-small); color: rgba(255,255,255,.8); }
-.blur-card .cap .title {   /* smaller, in the sans (gothic) */
+.blur-card .cap .title {   /* body size, in the serif (myeongjo) at the headline weight */
   display: block; margin-top: var(--s2);
-  font-family: var(--sans); font-size: var(--t-body); font-weight: 600; line-height: 1.5;
-  letter-spacing: -0.01em; word-break: keep-all; transition: color .15s ease;
+  font-family: var(--serif-ko); font-size: var(--t-body); font-weight: 600; line-height: 1.5;
+  letter-spacing: -0.0125em; word-break: keep-all; transition: color .15s ease;
 }
 /* a short English description under the title: room for two or three lines */
 .blur-card .cap .desc {
