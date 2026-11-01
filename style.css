@@ -876,14 +876,20 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 .clocks { display: grid; grid-template-columns: 1fr auto; column-gap: var(--s6); align-items: center; }
 .clocks > .clock-main, .clocks > .clock-mail { grid-column: 1; }
 .clocks > .aclock { grid-column: 2; grid-row: 1 / span 2; justify-self: end; }
-@media (max-width: 40rem) {   /* phones: Seoul time, then the dial with its circle centred, then the mail */
-  .clocks { display: flex; flex-direction: column; align-items: flex-start; }
-  .clocks > .clock-main { order: 1; }
-  .clocks > .aclock { order: 2; --ac-gap: var(--s1);   /* time, dial and mail read as one group: about 15px of clear space between each, as between the time and the mail on wider screens */ align-self: center; margin-left: 0 !important; margin-right: 0 !important; }
-  .clocks > .clock-mail { order: 3; margin-top: var(--s2) !important; }
+.clock-main .brk { display: none; }
+@media (max-width: 40rem) {   /* phones: four short lines on the left -- time, weekday + "in Seoul",
+     "Always open", the mail (small) -- and a smaller dial beside them, placed by site.js */
+  .clocks { display: block; position: relative; }
+  .clocks .clock-main time { display: contents; }
+  .clocks .clock-main .brk { display: block; flex-basis: 100%; height: 0; }   /* line break after the seconds */
+  .clocks > .clock-mail { flex-direction: column; align-items: flex-start; row-gap: var(--s1); }
+  .foot-mail { font-size: var(--t-small); }
+  .clocks > .aclock { position: absolute; }   /* size and place set by site.js */
+  .clocks .aclock .lab { font-size: 0.6875rem; }   /* names a touch smaller beside the small dial */
 }
 .aclock svg { display: block; width: 100%; height: 100%; overflow: visible; }
 .aclock .face { fill: none; stroke: var(--line); stroke-width: 1; }
+.aclock .face, .aclock line { vector-effect: non-scaling-stroke; }   /* 1px hairlines at any dial size */
 .aclock .tick { stroke: var(--line); stroke-width: 1; }
 .aclock .tick.q { stroke: #C9C9C6; }
 .aclock .hand { stroke-linecap: round; }

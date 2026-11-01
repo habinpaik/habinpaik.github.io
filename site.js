@@ -30,8 +30,7 @@
 })();
 
 /* Footer dial (.aclock): one face, one minute hand, an hour hand for Seoul (data-home "Zone=Name")
-   and one per city in data-zones ("Zone=Name|..."), each named just outside the dial.
-   The block keeps its left edge on the text column: room is made only for labels that stick out. */
+   and one per city in data-zones ("Zone=Name|..."), each named just outside the dial. */
 (function () {
   var box = document.querySelector('.aclock');
   if (!box || !window.Intl) return;
@@ -62,17 +61,13 @@
   }
   var labs = [], lastKey = '';
   function hourAng(t) { return ((t.h % 12) + t.m / 60) * Math.PI / 6; }
-  function draw() {
-    var now = new Date(), H = hm(home, now);
-    point(minHand, (H.m + H.s / 60) * Math.PI / 30, R - 7);
-    point(homeHand, hourAng(H), R * 0.55);
-    var items = zones.map(function (z, k) {
-      var t = hm(z.tz, now), a = hourAng(t); point(cityHands[k], a, R * 0.55);
-      return { name: z.name, a: a, h: t.h };
-    });
-    var labelled = homeName ? items.concat([{ name: homeName, a: hourAng(H), h: H.h }]) : items;
-    /* hands pointing (nearly) the same way share one label */
-    labelled = labelled.slice().sort(function (p, q) { return p.a - q.a; });
+  /* the labels for a given moment: one per hour hand (Seoul's left out on phones), and hands
+     pointing (nearly) the same way share one label */
+  function groupsAt(when, phone) {
+    var H = hm(home, when);
+    var labelled = zones.map(function (z) { var t = hm(z.tz, when); return { name: z.name, a: hourAng(t) }; });
+    if (homeName && !phone) labelled.push({ name: homeName, a: hourAng(H) });
+    labelled.sort(function (p, q) { return p.a - q.a; });
     var groups = [];
     labelled.forEach(function (it) {
       var g = groups[groups.length - 1];
@@ -82,61 +77,147 @@
       var f = groups[0], l = groups[groups.length - 1];
       if (f.a0 + 2 * Math.PI - l.a1 < 0.4) { l.names = l.names.concat(f.names); l.a1 = f.a1 + 2 * Math.PI; groups.shift(); }
     }
-    var key = groups.map(function (g) { return g.names.join() + Math.round((g.a0 + g.a1) * 20); }).join('|');
+    return groups;
+  }
+  var fit = null;   /* phones: the dial's size and place, worked out once for the whole day */
+  function draw() {
+    var now = new Date(), H = hm(home, now);
+    point(minHand, (H.m + H.s / 60) * Math.PI / 30, R - 7);
+    point(homeHand, hourAng(H), R * 0.55);
+    var items = zones.map(function (z, k) {
+      var t = hm(z.tz, now), a = hourAng(t); point(cityHands[k], a, R * 0.55);
+      return { name: z.name, a: a, h: t.h };
+    });
+    var phone = window.matchMedia && window.matchMedia('(max-width: 40rem)').matches;   /* phones: Seoul's hand unnamed */
+    var groups = groupsAt(now, phone);
+    var key = (phone ? 'p' : '') + groups.map(function (g) { return g.names.join() + Math.round((g.a0 + g.a1) * 20); }).join('|');
     if (key === lastKey) return;      /* labels only move a little each minute */
     lastKey = key;
     labs.forEach(function (n) { n.remove(); }); labs = [];
-    var minX = 0, maxX = S, minY = 0, maxY = S;
-    /* place every label; if two would touch, put those cities on one label and place again */
+    var Sk, Ck, Rk, stackAll = false;
+    /* place every label round the dial at its current size; if two would touch, put those
+       cities on one label and place again */
     function place(g) {
       var a = (g.a0 + g.a1) / 2, s = Math.sin(a), c = Math.cos(a);
-      var n = document.createElement('span'); n.className = 'lab'; n.textContent = g.names.join(' · ');
+      var n = document.createElement('span'); n.className = 'lab';
+      /* phones: a shared label beside the dial stacks its names, to stay narrow; above or below the
+         dial it runs them on one line, to stay low, unless that line would be too wide */
+      if (phone && (stackAll || Math.abs(s) > Math.abs(c))) g.names.forEach(function (nm, i) { if (i) n.appendChild(document.createElement('br')); n.appendChild(document.createTextNode(nm)); });
+      else n.textContent = g.names.join(' · ');
       box.appendChild(n);
       var w = n.offsetWidth, h = n.offsetHeight;
       /* every label keeps the same clear gap from the circle, whatever the angle: its centre moves
          out along the hand's direction until the letters' nearest edge or corner is exactly GAP
          outside the rim (found by halving the search range) */
-      var ih = h * 0.3;   /* half the letters' own height: the line box has empty space above and below them */
-      var lo = 0, hi = R + GAP + w + h;
+      var lh = parseFloat(getComputedStyle(n).lineHeight) || h;
+      var ih = h / 2 - lh * 0.2;   /* half the letters' own height: each line box has some empty space above and below them */
+      var lo = 0, hi = Rk + GAP + w + h;
       for (var it = 0; it < 24; it++) {
         var md = (lo + hi) / 2, ex = Math.max(Math.abs(s * md) - w / 2, 0), ey = Math.max(Math.abs(c * md) - ih, 0);
-        if (Math.hypot(ex, ey) < R + GAP) lo = md; else hi = md;
+        if (Math.hypot(ex, ey) < Rk + GAP) lo = md; else hi = md;
       }
-      var cx = C + s * hi, cy = C - c * hi;
-      return { g: g, n: n, x: cx - w / 2, y: cy - h / 2, w: w, h: h, l: cx - w / 2, r: cx + w / 2, t: cy - ih, b: cy + ih };
+      var cx = Ck + s * hi, cy = Ck - c * hi;
+      return { n: n, x: cx - w / 2, y: cy - h / 2, w: w, h: h, l: cx - w / 2, r: cx + w / 2, t: cy - ih, b: cy + ih };
     }
-    var placed;
-    for (var round = 0; round < 6; round++) {
-      placed = groups.map(place);
-      var hit = -1;
-      for (var i2 = 0; i2 < placed.length && hit < 0; i2++) {
-        var p = placed[i2], q = placed[(i2 + 1) % placed.length];
-        if (placed.length > 1 && p !== q && p.l < q.r + 6 && q.l < p.r + 6 && p.t < q.b + 4 && q.t < p.b + 4) hit = i2;
+    function layout(src) {
+      var k = box.clientWidth / S || 1; Sk = S * k; Ck = C * k; Rk = R * k;   /* the dial may be drawn smaller (phones) */
+      var gs = src.map(function (g) { return { names: g.names.slice(), a0: g.a0, a1: g.a1 }; }), placed;
+      for (var round = 0; round < 6; round++) {
+        placed = gs.map(place);
+        var hit = -1;
+        for (var i2 = 0; i2 < placed.length && hit < 0; i2++) {
+          var p = placed[i2], q = placed[(i2 + 1) % placed.length];
+          if (placed.length > 1 && p !== q && p.l < q.r + 6 && q.l < p.r + 6 && p.t < q.b + 4 && q.t < p.b + 4) hit = i2;
+        }
+        if (hit < 0) break;
+        placed.forEach(function (pp) { pp.n.remove(); });
+        var g1 = gs[hit], j = (hit + 1) % gs.length, g2 = gs[j];
+        var span = g2.a1 < g1.a0 ? g2.a1 + 2 * Math.PI : g2.a1;
+        gs.splice(hit, 1, { names: g1.names.concat(g2.names), a0: g1.a0, a1: span });
+        gs.splice(j > hit ? j : 0, 1);
       }
-      if (hit < 0) break;
-      placed.forEach(function (pp) { pp.n.remove(); });
-      var g1 = groups[hit], j = (hit + 1) % groups.length, g2 = groups[j];
-      var span = g2.a1 < g1.a0 ? g2.a1 + 2 * Math.PI : g2.a1;
-      groups.splice(hit, 1, { names: g1.names.concat(g2.names), a0: g1.a0, a1: span });
-      groups.splice(j > hit ? j : 0, 1);
+      return placed;
     }
-    placed.forEach(function (pp) {
-      labs.push(pp.n);
-      pp.n.style.left = pp.x + 'px'; pp.n.style.top = pp.y + 'px';
-      minX = Math.min(minX, pp.x); maxX = Math.max(maxX, pp.x + pp.w); minY = Math.min(minY, pp.y); maxY = Math.max(maxY, pp.y + pp.h);
-    });
-    /* make room only for what sticks out, so the outermost letters sit on the column's edge
-       (left edge on phones, right edge beside the Seoul time on wider screens) */
-    box.style.marginLeft = -minX + 'px';
-    box.style.marginRight = (maxX - S) + 'px';
-    box.style.marginTop = 'calc(var(--ac-gap, 0px) + ' + (-minY) + 'px)';
-    box.style.marginBottom = (maxY - S) + 'px';
+    function show(placed) {
+      placed.forEach(function (pp) { labs.push(pp.n); pp.n.style.left = pp.x + 'px'; pp.n.style.top = pp.y + 'px'; });
+    }
+
+    if (phone) {
+      /* phones: the dial sits beside four short lines (time, weekday, "Always open", the mail), its
+         circle on their vertical middle, as near the middle of the room beside the mail as it can go.
+         Every name stays inside the four lines' height and the column, clear of all their words and
+         of the mail box. Its size is the largest that works at every half hour of the day, so it
+         doesn't change as the hands turn. */
+      var host = box.parentNode, hr = host.getBoundingClientRect();
+      var dayKey = hr.width + '|' + (host.querySelector('.clock-main .dow') || {}).textContent;
+      if (!fit || fit.key !== dayKey) {
+        function rel(e, cut) {
+          var r = e.getBoundingClientRect(), c = r.height * cut;
+          return { l: r.left - hr.left, r: r.right - hr.left, t: r.top - hr.top + c, b: r.bottom - hr.top - c };
+        }
+        var words = [].map.call(host.querySelectorAll('.clock-main .hm, .clock-main .sec, .clock-main .dow, .clock-main .city, .clock-mail .city'), function (e) { return rel(e, 0.2); });
+        var mail = rel(host.querySelector('.foot-mail'), 0), all = words.concat([mail]);
+        var top = Math.min.apply(null, all.map(function (r) { return r.t; })), bot = mail.b, colR = Math.floor(hr.width);
+        var cy = (top + bot) / 2, cx0 = (mail.r + colR) / 2;
+        var day = [];
+        for (var hh = 0; hh < 48; hh++) day.push(groupsAt(new Date(now.getTime() + hh * 1800000), true));
+        /* the best x for one moment's labels at size D, or null */
+        function bestX(gs, D, stack) {
+          if (stack === undefined) { var b1 = bestX(gs, D, false); return b1 !== null ? b1 : bestX(gs, D, true); }
+          box.style.width = box.style.height = D + 'px'; stackAll = stack;
+          var placed = layout(gs), half = D / 2;
+          placed.forEach(function (pp) { pp.n.remove(); });
+          var rects = placed.map(function (pp) { return { l: pp.l - half, r: pp.r - half, t: pp.t - half, b: pp.b - half }; })
+                            .concat([{ l: -half, r: half, t: -half, b: half }]);
+          var best = null;
+          for (var x = 0; x <= colR; x++) {
+            var ok = rects.every(function (q) {
+              var L = x + q.l, Rr = x + q.r, T = cy + q.t, B = cy + q.b;
+              if (L < 0 || Rr > colR || T < top || B > bot) return false;
+              return all.every(function (w) { return !(L < w.r + 8 && w.l < Rr + 8 && T < w.b + 4 && w.t < B + 4); });
+            });
+            if (ok && (best === null || Math.abs(x - cx0) < Math.abs(best.x - cx0))) best = { x: x, stack: stack };
+          }
+          return best;
+        }
+        var SIZES = [72, 68, 64, 60, 56, 52, 48, 44, 40];
+        fit = { key: dayKey, D: null, cy: cy, bestX: bestX, colR: colR, SIZES: SIZES };
+        SIZES.some(function (D) {
+          if (!day.every(function (gs) { return bestX(gs, D) !== null; })) return false;
+          fit.D = D; return true;
+        });
+      }
+      /* a very narrow screen where no one size suits the whole day: the largest that suits now */
+      var D0 = fit.D, bx = null;
+      if (D0) bx = fit.bestX(groups, D0);
+      else fit.SIZES.some(function (D) { bx = fit.bestX(groups, D); if (bx) { D0 = D; return true; } return false; });
+      if (!bx) { D0 = 40; bx = { x: fit.colR - 20, stack: true }; }
+      stackAll = bx.stack;
+      box.style.width = box.style.height = D0 + 'px';
+      box.style.left = (bx.x - D0 / 2) + 'px'; box.style.top = (fit.cy - D0 / 2) + 'px';
+      box.style.margin = '0';
+      show(layout(groups));
+    } else {
+      box.style.width = box.style.height = box.style.left = box.style.top = '';
+      fit = null;
+      var placed = layout(groups);
+      show(placed);
+      var minX = 0, maxX = Sk, minY = 0, maxY = Sk;
+      placed.forEach(function (pp) { minX = Math.min(minX, pp.x); maxX = Math.max(maxX, pp.x + pp.w); minY = Math.min(minY, pp.y); maxY = Math.max(maxY, pp.y + pp.h); });
+      /* make room only for what sticks out, so the outermost letters sit on the column's edge
+         (the right edge of the column, beside the Seoul time) */
+      box.style.marginLeft = -minX + 'px';
+      box.style.marginRight = (maxX - Sk) + 'px';
+      box.style.marginTop = 'calc(var(--ac-gap, 0px) + ' + (-minY) + 'px)';
+      box.style.marginBottom = (maxY - Sk) + 'px';
+    }
     box.setAttribute('aria-label', 'Seoul ' + H.h + ':' + ('0' + H.m).slice(-2) + '; ' +
       items.map(function (i) { return i.name + ' ' + i.h + ':' + ('0' + H.m).slice(-2); }).join(', '));
   }
   box.setAttribute('role', 'img');
   draw(); setInterval(draw, 1000);
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { lastKey = ''; draw(); });
+  window.addEventListener('resize', function () { lastKey = ''; fit = null; draw(); });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { lastKey = ''; fit = null; draw(); });
 })();
 
 /* Link address tooltip: while the pointer is over a link, its address follows the pointer. */
