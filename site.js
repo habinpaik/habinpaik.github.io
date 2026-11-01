@@ -32,9 +32,8 @@
 /* Footer dial (.aclock): one face, one minute hand, an hour hand for Seoul (data-home "Zone=Name")
    and one per city in data-zones ("Zone=Name|..."), each named just outside the dial.
    The dial is drawn as large as it can be, beside the time and mail lines and down as far as the
-   row of page buttons. Its top (highest name, or the circle) sits on the top of the time's digits;
-   on wider screens its right edge sits on the column's right edge, on phones it keeps to the middle
-   of the room beside the mail. Every name stays inside that area and
+   row of page buttons, its right edge on the column's right edge. On wider screens the group's top
+   (highest name, or the circle) sits on the top of the time's digits; on phones the circle's top does. Every name stays inside that area and
    the column, clear of all the words and boxes around it -- at every half hour of the day, so the
    dial keeps one size as the hands turn (only its sideways place may shift a little). */
 (function () {
@@ -178,29 +177,23 @@
       });
       return fits ? { x: X, cy: Y, stackAll: stackAll, placed: placed } : null;
     }
-    /* phones: the group's top on the top of the time's digits, too, as near the middle of the room
-       beside the mail as it can go. When the names can't all stay clear of the words at that height
-       (the line "in Seoul, Korea, Always open" runs wide), the group drops a few pixels at a time
-       until they can. */
-    var gTop = Math.min.apply(null, rects.map(function (q) { return q.t; }));
-    for (var cyNow = A.top - gTop; ; cyNow += 2) {
-      var lo = -Infinity, hi = Infinity, bans = [], out = false;
-      for (var i = 0; i < rects.length && !out; i++) {
-        var q = rects[i], T = cyNow + q.t, B = cyNow + q.b;
-        if (B > A.bot) out = true;
-        lo = Math.max(lo, -q.l); hi = Math.min(hi, A.colR - q.r);
-        A.keep.forEach(function (w) { if (T < w.b + 4 && w.t < B + 4) bans.push([w.l - 8 - q.r, w.r + 8 - q.l]); });
-      }
-      if (out || lo > hi) return null;
-      var cands = [Math.min(hi, Math.max(lo, A.cx0)), lo, hi];
-      bans.forEach(function (bb) { cands.push(bb[0], bb[1]); });
-      var best = null;
-      cands.forEach(function (x) {
-        if (x < lo || x > hi) return;
-        if (bans.some(function (bb) { return x > bb[0] && x < bb[1]; })) return;
-        if (best === null || Math.abs(x - A.cx0) < Math.abs(best - A.cx0)) best = x;
+    /* phones: the circle's top on the top of the time's digits (names above it may rise into the
+       space over the time -- the footer's own spacing stays as it is), and the group's right edge on
+       the column's right edge */
+    /* At some hours a name on the left would run into the words at that height; then, and only
+       then, the dial drops a little at a time until it clears them. */
+    var gR2 = Math.max.apply(null, rects.map(function (q) { return q.r; }));
+    var X2 = A.colR - gR2;
+    for (var Y2 = A.top + half; ; Y2 += 2) {
+      var low = false;
+      var fits2 = rects.every(function (q) {
+        var L = X2 + q.l, Rr = X2 + q.r, T = Y2 + q.t, B = Y2 + q.b;
+        if (B > A.bot) { low = true; return false; }
+        if (L < 0) return false;
+        return A.keep.every(function (w) { return !(L < w.r + 8 && w.l < Rr + 8 && T < w.b + 4 && w.t < B + 4); });
       });
-      if (best !== null) return { x: best, cy: cyNow, stackAll: stackAll, placed: placed };
+      if (fits2) return { x: X2, cy: Y2, stackAll: stackAll, placed: placed };
+      if (low) return null;
     }
   }
 
@@ -219,6 +212,21 @@
       if (ok(lo)) { D = lo; while (hi - lo > 1) { var md = (lo + hi) >> 1; if (ok(md)) { lo = md; D = md; } else hi = md; } if (ok(hi)) D = hi; }
       if (D !== null && (best.D === null || D > best.D)) best = { A: A, D: D };
     });
+    if (phone && best.D) {
+      /* phones: of the sizes that work all day, the one that keeps the circle's top on the time's
+         top at the most hours (the larger on a tie) */
+      var bestDrops = Infinity, pick = best.D;
+      for (var D2 = best.D; D2 >= 40; D2 -= 2) {
+        var drops = 0, all = true;
+        for (var j = 0; j < day.length && all; j++) {
+          var r = bestX(day[j], D2, best.A, phone);
+          if (!r) all = false; else if (r.cy > best.A.top + D2 / 2 + 0.5) drops++;
+        }
+        if (all && drops < bestDrops) { bestDrops = drops; pick = D2; }
+        if (bestDrops === 0) break;
+      }
+      best.D = pick;
+    }
     return { A: best.A, D: best.D, phone: phone };
   }
 

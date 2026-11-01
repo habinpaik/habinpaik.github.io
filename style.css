@@ -26,7 +26,8 @@
   --brand:      #F8F8F8;   /* NYT 광고 띠 배경: 배너·표지책장 배경 */
   --brand-deep: #424245;   /* 같은 계열의 진한 회색: 본문 링크 */
   /* two shades only, each laid just under a top edge:
-     strong -- the page's very top and the footer's top line; light -- section lines, the
+     strong -- the top edge of each page (under the menu, or where the page meets the photo above
+     it) and the footer's top line; light -- section lines, the
      "I inquire..." band, the mail box, the story box, portfolio cards */
   --shade-strong: linear-gradient(to bottom, rgba(0,0,0,.14), rgba(0,0,0,0) 12px);
   --shade-light:  linear-gradient(to bottom, rgba(0,0,0,.07), rgba(0,0,0,0) 8px);
@@ -61,7 +62,7 @@ html { scrollbar-gutter: stable; }
 
 body {
   margin: 0;
-  background: var(--paper) var(--shade-strong) no-repeat;   /* the strong shade along the very top of every page */
+  background: var(--paper);
   color: var(--ink);
   font-family: var(--serif);
   font-size: var(--t-body);
@@ -98,6 +99,17 @@ main.wrap, .site-head .wrap, .site-foot .wrap { max-width: 46rem; }
 p { margin: 0 0 var(--s3); }
 p:last-child { margin-bottom: 0; }
 a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+
+
+/* the strong shade along the top edge of every page, the full width of the screen: on Home where
+   the page meets the photo (over "Engineer, Physician, Journalist."), elsewhere at the top of the
+   page's main column -- under the menu, or under Journalism's cover */
+.home .lead, body:not(.home) > main.wrap { position: relative; }
+.home .lead::before, body:not(.home) > main.wrap::before {
+  content: ""; position: absolute; top: 0; height: 12px; pointer-events: none;
+  left: calc(50% - (100vw - var(--sbw, 0px)) / 2); width: calc(100vw - var(--sbw, 0px));
+  background: var(--shade-strong);
+}
 
 /* ---------- Header (sticky; state changes on scroll) ---------- */
 .site-head {
@@ -777,7 +789,12 @@ figure.ph.margin-left, figure.ph.margin-right { width: 12rem; margin: var(--s4) 
   width: min(36rem, 86%); text-align: center; color: #fff; text-wrap: balance;
 }
 .feat-head .en { color: rgba(255,255,255,.85); }
-.feat-photo:hover .feat-head { color: var(--crimson-light); }   /* same hover colour as the overlay cards */
+.feat-photo::before {   /* hover: crimson rises from the bottom and covers the photo, the headline staying white on top */
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 0; z-index: 1;
+  background: var(--crimson); transition: height .45s cubic-bezier(.45, 0, .25, 1);
+}
+.feat-photo:hover::before { height: 100%; }
+.feat-head { z-index: 2; }
 
 /* 2. headline box overlapping the photo */
 .side-row { display: grid; grid-template-columns: 6fr 1fr 5fr; align-items: center; }
@@ -914,17 +931,12 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 .m-only { display: none; }
 @media (max-width: 40rem) {   /* phones: four short lines on the left -- time, weekday + "in Seoul",
      "Always open", the mail (small) -- and the dial beside them */
-  /* first line: the time, with the weekday stacked over the seconds beside it; second line:
-     "in Seoul, Korea, Always open"; then the mail */
+  /* first line: the time, the seconds and the weekday; second line: "in Seoul, Always open";
+     then the mail */
   .clocks .clock-main time { display: contents; }
-  .clocks .clock-main { display: grid; grid-template-columns: auto 1fr; column-gap: 0.5rem; align-items: end; justify-items: start; }   /* each word only as wide as itself */
-  .clocks .clock-main .hm { grid-column: 1; grid-row: 1 / span 2; }
-  .clocks .clock-main .dow { grid-column: 2; grid-row: 1; }
-  .clocks .clock-main .sec { grid-column: 2; grid-row: 2; padding-bottom: 0.3em; }   /* sits on the digits' baseline */
-  .clocks .clock-main .brk { display: none; }
-  .clocks .clock-main > .city { grid-column: 1 / -1; grid-row: 3; }
+  .clocks .clock-main .brk { display: block; flex-basis: 100%; height: 0; }   /* line break after the weekday */
   .clocks .m-only { display: inline; }
-  .clocks > .clock-mail > .city { display: none; }   /* "Always open" moves up beside "in Seoul, Korea," */
+  .clocks > .clock-mail > .city { display: none; }   /* "Always open" moves up beside "in Seoul," */
   .clocks > .clock-mail { flex-direction: column; align-items: flex-start; row-gap: var(--s1); }
   .foot-mail { font-size: var(--t-small); }
   .clocks .aclock .lab { font-size: 0.75rem; }   /* phones: names a size down, to leave the dial room */
@@ -1119,7 +1131,8 @@ main.shelf-end { padding-bottom: 0; }
 }
 /* phones: two card-news cards side by side in view (half the text column each) */
 @media (max-width: 40rem) {
-  .blur-card { flex-basis: calc((100vw - var(--sbw, 0px) - 2 * var(--gutter) - var(--s4)) / 2); }
+  .blur-rail .rail-track { gap: var(--s3); }   /* the same gap as the portfolio cards */
+  .blur-card { flex-basis: calc((100vw - var(--sbw, 0px) - 2 * var(--gutter) - var(--s3)) / 2); }
   .blur-card { aspect-ratio: 3 / 5; }   /* taller, so the date, headline and description still fit at half width */
 }
 .blur-card img {
