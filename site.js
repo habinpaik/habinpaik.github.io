@@ -32,8 +32,9 @@
 /* Footer dial (.aclock): one face, one minute hand, an hour hand for Seoul (data-home "Zone=Name")
    and one per city in data-zones ("Zone=Name|..."), each named just outside the dial.
    The dial is drawn as large as it can be, beside the time and mail lines and down as far as the
-   row of page buttons. On wider screens the group's top sits on the top of the time's digits and its
-   right edge on the column's right edge; on phones its circle sits on the middle of that height. Every name stays inside that area and
+   row of page buttons. Its top (highest name, or the circle) sits on the top of the time's digits;
+   on wider screens its right edge sits on the column's right edge, on phones it keeps to the middle
+   of the room beside the mail. Every name stays inside that area and
    the column, clear of all the words and boxes around it -- at every half hour of the day, so the
    dial keeps one size as the hands turn (only its sideways place may shift a little). */
 (function () {
@@ -145,7 +146,8 @@
       var r = e.getBoundingClientRect(), c = r.height * cut;
       return { l: r.left - hr.left, r: r.right - hr.left, t: r.top - hr.top + c, b: r.bottom - hr.top - c };
     }
-    var words = [].map.call(host.querySelectorAll('.clock-main .hm, .clock-main .sec, .clock-main .dow, .clock-main .city, .clock-mail .city'), function (e) { return rel(e, 0.2); });
+    var words = [].filter.call(host.querySelectorAll('.clock-main .hm, .clock-main .sec, .clock-main .dow, .clock-main .city, .clock-mail .city'), function (e) { return e.getClientRects().length; })
+                  .map(function (e) { return rel(e, 0.2); });   /* only words actually shown */
     var mail = rel(host.querySelector('.foot-mail'), 0);
     var btns = [].map.call(foot.querySelectorAll('.foot-links a'), function (e) { return rel(e, 0); });
     var keep = words.concat([mail], btns);
@@ -176,32 +178,38 @@
       });
       return fits ? { x: X, cy: Y, stackAll: stackAll, placed: placed } : null;
     }
-    var lo = -Infinity, hi = Infinity, bans = [];
-    for (var i = 0; i < rects.length; i++) {
-      var q = rects[i], T = A.cy + q.t, B = A.cy + q.b;
-      if (T < A.top || B > A.bot) return null;
-      lo = Math.max(lo, -q.l); hi = Math.min(hi, A.colR - q.r);
-      A.keep.forEach(function (w) { if (T < w.b + 4 && w.t < B + 4) bans.push([w.l - 8 - q.r, w.r + 8 - q.l]); });
+    /* phones: the group's top on the top of the time's digits, too, as near the middle of the room
+       beside the mail as it can go. When the names can't all stay clear of the words at that height
+       (the line "in Seoul, Korea, Always open" runs wide), the group drops a few pixels at a time
+       until they can. */
+    var gTop = Math.min.apply(null, rects.map(function (q) { return q.t; }));
+    for (var cyNow = A.top - gTop; ; cyNow += 2) {
+      var lo = -Infinity, hi = Infinity, bans = [], out = false;
+      for (var i = 0; i < rects.length && !out; i++) {
+        var q = rects[i], T = cyNow + q.t, B = cyNow + q.b;
+        if (B > A.bot) out = true;
+        lo = Math.max(lo, -q.l); hi = Math.min(hi, A.colR - q.r);
+        A.keep.forEach(function (w) { if (T < w.b + 4 && w.t < B + 4) bans.push([w.l - 8 - q.r, w.r + 8 - q.l]); });
+      }
+      if (out || lo > hi) return null;
+      var cands = [Math.min(hi, Math.max(lo, A.cx0)), lo, hi];
+      bans.forEach(function (bb) { cands.push(bb[0], bb[1]); });
+      var best = null;
+      cands.forEach(function (x) {
+        if (x < lo || x > hi) return;
+        if (bans.some(function (bb) { return x > bb[0] && x < bb[1]; })) return;
+        if (best === null || Math.abs(x - A.cx0) < Math.abs(best - A.cx0)) best = x;
+      });
+      if (best !== null) return { x: best, cy: cyNow, stackAll: stackAll, placed: placed };
     }
-    if (lo > hi) return null;
-    var cands = [Math.min(hi, Math.max(lo, A.cx0)), lo, hi];
-    bans.forEach(function (b) { cands.push(b[0], b[1]); });
-    var best = null;
-    cands.forEach(function (x) {
-      if (x < lo || x > hi) return;
-      if (bans.some(function (b) { return x > b[0] && x < b[1]; })) return;
-      if (best === null || Math.abs(x - A.cx0) < Math.abs(best - A.cx0)) best = x;
-    });
-    return best === null ? null : { x: best, stackAll: stackAll, placed: placed };
   }
 
   var fit = null, labs = [], lastKey = '';
-  /* the largest size that suits every half hour of the day; the circle's height is tried from the
-     middle of the area outwards, and the one allowing the largest dial wins (the middle on a tie) */
+  /* the largest size that suits every half hour of the day */
   function makeFit(now, phone) {
     var A0 = area(phone), day = [];
     for (var k = 0; k < 48; k++) day.push(groupsAt(new Date(now.getTime() + k * 1800000), phone));
-    var mid = A0.cy, span = phone ? (A0.bot - A0.top) / 2 : 0, best = { A: A0, D: null };   /* wider screens: height set by the top alignment */
+    var mid = A0.cy, span = 0, best = { A: A0, D: null };   /* the height comes from the top alignment */
     var offs = [0];
     for (var d = 4; d <= span; d += 4) offs.push(-d, d);
     offs.forEach(function (off) {

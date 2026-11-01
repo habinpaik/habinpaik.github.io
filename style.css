@@ -25,6 +25,11 @@
   --line:  #DFDFDF;   /* NYT 광고 띠 경계선 */
   --brand:      #F8F8F8;   /* NYT 광고 띠 배경: 배너·표지책장 배경 */
   --brand-deep: #424245;   /* 같은 계열의 진한 회색: 본문 링크 */
+  /* two shades only, each laid just under a top edge:
+     strong -- the page's very top and the footer's top line; light -- section lines, the
+     "I inquire..." band, the mail box, the story box, portfolio cards */
+  --shade-strong: linear-gradient(to bottom, rgba(0,0,0,.14), rgba(0,0,0,0) 12px);
+  --shade-light:  linear-gradient(to bottom, rgba(0,0,0,.07), rgba(0,0,0,0) 8px);
   --crimson: #862633;   /* 고려대 교색 Crimson, PANTONE 202C */
   --crimson-light: color-mix(in srgb, var(--crimson) 35%, #fff);   /* the same crimson lightened: hover on dark photos, hover bars */
   --link:  var(--crimson);
@@ -56,7 +61,7 @@ html { scrollbar-gutter: stable; }
 
 body {
   margin: 0;
-  background: var(--paper);
+  background: var(--paper) var(--shade-strong) no-repeat;   /* the strong shade along the very top of every page */
   color: var(--ink);
   font-family: var(--serif);
   font-size: var(--t-body);
@@ -319,7 +324,7 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
 .identity-band { margin-top: 0; }
 
 /* ---------- Identity band (HOME ONLY) ---------- */
-.identity-band { background: var(--brand) linear-gradient(to bottom, rgba(0,0,0,.07), rgba(0,0,0,0)) no-repeat top / 100% 12px; color: var(--ink); }   /* grey band, no lines above/below; the footer's faint shade along its top edge */
+.identity-band { background: var(--brand) var(--shade-light) no-repeat; color: var(--ink); }   /* grey band, no lines above/below; the light shade along its top edge */
 .identity-band .wrap { padding-block: var(--s5); }
 .identity-band p {
   margin: 0;
@@ -341,7 +346,7 @@ h2.section-title {
   /* every section opens with a hairline across the text column, with a short shade under it */
   padding-top: var(--s4);
   border-top: 1px solid var(--line);
-  background: linear-gradient(to bottom, rgba(0,0,0,.14), rgba(0,0,0,0)) no-repeat top / 100% 10px;   /* a steeper shade than the footer's */
+  background: var(--shade-light) no-repeat;
 }
 section { margin-top: var(--s7); }
 /* a lead paragraph before the first section (research/journalism/portfolio) */
@@ -783,12 +788,12 @@ figure.ph.margin-left, figure.ph.margin-right { width: 12rem; margin: var(--s4) 
 }
 .side-head .en { color: var(--stone); }
 .side-head {
-  background-image: linear-gradient(var(--crimson), var(--crimson)); background-repeat: no-repeat;
-  background-position: 0 100%; background-size: 100% 0; background-origin: border-box;
+  background-image: linear-gradient(var(--crimson), var(--crimson)), var(--shade-light); background-repeat: no-repeat;
+  background-position: 0 100%, 0 0; background-size: 100% 0, 100% 100%; background-origin: border-box, padding-box;   /* crimson fill for hover over the light shade */
   transition: background-size .45s cubic-bezier(.45, 0, .25, 1), color .45s ease, border-color .45s ease;
 }
 /* hover: the box fills with crimson from the bottom and its words turn white, as text links do */
-.side-head:hover { background-size: 100% 100%; border-color: var(--crimson); color: #fff; }
+.side-head:hover { background-size: 100% 100%, 100% 100%; border-color: var(--crimson); color: #fff; }
 .side-head:hover .en { color: rgba(255,255,255,.85); }
 .side-head .en { transition: color .45s ease; }
 .side-photo { grid-column: 2 / 4; grid-row: 1; display: block; overflow: hidden; background: var(--line); border: 1px solid var(--line); }   /* same hairline as the box: a pale photo or chart still has an edge */
@@ -843,7 +848,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   margin-top: 0;
   background: var(--brand); color: var(--ink);   /* light grey, the same as the Home banner */
   border-top: 1px solid var(--line);             /* a line to set it apart from the page above */
-  background-image: linear-gradient(to bottom, rgba(0,0,0,.07), rgba(0,0,0,0) 12px);   /* and a faint shade just under it, as on the paper's charts */
+  background-image: var(--shade-strong);   /* and the strong shade just under it */
 }
 /* Footer spacing uses exactly two sizes, measured on what you see (letters and the pill's edge):
    --fg (40px) for every small gap -- top, mail -> clocks, address -> copyright, bottom --
@@ -891,7 +896,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   transition: background .2s ease, color .2s ease, border-color .2s ease;
 }
 .foot-mail {   /* crimson fill (for hover) over the footer's faint shade, here under the box's top line */
-  background-image: linear-gradient(var(--crimson), var(--crimson)), linear-gradient(to bottom, rgba(0,0,0,.07), rgba(0,0,0,0) 12px);
+  background-image: linear-gradient(var(--crimson), var(--crimson)), var(--shade-light);
   background-size: 100% 0, 100% 100%; background-repeat: no-repeat; background-position: 0 100%, 0 0; background-origin: border-box;
   transition: background-size .45s cubic-bezier(.45, 0, .25, 1), color .45s ease, border-color .45s ease;
 }
@@ -906,10 +911,20 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 .clocks { position: relative; }
 .aclock { position: absolute; left: 0; top: 0; width: 88px; height: 88px; }
 .clock-main .brk { display: none; }
+.m-only { display: none; }
 @media (max-width: 40rem) {   /* phones: four short lines on the left -- time, weekday + "in Seoul",
      "Always open", the mail (small) -- and the dial beside them */
+  /* first line: the time, with the weekday stacked over the seconds beside it; second line:
+     "in Seoul, Korea, Always open"; then the mail */
   .clocks .clock-main time { display: contents; }
-  .clocks .clock-main .brk { display: block; flex-basis: 100%; height: 0; }   /* line break after the seconds */
+  .clocks .clock-main { display: grid; grid-template-columns: auto 1fr; column-gap: 0.5rem; align-items: end; justify-items: start; }   /* each word only as wide as itself */
+  .clocks .clock-main .hm { grid-column: 1; grid-row: 1 / span 2; }
+  .clocks .clock-main .dow { grid-column: 2; grid-row: 1; }
+  .clocks .clock-main .sec { grid-column: 2; grid-row: 2; padding-bottom: 0.3em; }   /* sits on the digits' baseline */
+  .clocks .clock-main .brk { display: none; }
+  .clocks .clock-main > .city { grid-column: 1 / -1; grid-row: 3; }
+  .clocks .m-only { display: inline; }
+  .clocks > .clock-mail > .city { display: none; }   /* "Always open" moves up beside "in Seoul, Korea," */
   .clocks > .clock-mail { flex-direction: column; align-items: flex-start; row-gap: var(--s1); }
   .foot-mail { font-size: var(--t-small); }
   .clocks .aclock .lab { font-size: 0.75rem; }   /* phones: names a size down, to leave the dial room */
@@ -1045,7 +1060,7 @@ main.shelf-end { padding-bottom: 0; }
 .card-img { display: block; aspect-ratio: 3 / 2; overflow: hidden; background: var(--line); }
 .card-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s ease; }
 .card:hover .card-img img { transform: scale(1.04); }
-.card-txt { flex: 1; display: flex; flex-direction: column; padding: var(--s4); min-height: 11rem; }
+.card-txt { flex: 1; display: flex; flex-direction: column; padding: var(--s4); min-height: 11rem; background: var(--shade-light) no-repeat; }   /* light shade under the photo's edge */
 .card-date { font-family: var(--sans); font-size: var(--t-small); line-height: 1.5; color: var(--stone); }
 .card-title {
   margin-top: var(--s2);
@@ -1077,6 +1092,10 @@ main.shelf-end { padding-bottom: 0; }
 }
 .card-rail:not(.blur-rail) .card { flex: none; }
 .card-rail:not(.blur-rail) .rail-foot { display: none; }
+@media (max-width: 40rem) {   /* phones: two cards a row */
+  .card-rail:not(.blur-rail) .rail-track { grid-template-columns: 1fr 1fr; gap: var(--s3); }
+  .card-txt { padding: var(--s3); min-height: 9rem; }
+}
 
 /* ---------- Journalism: headlines in Noto Serif KR SemiBold, as JoongAng's opinion headlines
    (their "400" is in fact the SemiBold file), tracking -0.4px at 32px = -0.0125em ---------- */
@@ -1097,6 +1116,11 @@ main.shelf-end { padding-bottom: 0; }
   position: relative; display: block; overflow: hidden; text-decoration: none;
   flex: 0 0 clamp(15rem, 70vw, 18rem); scroll-snap-align: start;
   aspect-ratio: 4 / 5; background: var(--brand-deep);
+}
+/* phones: two card-news cards side by side in view (half the text column each) */
+@media (max-width: 40rem) {
+  .blur-card { flex-basis: calc((100vw - var(--sbw, 0px) - 2 * var(--gutter) - var(--s4)) / 2); }
+  .blur-card { aspect-ratio: 3 / 5; }   /* taller, so the date, headline and description still fit at half width */
 }
 .blur-card img {
   position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
