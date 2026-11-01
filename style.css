@@ -11,8 +11,9 @@
      as a feed. Photos stay within the text column and short on desktop.
    - One headline style: Noto Serif KR SemiBold (600) at the headline size, nothing heavier.
      Dates and labels small, in sans, grey. Descriptions under a block, not inside photos.
-   - Photos greyscale, hairlines #DFDFDF, square corners. Hover: text goes link-grey,
-     text on photos goes #E8B4B8.
+   - Photos greyscale, hairlines #DFDFDF, square corners. Hover: text links fill with crimson
+     and turn white; text on photos goes light crimson. One brand colour, Korea University crimson (PANTONE 202C):
+     links, hovers, the current-page bar and the dial's city hands -- nothing else.
    - New pieces reuse these tokens and components rather than bringing in a look of their own.
    ============================================================ */
 
@@ -24,7 +25,9 @@
   --line:  #DFDFDF;   /* NYT 광고 띠 경계선 */
   --brand:      #F8F8F8;   /* NYT 광고 띠 배경: 배너·표지책장 배경 */
   --brand-deep: #424245;   /* 같은 계열의 진한 회색: 본문 링크 */
-  --link:  var(--brand-deep);
+  --crimson: #862633;   /* 고려대 교색 Crimson, PANTONE 202C */
+  --crimson-light: color-mix(in srgb, var(--crimson) 35%, #fff);   /* the same crimson lightened: hover on dark photos, hover bars */
+  --link:  var(--crimson);
   --hero-bg: var(--brand-deep);   /* Home 상단 이름 영역 + 그때의 메뉴 배경 */
 
   --serif: "Lora", "Noto Serif KR", Georgia, "Times New Roman", serif;
@@ -131,7 +134,7 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
 .wordmark[aria-current="page"]::after {
   content: ""; position: absolute; left: 0; right: 0;
   bottom: calc(-1 * var(--s2) - 1px);   /* sit exactly on the header's bottom edge */
-  height: 5px; background: var(--ink);
+  height: 5px; background: var(--crimson);
 }
 /* hover (not the current page): the text stays as it is; the same bar, same place, in grey */
 @media (hover: hover) {
@@ -139,7 +142,7 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
   .wordmark:not([aria-current="page"]):hover::after {
     content: ""; position: absolute; left: 0; right: 0;
     bottom: calc(-1 * var(--s2) - 1px);
-    height: 5px; background: #D2D2CE;   /* same bar as the current page, in a light grey */
+    height: 5px; background: var(--crimson-light);   /* same bar as the current page, in light crimson */
   }
   .hero-on .nav a:not([aria-current="page"]):hover::after,
   .hero-on .wordmark:not([aria-current="page"]):hover::after,
@@ -335,6 +338,10 @@ h2.section-title {
   font-size: var(--t-body);
   font-weight: 600;
   margin: 0 0 var(--s4);
+  /* every section opens with a hairline across the text column, with a short shade under it */
+  padding-top: var(--s4);
+  border-top: 1px solid var(--line);
+  background: linear-gradient(to bottom, rgba(0,0,0,.14), rgba(0,0,0,0)) no-repeat top / 100% 10px;   /* a steeper shade than the footer's */
 }
 section { margin-top: var(--s7); }
 /* a lead paragraph before the first section (research/journalism/portfolio) */
@@ -367,7 +374,7 @@ main > p:first-child { margin-bottom: var(--s7); }
 .entry .head { display: flex; align-items: baseline; gap: var(--s3); flex-wrap: wrap; }
 .entry h3 { font-family: var(--serif-ko); font-size: var(--t-title); font-weight: 400; line-height: 1.6; margin: 0; letter-spacing: -0.02em; word-break: keep-all; }
 .entry h3 a { color: var(--ink); text-decoration: none; }
-.entry h3 a:hover { color: var(--link); }
+.entry h3 a:hover { color: #fff; }
 .shelf-note { margin: calc(var(--s3) - var(--s4)) 0 0; font-family: var(--sans); font-size: var(--t-small); line-height: 1.6; color: #2E3A46; }
 .shelf-note a { color: inherit; }
 .entry .date { color: var(--stone); font-size: var(--t-small); white-space: nowrap; }
@@ -407,7 +414,7 @@ main > p.epigraph:first-child { margin-bottom: var(--s3); }
 .table .cell img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; filter: grayscale(1); background: var(--line); display: block; margin-bottom: var(--s2); }
 .table .cell .th { }
 .table .cell .th a { font-family: var(--serif-ko); color: var(--ink); text-decoration: none; font-weight: 400; font-size: var(--t-body); line-height: 1.6; letter-spacing: -0.02em; }
-.table .cell .th a:hover { color: var(--link); }
+.table .cell .th a:hover { color: #fff; }
 .table .cell .desc { color: var(--stone); font-size: var(--t-small); margin: var(--s2) 0 0; line-height: 1.6; max-width: none; }
 .table .cell .date { color: var(--stone); font-size: var(--t-small); }
 @media (max-width: 52rem) {
@@ -625,7 +632,7 @@ main > p.epigraph:first-child { margin-bottom: var(--s3); }
 }
 .work .th { display: flex; align-items: baseline; gap: var(--s2); justify-content: space-between; }
 .work .th a { color: var(--ink); text-decoration: none; font-weight: 400; font-size: var(--t-title); line-height: 1.6; }
-.work .th a:hover { color: var(--link); }
+.work .th a:hover { color: #fff; }
 .work .date { color: var(--stone); font-size: var(--t-small); white-space: nowrap; }
 .work .desc { color: var(--stone); font-size: var(--t-small); margin: var(--s2) 0 0; max-width: none; }
 
@@ -692,7 +699,7 @@ figure.ph.overlay figcaption {
   font-family: var(--sans); font-size: var(--t-small); color: rgba(255,255,255,.8);
   word-break: keep-all;
 }
-.overlay-card:hover .cap .title { color: #E8B4B8; }
+.overlay-card:hover .cap .title { color: var(--crimson-light); }
 @media (max-width: 34rem) { .overlay-duo { grid-template-columns: 1fr; } }
 
 /* ---- Side photos: mounted in the empty space beside the text column ----
@@ -764,7 +771,7 @@ figure.ph.margin-left, figure.ph.margin-right { width: 12rem; margin: var(--s4) 
   width: min(36rem, 86%); text-align: center; color: #fff; text-wrap: balance;
 }
 .feat-head .en { color: rgba(255,255,255,.85); }
-.feat-photo:hover .feat-head { color: #E8B4B8; }   /* same hover colour as the overlay cards */
+.feat-photo:hover .feat-head { color: var(--crimson-light); }   /* same hover colour as the overlay cards */
 
 /* 2. headline box overlapping the photo */
 .side-row { display: grid; grid-template-columns: 6fr 1fr 5fr; align-items: center; }
@@ -787,24 +794,27 @@ figure.ph.margin-left, figure.ph.margin-right { width: 12rem; margin: var(--s4) 
 }
 
 /* ---------- Links ----------
-   Text links: on hover the colour changes and the underline is redrawn left -> right.
-   (Menu, wordmark, image cards and the footer's big mail button are excluded.)
-   Links that normally have no underline get one drawn on hover. */
-:root { --link-hover: var(--stone); }
+   Text links: a hairline underline at rest. On hover a crimson box fills the word from the bottom
+   up -- the underline growing into it -- inside a box just a little wider than the letters, while
+   the letters turn white. (Menu, wordmark, image cards and the footer's buttons are excluded.)
+   Links with no underline at rest (headlines, the footer address) fill the same way. */
+:root { --link-hover: #fff; }
 a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .foot-links a, .foot-mail)) {
   text-decoration: none;
-  background-image: linear-gradient(currentColor, currentColor);
+  padding: 0 0.12em; margin: 0 -0.12em;   /* the box reaches a hair past the letters; the text doesn't move */
+  -webkit-box-decoration-break: clone; box-decoration-break: clone;   /* a link over two lines gets a box on each */
+  background-image: linear-gradient(var(--crimson), var(--crimson)), linear-gradient(currentColor, currentColor);
   background-repeat: no-repeat;
-  background-position: 0 100%;
-  background-size: 100% 1px;
-  transition: color .15s ease;
+  background-position: 0 100%, 0.12em 100%;
+  background-size: 100% 0, calc(100% - 0.24em) 1px;
+  transition: background-size .45s cubic-bezier(.45, 0, .25, 1), color .45s ease;   /* rises from the underline, unhurried */
 }
 a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .foot-links a, .foot-mail)):hover {
   color: var(--link-hover);
-  animation: link-draw .45s cubic-bezier(.2, .7, .2, 1) both;
+  background-size: 100% 100%, calc(100% - 0.24em) 1px;
 }
-@keyframes link-draw { from { background-size: 0 1px; } to { background-size: 100% 1px; } }
-.entry h3 a, .table .cell .th a, .work .th a, .foot-contact a { background-size: 0 1px; }
+.entry h3 a, .table .cell .th a, .work .th a, .foot-contact a { background-size: 100% 0, 0 1px; }
+.entry h3 a:hover, .table .cell .th a:hover, .work .th a:hover, .foot-contact a:hover { background-size: 100% 100%, 0 1px; }
 
 /* address that follows the pointer over a link (site.js) */
 .link-tip {
@@ -824,7 +834,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   margin-top: 0;
   background: var(--brand); color: var(--ink);   /* light grey, the same as the Home banner */
   border-top: 1px solid var(--line);             /* a line to set it apart from the page above */
-  background-image: linear-gradient(to bottom, rgba(0,0,0,.035), rgba(0,0,0,0) 24px);   /* and a faint shade just under it, as on the paper's charts */
+  background-image: linear-gradient(to bottom, rgba(0,0,0,.07), rgba(0,0,0,0) 12px);   /* and a faint shade just under it, as on the paper's charts */
 }
 /* Footer spacing uses exactly two sizes, measured on what you see (letters and the pill's edge):
    --fg (40px) for every small gap -- top, mail -> clocks, address -> copyright, bottom --
@@ -852,7 +862,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   font-family: var(--serif); font-weight: 400; font-size: var(--t-small); line-height: 1.3;
   transition: background .2s ease, color .2s ease, border-color .2s ease;
 }
-.foot-links a:hover { background: var(--ink); border-color: var(--ink); color: #fff; }
+.foot-links a:hover { background: var(--crimson); border-color: var(--crimson); color: #fff; }
 .foot-links { align-items: center; }
 /* mail, right under the Seoul time: the same plain rectangle as the page buttons, at body size */
 .clock-mail { margin-top: var(--s2) !important; display: flex; flex-wrap: nowrap; align-items: baseline; column-gap: calc(var(--t-body) * 0.75); white-space: nowrap; }   /* gap = the box's inner left padding: "open" -> edge = edge -> "d" */   /* a short line, small and grey like "in Seoul", then the mail -- always on one line */
@@ -864,7 +874,8 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   font-family: var(--serif); font-weight: 400; font-size: var(--t-body); line-height: 1.3;
   transition: background .2s ease, color .2s ease, border-color .2s ease;
 }
-.foot-mail:hover { background: var(--ink); border-color: var(--ink); color: #fff; }
+.foot-mail { background-image: linear-gradient(to bottom, rgba(0,0,0,.07), rgba(0,0,0,0) 12px); }   /* the footer's faint shade under its top line, here under the box's */
+.foot-mail:hover { background: var(--crimson); border-color: var(--crimson); color: #fff; }
 
 /* one dial for all five cities: the minutes are the same everywhere, so one minute hand and an hour
    hand per city. Every line in it -- rim, hour marks, hands -- is the same 1px hairline. The rim,
@@ -881,18 +892,18 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   .clocks .clock-main .brk { display: block; flex-basis: 100%; height: 0; }   /* line break after the seconds */
   .clocks > .clock-mail { flex-direction: column; align-items: flex-start; row-gap: var(--s1); }
   .foot-mail { font-size: var(--t-small); }
-  .clocks .aclock .lab { font-size: 0.6875rem; }   /* names a touch smaller on phones */
+  .clocks .aclock .lab { font-size: 0.75rem; }   /* phones: names a size down, to leave the dial room */
 }
 .aclock svg { display: block; width: 100%; height: 100%; overflow: visible; }
 .aclock .face { fill: none; }
 .aclock .face, .aclock line { stroke-width: 1; vector-effect: non-scaling-stroke; }   /* 1px at any size */
 .aclock .face, .aclock .tick, .aclock .hand.min, .aclock .hand.home { stroke: var(--line); }
 .aclock .hand { stroke-linecap: round; }
-.aclock .hand.city { stroke: var(--ink); }
+.aclock .hand.city { stroke: var(--crimson); }
 .aclock .pin { fill: var(--ink); }
 .aclock .lab {
   position: absolute; white-space: nowrap; pointer-events: none;
-  font-family: var(--sans); font-feature-settings: normal; font-size: 0.75rem; line-height: 1.2; color: var(--stone);
+  font-family: var(--sans); font-feature-settings: normal; font-size: var(--t-small); line-height: 1.2; color: var(--stone);   /* the same size as "in Seoul" and "Always open" */
 }
 
 /* address: plain body text, no hierarchy -- only the colour is dimmer */
@@ -959,7 +970,7 @@ a:focus-visible { outline: 2px solid var(--link); outline-offset: 3px; }
 /* ---------- 책장 박스: 분류 버튼 줄 + 가로책장 + 표지책장을 하나의 회색 박스로 ---------- */
 .shelf-box {
   width: calc(100vw - var(--sbw, 0px)); margin-left: calc(50% - (100vw - var(--sbw, 0px)) / 2);
-  background: var(--brand);   /* no lines above/below */
+  background: none;   /* no grey box: the shelves sit straight on the page */
   margin-top: var(--s3);
 }
 /* Research: the bookshelf box runs straight into the dark footer -- no white strip between */
@@ -1084,6 +1095,6 @@ main.shelf-end { padding-bottom: 0; }
   margin-top: var(--s2); min-height: calc(3 * 1.5em);
   font-family: var(--sans); font-size: var(--t-small); line-height: 1.5; color: rgba(255,255,255,.78);
 }
-.blur-card:hover .cap .title { color: #E8B4B8; }   /* same hover colour as the overlay cards */
+.blur-card:hover .cap .title { color: var(--crimson-light); }   /* same hover colour as the overlay cards */
 .blur-card.no-img .cap::before { display: none; }   /* no photo: plain deep grey */
 @media (max-width: 23rem) { .foot-mail { font-size: var(--t-small); } }   /* very narrow phones: still one line */

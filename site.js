@@ -31,8 +31,9 @@
 
 /* Footer dial (.aclock): one face, one minute hand, an hour hand for Seoul (data-home "Zone=Name")
    and one per city in data-zones ("Zone=Name|..."), each named just outside the dial.
-   The dial is drawn as large as it can be: beside the time and mail lines, down as far as the row
-   of page buttons, its circle on the middle of that height. Every name stays inside that area and
+   The dial is drawn as large as it can be, beside the time and mail lines and down as far as the
+   row of page buttons. On wider screens the group's top sits on the top of the time's digits and its
+   right edge on the column's right edge; on phones its circle sits on the middle of that height. Every name stays inside that area and
    the column, clear of all the words and boxes around it -- at every half hour of the day, so the
    dial keeps one size as the hands turn (only its sideways place may shift a little). */
 (function () {
@@ -163,6 +164,18 @@
     var placed = layout(groups, D, stackAll, phone), half = D / 2;
     var rects = placed.map(function (p) { return { l: p.l - half, r: p.r - half, t: p.t - half, b: p.b - half }; })
                       .concat([{ l: -half, r: half, t: -half, b: half }]);
+    if (!phone) {
+      /* wider screens: the group's top (its highest name, or the circle's top) on the top of the
+         time's digits, and its right edge (its rightmost name, or the circle) on the column's right */
+      var gT = Math.min.apply(null, rects.map(function (q) { return q.t; })), gR = Math.max.apply(null, rects.map(function (q) { return q.r; }));
+      var X = A.colR - gR, Y = A.top - gT;
+      var fits = rects.every(function (q) {
+        var L = X + q.l, Rr = X + q.r, T = Y + q.t, B = Y + q.b;
+        if (L < 0 || B > A.bot) return false;
+        return A.keep.every(function (w) { return !(L < w.r + 8 && w.l < Rr + 8 && T < w.b + 4 && w.t < B + 4); });
+      });
+      return fits ? { x: X, cy: Y, stackAll: stackAll, placed: placed } : null;
+    }
     var lo = -Infinity, hi = Infinity, bans = [];
     for (var i = 0; i < rects.length; i++) {
       var q = rects[i], T = A.cy + q.t, B = A.cy + q.b;
@@ -188,7 +201,7 @@
   function makeFit(now, phone) {
     var A0 = area(phone), day = [];
     for (var k = 0; k < 48; k++) day.push(groupsAt(new Date(now.getTime() + k * 1800000), phone));
-    var mid = A0.cy, span = (A0.bot - A0.top) / 2, best = { A: A0, D: null };
+    var mid = A0.cy, span = phone ? (A0.bot - A0.top) / 2 : 0, best = { A: A0, D: null };   /* wider screens: height set by the top alignment */
     var offs = [0];
     for (var d = 4; d <= span; d += 4) offs.push(-d, d);
     offs.forEach(function (off) {
@@ -222,7 +235,7 @@
     if (!res) { D = 40; res = { x: fit.A.colR - 20, placed: layout(groups, 40, true, phone) }; }
 
     box.style.width = box.style.height = D + 'px';
-    box.style.left = (res.x - D / 2) + 'px'; box.style.top = (fit.A.cy - D / 2) + 'px';
+    box.style.left = (res.x - D / 2) + 'px'; box.style.top = ((res.cy !== undefined ? res.cy : fit.A.cy) - D / 2) + 'px';
     pin.setAttribute('r', 1.75 * S / D);   /* the centre dot stays 3.5px across at any size */
     labs.forEach(function (n) { n.remove(); }); labs = [];
     res.placed.forEach(function (p) {
