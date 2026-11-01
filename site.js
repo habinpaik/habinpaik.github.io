@@ -30,10 +30,15 @@
 })();
 
 /* Footer dial (.aclock): one face, one minute hand, an hour hand for Seoul (data-home "Zone=Name")
-   and one per city in data-zones ("Zone=Name|..."), each named just outside the dial. */
+   and one per city in data-zones ("Zone=Name|..."), each named just outside the dial.
+   The dial is drawn as large as it can be: beside the time and mail lines, down as far as the row
+   of page buttons, its circle on the middle of that height. Every name stays inside that area and
+   the column, clear of all the words and boxes around it -- at every half hour of the day, so the
+   dial keeps one size as the hands turn (only its sideways place may shift a little). */
 (function () {
   var box = document.querySelector('.aclock');
   if (!box || !window.Intl) return;
+  var host = box.parentNode, foot = box.closest('.site-foot') || document;
   var NS = 'http://www.w3.org/2000/svg', S = 88, C = S / 2, R = C - 0.5, GAP = 5;
   var hz = box.getAttribute('data-home').split('='), home = hz[0], homeName = hz[1] || '';
   var zones = box.getAttribute('data-zones').split('|').map(function (z) { z = z.split('='); return { tz: z[0], name: z[1] }; });
@@ -41,32 +46,32 @@
   var svg = el('svg', { viewBox: '0 0 ' + S + ' ' + S, 'aria-hidden': 'true' });
   svg.appendChild(el('circle', { 'class': 'face', cx: C, cy: C, r: R }));
   for (var i = 0; i < 12; i++) {
-    var a = i * Math.PI / 6, q = i % 3 === 0, l = q ? 5 : 3;
-    svg.appendChild(el('line', { 'class': 'tick' + (q ? ' q' : ''),
+    var a = i * Math.PI / 6, l = i % 3 === 0 ? 5 : 3;
+    svg.appendChild(el('line', { 'class': 'tick',
       x1: C + Math.sin(a) * (R - l), y1: C - Math.cos(a) * (R - l), x2: C + Math.sin(a) * R, y2: C - Math.cos(a) * R }));
   }
   var cityHands = zones.map(function () { return svg.appendChild(el('line', { 'class': 'hand city' })); });
   var homeHand = svg.appendChild(el('line', { 'class': 'hand home' }));
   var minHand = svg.appendChild(el('line', { 'class': 'hand min' }));
-  svg.appendChild(el('circle', { 'class': 'pin', cx: C, cy: C, r: 1.75 }));
+  var pin = svg.appendChild(el('circle', { 'class': 'pin', cx: C, cy: C, r: 1.75 }));
   box.appendChild(svg);
 
-  function hm(tz, now) {
-    var t = new Intl.DateTimeFormat('en-US', { timeZone: tz, hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23' }).format(now).split(':');
+  function hm(tz, when) {
+    var t = new Intl.DateTimeFormat('en-US', { timeZone: tz, hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23' }).format(when).split(':');
     return { h: +t[0], m: +t[1], s: +t[2] };
   }
   function point(line, ang, len) {
     line.setAttribute('x1', C); line.setAttribute('y1', C);
     line.setAttribute('x2', C + Math.sin(ang) * len); line.setAttribute('y2', C - Math.cos(ang) * len);
   }
-  var labs = [], lastKey = '';
   function hourAng(t) { return ((t.h % 12) + t.m / 60) * Math.PI / 6; }
-  /* the labels for a given moment: one per hour hand (Seoul's left out on phones), and hands
-     pointing (nearly) the same way share one label */
+  function isPhone() { return !!(window.matchMedia && window.matchMedia('(max-width: 40rem)').matches); }
+
+  /* the labels for a moment: one per hour hand (Seoul's left out on phones); hands pointing
+     (nearly) the same way share one label */
   function groupsAt(when, phone) {
-    var H = hm(home, when);
-    var labelled = zones.map(function (z) { var t = hm(z.tz, when); return { name: z.name, a: hourAng(t) }; });
-    if (homeName && !phone) labelled.push({ name: homeName, a: hourAng(H) });
+    var labelled = zones.map(function (z) { return { name: z.name, a: hourAng(hm(z.tz, when)) }; });
+    if (homeName && !phone) labelled.push({ name: homeName, a: hourAng(hm(home, when)) });
     labelled.sort(function (p, q) { return p.a - q.a; });
     var groups = [];
     labelled.forEach(function (it) {
@@ -74,150 +79,163 @@
       if (g && it.a - g.a1 < 0.4) { g.names.push(it.name); g.a1 = it.a; } else groups.push({ names: [it.name], a0: it.a, a1: it.a });
     });
     if (groups.length > 1) {   /* the circle wraps round at 12 */
-      var f = groups[0], l = groups[groups.length - 1];
-      if (f.a0 + 2 * Math.PI - l.a1 < 0.4) { l.names = l.names.concat(f.names); l.a1 = f.a1 + 2 * Math.PI; groups.shift(); }
+      var f = groups[0], z = groups[groups.length - 1];
+      if (f.a0 + 2 * Math.PI - z.a1 < 0.4) { z.names = z.names.concat(f.names); z.a1 = f.a1 + 2 * Math.PI; groups.shift(); }
     }
     return groups;
   }
-  var fit = null;   /* phones: the dial's size and place, worked out once for the whole day */
+
+  /* label sizes, measured once each */
+  var sizes = {};
+  function fill(n, names, stacked) {
+    n.textContent = '';
+    if (stacked) names.forEach(function (nm, i) { if (i) n.appendChild(document.createElement('br')); n.appendChild(document.createTextNode(nm)); });
+    else n.textContent = names.join(' · ');
+  }
+  function measure(names, stacked) {
+    var key = names.join('|') + (stacked ? '#' : '') + (isPhone() ? 'p' : '');
+    if (!sizes[key]) {
+      var n = document.createElement('span'); n.className = 'lab'; fill(n, names, stacked); box.appendChild(n);
+      var h = n.offsetHeight, lh = parseFloat(getComputedStyle(n).lineHeight) || h;
+      sizes[key] = { w: n.offsetWidth, h: h, ih: h / 2 - lh * 0.2 };   /* ih: half the letters' own height */
+      n.remove();
+    }
+    return sizes[key];
+  }
+  /* one label beside a dial of size D (px): its centre goes out along the hand's direction until the
+     letters' nearest edge or corner is exactly GAP outside the rim. Beside the dial a shared label
+     stacks its names on phones, to stay narrow; above or below, it runs them on one line, to stay
+     low -- unless stackAll asks for every shared label to be stacked. */
+  function geom(g, D, stackAll, phone) {
+    var a = (g.a0 + g.a1) / 2, s = Math.sin(a), c = Math.cos(a), Rk = R * D / S, Ck = D / 2;
+    var stacked = g.names.length > 1 && (stackAll || (phone && Math.abs(s) > Math.abs(c)));
+    var m = measure(g.names, stacked), lo = 0, hi = Rk + GAP + m.w + m.h;
+    for (var it = 0; it < 24; it++) {
+      var md = (lo + hi) / 2, ex = Math.max(Math.abs(s * md) - m.w / 2, 0), ey = Math.max(Math.abs(c * md) - m.ih, 0);
+      if (Math.hypot(ex, ey) < Rk + GAP) lo = md; else hi = md;
+    }
+    var cx = Ck + s * hi, cy = Ck - c * hi;
+    return { names: g.names, stacked: stacked, x: cx - m.w / 2, y: cy - m.h / 2, w: m.w, h: m.h,
+             l: cx - m.w / 2, r: cx + m.w / 2, t: cy - m.ih, b: cy + m.ih };
+  }
+  /* all the labels; two that would touch become one label, and everything is placed again */
+  function layout(groups, D, stackAll, phone) {
+    var gs = groups.map(function (g) { return { names: g.names.slice(), a0: g.a0, a1: g.a1 }; }), placed;
+    for (var round = 0; round < 6; round++) {
+      placed = gs.map(function (g) { return geom(g, D, stackAll, phone); });
+      var hit = -1;
+      for (var i2 = 0; i2 < placed.length && hit < 0; i2++) {
+        var p = placed[i2], q = placed[(i2 + 1) % placed.length];
+        if (placed.length > 1 && p !== q && p.l < q.r + 6 && q.l < p.r + 6 && p.t < q.b + 4 && q.t < p.b + 4) hit = i2;
+      }
+      if (hit < 0) break;
+      var g1 = gs[hit], j = (hit + 1) % gs.length, g2 = gs[j];
+      var span = g2.a1 < g1.a0 ? g2.a1 + 2 * Math.PI : g2.a1;
+      gs.splice(hit, 1, { names: g1.names.concat(g2.names), a0: g1.a0, a1: span });
+      gs.splice(j > hit ? j : 0, 1);
+    }
+    return placed;
+  }
+
+  /* the area the dial may use, and what it must keep clear of (all relative to the clocks block) */
+  function area(phone) {
+    var hr = host.getBoundingClientRect();
+    function rel(e, cut) {
+      var r = e.getBoundingClientRect(), c = r.height * cut;
+      return { l: r.left - hr.left, r: r.right - hr.left, t: r.top - hr.top + c, b: r.bottom - hr.top - c };
+    }
+    var words = [].map.call(host.querySelectorAll('.clock-main .hm, .clock-main .sec, .clock-main .dow, .clock-main .city, .clock-mail .city'), function (e) { return rel(e, 0.2); });
+    var mail = rel(host.querySelector('.foot-mail'), 0);
+    var btns = [].map.call(foot.querySelectorAll('.foot-links a'), function (e) { return rel(e, 0); });
+    var keep = words.concat([mail], btns);
+    var top = Math.min.apply(null, words.map(function (r) { return r.t; }));
+    /* down to the page buttons: on phones they fill the width, so up to their top edge; on wider
+       screens they sit at the left, so the dial may come down beside them to their bottom edge */
+    var bot = !btns.length ? mail.b : phone ? Math.min.apply(null, btns.map(function (r) { return r.t; })) - 4
+                                            : Math.max.apply(null, btns.map(function (r) { return r.b; }));
+    var colR = hr.width;
+    return { keep: keep, top: top, bot: bot, cy: (top + bot) / 2, colR: colR,
+             cx0: phone ? (mail.r + colR) / 2 : colR };   /* phones: middle of the room beside the mail; wider: as far right as it goes */
+  }
+  /* where the dial's centre can go for one moment's labels at size D: the allowed x nearest cx0, or null */
+  function bestX(groups, D, A, phone, stackAll) {
+    if (stackAll === undefined) return bestX(groups, D, A, phone, false) || bestX(groups, D, A, phone, true);
+    var placed = layout(groups, D, stackAll, phone), half = D / 2;
+    var rects = placed.map(function (p) { return { l: p.l - half, r: p.r - half, t: p.t - half, b: p.b - half }; })
+                      .concat([{ l: -half, r: half, t: -half, b: half }]);
+    var lo = -Infinity, hi = Infinity, bans = [];
+    for (var i = 0; i < rects.length; i++) {
+      var q = rects[i], T = A.cy + q.t, B = A.cy + q.b;
+      if (T < A.top || B > A.bot) return null;
+      lo = Math.max(lo, -q.l); hi = Math.min(hi, A.colR - q.r);
+      A.keep.forEach(function (w) { if (T < w.b + 4 && w.t < B + 4) bans.push([w.l - 8 - q.r, w.r + 8 - q.l]); });
+    }
+    if (lo > hi) return null;
+    var cands = [Math.min(hi, Math.max(lo, A.cx0)), lo, hi];
+    bans.forEach(function (b) { cands.push(b[0], b[1]); });
+    var best = null;
+    cands.forEach(function (x) {
+      if (x < lo || x > hi) return;
+      if (bans.some(function (b) { return x > b[0] && x < b[1]; })) return;
+      if (best === null || Math.abs(x - A.cx0) < Math.abs(best - A.cx0)) best = x;
+    });
+    return best === null ? null : { x: best, stackAll: stackAll, placed: placed };
+  }
+
+  var fit = null, labs = [], lastKey = '';
+  /* the largest size that suits every half hour of the day; the circle's height is tried from the
+     middle of the area outwards, and the one allowing the largest dial wins (the middle on a tie) */
+  function makeFit(now, phone) {
+    var A0 = area(phone), day = [];
+    for (var k = 0; k < 48; k++) day.push(groupsAt(new Date(now.getTime() + k * 1800000), phone));
+    var mid = A0.cy, span = (A0.bot - A0.top) / 2, best = { A: A0, D: null };
+    var offs = [0];
+    for (var d = 4; d <= span; d += 4) offs.push(-d, d);
+    offs.forEach(function (off) {
+      var A = Object.assign({}, A0, { cy: mid + off });
+      var ok = function (D) { return day.every(function (gs) { return bestX(gs, D, A, phone) !== null; }); };
+      var lo = 40, hi = Math.floor(Math.min(A.bot - A.top, 240)), D = null;
+      if (ok(lo)) { D = lo; while (hi - lo > 1) { var md = (lo + hi) >> 1; if (ok(md)) { lo = md; D = md; } else hi = md; } if (ok(hi)) D = hi; }
+      if (D !== null && (best.D === null || D > best.D)) best = { A: A, D: D };
+    });
+    return { A: best.A, D: best.D, phone: phone };
+  }
+
   function draw() {
-    var now = new Date(), H = hm(home, now);
+    var now = new Date(), H = hm(home, now), phone = isPhone();
     point(minHand, (H.m + H.s / 60) * Math.PI / 30, R - 7);
     point(homeHand, hourAng(H), R * 0.55);
     var items = zones.map(function (z, k) {
-      var t = hm(z.tz, now), a = hourAng(t); point(cityHands[k], a, R * 0.55);
-      return { name: z.name, a: a, h: t.h };
+      var t = hm(z.tz, now); point(cityHands[k], hourAng(t), R * 0.55); return { name: z.name, h: t.h };
     });
-    var phone = window.matchMedia && window.matchMedia('(max-width: 40rem)').matches;   /* phones: Seoul's hand unnamed */
+    var dow = (host.querySelector('.clock-main .dow') || {}).textContent;
+    var fkey = phone + '|' + Math.round(host.getBoundingClientRect().width) + '|' + dow;
+    if (!fit || fit.key !== fkey) { fit = makeFit(now, phone); fit.key = fkey; lastKey = ''; }
     var groups = groupsAt(now, phone);
-    var key = (phone ? 'p' : '') + groups.map(function (g) { return g.names.join() + Math.round((g.a0 + g.a1) * 20); }).join('|');
+    var key = groups.map(function (g) { return g.names.join() + Math.round((g.a0 + g.a1) * 20); }).join('|');
     if (key === lastKey) return;      /* labels only move a little each minute */
     lastKey = key;
-    labs.forEach(function (n) { n.remove(); }); labs = [];
-    var Sk, Ck, Rk, stackAll = false;
-    /* place every label round the dial at its current size; if two would touch, put those
-       cities on one label and place again */
-    function place(g) {
-      var a = (g.a0 + g.a1) / 2, s = Math.sin(a), c = Math.cos(a);
-      var n = document.createElement('span'); n.className = 'lab';
-      /* phones: a shared label beside the dial stacks its names, to stay narrow; above or below the
-         dial it runs them on one line, to stay low, unless that line would be too wide */
-      if (phone && (stackAll || Math.abs(s) > Math.abs(c))) g.names.forEach(function (nm, i) { if (i) n.appendChild(document.createElement('br')); n.appendChild(document.createTextNode(nm)); });
-      else n.textContent = g.names.join(' · ');
-      box.appendChild(n);
-      var w = n.offsetWidth, h = n.offsetHeight;
-      /* every label keeps the same clear gap from the circle, whatever the angle: its centre moves
-         out along the hand's direction until the letters' nearest edge or corner is exactly GAP
-         outside the rim (found by halving the search range) */
-      var lh = parseFloat(getComputedStyle(n).lineHeight) || h;
-      var ih = h / 2 - lh * 0.2;   /* half the letters' own height: each line box has some empty space above and below them */
-      var lo = 0, hi = Rk + GAP + w + h;
-      for (var it = 0; it < 24; it++) {
-        var md = (lo + hi) / 2, ex = Math.max(Math.abs(s * md) - w / 2, 0), ey = Math.max(Math.abs(c * md) - ih, 0);
-        if (Math.hypot(ex, ey) < Rk + GAP) lo = md; else hi = md;
-      }
-      var cx = Ck + s * hi, cy = Ck - c * hi;
-      return { n: n, x: cx - w / 2, y: cy - h / 2, w: w, h: h, l: cx - w / 2, r: cx + w / 2, t: cy - ih, b: cy + ih };
-    }
-    function layout(src) {
-      var k = box.clientWidth / S || 1; Sk = S * k; Ck = C * k; Rk = R * k;   /* the dial may be drawn smaller (phones) */
-      var gs = src.map(function (g) { return { names: g.names.slice(), a0: g.a0, a1: g.a1 }; }), placed;
-      for (var round = 0; round < 6; round++) {
-        placed = gs.map(place);
-        var hit = -1;
-        for (var i2 = 0; i2 < placed.length && hit < 0; i2++) {
-          var p = placed[i2], q = placed[(i2 + 1) % placed.length];
-          if (placed.length > 1 && p !== q && p.l < q.r + 6 && q.l < p.r + 6 && p.t < q.b + 4 && q.t < p.b + 4) hit = i2;
-        }
-        if (hit < 0) break;
-        placed.forEach(function (pp) { pp.n.remove(); });
-        var g1 = gs[hit], j = (hit + 1) % gs.length, g2 = gs[j];
-        var span = g2.a1 < g1.a0 ? g2.a1 + 2 * Math.PI : g2.a1;
-        gs.splice(hit, 1, { names: g1.names.concat(g2.names), a0: g1.a0, a1: span });
-        gs.splice(j > hit ? j : 0, 1);
-      }
-      return placed;
-    }
-    function show(placed) {
-      placed.forEach(function (pp) { labs.push(pp.n); pp.n.style.left = pp.x + 'px'; pp.n.style.top = pp.y + 'px'; });
-    }
 
-    if (phone) {
-      /* phones: the dial sits beside four short lines (time, weekday, "Always open", the mail), its
-         circle on their vertical middle, as near the middle of the room beside the mail as it can go.
-         Every name stays inside the four lines' height and the column, clear of all their words and
-         of the mail box. Its size is the largest that works at every half hour of the day, so it
-         doesn't change as the hands turn. */
-      var host = box.parentNode, hr = host.getBoundingClientRect();
-      var dayKey = hr.width + '|' + (host.querySelector('.clock-main .dow') || {}).textContent;
-      if (!fit || fit.key !== dayKey) {
-        function rel(e, cut) {
-          var r = e.getBoundingClientRect(), c = r.height * cut;
-          return { l: r.left - hr.left, r: r.right - hr.left, t: r.top - hr.top + c, b: r.bottom - hr.top - c };
-        }
-        var words = [].map.call(host.querySelectorAll('.clock-main .hm, .clock-main .sec, .clock-main .dow, .clock-main .city, .clock-mail .city'), function (e) { return rel(e, 0.2); });
-        var mail = rel(host.querySelector('.foot-mail'), 0), all = words.concat([mail]);
-        var top = Math.min.apply(null, all.map(function (r) { return r.t; })), bot = mail.b, colR = Math.floor(hr.width);
-        var cy = (top + bot) / 2, cx0 = (mail.r + colR) / 2;
-        var day = [];
-        for (var hh = 0; hh < 48; hh++) day.push(groupsAt(new Date(now.getTime() + hh * 1800000), true));
-        /* the best x for one moment's labels at size D, or null */
-        function bestX(gs, D, stack) {
-          if (stack === undefined) { var b1 = bestX(gs, D, false); return b1 !== null ? b1 : bestX(gs, D, true); }
-          box.style.width = box.style.height = D + 'px'; stackAll = stack;
-          var placed = layout(gs), half = D / 2;
-          placed.forEach(function (pp) { pp.n.remove(); });
-          var rects = placed.map(function (pp) { return { l: pp.l - half, r: pp.r - half, t: pp.t - half, b: pp.b - half }; })
-                            .concat([{ l: -half, r: half, t: -half, b: half }]);
-          var best = null;
-          for (var x = 0; x <= colR; x++) {
-            var ok = rects.every(function (q) {
-              var L = x + q.l, Rr = x + q.r, T = cy + q.t, B = cy + q.b;
-              if (L < 0 || Rr > colR || T < top || B > bot) return false;
-              return all.every(function (w) { return !(L < w.r + 8 && w.l < Rr + 8 && T < w.b + 4 && w.t < B + 4); });
-            });
-            if (ok && (best === null || Math.abs(x - cx0) < Math.abs(best.x - cx0))) best = { x: x, stack: stack };
-          }
-          return best;
-        }
-        var SIZES = [72, 68, 64, 60, 56, 52, 48, 44, 40];
-        fit = { key: dayKey, D: null, cy: cy, bestX: bestX, colR: colR, SIZES: SIZES };
-        SIZES.some(function (D) {
-          if (!day.every(function (gs) { return bestX(gs, D) !== null; })) return false;
-          fit.D = D; return true;
-        });
-      }
-      /* a very narrow screen where no one size suits the whole day: the largest that suits now */
-      var D0 = fit.D, bx = null;
-      if (D0) bx = fit.bestX(groups, D0);
-      else fit.SIZES.some(function (D) { bx = fit.bestX(groups, D); if (bx) { D0 = D; return true; } return false; });
-      if (!bx) { D0 = 40; bx = { x: fit.colR - 20, stack: true }; }
-      stackAll = bx.stack;
-      box.style.width = box.style.height = D0 + 'px';
-      box.style.left = (bx.x - D0 / 2) + 'px'; box.style.top = (fit.cy - D0 / 2) + 'px';
-      box.style.margin = '0';
-      show(layout(groups));
-    } else {
-      box.style.width = box.style.height = box.style.left = box.style.top = '';
-      fit = null;
-      var placed = layout(groups);
-      show(placed);
-      var minX = 0, maxX = Sk, minY = 0, maxY = Sk;
-      placed.forEach(function (pp) { minX = Math.min(minX, pp.x); maxX = Math.max(maxX, pp.x + pp.w); minY = Math.min(minY, pp.y); maxY = Math.max(maxY, pp.y + pp.h); });
-      /* make room only for what sticks out, so the outermost letters sit on the column's edge
-         (the right edge of the column, beside the Seoul time) */
-      box.style.marginLeft = -minX + 'px';
-      box.style.marginRight = (maxX - Sk) + 'px';
-      box.style.marginTop = 'calc(var(--ac-gap, 0px) + ' + (-minY) + 'px)';
-      box.style.marginBottom = (maxY - Sk) + 'px';
-    }
+    /* a screen too narrow for one size all day: the largest that suits this moment */
+    var D = fit.D, res = D ? bestX(groups, D, fit.A, phone) : null;
+    if (!res) for (D = Math.floor(fit.A.bot - fit.A.top); D >= 40 && !res; D -= 2) res = bestX(groups, D, fit.A, phone);
+    if (!res) { D = 40; res = { x: fit.A.colR - 20, placed: layout(groups, 40, true, phone) }; }
+
+    box.style.width = box.style.height = D + 'px';
+    box.style.left = (res.x - D / 2) + 'px'; box.style.top = (fit.A.cy - D / 2) + 'px';
+    pin.setAttribute('r', 1.75 * S / D);   /* the centre dot stays 3.5px across at any size */
+    labs.forEach(function (n) { n.remove(); }); labs = [];
+    res.placed.forEach(function (p) {
+      var n = document.createElement('span'); n.className = 'lab'; fill(n, p.names, p.stacked);
+      n.style.left = p.x + 'px'; n.style.top = p.y + 'px'; box.appendChild(n); labs.push(n);
+    });
     box.setAttribute('aria-label', 'Seoul ' + H.h + ':' + ('0' + H.m).slice(-2) + '; ' +
       items.map(function (i) { return i.name + ' ' + i.h + ':' + ('0' + H.m).slice(-2); }).join(', '));
   }
   box.setAttribute('role', 'img');
   draw(); setInterval(draw, 1000);
-  window.addEventListener('resize', function () { lastKey = ''; fit = null; draw(); });
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { lastKey = ''; fit = null; draw(); });
+  window.addEventListener('resize', function () { fit = null; sizes = {}; draw(); });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { fit = null; sizes = {}; draw(); });
 })();
 
 /* Link address tooltip: while the pointer is over a link, its address follows the pointer. */

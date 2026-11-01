@@ -824,6 +824,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   margin-top: 0;
   background: var(--brand); color: var(--ink);   /* light grey, the same as the Home banner */
   border-top: 1px solid var(--line);             /* a line to set it apart from the page above */
+  background-image: linear-gradient(to bottom, rgba(0,0,0,.035), rgba(0,0,0,0) 24px);   /* and a faint shade just under it, as on the paper's charts */
 }
 /* Footer spacing uses exactly two sizes, measured on what you see (letters and the pill's edge):
    --fg (40px) for every small gap -- top, mail -> clocks, address -> copyright, bottom --
@@ -865,37 +866,29 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 }
 .foot-mail:hover { background: var(--ink); border-color: var(--ink); color: #fff; }
 
-/* one small dial for all five cities: the minutes are the same everywhere, so one minute hand
-   and an hour hand per city. Every hand is the same 1px hairline: the minute hand is the long grey
-   one, Seoul's hour hand the short grey one, the other cities' hour hands short and dark. Each hour
-   hand is named just outside the dial where it points; hands pointing the same way share one label.
-   Drawn by site.js. */
-.aclock { position: relative; width: 88px; height: 88px; }
-/* wider screens: the dial sits at the right, level with the Seoul time and the mail, taking no rows
-   of its own, its outermost label on the right edge of the column */
-.clocks { display: grid; grid-template-columns: 1fr auto; column-gap: var(--s6); align-items: center; }
-.clocks > .clock-main, .clocks > .clock-mail { grid-column: 1; }
-.clocks > .aclock { grid-column: 2; grid-row: 1 / span 2; justify-self: end; }
+/* one dial for all five cities: the minutes are the same everywhere, so one minute hand and an hour
+   hand per city. Every line in it -- rim, hour marks, hands -- is the same 1px hairline. The rim,
+   the marks, the minute hand and Seoul's hour hand share the rim's pale grey; the other cities'
+   hour hands are dark. Each hour hand is named just outside the dial where it points; hands
+   pointing the same way share one label. Size and place are worked out by site.js: as large as
+   fits beside the time and mail, down to the row of page buttons. */
+.clocks { position: relative; }
+.aclock { position: absolute; left: 0; top: 0; width: 88px; height: 88px; }
 .clock-main .brk { display: none; }
 @media (max-width: 40rem) {   /* phones: four short lines on the left -- time, weekday + "in Seoul",
-     "Always open", the mail (small) -- and a smaller dial beside them, placed by site.js */
-  .clocks { display: block; position: relative; }
+     "Always open", the mail (small) -- and the dial beside them */
   .clocks .clock-main time { display: contents; }
   .clocks .clock-main .brk { display: block; flex-basis: 100%; height: 0; }   /* line break after the seconds */
   .clocks > .clock-mail { flex-direction: column; align-items: flex-start; row-gap: var(--s1); }
   .foot-mail { font-size: var(--t-small); }
-  .clocks > .aclock { position: absolute; }   /* size and place set by site.js */
-  .clocks .aclock .lab { font-size: 0.6875rem; }   /* names a touch smaller beside the small dial */
+  .clocks .aclock .lab { font-size: 0.6875rem; }   /* names a touch smaller on phones */
 }
 .aclock svg { display: block; width: 100%; height: 100%; overflow: visible; }
-.aclock .face { fill: none; stroke: var(--line); stroke-width: 1; }
-.aclock .face, .aclock line { vector-effect: non-scaling-stroke; }   /* 1px hairlines at any dial size */
-.aclock .tick { stroke: var(--line); stroke-width: 1; }
-.aclock .tick.q { stroke: #C9C9C6; }
+.aclock .face { fill: none; }
+.aclock .face, .aclock line { stroke-width: 1; vector-effect: non-scaling-stroke; }   /* 1px at any size */
+.aclock .face, .aclock .tick, .aclock .hand.min, .aclock .hand.home { stroke: var(--line); }
 .aclock .hand { stroke-linecap: round; }
-.aclock .hand.min { stroke: var(--stone); stroke-width: 1; }
-.aclock .hand.home { stroke: var(--stone); stroke-width: 1; }
-.aclock .hand.city { stroke: var(--ink); stroke-width: 1; }
+.aclock .hand.city { stroke: var(--ink); }
 .aclock .pin { fill: var(--ink); }
 .aclock .lab {
   position: absolute; white-space: nowrap; pointer-events: none;
