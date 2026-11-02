@@ -1247,3 +1247,16 @@ main.shelf-end { padding-bottom: 0; }
   .estack { float: none; width: 100%; margin: 0 0 var(--s4); }
   .ebox { width: calc(85% - 2 * var(--s4)); }
 }
+
+/* Desking: two headline boxes side by side, the second set a little lower and pulled a little to the
+   left so the two overlap at a corner -- the election boxes' look, with date and a line of description */
+.epair { display: flex; align-items: flex-start; margin: var(--s6) 0; }
+.epair .ebox { flex: 1 1 0; width: auto; }
+.epair .ebox + .ebox { margin: var(--s5) 0 0 calc(-1 * var(--s4)); z-index: 1; }
+.ebox .edesc { display: block; margin-top: var(--s2); font-family: var(--serif); font-size: var(--t-small); line-height: 1.5; color: var(--stone); transition: color .45s ease; }
+.ebox:hover .edesc { color: rgba(255,255,255,.85); }
+@media (max-width: 34rem) {
+  .epair { flex-direction: column; padding-bottom: 0; }
+  .epair .ebox { width: calc(85% - 2 * var(--s4)); flex: none; }
+  .epair .ebox + .ebox { margin: calc(-1 * var(--s3)) 0 0 15%; }
+}
