@@ -282,7 +282,17 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
   position: absolute; z-index: 2; left: 0; right: 0; bottom: 0; height: 0; pointer-events: none;
   background: var(--crimson); transition: height .45s cubic-bezier(.45, 0, .25, 1);
 }
-.jc-down:hover ~ .jc-band { height: 88px; }   /* the arrow (64px, 12px off the bottom) plus 12px above it */
+.jc-down:hover ~ .jc-band, .jc-zone:hover ~ .jc-band { height: 88px; }
+.jc-zone { position: absolute; z-index: 3; left: 0; right: 0; bottom: 0; height: 88px; cursor: pointer; }
+.jc-zone:hover ~ .jc-down path { stroke: var(--crimson); }
+/* caption in the corner of the taller photo */
+.jc-cap {
+  position: absolute; z-index: 2; margin: 0; max-width: 40%; pointer-events: none;
+  font-family: var(--sans); font-size: var(--t-small); line-height: 1.4; color: rgba(255,255,255,.9);
+  text-shadow: 0 0 .5em rgba(0,0,0,.6); opacity: 0; transition: opacity 2.3s cubic-bezier(.37,0,.63,1);
+}
+.jc-cap b { font-weight: 600; color: #fff; }
+.j-cover.open .jc-cap { opacity: 1; }   /* the arrow (64px, 12px off the bottom) plus 12px above it */
 @media (prefers-reduced-motion: reduce) { .jc-grid::after, .jc-line { transition: none; } }
 /* the bar is always the blurred see-through one here, so the photo shows through it from the start */
 .j-page .site-head,

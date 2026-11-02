@@ -72,8 +72,6 @@ f(); window.addEventListener('resize',f);})();
 
 <main class="wrap">
 
-  <p class="dek">Covering the campus, then editing the desk that covers it.</p>
-
   <p>I serve as the University Editor for <a href="https://www.kunews.ac.kr/" target="_blank" rel="noopener">The Korea University Weekly</a>, a prominent student news organization established in 1947. Reaching 6,000 print readers weekly, we hold the highest online viewership among Korean university media.</p>
 
   <section>
@@ -396,7 +394,9 @@ f(); window.addEventListener('resize',f);})();
     summer:  ['Writing through', 'summer and winter.'],
     black:   ['Seeing the world', 'in black and in color.']
   };
-  var LINE = LINES[pair[0]];
+  /* the cover now carries the page's opener, in white, centred (the per-pair lines above are kept
+     for reference but no longer shown) */
+  var LINE = ['Covering the campus,', 'then editing the desk that covers it.'];
   var words = ['white', 'black'].map(function (tone) {
     var t = document.createElement('p'); t.className = 'jc-line ' + tone;
     LINE.forEach(function (l) { var sp = document.createElement('span'); sp.textContent = l; t.appendChild(sp); });
@@ -412,7 +412,7 @@ f(); window.addEventListener('resize',f);})();
     if (!vertical && phone) {
       top = (H - (W / 2) / Math.min(ratio(panes[0]), ratio(panes[1]))) / 2;
       headH = head.getBoundingClientRect().height;
-      var sp = words[0].firstChild, lineH = sp ? sp.getBoundingClientRect().height * LINE.length : 0;
+      var lineH = [].reduce.call(words[0].children, function (s, sp) { return s + sp.getBoundingClientRect().height; }, 0);
       ok = lineH > 0 && top - headH >= lineH + 24;
     }
     above = ok;
@@ -421,12 +421,40 @@ f(); window.addEventListener('resize',f);})();
   }
   function clipBlack() {
     if (!open) return;
+    words[0].style.clipPath = 'none'; words[1].style.display = 'none'; placeCaption();   /* all white, no split colour */
+    return;
     if (above) { words[0].style.clipPath = 'none'; words[1].style.clipPath = 'inset(100%)'; return; }
     var o = cover.getBoundingClientRect(), r = panes[0].getBoundingClientRect(),
         l = r.left - o.left, t = r.top - o.top, rr = r.right - o.left, b = r.bottom - o.top;
     words[1].style.clipPath = 'polygon(' + l + 'px ' + t + 'px,' + rr + 'px ' + t + 'px,' + rr + 'px ' + b + 'px,' + l + 'px ' + b + 'px)';
     words[0].style.clipPath = "path(evenodd,'M0 0H" + o.width + 'V' + o.height + 'H0Z' +
                               'M' + l + ' ' + t + 'H' + rr + 'V' + b + 'H' + l + "Z')";
+  }
+
+  /* a small caption in the bottom corner of the taller photo -- the right one's bottom-right when it
+     is taller, otherwise the left one's bottom-left (stacked on phones: the larger one's) -- saying
+     what and where it is. Changes over as the split moves and the other photo becomes the taller. */
+  var CAPTIONS = {
+    outside: ['Outside', 'Back of the Main Library’s new building'],
+    inside: ['Inside', 'Hall of the new engineering building'],
+    morning: ['Morning', ''], night: ['Night', ''], one: ['Each one', ''], embracing: ['All', ''],
+    sunny: ['Sun', ''], rain: ['Rain', ''], summer: ['Summer', ''], winter: ['Winter', ''],
+    black: ['Black', ''], color: ['Color', '']
+  };
+  var cap = document.createElement('p'); cap.className = 'jc-cap';
+  function placeCaption() {
+    if (!open || !panes) return;
+    var o = cover.getBoundingClientRect(), a = panes[0].getBoundingClientRect(), b = panes[1].getBoundingClientRect();
+    var useRight = vertical ? b.width * b.height >= a.width * a.height : b.height > a.height;
+    var r = useRight ? b : a, c = CAPTIONS[pair[useRight ? 1 : 0]] || ['', ''];
+    if (cap.getAttribute('data-k') !== pair[useRight ? 1 : 0]) {
+      cap.setAttribute('data-k', pair[useRight ? 1 : 0]);
+      cap.innerHTML = '<b></b> <span></span>'; cap.firstChild.textContent = c[0]; cap.lastChild.textContent = c[1];
+    }
+    var m = 12;
+    cap.style.top = (r.bottom - o.top - m - cap.offsetHeight) + 'px';
+    if (useRight) { cap.style.left = ''; cap.style.right = (o.right - r.right + m) + 'px'; cap.style.textAlign = 'right'; }
+    else { cap.style.right = ''; cap.style.left = (r.left - o.left + m) + 'px'; cap.style.textAlign = 'left'; }
   }
 
   /* columns x rows to suit the screen: the arrangement whose cells come closest to 5:4 */
@@ -577,19 +605,24 @@ f(); window.addEventListener('resize',f);})();
     var y = window.scrollY + cover.getBoundingClientRect().bottom - head.getBoundingClientRect().height;
     window.scrollTo({ top: y, behavior: 'smooth' });
   });
+  /* the strip along the bottom (the band's height) counts as the arrow too: pointing anywhere in it
+     raises the band, clicking it scrolls on */
+  var zone = document.createElement('div'); zone.className = 'jc-zone'; zone.setAttribute('aria-hidden', 'true');
+  zone.addEventListener('click', function () { down.click(); });
+  cover.appendChild(zone);
   cover.appendChild(down);
   /* a band across the bottom of the cover that fills with crimson while the pointer is on the arrow */
   var band = document.createElement('div'); band.className = 'jc-band'; band.setAttribute('aria-hidden', 'true');
   cover.appendChild(band);
 
   function reveal() {
-    var col = lineColour(panes[0].firstChild);
-    if (col) words[1].style.color = col;
+    var col = null;   /* the line is white now: no colour taken from the photo */
     /* a soft halo of the opposite tone keeps the words clear where the photo is busy */
     words[1].classList.toggle('on-dark', !lineDark);
     var from = pair.map(cellRect);
     panes.forEach(function (p, i) { place(p, from[i]); cover.appendChild(p); cells[pair[i]].classList.add('lifted'); });
     words.forEach(function (w) { cover.appendChild(w); });
+    cover.appendChild(cap);
     placeLine();
     cover.offsetWidth;
     cover.classList.add('open');
