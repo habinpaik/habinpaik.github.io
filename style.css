@@ -13,7 +13,8 @@
      Dates and labels small, in sans, grey. Descriptions under a block, not inside photos.
    - Photos greyscale, hairlines #DFDFDF, square corners. Hover: text links fill with crimson
      and turn white; text on photos goes light crimson. One brand colour, Korea University crimson (PANTONE 202C):
-     links, hovers, the current-page bar and the dial's city hands -- nothing else.
+     hovers, the current-page bar and the dial's city hands -- nothing else. At rest, links are
+     the colour of their text, marked only by a hairline underline.
    - New pieces reuse these tokens and components rather than bringing in a look of their own.
    ============================================================ */
 
@@ -33,7 +34,7 @@
   --shade-light:  linear-gradient(to bottom, rgba(0,0,0,.07), rgba(0,0,0,0) 8px);
   --crimson: #862633;   /* 고려대 교색 Crimson, PANTONE 202C */
   --crimson-light: color-mix(in srgb, var(--crimson) 35%, #fff);   /* the same crimson lightened: hover on dark photos, hover bars */
-  --link:  var(--crimson);
+  --link:  inherit;   /* text links take the colour of the words around them, with a hairline underline; crimson only on hover */
   --hero-bg: var(--brand-deep);   /* Home 상단 이름 영역 + 그때의 메뉴 배경 */
 
   --serif: "Lora", "Noto Serif KR", Georgia, "Times New Roman", serif;
@@ -96,7 +97,7 @@ main.wrap, .site-head .wrap, .site-foot .wrap { max-width: 46rem; }
    ONE body-text rule. Every paragraph of running copy is just <p>.
    No .intro / .bio / .affil variants — they were all this.
    ============================================================ */
-p { margin: 0 0 var(--s3); }
+p { margin: 0 0 var(--s4); }   /* paragraph -> paragraph = section title -> its first paragraph */
 p:last-child { margin-bottom: 0; }
 a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1px; }
 
@@ -256,19 +257,32 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
 }
 .jc-line.white { color: #fff; }
 .jc-line.black { color: #000; clip-path: inset(100%); }
+.jc-line.black { text-shadow: 0 0 .35em rgba(255,255,255,.55), 0 0 .08em rgba(255,255,255,.5); }   /* dark words: a light halo */
+.jc-line.black.on-dark { text-shadow: 0 0 .35em rgba(0,0,0,.6), 0 0 .08em rgba(0,0,0,.5); }      /* lighter words: a dark halo */
+.jc-line.white { text-shadow: 0 0 .35em rgba(0,0,0,.35); }
 .j-cover.open .jc-line { opacity: 1; }
 /* tall phone screens: the line sits above the photos (placed by script), just clear of them */
 .j-cover.line-above .jc-line { justify-content: flex-end; padding-bottom: var(--s4); }
 /* arrow at the bottom of the cover, appears with the line */
 .jc-down {
-  position: absolute; z-index: 3; left: 50%; bottom: 12px; transform: translateX(-50%);
-  width: 64px; height: 64px; padding: 10px; margin: 0;
+  position: absolute; z-index: 4; left: 50%; bottom: 12px; transform: translateX(-50%);
+  width: 64px; height: 64px; padding: 14px; margin: 0;   /* a 36px disc inside a 64px target */
   background: none; border: 0; cursor: pointer; color: #fff;
   opacity: 0; transition: opacity 2.3s cubic-bezier(.37,0,.63,1);
 }
-.jc-down svg { display: block; width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-.j-cover.open .jc-down { opacity: .8; }
+.jc-down svg { display: block; width: 100%; height: 100%; }
+.jc-down circle { fill: #fff; }
+.jc-down path { fill: none; stroke: var(--ink); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: stroke .45s ease; }
+.jc-down:hover path { stroke: var(--crimson); }
+.j-cover.open .jc-down { opacity: 1; }
 .jc-down:hover { opacity: 1; }
+/* hovering the arrow: crimson rises from the bottom edge across the full width, up to just above
+   the arrow, as on nytco.com; the arrow stays white on top of it */
+.jc-band {
+  position: absolute; z-index: 2; left: 0; right: 0; bottom: 0; height: 0; pointer-events: none;
+  background: var(--crimson); transition: height .45s cubic-bezier(.45, 0, .25, 1);
+}
+.jc-down:hover ~ .jc-band { height: 88px; }   /* the arrow (64px, 12px off the bottom) plus 12px above it */
 @media (prefers-reduced-motion: reduce) { .jc-grid::after, .jc-line { transition: none; } }
 /* the bar is always the blurred see-through one here, so the photo shows through it from the start */
 .j-page .site-head,
@@ -341,10 +355,16 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
 .identity-band p {
   margin: 0;
   font-size: var(--t-display);
-  font-weight: 700;   /* same weight as the line over the Journalism cover */
-  line-height: 1.6;
+  font-weight: 400;   /* the body's own face and weight, only larger */
+  line-height: 1.5;
   max-width: none;
   letter-spacing: -0.01em;
+}
+/* a page's one-sentence opener (.dek), at the band's size in the body face -- one sentence only,
+   standing as a section of its own (after the NYT's article deks) */
+p.dek {
+  font-size: var(--t-display); font-weight: 400; line-height: 1.5; letter-spacing: -0.01em;
+  margin: 0 0 var(--s4);
 }
 .identity-band .ko { color: var(--ink); }
 
@@ -354,13 +374,15 @@ h2.section-title {
   font-family: var(--sans);
   font-size: var(--t-body);
   font-weight: 600;
-  margin: 0 0 var(--s4);
-  /* every section opens with a hairline across the text column, with a short shade under it */
-  padding-top: var(--s4);
+  margin: 0 0 var(--s4);   /* the same gap as between paragraphs */
+  /* every section opens with a hairline across the text column, with a short shade under it;
+     the title sits close under the line, so the two read as one heading */
+  padding-top: var(--s2);
   border-top: 1px solid var(--line);
   background: var(--shade-light) no-repeat;
 }
 section { margin-top: var(--s7); }
+h2.section-title + * { margin-top: 0 !important; }   /* whatever follows a title starts the same gap below it */
 /* a lead paragraph before the first section (research/journalism/portfolio) */
 main > p:first-child { margin-bottom: var(--s7); }
 
@@ -405,6 +427,7 @@ hr.rule { border: 0; border-top: 1px solid var(--line); height: 0; margin: calc(
 
 /* centred closing line (portfolio) */
 main > p.epigraph:first-child { margin-bottom: var(--s3); }
+main > p.dek:first-child { margin-bottom: var(--s7); }   /* the opener is a section of its own: the same gap below it as between sections */   /* the Korean of the opener, right under it at body size */
 .epigraph {
   text-align: left; max-width: none;
   margin: 0 0 var(--s3); color: var(--ink);
@@ -941,7 +964,14 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   .foot-mail { font-size: var(--t-small); }
   .clocks .aclock .lab { font-size: 0.75rem; }   /* phones: names a size down, to leave the dial room */
 }
-.aclock svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.aclock svg { display: block; position: relative; width: 100%; height: 100%; overflow: visible; }
+/* hover: the face fills with crimson in step with the seconds (drawn by site.js); it fades in and out */
+.aclock-fill { position: absolute; inset: 0; border-radius: 50%; pointer-events: none; opacity: 0; transition: opacity .3s ease; }
+.aclock.live .aclock-fill { opacity: 1; }
+.aclock .face, .aclock .tick, .aclock .hand, .aclock .pin { transition: stroke .3s ease, fill .3s ease; }
+/* while the face is part pale, part crimson, the hands go dark so they read on both */
+.aclock:hover .hand.city { stroke: var(--ink); }
+.aclock:hover .hand.min, .aclock:hover .hand.home { stroke: var(--stone); }
 .aclock .face { fill: none; }
 .aclock .face, .aclock line { stroke-width: 1; vector-effect: non-scaling-stroke; }   /* 1px at any size */
 .aclock .face, .aclock .tick, .aclock .hand.min, .aclock .hand.home { stroke: var(--line); }
@@ -1004,7 +1034,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   .wordmark[aria-current="page"]::after { display: none; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
-a:focus-visible { outline: 2px solid var(--link); outline-offset: 3px; }
+a:focus-visible { outline: 2px solid var(--crimson); outline-offset: 3px; }
 
 /* 디자인 색 배경의 표지 책장 위 요소 */
 .shelf-panel .book .t { color: #2E3A46; }
@@ -1050,7 +1080,7 @@ main.shelf-end { padding-bottom: 0; }
    of the screen and scrolls sideways; under it a hairline with a dark thumb showing where you are,
    and prev / next arrows on the right. */
 .card-rail {
-  margin-top: var(--s5);
+  margin-top: var(--s4);   /* the paragraph gap */
   /* from the text column's left edge to the right edge of the screen */
   margin-right: calc((100% - (100vw - var(--sbw, 0px))) / 2);
 }
@@ -1166,3 +1196,28 @@ main.shelf-end { padding-bottom: 0; }
 .blur-card:hover .cap .title { color: var(--crimson-light); }   /* same hover colour as the overlay cards */
 .blur-card.no-img .cap::before { display: none; }   /* no photo: plain deep grey */
 @media (max-width: 23rem) { .foot-mail { font-size: var(--t-small); } }   /* very narrow phones: still one line */
+
+/* Local election desking: each headline in a box half the column wide -- the first at the left,
+   the next at the right, the last in the middle; the description runs the full width below. Box as the story box: hairline, light shade, crimson fill on hover. */
+.entry.boxed .head { width: 50%; }
+.entry.boxed.at-right .head { margin-left: auto; margin-right: 5px; text-align: right; }   /* the box behind still ends on the column's edge */
+.entry.boxed.at-center .head { text-align: center; }
+.entry.boxed.at-center .head { margin-inline: auto; }
+.entry.boxed .head h3 a {
+  display: block; padding: var(--s4) var(--s5);
+  border: 1px solid var(--line); color: var(--ink);
+  background-image: linear-gradient(var(--crimson), var(--crimson)), var(--shade-light);
+  background-repeat: no-repeat; background-position: 0 100%, 0 0; background-size: 100% 0, 100% 100%;
+  background-origin: border-box, padding-box; margin: 0;
+  transition: background-size .45s cubic-bezier(.45, 0, .25, 1), color .45s ease, border-color .45s ease;
+}
+/* one more box of the same size behind it, a few pixels down and to the right -- a small stack */
+.entry.boxed .head { position: relative; isolation: isolate; }
+.entry.boxed .head::after {
+  content: ""; position: absolute; inset: 0; transform: translate(5px, 5px); z-index: -1;
+  border: 1px solid var(--line); background: var(--paper);
+}
+.entry.boxed .head h3 a { background-color: var(--paper); }
+.entry.boxed .head h3 a:hover { background-size: 100% 100%, 100% 100%; border-color: var(--crimson); color: #fff; }
+.entry.boxed .desc { margin-top: var(--s3); }
+@media (max-width: 34rem) { .entry.boxed .head { width: 70%; } }

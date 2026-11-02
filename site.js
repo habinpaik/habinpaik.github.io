@@ -55,7 +55,23 @@
   var homeHand = svg.appendChild(el('line', { 'class': 'hand home' }));
   var minHand = svg.appendChild(el('line', { 'class': 'hand min' }));
   var pin = svg.appendChild(el('circle', { 'class': 'pin', cx: C, cy: C, r: 1.75 }));
+  var fillDisc = document.createElement('span'); fillDisc.className = 'aclock-fill'; fillDisc.setAttribute('aria-hidden', 'true');
+  box.appendChild(fillDisc);
   box.appendChild(svg);
+  /* hover: the face fills with crimson in step with the seconds -- its leading edge (light crimson
+     fading into full) sits where a second hand would be, and keeps going round: one minute it fills,
+     the next it empties the same way, so it never jumps */
+  var sweeping = 0;
+  function sweep() {
+    var t = new Date(), sec = t.getSeconds() + t.getMilliseconds() / 1000, a = sec * 6,
+        C1 = 'var(--crimson)', C2 = 'var(--crimson-light)';
+    fillDisc.style.background = t.getMinutes() % 2 === 0
+      ? 'conic-gradient(' + C1 + ' 0deg ' + Math.max(0, a - 60) + 'deg, ' + C2 + ' ' + a + 'deg, transparent ' + a + 'deg)'
+      : 'conic-gradient(transparent 0deg ' + a + 'deg, ' + C2 + ' ' + a + 'deg, ' + C1 + ' ' + Math.min(360, a + 60) + 'deg)';
+    sweeping = requestAnimationFrame(sweep);
+  }
+  box.addEventListener('mouseenter', function () { if (!sweeping) sweep(); box.classList.add('live'); });
+  box.addEventListener('mouseleave', function () { cancelAnimationFrame(sweeping); sweeping = 0; box.classList.remove('live'); });
 
   function hm(tz, when) {
     var t = new Intl.DateTimeFormat('en-US', { timeZone: tz, hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23' }).format(when).split(':');

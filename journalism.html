@@ -72,6 +72,8 @@ f(); window.addEventListener('resize',f);})();
 
 <main class="wrap">
 
+  <p class="dek">Covering the campus, then editing the desk that covers it.</p>
+
   <p>I serve as the University Editor for <a href="https://www.kunews.ac.kr/" target="_blank" rel="noopener">The Korea University Weekly</a>, a prominent student news organization established in 1947. Reaching 6,000 print readers weekly, we hold the highest online viewership among Korean university media.</p>
 
   <section>
@@ -134,20 +136,17 @@ f(); window.addEventListener('resize',f);})();
 
   <section>
     <h2 class="section-title">Local Election Desking</h2>
-    <div class="entry">
-      <p class="kicker">Seongbuk district head candidates · Interview</p>
+    <div class="entry boxed at-left">
       <div class="head"><h3><a href="https://www.kunews.ac.kr/news/articleView.html?idxno=50840" target="_blank" rel="noopener">성북 재개발 속도 내나…이승로 “수익 활용” 민병웅 “문제 예방”</a></h3></div>
-      <p class="desc"><span class="date">May 2026</span> <span class="dash">·</span> <a class="go" href="https://www.kunews.ac.kr/news/articleView.html?idxno=50854" target="_blank" rel="noopener">Pledge analysis ↗</a> <span class="dash">—</span> Two candidates who met eight years ago face off again over how fast — and for whom — Seongbuk redevelops.</p>
+      <p class="desc"><span class="date">May 2026</span> <span class="dash">·</span> <a class="go" href="https://www.kunews.ac.kr/news/articleView.html?idxno=50854" target="_blank" rel="noopener">Pledge analysis ↗</a> <span class="dash">—</span> An interview with the Seongbuk district head candidates, who met eight years ago and now face off again over how fast — and for whom — Seongbuk redevelops.</p>
     </div>
-    <div class="entry">
-      <p class="kicker">Dongdaemun district head candidates · Pledge analysis</p>
+    <div class="entry boxed at-right">
       <div class="head"><h3><a href="https://www.kunews.ac.kr/news/articleView.html?idxno=50839" target="_blank" rel="noopener">‘설욕’ 최동민 ‘수성’ 이필형, 4년 만에 재대결</a></h3></div>
-      <p class="desc"><span class="date">May 2026</span> <span class="dash">—</span> A rematch four years on: undergrounding the railway against a Cheongnyangni economic hub.</p>
+      <p class="desc"><span class="date">May 2026</span> <span class="dash">—</span> A pledge analysis of the Dongdaemun district head race, a rematch four years on: undergrounding the railway against a Cheongnyangni economic hub.</p>
     </div>
-    <div class="entry">
-      <p class="kicker">Sejong mayoral candidates · Interview</p>
+    <div class="entry boxed at-center">
       <div class="head"><h3><a href="https://www.kunews.ac.kr/news/articleView.html?idxno=50859" target="_blank" rel="noopener">“조치원 개발” “청년 일자리 확대” 세종캠, 혜택 얻을까</a></h3></div>
-      <p class="desc"><span class="date">May 2026</span> <span class="dash">·</span> <a class="go" href="https://www.kunews.ac.kr/news/articleView.html?idxno=50856" target="_blank" rel="noopener">Pledge analysis ↗</a> <span class="dash">—</span> What the candidates’ pledges — Jochiwon development, jobs for young people — would mean for the Sejong campus.</p>
+      <p class="desc"><span class="date">May 2026</span> <span class="dash">·</span> <a class="go" href="https://www.kunews.ac.kr/news/articleView.html?idxno=50856" target="_blank" rel="noopener">Pledge analysis ↗</a> <span class="dash">—</span> An interview with the Sejong mayoral candidates on what their pledges — Jochiwon development, jobs for young people — would mean for the Sejong campus.</p>
     </div>
   </section>
 
@@ -529,50 +528,65 @@ f(); window.addEventListener('resize',f);})();
     return [f(0), f(8), f(4)];
   }
   function lineColour(im) {
+    /* Reads every pixel of the left photo that lies under the words (the right half of the photo,
+       middle band), then tries colours in the photo's own hue and the opposite hue, dark to mid
+       (never pale enough to blur into the white words beside them), and keeps the one that stands
+       clear (contrast 3:1 or better) of the most of those pixels -- a busy photo, half bright
+       building and half night sky, is judged pixel by pixel, not by its average. */
     try {
-      var n = 48, cv = document.createElement('canvas'); cv.width = cv.height = n;
+      var n = 64, cv = document.createElement('canvas'); cv.width = cv.height = n;
       var g = cv.getContext('2d', { willReadFrequently: true }), w = im.naturalWidth, h = im.naturalHeight;
-      if (vertical) g.drawImage(im, w * 0.3, h * 0.5, w * 0.4, h * 0.5, 0, 0, n, n);   /* stacked: bottom middle */
-      else g.drawImage(im, w * 0.5, h * 0.3, w * 0.5, h * 0.4, 0, 0, n, n);            /* side by side: right middle */
-      var d = g.getImageData(0, 0, n, n).data, R = 0, G = 0, B = 0, hx = 0, hy = 0, m = d.length / 4;
+      if (vertical) g.drawImage(im, w * 0.2, h * 0.55, w * 0.6, h * 0.45, 0, 0, n, n);   /* stacked: bottom middle */
+      else g.drawImage(im, w * 0.45, h * 0.35, w * 0.55, h * 0.3, 0, 0, n, n);           /* side by side: right middle */
+      var d = g.getImageData(0, 0, n, n).data, Ls = [], hx = 0, hy = 0;
       for (var i = 0; i < d.length; i += 4) {
         var r = d[i] / 255, gg = d[i + 1] / 255, b = d[i + 2] / 255, mx = Math.max(r, gg, b), mn = Math.min(r, gg, b);
-        R += r; G += gg; B += b;
+        Ls.push(lum([r, gg, b]));
         if (mx - mn > 0.02) {
           var hu = mx === r ? ((gg - b) / (mx - mn)) % 6 : mx === gg ? (b - r) / (mx - mn) + 2 : (r - gg) / (mx - mn) + 4;
-          var a = hu * Math.PI / 3, wgt = mx - mn;          /* weight by how colourful the pixel is */
+          var a = hu * Math.PI / 3, wgt = mx - mn;
           hx += Math.cos(a) * wgt; hy += Math.sin(a) * wgt;
         }
       }
-      var Lb = lum([R / m, G / m, B / m]),
-          hue = Math.hypot(hx, hy) > 1e-3 ? (Math.atan2(hy, hx) * 180 / Math.PI + 360) % 360 : 215,
-          best = null, bestC = 0;
-      [hue, (hue + 180) % 360].forEach(function (hh, side) {
-        for (var l = 0.18; l <= 0.821; l += 0.02) {
-          var c = hsl(hh, 0.75, l), L = lum(c),
-              cr = (Math.max(L, Lb) + 0.05) / (Math.min(L, Lb) + 0.05);
+      var hue = Math.hypot(hx, hy) > 1e-3 ? (Math.atan2(hy, hx) * 180 / Math.PI + 360) % 360 : 215;
+      var best = null, bestS = -1;
+      [hue, (hue + 180) % 360].forEach(function (hh) {
+        for (var l = 0.08; l <= 0.821; l += 0.02) {
+          var c = hsl(hh, 0.75, l), L = lum(c);
           if (1.05 / (L + 0.05) < 3) continue;          /* too pale: would blur into the white words beside it */
-          if (side === 1 && bestC >= 4.5) return;      /* the photo's own hue already reads well */
-          if (cr > bestC) { bestC = cr; best = c; }
+          var ok = 0, sum = 0;
+          for (var k = 0; k < Ls.length; k++) {
+            var cr = (Math.max(L, Ls[k]) + 0.05) / (Math.min(L, Ls[k]) + 0.05);
+            if (cr >= 3) ok++; sum += Math.min(cr, 7);
+          }
+          var score = ok / Ls.length + sum / Ls.length / 1000;   /* most pixels clear; ties to the stronger */
+          if (score > bestS) { bestS = score; best = c; }
         }
       });
+      lineDark = lum(best) < 0.18;
       return 'rgb(' + best.map(function (v) { return Math.round(v * 255); }).join(',') + ')';
     } catch (e) { return null; }
   }
+  var lineDark = true;
 
   /* small arrow at the bottom of the cover: there's more below. Click/tap scrolls to the page. */
   var down = document.createElement('button');
   down.type = 'button'; down.className = 'jc-down'; down.setAttribute('aria-label', 'Scroll to the page');
-  down.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg>';
+  down.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12"/><path d="M7.5 10.25l4.5 4.5 4.5-4.5"/></svg>';   /* a dark arrow in a white disc, as on nytco.com */
   down.addEventListener('click', function () {
     var y = window.scrollY + cover.getBoundingClientRect().bottom - head.getBoundingClientRect().height;
     window.scrollTo({ top: y, behavior: 'smooth' });
   });
   cover.appendChild(down);
+  /* a band across the bottom of the cover that fills with crimson while the pointer is on the arrow */
+  var band = document.createElement('div'); band.className = 'jc-band'; band.setAttribute('aria-hidden', 'true');
+  cover.appendChild(band);
 
   function reveal() {
     var col = lineColour(panes[0].firstChild);
     if (col) words[1].style.color = col;
+    /* a soft halo of the opposite tone keeps the words clear where the photo is busy */
+    words[1].classList.toggle('on-dark', !lineDark);
     var from = pair.map(cellRect);
     panes.forEach(function (p, i) { place(p, from[i]); cover.appendChild(p); cells[pair[i]].classList.add('lifted'); });
     words.forEach(function (w) { cover.appendChild(w); });

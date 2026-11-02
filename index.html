@@ -79,9 +79,9 @@ f(); window.addEventListener('resize',f);})();
     <div>
       <section>
         <h2 class="section-title">Education</h2>
-        <p class="fact"><span class="primary">B.S. Mechanical Engineering, Korea University</span> <span class="years" lang="ko">고려대</span> <span class="years">2024–present</span></p>
-        <p class="fact"><span class="primary">B.S. Physics, Korea University</span> <span class="years">2026–present</span></p>
-        <p class="fact"><span class="primary">Sejong Academy of Science and Arts</span> <span class="nowrap"><span class="years" lang="ko">세종과학예술영재학교</span> <span class="years">2021–2024</span></span></p>
+        <p class="fact"><span class="primary">B.S. Mechanical Engineering, <a href="https://www.korea.ac.kr/" target="_blank" rel="noopener">Korea University</a></span> <span class="years" lang="ko">고려대</span> <span class="years">2024–present</span></p>
+        <p class="fact"><span class="primary">B.S. Physics, <a href="https://www.korea.ac.kr/" target="_blank" rel="noopener">Korea University</a></span> <span class="years">2026–present</span></p>
+        <p class="fact"><span class="primary"><a href="https://sasa.hs.kr/" target="_blank" rel="noopener">Sejong Academy of Science and Arts</a></span> <span class="nowrap"><span class="years" lang="ko">세종과학예술영재학교</span> <span class="years">2021–2024</span></span></p>
       </section>
 
       <section>
@@ -143,7 +143,7 @@ f(); window.addEventListener('resize',f);})();
    hero-on : menu bar not yet at the top -> transparent bar over the photo
    fade    : the big name fades out from the moment the photo switches
              until the page touches the bottom of "Habin Paik" (fully transparent exactly then)
-   .named  : the big name has started to fade -> name shows in the menu bar
+   .named  : the photo has switched (the page has risen 4px) -> name shows in the menu bar
    .lined  : bar is at the top (blurred) and hasn't reached "Engineer" yet -> line under the bar
    .campus : the page has risen even a little (4px)
              -> building photo, centred in the photo area visible at that moment */
@@ -160,7 +160,7 @@ f(); window.addEventListener('resize',f);})();
   function fs() { return parseFloat(getComputedStyle(name).fontSize); }
   function enBottom() { return name.getBoundingClientRect().top + 0.95 * fs(); }       /* bottom of "Habin Paik" */
   function koBottom() { return ko.getBoundingClientRect().bottom - 0.145 * fs(); }    /* bottom of "백하빈" */
-  var SWITCH = 4;                    /* px the page must rise before the photo changes */
+  var SWITCH = 4, campusH = 0;                    /* px the page must rise before the photo changes */
   function switchAt() {              /* halfway between the page's starting edge and the bottom of "백하빈" */
     return (hero.getBoundingClientRect().bottom + koBottom()) / 2;
   }
@@ -175,10 +175,13 @@ f(); window.addEventListener('resize',f);})();
     document.body.classList.toggle('hero-on', heroOn);
     var from = mid, to = enBottom();
     name.style.opacity = Math.max(0, Math.min(1, (edge - to) / (from - to))).toFixed(3);
-    document.body.classList.toggle('named', !heroOn || edge <= from);   /* the moment the big name starts to fade */
-    head.classList.toggle('lined', !heroOn && inkTop(first) > edge);
     var campus = edge <= hero.getBoundingClientRect().bottom - SWITCH;
-    if (campus && !hero.classList.contains('campus')) root.style.setProperty('--campus-h', edge + 'px');
+    document.body.classList.toggle('named', !heroOn || campus);   /* the name appears in the bar the moment the photo switches */
+    head.classList.toggle('lined', !heroOn && inkTop(first) > edge);
+    /* the building photo fills the photo area showing at the switch; if the page is later pulled
+       back down (or it opened already closed, from another page's name link), it grows with the
+       area so the portrait never shows beneath it */
+    if (campus && (!hero.classList.contains('campus') || edge > campusH)) { campusH = edge; root.style.setProperty('--campus-h', edge + 'px'); }
     hero.classList.toggle('campus', campus);
   }
   /* Arriving from the name link on another page (index.html#closed):
@@ -205,7 +208,7 @@ f(); window.addEventListener('resize',f);})();
   update();
   window.addEventListener('scroll', update, { passive: true });
   window.addEventListener('resize', function () {
-    if (hero.classList.contains('campus')) root.style.setProperty('--campus-h', (hero.getBoundingClientRect().bottom - SWITCH) + 'px');
+    if (hero.classList.contains('campus')) { campusH = hero.getBoundingClientRect().bottom - SWITCH; root.style.setProperty('--campus-h', campusH + 'px'); }
     update();
   });
 })();
