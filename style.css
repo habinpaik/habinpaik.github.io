@@ -259,8 +259,12 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
 .jc-line.black { color: #000; clip-path: inset(100%); }
 .jc-line.black { text-shadow: 0 0 .35em rgba(255,255,255,.55), 0 0 .08em rgba(255,255,255,.5); }   /* dark words: a light halo */
 .jc-line.black.on-dark { text-shadow: 0 0 .35em rgba(0,0,0,.6), 0 0 .08em rgba(0,0,0,.5); }      /* lighter words: a dark halo */
-.jc-line.white { text-shadow: 0 0 .35em rgba(0,0,0,.35); }
+.jc-line.white { text-shadow: 0 0 .5em rgba(0,0,0,.55), 0 0 .1em rgba(0,0,0,.4); }   /* regular weight: a firmer dark halo keeps it clear on pale photos */
 .j-cover.open .jc-line { opacity: 1; }
+/* the opener on the cover keeps the opener's own style -- the body face at the band's size, regular
+   weight -- in white, centred, no wider than the text column */
+.jc-line { font-size: var(--t-display); font-weight: 400; line-height: 1.5; letter-spacing: -0.01em; }
+.jc-line span { max-width: calc(46rem - 2 * var(--gutter)); padding-inline: var(--gutter); box-sizing: content-box; }
 /* tall phone screens: the line sits above the photos (placed by script), just clear of them */
 .j-cover.line-above .jc-line { justify-content: flex-end; padding-bottom: var(--s4); }
 /* arrow at the bottom of the cover, appears with the line */

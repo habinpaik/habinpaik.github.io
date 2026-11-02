@@ -396,7 +396,7 @@ f(); window.addEventListener('resize',f);})();
   };
   /* the cover now carries the page's opener, in white, centred (the per-pair lines above are kept
      for reference but no longer shown) */
-  var LINE = ['Covering the campus,', 'then editing the desk that covers it.'];
+  var LINE = ['Covering the campus, then editing the desk that covers it.'];
   var words = ['white', 'black'].map(function (tone) {
     var t = document.createElement('p'); t.className = 'jc-line ' + tone;
     LINE.forEach(function (l) { var sp = document.createElement('span'); sp.textContent = l; t.appendChild(sp); });
@@ -452,7 +452,7 @@ f(); window.addEventListener('resize',f);})();
       cap.innerHTML = '<b></b> <span></span>'; cap.firstChild.textContent = c[0]; cap.lastChild.textContent = c[1];
     }
     var m = 12;
-    cap.style.top = (r.bottom - o.top - m - cap.offsetHeight) + 'px';
+    cap.style.top = (Math.min(r.bottom, o.bottom) - o.top - m - cap.offsetHeight) + 'px';   /* inside the part of the photo on screen */
     if (useRight) { cap.style.left = ''; cap.style.right = (o.right - r.right + m) + 'px'; cap.style.textAlign = 'right'; }
     else { cap.style.right = ''; cap.style.left = (r.left - o.left + m) + 'px'; cap.style.textAlign = 'left'; }
   }
