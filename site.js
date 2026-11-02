@@ -58,41 +58,48 @@
   var fillDisc = document.createElement('span'); fillDisc.className = 'aclock-fill'; fillDisc.setAttribute('aria-hidden', 'true');
   box.appendChild(fillDisc);
   box.appendChild(svg);
-  /* hover: a broadcast-clock wipe. Crimson starts at Seoul's hour hand and sweeps clockwise with a
-     light leading edge -- once all the way round, then on to the minute hand -- leaving the face solid
-     crimson; it holds a moment, then clears again starting from the hour hand. Quick and eased
-     (fast in the middle, soft at the ends), not at an even pace; it repeats while the pointer stays. */
-  var sweeping = 0, t0 = 0, homeA = 0, minA = 0;
-  var FILL = 1100, HOLD = 450, CLEAR = 650, REST = 500, BAND = 70;
+  /* hover: a broadcast-clock wipe. Crimson sweeps once round the face from Seoul's hour hand, with a
+     light leading edge, until the face is solid; after a beat it clears, sweeping once round from the
+     minute hand -- so the minute hand is the last thing to come back out. Quick and eased (fast in
+     the middle, soft at the ends). Each hand turns white while crimson lies under it. Repeats while
+     the pointer stays. */
+  var sweeping = 0, t0 = 0, homeA = 0, minA = 0, cityA = [];
+  var FILL = 950, HOLD = 350, CLEAR = 950, REST = 600, BAND = 70;
   function easeInOut(x) { return x < .5 ? 8 * x * x * x * x : 1 - Math.pow(-2 * x + 2, 4) / 2; }
-  function easeIn(x) { return x * x * x; }
   function cg(from, stops) { return 'conic-gradient(from ' + from + 'deg, ' + stops + ')'; }
+  function rel(a, from) { return ((a - from) % 360 + 360) % 360; }
+  function light(line, on) { line.style.stroke = on ? '#fff' : ''; }
   function wipe(now) {
-    var C1 = 'var(--crimson)', C2 = 'var(--crimson-light)', el = (now - t0) % (FILL + HOLD + CLEAR + REST), bg;
-    if (el < FILL) {
-      var span = 360 + ((minA - homeA + 360) % 360), L = easeInOut(el / FILL) * span;
-      if (L <= 360) bg = cg(homeA, C1 + ' 0deg ' + Math.max(0, L - BAND) + 'deg, ' + C2 + ' ' + L + 'deg, transparent ' + L + 'deg');
-      else {   /* full: the light edge runs on to the minute hand, fading out as it gets there */
-        var p = L - 360, k = Math.round(100 * (1 - (L - 360) / Math.max(1, span - 360)));
-        var C3 = 'color-mix(in srgb, ' + C2 + ' ' + k + '%, ' + C1 + ')';
-        bg = cg(homeA, C1 + ' 0deg ' + Math.max(0, p - BAND) + 'deg, ' + C3 + ' ' + p + 'deg, ' + C1 + ' ' + p + 'deg');
-      }
-    } else if (el < FILL + HOLD) bg = C1;
-    else if (el < FILL + HOLD + CLEAR) {
-      var E = easeIn((el - FILL - HOLD) / CLEAR) * (360 + BAND);
-      bg = cg(homeA, 'transparent 0deg ' + Math.max(0, E - BAND) + 'deg, ' + C2 + ' ' + Math.min(360, E) + 'deg, ' + C1 + ' ' + Math.min(360, E) + 'deg');
-      if (E >= 360 + BAND - 1) bg = 'transparent';
-    } else bg = 'transparent';
+    var C1 = 'var(--crimson)', C2 = 'var(--crimson-light)', el = (now - t0) % (FILL + HOLD + CLEAR + REST), bg, covered;
+    if (el < FILL) {   /* filling from the hour hand */
+      var L = easeInOut(el / FILL) * (360 + BAND), Lc = Math.min(360, L);
+      bg = cg(homeA, C1 + ' 0deg ' + Math.max(0, L - BAND) + 'deg, ' + C2 + ' ' + Lc + 'deg, transparent ' + Lc + 'deg');
+      if (L >= 360 + BAND - 0.5) bg = C1;
+      covered = function (a) { return rel(a, homeA) < Math.max(0, L - BAND / 2); };
+    } else if (el < FILL + HOLD) { bg = C1; covered = function () { return true; }; }
+    else if (el < FILL + HOLD + CLEAR) {   /* clearing from the minute hand: it comes out last */
+      var E = easeInOut((el - FILL - HOLD) / CLEAR) * (360 + BAND), Ec = Math.min(360, E);
+      bg = cg(minA, 'transparent 0deg ' + Math.max(0, E - BAND) + 'deg, ' + C2 + ' ' + Ec + 'deg, ' + C1 + ' ' + Ec + 'deg');
+      if (E >= 360 + BAND - 0.5) bg = 'transparent';
+      covered = function (a) { var r = rel(a, minA); return r > E - BAND / 2 && !(r < 0.5 && E > 300); };
+    } else { bg = 'transparent'; covered = function () { return false; }; }
     fillDisc.style.background = bg;
+    light(homeHand, covered(homeA)); light(minHand, covered(minA));
+    cityHands.forEach(function (h, k) { light(h, covered(cityA[k])); });
+    pin.style.fill = (el > FILL * 0.5 && el < FILL + HOLD + CLEAR * 0.5) ? '#fff' : '';
     sweeping = requestAnimationFrame(wipe);
   }
   box.addEventListener('mouseenter', function () {
-    var H = hm(home, new Date());
+    var now = new Date(), H = hm(home, now);
     homeA = hourAng(H) * 180 / Math.PI; minA = (H.m + H.s / 60) * 6;
+    cityA = zones.map(function (z) { return hourAng(hm(z.tz, now)) * 180 / Math.PI; });
     t0 = performance.now(); if (!sweeping) sweeping = requestAnimationFrame(wipe);
     box.classList.add('live');
   });
-  box.addEventListener('mouseleave', function () { cancelAnimationFrame(sweeping); sweeping = 0; box.classList.remove('live'); });
+  box.addEventListener('mouseleave', function () {
+    cancelAnimationFrame(sweeping); sweeping = 0; box.classList.remove('live');
+    [homeHand, minHand].concat(cityHands).forEach(function (h) { light(h, false); }); pin.style.fill = '';
+  });
 
   function hm(tz, when) {
     var t = new Intl.DateTimeFormat('en-US', { timeZone: tz, hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23' }).format(when).split(':');

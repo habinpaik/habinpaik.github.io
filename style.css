@@ -982,7 +982,8 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 /* hover: the face fills with crimson in step with the seconds (drawn by site.js); it fades in and out */
 .aclock-fill { position: absolute; inset: 0; border-radius: 50%; pointer-events: none; opacity: 0; transition: opacity .3s ease; }
 .aclock.live .aclock-fill { opacity: 1; }
-.aclock .face, .aclock .tick, .aclock .hand, .aclock .pin { transition: stroke .3s ease, fill .3s ease; }
+.aclock .face, .aclock .tick, .aclock .pin { transition: stroke .3s ease, fill .3s ease; }
+.aclock .hand { transition: stroke .12s ease; }   /* quick, so each hand lights as the crimson reaches it */
 /* while the face is part pale, part crimson, the hands go dark so they read on both */
 .aclock:hover .hand.city { stroke: var(--ink); }
 .aclock:hover .hand.min, .aclock:hover .hand.home { stroke: var(--stone); }
