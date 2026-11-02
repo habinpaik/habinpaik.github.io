@@ -58,19 +58,40 @@
   var fillDisc = document.createElement('span'); fillDisc.className = 'aclock-fill'; fillDisc.setAttribute('aria-hidden', 'true');
   box.appendChild(fillDisc);
   box.appendChild(svg);
-  /* hover: the face fills with crimson in step with the seconds -- its leading edge (light crimson
-     fading into full) sits where a second hand would be, and keeps going round: one minute it fills,
-     the next it empties the same way, so it never jumps */
-  var sweeping = 0;
-  function sweep() {
-    var t = new Date(), sec = t.getSeconds() + t.getMilliseconds() / 1000, a = sec * 6,
-        C1 = 'var(--crimson)', C2 = 'var(--crimson-light)';
-    fillDisc.style.background = t.getMinutes() % 2 === 0
-      ? 'conic-gradient(' + C1 + ' 0deg ' + Math.max(0, a - 60) + 'deg, ' + C2 + ' ' + a + 'deg, transparent ' + a + 'deg)'
-      : 'conic-gradient(transparent 0deg ' + a + 'deg, ' + C2 + ' ' + a + 'deg, ' + C1 + ' ' + Math.min(360, a + 60) + 'deg)';
-    sweeping = requestAnimationFrame(sweep);
+  /* hover: a broadcast-clock wipe. Crimson starts at Seoul's hour hand and sweeps clockwise with a
+     light leading edge -- once all the way round, then on to the minute hand -- leaving the face solid
+     crimson; it holds a moment, then clears again starting from the hour hand. Quick and eased
+     (fast in the middle, soft at the ends), not at an even pace; it repeats while the pointer stays. */
+  var sweeping = 0, t0 = 0, homeA = 0, minA = 0;
+  var FILL = 1100, HOLD = 450, CLEAR = 650, REST = 500, BAND = 70;
+  function easeInOut(x) { return x < .5 ? 8 * x * x * x * x : 1 - Math.pow(-2 * x + 2, 4) / 2; }
+  function easeIn(x) { return x * x * x; }
+  function cg(from, stops) { return 'conic-gradient(from ' + from + 'deg, ' + stops + ')'; }
+  function wipe(now) {
+    var C1 = 'var(--crimson)', C2 = 'var(--crimson-light)', el = (now - t0) % (FILL + HOLD + CLEAR + REST), bg;
+    if (el < FILL) {
+      var span = 360 + ((minA - homeA + 360) % 360), L = easeInOut(el / FILL) * span;
+      if (L <= 360) bg = cg(homeA, C1 + ' 0deg ' + Math.max(0, L - BAND) + 'deg, ' + C2 + ' ' + L + 'deg, transparent ' + L + 'deg');
+      else {   /* full: the light edge runs on to the minute hand, fading out as it gets there */
+        var p = L - 360, k = Math.round(100 * (1 - (L - 360) / Math.max(1, span - 360)));
+        var C3 = 'color-mix(in srgb, ' + C2 + ' ' + k + '%, ' + C1 + ')';
+        bg = cg(homeA, C1 + ' 0deg ' + Math.max(0, p - BAND) + 'deg, ' + C3 + ' ' + p + 'deg, ' + C1 + ' ' + p + 'deg');
+      }
+    } else if (el < FILL + HOLD) bg = C1;
+    else if (el < FILL + HOLD + CLEAR) {
+      var E = easeIn((el - FILL - HOLD) / CLEAR) * (360 + BAND);
+      bg = cg(homeA, 'transparent 0deg ' + Math.max(0, E - BAND) + 'deg, ' + C2 + ' ' + Math.min(360, E) + 'deg, ' + C1 + ' ' + Math.min(360, E) + 'deg');
+      if (E >= 360 + BAND - 1) bg = 'transparent';
+    } else bg = 'transparent';
+    fillDisc.style.background = bg;
+    sweeping = requestAnimationFrame(wipe);
   }
-  box.addEventListener('mouseenter', function () { if (!sweeping) sweep(); box.classList.add('live'); });
+  box.addEventListener('mouseenter', function () {
+    var H = hm(home, new Date());
+    homeA = hourAng(H) * 180 / Math.PI; minA = (H.m + H.s / 60) * 6;
+    t0 = performance.now(); if (!sweeping) sweeping = requestAnimationFrame(wipe);
+    box.classList.add('live');
+  });
   box.addEventListener('mouseleave', function () { cancelAnimationFrame(sweeping); sweeping = 0; box.classList.remove('live'); });
 
   function hm(tz, when) {
