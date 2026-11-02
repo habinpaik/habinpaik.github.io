@@ -1212,27 +1212,38 @@ main.shelf-end { padding-bottom: 0; }
 .blur-card.no-img .cap::before { display: none; }   /* no photo: plain deep grey */
 @media (max-width: 23rem) { .foot-mail { font-size: var(--t-small); } }   /* very narrow phones: still one line */
 
-/* Local election desking: each headline in a box half the column wide -- the first at the left,
-   the next at the right, the last in the middle; the description runs the full width below. Box as the story box: hairline, light shade, crimson fill on hover. */
-.entry.boxed .head { width: 50%; }
-.entry.boxed.at-right .head { margin-left: auto; margin-right: 5px; text-align: right; }   /* the box behind still ends on the column's edge */
-.entry.boxed.at-center .head { text-align: center; }
-.entry.boxed.at-center .head { margin-inline: auto; }
-.entry.boxed .head h3 a {
-  display: block; padding: var(--s4) var(--s5);
-  border: 1px solid var(--line); color: var(--ink);
+/* Local election desking: the three headlines in boxes stacked down the left, each overlapping the
+   one above a little and stepping right; the one description flows to their right and on below.
+   A race's pledge analysis sits inside its box. Headlines at the card-news headline size. Boxes as
+   the story box: hairline, light shade, crimson fill on hover (both links turn white). */
+.election::after { content: ""; display: block; clear: both; }
+.estack { float: left; width: 46%; margin: 0 var(--s5) var(--s3) 0; }
+.ebox {
+  position: relative; width: calc(100% - 2 * var(--s4)); padding: var(--s3) var(--s4);
+  border: 1px solid var(--line); background-color: var(--paper);
   background-image: linear-gradient(var(--crimson), var(--crimson)), var(--shade-light);
   background-repeat: no-repeat; background-position: 0 100%, 0 0; background-size: 100% 0, 100% 100%;
-  background-origin: border-box, padding-box; margin: 0;
-  transition: background-size .45s cubic-bezier(.45, 0, .25, 1), color .45s ease, border-color .45s ease;
+  background-origin: border-box, padding-box;
+  transition: background-size .45s cubic-bezier(.45, 0, .25, 1), border-color .45s ease;
+  /* an empty box of the same size just behind, a few pixels down and to the right -- a small stack */
+  box-shadow: 5px 5px 0 -1px var(--paper), 5px 5px 0 0 var(--line);
 }
-/* one more box of the same size behind it, a few pixels down and to the right -- a small stack */
-.entry.boxed .head { position: relative; isolation: isolate; }
-.entry.boxed .head::after {
-  content: ""; position: absolute; inset: 0; transform: translate(5px, 5px); z-index: -1;
-  border: 1px solid var(--line); background: var(--paper);
+.ebox + .ebox { margin-top: calc(-1 * var(--s3)); }   /* overlaps the box above */
+.ebox:nth-child(2) { margin-left: var(--s4); z-index: 1; }
+.ebox:nth-child(3) { margin-left: calc(2 * var(--s4)); z-index: 2; }
+.ebox .ekick { display: block; margin-bottom: var(--s1); font-family: var(--sans); font-size: var(--t-small); color: var(--stone); transition: color .45s ease; }   /* which race, small, above the headline */
+.ebox:hover .ekick { color: rgba(255,255,255,.85); }
+.ebox h3 { margin: 0; font-family: var(--serif-ko); font-size: var(--t-body); font-weight: 600; line-height: 1.5; letter-spacing: -0.0125em; word-break: keep-all; }
+.ebox h3 a { color: var(--ink); transition: color .45s ease; }
+.ebox .go { display: inline-block; margin-top: var(--s1); font-family: var(--sans); font-size: var(--t-small); color: var(--stone); transition: color .45s ease; }
+.ebox h3 a, .ebox .go { background-image: none !important; padding: 0; margin-inline: 0; }   /* the box does the hover */
+.ebox:hover { background-size: 100% 100%, 100% 100%; border-color: var(--crimson); }
+.ebox:hover h3 a, .ebox:hover .go { color: #fff; }
+.ebox .go:hover { text-decoration: underline; text-underline-offset: 3px; }
+.election .desc { margin: 0; }
+.election .date { color: var(--stone); font-size: var(--t-small); white-space: nowrap; }
+.election .dash { color: var(--stone); }
+@media (max-width: 34rem) {
+  .estack { float: none; width: 100%; margin: 0 0 var(--s4); }
+  .ebox { width: calc(85% - 2 * var(--s4)); }
 }
-.entry.boxed .head h3 a { background-color: var(--paper); }
-.entry.boxed .head h3 a:hover { background-size: 100% 100%, 100% 100%; border-color: var(--crimson); color: #fff; }
-.entry.boxed .desc { margin-top: var(--s3); }
-@media (max-width: 34rem) { .entry.boxed .head { width: 70%; } }
