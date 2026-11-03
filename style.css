@@ -720,7 +720,7 @@ figure.ph.duo figcaption, figure.ph.trio figcaption { grid-column: 1 / -1; }
 @media (max-width: 34rem) { figure.ph.trio { grid-template-columns: 1fr 1fr; } }
 
 /* text laid over the image (bottom-left), for a dramatic titled photo */
-figure.ph.overlay { position: relative; }
+figure.ph.overlay { position: relative; margin-inline: calc(-1 * var(--s4)); }   /* wider by the caption's inset, so the caption lines up with the text column */
 figure.ph.overlay img { aspect-ratio: 16 / 9; object-fit: cover; }
 figure.ph.overlay figcaption {
   position: absolute; left: 0; right: 0; bottom: 0; margin: 0;
@@ -833,6 +833,40 @@ figure.ph.margin-left, figure.ph.margin-right { width: 12rem; margin: var(--s4) 
 .feat-photo:hover::before { height: 100%; }
 .feat-head { z-index: 2; }
 
+/* Boxes tucked behind the story above them, centred and each narrower than the one above, as if
+   pages of the paper lay underneath: a companion story (Special Report), then the print edition.
+   Each one's top edge hides behind the one above, so the light shade starts just below that edge.
+   Crimson fill on hover like the other boxes. */
+.feat { position: relative; z-index: 0; }
+.feat-photo { z-index: 3; }
+.tuck-story, .print-tab {
+  position: relative; display: block; box-sizing: border-box; margin: calc(-1 * var(--s2)) auto 0;
+  border: 1px solid var(--line); background-color: var(--paper);
+  background-image: linear-gradient(var(--crimson), var(--crimson)), var(--shade-light) !important;
+  background-repeat: no-repeat; background-position: 0 100%, 0 calc(var(--s2) - 1px); background-size: 100% 0, 100% 100%;
+  background-origin: border-box, padding-box;
+  text-decoration: none; text-align: center;
+  transition: background-size .45s cubic-bezier(.45, 0, .25, 1), border-color .45s ease;
+}
+.tuck-story { z-index: 2; width: 75%; padding: calc(var(--s2) + var(--s4)) var(--s4) var(--s4); }
+.print-tab {
+  z-index: 1; width: 75%; padding: calc(2 * var(--s2)) var(--s4) var(--s2);
+  font-family: var(--sans); font-size: var(--t-small); color: var(--stone); transition-property: background-size, border-color, color;
+}
+.tuck-story + .print-tab { width: 45%; }   /* under the companion story: narrower again */
+.tuck-head {
+  display: block; font-family: var(--serif-ko); font-size: var(--t-body); font-weight: 600; line-height: 1.5;
+  letter-spacing: -0.0125em; word-break: keep-all; text-wrap: balance; color: var(--ink); transition: color .45s ease;
+}
+.tuck-story .en {
+  display: block; margin-top: var(--s2); font-family: var(--serif); font-size: var(--t-small); line-height: 1.5;
+  color: var(--stone); transition: color .45s ease;
+}
+.tuck-story:hover, .print-tab:hover { background-size: 100% 100%, 100% 100%; border-color: var(--crimson); }
+.tuck-story:hover .tuck-head, .print-tab:hover { color: #fff; }
+.tuck-story:hover .en { color: rgba(255,255,255,.85); }
+@media (max-width: 34rem) { .tuck-story { width: 85%; } .tuck-story + .print-tab { width: 60%; } }
+
 /* 2. headline box overlapping the photo */
 .side-row { display: grid; grid-template-columns: 6fr 1fr 5fr; align-items: center; }
 .side-head {
@@ -841,6 +875,8 @@ figure.ph.margin-left, figure.ph.margin-right { width: 12rem; margin: var(--s4) 
   color: var(--ink); text-decoration: none;
 }
 .side-head .en { color: var(--stone); }
+.side-head.sm { font-size: var(--t-body); }   /* a smaller side story: the box headlines' size */
+.en .date, .en .dash, .feat .en .date + .dash { font-size: inherit; color: inherit; }   /* date leads the English head */
 .side-head {
   background-image: linear-gradient(var(--crimson), var(--crimson)), var(--shade-light); background-repeat: no-repeat;
   background-position: 0 100%, 0 0; background-size: 100% 0, 100% 100%; background-origin: border-box, padding-box;   /* crimson fill for hover over the light shade */
@@ -867,7 +903,7 @@ figure.ph.margin-left, figure.ph.margin-right { width: 12rem; margin: var(--s4) 
    the letters turn white. (Menu, wordmark, image cards and the footer's buttons are excluded.)
    Links with no underline at rest (headlines, the footer address) fill the same way. */
 :root { --link-hover: #fff; }
-a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .foot-links a, .foot-mail)) {
+a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .foot-links a, .foot-mail)) {
   text-decoration: none;
   padding: 0 0.12em; margin: 0 -0.12em;   /* the box reaches a hair past the letters; the text doesn't move */
   -webkit-box-decoration-break: clone; box-decoration-break: clone;   /* a link over two lines gets a box on each */
@@ -877,7 +913,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   background-size: 100% 0, calc(100% - 0.24em) 1px;
   transition: background-size .45s cubic-bezier(.45, 0, .25, 1), color .45s ease;   /* rises from the underline, unhurried */
 }
-a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .foot-links a, .foot-mail)):hover {
+a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .foot-links a, .foot-mail)):hover {
   color: var(--link-hover);
   background-size: 100% 100%, calc(100% - 0.24em) 1px;
 }
@@ -1198,7 +1234,7 @@ main.shelf-end { padding-bottom: 0; }
 }
 .blur-card .cap .meta { display: block; font-family: var(--sans); font-size: var(--t-small); color: rgba(255,255,255,.8); }
 .blur-card .cap .title {   /* body size, in the serif (myeongjo) at the headline weight */
-  display: block; margin-top: var(--s2);
+  display: block;
   font-family: var(--serif-ko); font-size: var(--t-body); font-weight: 600; line-height: 1.5;
   letter-spacing: -0.0125em; word-break: keep-all; transition: color .15s ease;
 }
@@ -1208,6 +1244,7 @@ main.shelf-end { padding-bottom: 0; }
   margin-top: var(--s2); min-height: calc(3 * 1.5em);
   font-family: var(--sans); font-size: var(--t-small); line-height: 1.5; color: rgba(255,255,255,.78);
 }
+.blur-card .cap .desc .date, .blur-card .cap .desc .dash { color: rgba(255,255,255,.9); }   /* date leads the English line */
 .blur-card:hover .cap .title { color: var(--crimson-light); }   /* same hover colour as the overlay cards */
 .blur-card.no-img .cap::before { display: none; }   /* no photo: plain deep grey */
 @media (max-width: 23rem) { .foot-mail { font-size: var(--t-small); } }   /* very narrow phones: still one line */
@@ -1240,6 +1277,25 @@ main.shelf-end { padding-bottom: 0; }
 .ebox:hover { background-size: 100% 100%, 100% 100%; border-color: var(--crimson); }
 .ebox:hover h3 a, .ebox:hover .go { color: #fff; }
 .ebox .go:hover { text-decoration: underline; text-underline-offset: 3px; }
+/* A box with a pledge analysis is split by a hairline: the top (race + headline) opens the interview,
+   the strip below opens the analysis, and each fills crimson on its own */
+.ebox.split { padding: 0; }
+.ebox.split:hover { background-size: 100% 0, 100% 100%; border-color: var(--line); }
+.ebox.split:hover .ekick { color: var(--stone); }
+.ebox.split:hover h3 a { color: var(--ink); }
+.ebox.split:hover .go { color: var(--stone); }
+.eup, .ebox.split .go {
+  position: relative; display: block;
+  background-image: linear-gradient(var(--crimson), var(--crimson)) !important; background-repeat: no-repeat;
+  background-position: 0 100%; background-size: 100% 0;
+  transition: background-size .45s cubic-bezier(.45, 0, .25, 1), color .45s ease;
+}
+.eup { padding: var(--s3) var(--s4); }
+.eup h3 a::after { content: ""; position: absolute; inset: 0; }   /* the whole top half is the link */
+.ebox.split .go { margin: 0; padding: var(--s2) var(--s4); border-top: 1px solid var(--line); }
+.ebox.split .eup:hover, .ebox.split .go:hover { background-size: 100% 100%; }
+.ebox.split .eup:hover .ekick { color: rgba(255,255,255,.85); }
+.ebox.split .eup:hover h3 a, .ebox.split .go:hover { color: #fff; text-decoration: none; }
 .election .desc { margin: 0; }
 .election .date { color: var(--stone); font-size: var(--t-small); white-space: nowrap; }
 .election .dash { color: var(--stone); }
@@ -1249,14 +1305,13 @@ main.shelf-end { padding-bottom: 0; }
 }
 
 /* Desking: two headline boxes side by side, the second set a little lower and pulled a little to the
-   left so the two overlap at a corner -- the election boxes' look, with date and a line of description */
+   left so the two overlap at a corner -- the election boxes' look: date and headline only */
 .epair { display: flex; align-items: flex-start; margin: var(--s6) 0; }
 .epair .ebox { flex: 1 1 0; width: auto; }
 .epair .ebox + .ebox { margin: var(--s5) 0 0 calc(-1 * var(--s4)); z-index: 1; }
-.ebox .edesc { display: block; margin-top: var(--s2); font-family: var(--serif); font-size: var(--t-small); line-height: 1.5; color: var(--stone); transition: color .45s ease; }
-.ebox:hover .edesc { color: rgba(255,255,255,.85); }
-@media (max-width: 34rem) {
-  .epair { flex-direction: column; padding-bottom: 0; }
-  .epair .ebox { width: calc(85% - 2 * var(--s4)); flex: none; }
-  .epair .ebox + .ebox { margin: calc(-1 * var(--s3)) 0 0 15%; }
+.ebox .en { display: block; margin-top: var(--s2); font-family: var(--serif); font-size: var(--t-small); line-height: 1.5; color: var(--stone); transition: color .45s ease; }   /* English title, as under the side headlines */
+.ebox:hover .en { color: rgba(255,255,255,.85); }
+@media (max-width: 34rem) {   /* still side by side on phones, with tighter padding and overlap */
+  .epair .ebox { padding: var(--s3); }
+  .epair .ebox + .ebox { margin: var(--s4) 0 0 calc(-1 * var(--s3)); }
 }
