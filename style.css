@@ -1320,6 +1320,7 @@ main.shelf-end { padding-bottom: 0; }
 .epair { display: flex; align-items: flex-start; margin: var(--s6) 0; }
 .epair .ebox { flex: 1 1 0; width: auto; }
 .epair .ebox + .ebox { margin: var(--s5) 0 0 calc(-1 * var(--s4)); z-index: 1; }
+.epair.big .ebox h3 { font-size: var(--t-title); }   /* at the side-story headline size */
 .ebox .en { display: block; margin-top: var(--s2); font-family: var(--serif); font-size: var(--t-small); line-height: 1.5; color: var(--stone); transition: color .45s ease; }   /* English title, as under the side headlines */
 .ebox:hover .en { color: rgba(255,255,255,.85); }
 @media (max-width: 34rem) {   /* still side by side on phones, with tighter padding and overlap */
