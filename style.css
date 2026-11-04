@@ -756,6 +756,17 @@ figure.ph.overlay figcaption {
 }
 .overlay-card:hover .cap .title { color: var(--crimson-light); }
 @media (max-width: 34rem) { .overlay-duo { grid-template-columns: 1fr; } }
+/* tall pair: two half-width portrait photos, headline at the side-story size; stays two-up on phones */
+.overlay-duo.tall .overlay-card img { aspect-ratio: 2 / 3; }
+.overlay-duo.tall .cap .title { font-size: var(--t-title); font-weight: 600; line-height: 1.5; letter-spacing: -0.0125em; }
+.overlay-duo.tall .cap .meta .date, .overlay-duo.tall .cap .meta .dash { font-size: inherit; color: inherit; }
+.overlay-duo.tall .cap .meta { font-family: var(--serif); }
+.overlay-duo.tall .cap .meta .date { font-family: var(--sans); }
+@media (max-width: 34rem) {
+  .overlay-duo.tall { grid-template-columns: 1fr 1fr; gap: var(--s3); }
+  .overlay-duo.tall .cap { padding: var(--s6) var(--s3) var(--s3); }
+  .overlay-duo.tall .cap .title { font-size: var(--t-body); }
+}
 
 /* ---- Side photos: mounted in the empty space beside the text column ----
    The entry is the positioning context; the photo is absolutely placed just
@@ -1315,3 +1326,4 @@ main.shelf-end { padding-bottom: 0; }
   .epair .ebox { padding: var(--s3); }
   .epair .ebox + .ebox { margin: var(--s4) 0 0 calc(-1 * var(--s3)); }
 }
+.nw { white-space: nowrap; }   /* keep a pair joined by a middle dot on one line */
