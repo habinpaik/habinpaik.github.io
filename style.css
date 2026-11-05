@@ -977,7 +977,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
    and the body's section gap for clocks -> address. The em offsets below remove each
    font's built-in space above/below its letters so the visible gaps come out equal. */
 .site-foot { --fg: var(--s6); }
-.site-foot .wrap { padding-block: var(--fg) calc(var(--fg) - 0.16em); }
+.site-foot .wrap { padding-block: var(--fg) calc(var(--fg) - 0.5em); }
 /* clocks, then a row of buttons (mail + the four pages), then the address with the copyright on its right */
 .foot-main { display: grid; grid-template-columns: auto 1fr; column-gap: var(--s6); row-gap: 0; }
 .foot-side { display: contents; }
@@ -985,7 +985,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 .foot-side > .foot-links { grid-column: 1 / -1; grid-row: 2; }
 .foot-side > .foot-contact { grid-column: 1; grid-row: 3;
   /* buttons -> address: the same visible gap as clocks -> buttons (measured on the edges and letters) */
-  margin-top: var(--fg); }
+  margin-top: calc(var(--fg) - 0.26em); }
 .foot-copy { grid-column: 2; grid-row: 3; justify-self: end; align-self: end; white-space: nowrap; }   /* level with the last address line */
 
 /* buttons: plain rectangles, text the size of the city names */
@@ -993,7 +993,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 .foot-links a {
   display: inline-block;
   border: 1px solid #C9C9C6; border-radius: 0;
-  padding: 0.35em 0.75em;
+  padding: 0.5em 0.67em 0.245em;   /* see .foot-mail: the same visible gap on all four sides */
   color: var(--stone); text-decoration: none;   /* same grey as the city names */
   font-family: var(--serif); font-weight: 400; font-size: var(--t-small); line-height: 1.3;
   transition: background .2s ease, color .2s ease, border-color .2s ease;
@@ -1008,11 +1008,13 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 .foot-links a:hover { background-size: 100% 100%; border-color: var(--crimson); color: #fff; }
 .foot-links { align-items: center; }
 /* mail, right under the Seoul time: the same plain rectangle as the page buttons, at body size */
-.clock-mail { margin-top: var(--s2) !important; display: flex; flex-wrap: nowrap; align-items: baseline; column-gap: calc(var(--t-body) * 0.75); white-space: nowrap; }   /* gap = the box's inner left padding: "open" -> edge = edge -> "d" */   /* a short line, small and grey like "in Seoul", then the mail -- always on one line */
+.clock-mail { margin-top: var(--s2) !important; display: flex; flex-wrap: nowrap; align-items: baseline; column-gap: calc(var(--t-body) * 0.67); white-space: nowrap; }   /* gap = the box's inner left padding: "open" -> edge = edge -> "d" */   /* a short line, small and grey like "in Seoul", then the mail -- always on one line */
 .foot-mail {
   display: inline-block;
   border: 1px solid #C9C9C6; border-radius: 0;
-  padding: 0.35em 0.75em;
+  /* the same visible gap, 0.65em, on all four sides, measured from the capitals' top and the baseline
+     (Newsreader sits high in its line box, hence more padding above than below) */
+  padding: 0.5em 0.67em 0.245em;
   color: var(--stone); text-decoration: none;
   font-family: var(--serif); font-weight: 400; font-size: var(--t-body); line-height: 1.3;
   transition: background .2s ease, color .2s ease, border-color .2s ease;
@@ -1074,7 +1076,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
    1) Seoul -- the time large (twice the body, regular weight), then the seconds and the weekday
       (Thursday) small, then "in Seoul" small and grey
    2) New York, California, London, Beijing -- the city small and grey, the time at body size */
-.clocks { margin-top: -0.25em; }   /* Lora's space above its figures: the top gap then reads as --fg */
+.clocks { margin-top: -0.33em; }   /* the space above the figures in Newsreader: the top gap then reads as --fg */
 .clocks p { margin: 0; }
 .clocks .city {
   font-family: var(--sans); font-feature-settings: normal; font-size: var(--t-small);
@@ -1100,7 +1102,8 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 @media (max-width: 40rem) {
   .foot-main { grid-template-columns: 1fr; }
   .foot-copy { grid-column: 1; grid-row: 4; justify-self: start; margin-top: 0; line-height: 1.5; }   /* phones: straight on from the address, as one paragraph */
-  .site-foot .wrap { padding-bottom: calc(var(--fg) - 0.31em); }
+  .site-foot .wrap { padding-bottom: calc(var(--fg) - 0.51em); }
+  .foot-mail, .foot-links a { padding-top: 0.56em; padding-bottom: 0.185em; }   /* small sizes: the letters round a hair higher, so a hair more above */
 }
 @media (prefers-reduced-motion: reduce) { a { animation: none !important; } }
 
