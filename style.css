@@ -158,7 +158,7 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
 .brand { display: flex; align-items: baseline; gap: var(--s2); }
 .wordmark {
   position: relative;
-  font-family: var(--serif); font-size: var(--t-body); font-weight: 700; letter-spacing: -0.01em;
+  font-family: var(--serif); font-size: var(--t-body); font-weight: 400; letter-spacing: -0.01em;
   color: var(--stone); text-decoration: none;
   transition: opacity .25s ease, visibility .25s, color .15s ease;
 }
@@ -169,13 +169,13 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
   fill: none; stroke: currentColor; stroke-width: 2.8; stroke-linecap: round; stroke-linejoin: round;
 }
 .nav { display: flex; gap: var(--s4); font-size: var(--t-body); }
-.nav a { position: relative; color: var(--stone); text-decoration: none; font-weight: 700; font-size: var(--t-body); transition: color .15s ease; }
+.nav a { position: relative; color: var(--stone); text-decoration: none; font-weight: 400; font-size: var(--t-body); transition: color .15s ease; }
 .nav a[aria-current="page"] { color: var(--ink); }
 /* thick bar sitting on the header's bottom edge (not an underline under the text) */
 .nav a[aria-current="page"]::after,
 .wordmark[aria-current="page"]::after {
   content: ""; position: absolute; left: 0; right: 0;
-  bottom: calc(-1 * var(--s2) - 1px);   /* sit exactly on the header's bottom edge */
+  bottom: calc(-1 * var(--s1) - 1px);   /* sit exactly on the header's bottom edge: the bar's bottom padding + its 1px line */
   height: 5px; background: var(--crimson);
 }
 /* hover (not the current page): the text stays as it is; the same bar, same place, in grey */
@@ -183,7 +183,7 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
   .nav a:not([aria-current="page"]):hover::after,
   .wordmark:not([aria-current="page"]):hover::after {
     content: ""; position: absolute; left: 0; right: 0;
-    bottom: calc(-1 * var(--s2) - 1px);
+    bottom: calc(-1 * var(--s1) - 1px);
     height: 5px; background: var(--crimson-light);   /* same bar as the current page, in light crimson */
   }
   .hero-on .nav a:not([aria-current="page"]):hover::after,
