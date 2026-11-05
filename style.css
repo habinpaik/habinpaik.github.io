@@ -152,7 +152,7 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
 }
 .site-head .bar {
   display: flex; align-items: baseline; justify-content: space-between;
-  gap: var(--s4); padding-top: var(--s3); padding-bottom: var(--s2);   /* 메뉴 글자와 아래 굵은 바 사이를 좁게 */
+  gap: var(--s4); padding-top: var(--s2); padding-bottom: var(--s1);   /* a slim bar: about the same small gap above the letters and below them */
 }
 /* the name is the Home button: grey, a thin grey bar on hover, dark + bar when you're on Home -- like the menu */
 .brand { display: flex; align-items: baseline; gap: var(--s2); }
@@ -414,8 +414,8 @@ h2.section-title {
   font-weight: 600;
   margin: 0 0 var(--s4);   /* the same gap as between paragraphs */
   /* every section opens with a hairline across the text column, with a short shade under it;
-     the title sits close under the line, so the two read as one heading */
-  padding-top: var(--s2);
+     the line sits midway: from the text above to the line = from the line to the title's letters */
+  padding-top: calc(var(--s6) + 0.15em);
   border-top: 1px solid var(--line);
   background: var(--shade-light) no-repeat;
 }
