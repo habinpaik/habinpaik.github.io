@@ -55,7 +55,7 @@
      it) and the footer's top line; light -- section lines, the
      "I inquire..." band, the mail box, the story box, portfolio cards */
   --shade-strong: linear-gradient(to bottom, rgba(0,0,0,.14), rgba(0,0,0,0) 12px);
-  --shade-light:  linear-gradient(to bottom, rgba(0,0,0,.07), rgba(0,0,0,0) 8px);
+  --shade-light:  linear-gradient(to bottom, rgba(0,0,0,.07), rgba(0,0,0,0) var(--s4));   /* fades over one paragraph gap */
   --crimson: #862633;   /* 고려대 교색 Crimson, PANTONE 202C */
   --crimson-light: color-mix(in srgb, var(--crimson) 35%, #fff);   /* the same crimson lightened: hover on dark photos, hover bars */
   --link:  inherit;   /* text links take the colour of the words around them, with a hairline underline; crimson only on hover */
