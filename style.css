@@ -414,9 +414,10 @@ h2.section-title {
   font-weight: 600;
   margin: 0 0 var(--s4);   /* the same gap as between paragraphs */
   /* every section opens with a hairline across the text column, with a short shade under it;
-     the shade fades over one paragraph gap (--s4), then twice that again down to the title's letters:
-     line -> capitals = 3 x --s4 (0.37em is the space above the capitals in the title's line) */
-  padding-top: calc(3 * var(--s4) - 0.37em);
+     the shade fades over one paragraph gap (--s4); from its end down to the title's letters is twice
+     the gap above the line (text above -> line = --s6 + about 0.5em below the last baseline).
+     So line -> capitals = --s4 + 2 x (--s6 + 0.5em); 0.37em is the space above the capitals */
+  padding-top: calc(var(--s4) + 2 * var(--s6) + 0.63em);
   border-top: 1px solid var(--line);
   background: var(--shade-light) no-repeat;
 }
@@ -984,8 +985,8 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 .foot-side { display: contents; }
 .foot-side > .clocks { grid-column: 1 / -1; grid-row: 1; }
 .foot-side > .foot-contact { grid-column: 1; grid-row: 2;
-  /* mail box -> address: one paragraph gap, box edge to the capitals' top (0.26em above them in the line) */
-  margin-top: calc(var(--s4) - 0.26em); }
+  /* mail box -> address: --s5, box edge to the capitals' top (0.26em above them in the line) */
+  margin-top: calc(var(--s5) - 0.26em); }
 .foot-copy { grid-column: 2; grid-row: 2; justify-self: end; align-self: end; white-space: nowrap; }   /* level with the last address line */
 
 /* mail, right under the Seoul time: a plain rectangle, its text the size of "Always open" */
