@@ -414,8 +414,9 @@ h2.section-title {
   font-weight: 600;
   margin: 0 0 var(--s4);   /* the same gap as between paragraphs */
   /* every section opens with a hairline across the text column, with a short shade under it;
-     the line sits midway: from the text above to the line = from the line to the title's letters */
-  padding-top: calc(var(--s6) + 0.15em);
+     the shade fades over one paragraph gap (--s4), then twice that again down to the title's letters:
+     line -> capitals = 3 x --s4 (0.37em is the space above the capitals in the title's line) */
+  padding-top: calc(3 * var(--s4) - 0.37em);
   border-top: 1px solid var(--line);
   background: var(--shade-light) no-repeat;
 }
