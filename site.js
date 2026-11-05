@@ -1,7 +1,7 @@
 /* Shared by every page. */
 
 /* Footer clocks: <time data-tz="..."> shows HH:MM in that time zone.
-   Where present, .sec shows the seconds and .dow the weekday (Thursday). Updated every second;
+   Where present, .dow shows the weekday (Thursday). Updated every second;
    HH:MM is only rewritten when it changes. */
 (function () {
   var els = document.querySelectorAll('time[data-tz]');
