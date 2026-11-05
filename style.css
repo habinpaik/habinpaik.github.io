@@ -37,7 +37,7 @@
   --link:  inherit;   /* text links take the colour of the words around them, with a hairline underline; crimson only on hover */
   --hero-bg: var(--brand-deep);   /* Home 상단 이름 영역 + 그때의 메뉴 배경 */
 
-  --serif: "Lora", "Noto Serif KR", Georgia, "Times New Roman", serif;
+  --serif: "Newsreader", "Noto Serif KR", Georgia, "Times New Roman", serif;
   --serif-ko: "Noto Serif KR", Georgia, serif;
   --sans:  "Pretendard", -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
 
@@ -382,7 +382,7 @@ p.dek {
 }
 .identity-band .ko { color: var(--ink); }
 
-main { padding-block: var(--s7); }
+main { padding-block: var(--s6); }
 
 h2.section-title {
   font-family: var(--sans);
@@ -395,13 +395,13 @@ h2.section-title {
   border-top: 1px solid var(--line);
   background: var(--shade-light) no-repeat;
 }
-section { margin-top: var(--s7); }
+section { margin-top: var(--s6); }
 h2.section-title + * { margin-top: 0 !important; }   /* whatever follows a title starts the same gap below it */
 /* a lead paragraph before the first section (research/journalism/portfolio) */
-main > p:first-child { margin-bottom: var(--s7); }
+main > p:first-child { margin-bottom: var(--s6); }
 
 /* ---------- Home: bio beside ID photo ---------- */
-.bio-row { display: grid; grid-template-columns: 1fr auto; gap: var(--s5); align-items: start; margin-bottom: var(--s7); }
+.bio-row { display: grid; grid-template-columns: 1fr auto; gap: var(--s5); align-items: start; margin-bottom: var(--s6); }
 .bio-row .bio { margin-bottom: 0; max-width: none; }
 .id-photo { width: 150px; }
 .id-photo img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; filter: grayscale(1); background: var(--line); display: block; }
@@ -412,7 +412,7 @@ main > p:first-child { margin-bottom: var(--s7); }
 }
 
 /* facts */
-.fact { line-height: 1.6; margin: 0 0 var(--s2); }
+.fact { line-height: 1.6; margin: 0 0 var(--s2); font-family: var(--sans); }   /* a list, not prose: in the sans */
 .fact:last-child { margin-bottom: 0; }
 .fact .primary { font-weight: 600; }
 .fact .sep { color: var(--stone); }
@@ -426,7 +426,7 @@ main > p:first-child { margin-bottom: var(--s7); }
 .entry { margin-bottom: var(--s6); }
 .entry:last-child { margin-bottom: 0; }
 .entry .head { display: flex; align-items: baseline; gap: var(--s3); flex-wrap: wrap; }
-.entry h3 { font-family: var(--serif-ko); font-size: var(--t-title); font-weight: 400; line-height: 1.6; margin: 0; letter-spacing: -0.02em; word-break: keep-all; }
+.entry h3 { font-family: var(--serif-ko); font-size: var(--t-title); font-weight: 400; line-height: 1.3; margin: 0; letter-spacing: -0.02em; word-break: keep-all; }
 .entry h3 a { color: var(--ink); text-decoration: none; }
 .entry h3 a:hover { color: #fff; }
 .shelf-note { margin: calc(var(--s3) - var(--s4)) 0 0; font-family: var(--sans); font-size: var(--t-small); line-height: 1.6; color: #2E3A46; }
@@ -441,7 +441,7 @@ hr.rule { border: 0; border-top: 1px solid var(--line); height: 0; margin: calc(
 
 /* centred closing line (portfolio) */
 main > p.epigraph:first-child { margin-bottom: var(--s3); }
-main > p.dek:first-child { margin-bottom: var(--s7); }   /* the opener is a section of its own: the same gap below it as between sections */   /* the Korean of the opener, right under it at body size */
+main > p.dek:first-child { margin-bottom: var(--s6); }   /* the opener is a section of its own: the same gap below it as between sections */   /* the Korean of the opener, right under it at body size */
 .epigraph {
   text-align: left; max-width: none;
   margin: 0 0 var(--s3); color: var(--ink);
@@ -746,7 +746,7 @@ figure.ph.overlay figcaption {
 .overlay-card .cap .title {
   display: block;
   font-family: var(--serif-ko); font-size: var(--t-body); font-weight: 400;   /* the Portfolio card-title size */
-  line-height: 1.5; letter-spacing: -0.02em; word-break: keep-all;
+  line-height: 1.3; letter-spacing: -0.02em; word-break: keep-all;
   transition: color .15s ease;
 }
 .overlay-card .cap .meta {
@@ -758,10 +758,9 @@ figure.ph.overlay figcaption {
 @media (max-width: 34rem) { .overlay-duo { grid-template-columns: 1fr; } }
 /* tall pair: two half-width portrait photos, headline at the side-story size; stays two-up on phones */
 .overlay-duo.tall .overlay-card img { aspect-ratio: 2 / 3; }
-.overlay-duo.tall .cap .title { font-size: var(--t-title); font-weight: 600; line-height: 1.5; letter-spacing: -0.0125em; }
+.overlay-duo.tall .cap .title { font-size: var(--t-title); font-weight: 600; line-height: 1.3; letter-spacing: -0.0125em; }
 .overlay-duo.tall .cap .meta .date, .overlay-duo.tall .cap .meta .dash { font-size: inherit; color: inherit; }
-.overlay-duo.tall .cap .meta { font-family: var(--serif); }
-.overlay-duo.tall .cap .meta .date { font-family: var(--sans); }
+.overlay-duo.tall .cap .meta { font-family: var(--sans); }
 @media (max-width: 34rem) {
   .overlay-duo.tall { grid-template-columns: 1fr 1fr; gap: var(--s3); }
   .overlay-duo.tall .cap { padding: var(--s6) var(--s3) var(--s3); }
@@ -813,19 +812,17 @@ figure.ph.margin-left, figure.ph.margin-right { width: 12rem; margin: var(--s4) 
        </div>
        <p class="desc">…</p>
      </div> */
-.feat { margin: var(--s6) 0 0; }
-.side { margin: var(--s6) 0; }
-.feat > .desc, .side > .desc { margin: var(--s3) 0 0; }
+.feat, .side { margin: var(--s6) 0; }   /* a story sits in the essay with the same gap above and below */
 .feat .date, .side .date { color: var(--stone); font-size: var(--t-small); white-space: nowrap; }
 .feat .date + .dash, .side .date + .dash { color: var(--stone); }
 
 .feat-head, .side-head {
-  font-family: var(--serif-ko); font-size: var(--t-title); font-weight: 600; line-height: 1.5;
+  font-family: var(--serif-ko); font-size: var(--t-title); font-weight: 600; line-height: 1.3;
   letter-spacing: -0.0125em; word-break: keep-all; transition: color .15s ease;
 }
-.feat-head .en, .side-head .en {   /* small English title under the Korean one */
+.feat-head .en, .side-head .en {   /* small English title under the Korean one, in the sans */
   display: block; margin-top: var(--s2);
-  font-family: var(--serif); font-size: var(--t-small); font-weight: 400; line-height: 1.5; letter-spacing: 0;
+  font-family: var(--sans); font-size: var(--t-small); font-weight: 400; line-height: 1.5; letter-spacing: 0;
 }
 
 /* 1. photo, headline on it */
@@ -866,11 +863,11 @@ figure.ph.margin-left, figure.ph.margin-right { width: 12rem; margin: var(--s4) 
 }
 .tuck-story + .print-tab { width: 45%; }   /* under the companion story: narrower again */
 .tuck-head {
-  display: block; font-family: var(--serif-ko); font-size: var(--t-body); font-weight: 600; line-height: 1.5;
+  display: block; font-family: var(--serif-ko); font-size: var(--t-body); font-weight: 600; line-height: 1.3;
   letter-spacing: -0.0125em; word-break: keep-all; text-wrap: balance; color: var(--ink); transition: color .45s ease;
 }
 .tuck-story .en {
-  display: block; margin-top: var(--s2); font-family: var(--serif); font-size: var(--t-small); line-height: 1.5;
+  display: block; margin-top: var(--s2); font-family: var(--sans); font-size: var(--t-small); line-height: 1.5;
   color: var(--stone); transition: color .45s ease;
 }
 .tuck-story:hover, .print-tab:hover { background-size: 100% 100%, 100% 100%; border-color: var(--crimson); }
@@ -1246,16 +1243,16 @@ main.shelf-end { padding-bottom: 0; }
 .blur-card .cap .meta { display: block; font-family: var(--sans); font-size: var(--t-small); color: rgba(255,255,255,.8); }
 .blur-card .cap .title {   /* body size, in the serif (myeongjo) at the headline weight */
   display: block;
-  font-family: var(--serif-ko); font-size: var(--t-body); font-weight: 600; line-height: 1.5;
+  font-family: var(--serif-ko); font-size: var(--t-body); font-weight: 600; line-height: 1.3;
   letter-spacing: -0.0125em; word-break: keep-all; transition: color .15s ease;
 }
-/* a short English description under the title: room for two or three lines */
-.blur-card .cap .desc {
+/* the English headline under the Korean one: room for up to three lines */
+.blur-card .cap .en {
   display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden;
   margin-top: var(--s2); min-height: calc(3 * 1.5em);
   font-family: var(--sans); font-size: var(--t-small); line-height: 1.5; color: rgba(255,255,255,.78);
 }
-.blur-card .cap .desc .date, .blur-card .cap .desc .dash { color: rgba(255,255,255,.9); }   /* date leads the English line */
+.blur-card .cap .en .date, .blur-card .cap .en .dash { color: rgba(255,255,255,.9); }   /* date leads the English line */
 .blur-card:hover .cap .title { color: var(--crimson-light); }   /* same hover colour as the overlay cards */
 .blur-card.no-img .cap::before { display: none; }   /* no photo: plain deep grey */
 @media (max-width: 23rem) { .foot-mail { font-size: var(--t-small); } }   /* very narrow phones: still one line */
@@ -1281,7 +1278,7 @@ main.shelf-end { padding-bottom: 0; }
 .ebox:nth-child(3) { margin-left: calc(2 * var(--s4)); z-index: 2; }
 .ebox .ekick { display: block; margin-bottom: var(--s1); font-family: var(--sans); font-size: var(--t-small); color: var(--stone); transition: color .45s ease; }   /* which race, small, above the headline */
 .ebox:hover .ekick { color: rgba(255,255,255,.85); }
-.ebox h3 { margin: 0; font-family: var(--serif-ko); font-size: var(--t-body); font-weight: 600; line-height: 1.5; letter-spacing: -0.0125em; word-break: keep-all; }
+.ebox h3 { margin: 0; font-family: var(--serif-ko); font-size: var(--t-body); font-weight: 600; line-height: 1.3; letter-spacing: -0.0125em; word-break: keep-all; }
 .ebox h3 a { color: var(--ink); transition: color .45s ease; }
 .ebox .go { display: inline-block; margin-top: var(--s1); font-family: var(--sans); font-size: var(--t-small); color: var(--stone); transition: color .45s ease; }
 .ebox h3 a, .ebox .go { background-image: none !important; padding: 0; margin-inline: 0; }   /* the box does the hover */
@@ -1307,7 +1304,7 @@ main.shelf-end { padding-bottom: 0; }
 .ebox.split .eup:hover, .ebox.split .go:hover { background-size: 100% 100%; }
 .ebox.split .eup:hover .ekick { color: rgba(255,255,255,.85); }
 .ebox.split .eup:hover h3 a, .ebox.split .go:hover { color: #fff; text-decoration: none; }
-.election .desc { margin: 0; }
+.election > p { margin: 0; }   /* the essay runs beside the boxes, as text beside a figure in a book */
 .election .date { color: var(--stone); font-size: var(--t-small); white-space: nowrap; }
 .election .dash { color: var(--stone); }
 @media (max-width: 34rem) {
@@ -1321,7 +1318,7 @@ main.shelf-end { padding-bottom: 0; }
 .epair .ebox { flex: 1 1 0; width: auto; }
 .epair .ebox + .ebox { margin: var(--s5) 0 0 calc(-1 * var(--s4)); z-index: 1; }
 .epair.big .ebox h3 { font-size: var(--t-title); }   /* at the side-story headline size */
-.ebox .en { display: block; margin-top: var(--s2); font-family: var(--serif); font-size: var(--t-small); line-height: 1.5; color: var(--stone); transition: color .45s ease; }   /* English title, as under the side headlines */
+.ebox .en { display: block; margin-top: var(--s2); font-family: var(--sans); font-size: var(--t-small); line-height: 1.5; color: var(--stone); transition: color .45s ease; }   /* English title, as under the side headlines */
 .ebox:hover .en { color: rgba(255,255,255,.85); }
 @media (max-width: 34rem) {   /* still side by side on phones, with tighter padding and overlap */
   .epair .ebox { padding: var(--s3); }
