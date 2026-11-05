@@ -856,7 +856,7 @@ figure.ph.margin-left, figure.ph.margin-right { width: 12rem; margin: var(--s4) 
 .feat-photo img { display: block; width: 100%; aspect-ratio: 2 / 1; object-fit: cover; filter: grayscale(1); }
 .feat-photo::after { content: ""; position: absolute; inset: 45% 0 0; background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,.6)); pointer-events: none; }
 .feat-head {
-  position: absolute; z-index: 1; left: 50%; bottom: var(--s4); transform: translateX(-50%);
+  position: absolute; z-index: 1; left: 50%; bottom: calc(var(--s3) - 0.47 * var(--t-small)); transform: translateX(-50%);   /* the box inset: 14px under the English line */
   width: min(36rem, 86%); text-align: center; color: #fff; text-wrap: balance;
 }
 .feat-head .en { color: rgba(255,255,255,.85); }
@@ -913,7 +913,7 @@ figure.ph.margin-left, figure.ph.margin-right { width: 12rem; margin: var(--s4) 
 
 @media (max-width: 34rem) {
   .feat-photo img, .side-photo img { aspect-ratio: 3 / 2; }
-  .feat-head { width: 90%; bottom: var(--s3); }
+  .feat-head { width: 90%; }
   .side-row { grid-template-columns: 1fr; }
   .side-photo { grid-column: 1; grid-row: 1; }
   .side-head { grid-column: 1; grid-row: 2; margin: calc(-1 * var(--s6)) var(--s4) 0; }
@@ -1256,7 +1256,7 @@ main.shelf-end { padding-bottom: 0; }
 .election::after { content: ""; display: block; clear: both; }
 .estack { float: left; width: 46%; margin: 0 var(--s5) var(--s3) 0; }
 .ebox {
-  position: relative; width: calc(100% - 2 * var(--s3)); padding: calc(var(--s3) - 0.2 * var(--t-small)) var(--s3) calc(var(--s3) - 0.25 * var(--t-body));   /* first line the race (small sans), last the headline */
+  position: relative; width: calc(100% - 2 * var(--s3)); padding: calc(var(--s3) - 0.24 * var(--t-small)) var(--s3) calc(var(--s3) - 0.14 * var(--t-body));   /* first line the race (small sans), last the headline -- to the foot of its Hangul, which sits a little under the baseline */
   border: 1px solid var(--line); background-color: var(--paper);
   background-image: var(--shade-light); background-repeat: no-repeat; background-origin: padding-box;
   /* an empty box of the same size just behind, a few pixels down and to the right -- a small stack */
@@ -1273,7 +1273,7 @@ main.shelf-end { padding-bottom: 0; }
 /* A box with a pledge analysis is split by a hairline: the top (race + headline) opens the interview,
    the strip below opens the analysis */
 .ebox.split { padding: 0; }
-.eup { position: relative; display: block; padding: calc(var(--s3) - 0.2 * var(--t-small)) var(--s3) calc(var(--s3) - 0.25 * var(--t-body)); }
+.eup { position: relative; display: block; padding: calc(var(--s3) - 0.24 * var(--t-small)) var(--s3) calc(var(--s3) - 0.14 * var(--t-body)); }
 .ebox.split .go { display: block; margin: 0; border-top: 1px solid var(--line); padding: calc(var(--s3) - 0.27 * var(--t-small)) var(--s3) calc(var(--s3) - 0.4 * var(--t-small)); }
 .election > p { margin: 0; }
 .election > p + p { margin-top: var(--s4); }   /* paragraph gap, as elsewhere */   /* the essay runs beside the boxes, as text beside a figure in a book */
