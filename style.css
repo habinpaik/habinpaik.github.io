@@ -936,7 +936,7 @@ figure.ph.margin-left, figure.ph.margin-right { width: 12rem; margin: var(--s4) 
    the letters turn white. (Menu, wordmark, image cards and the footer's buttons are excluded.)
    Links with no underline at rest (headlines, the footer address) fill the same way. */
 :root { --link-hover: #fff; }
-a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .foot-links a, .foot-mail)) {
+a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .foot-mail)) {
   text-decoration: none;
   padding: 0 0.12em; margin: 0 -0.12em;   /* the box reaches a hair past the letters; the text doesn't move */
   -webkit-box-decoration-break: clone; box-decoration-break: clone;   /* a link over two lines gets a box on each */
@@ -946,7 +946,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   background-size: 100% 0, calc(100% - 0.24em) 1px;
   transition: background-size .45s cubic-bezier(.45, 0, .25, 1), color .45s ease;   /* rises from the underline, unhurried */
 }
-a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .foot-links a, .foot-mail)):hover {
+a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .foot-mail)):hover {
   color: var(--link-hover);
   background-size: 100% 100%, calc(100% - 0.24em) 1px;
 }
@@ -979,37 +979,17 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
    font's built-in space above/below its letters so the visible gaps come out equal. */
 .site-foot { --fg: var(--s6); }
 .site-foot .wrap { padding-block: var(--fg) calc(var(--fg) - 0.5em); }
-/* clocks, then a row of buttons (mail + the four pages), then the address with the copyright on its right */
+/* clocks (with the mail), then the address with the copyright on its right */
 .foot-main { display: grid; grid-template-columns: auto 1fr; column-gap: var(--s6); row-gap: 0; }
 .foot-side { display: contents; }
 .foot-side > .clocks { grid-column: 1 / -1; grid-row: 1; }
-.foot-side > .foot-links { grid-column: 1 / -1; grid-row: 2; }
-.foot-side > .foot-contact { grid-column: 1; grid-row: 3;
-  /* buttons -> address: the same visible gap as clocks -> buttons (measured on the edges and letters) */
-  margin-top: calc(var(--fg) - 0.26em); }
-.foot-copy { grid-column: 2; grid-row: 3; justify-self: end; align-self: end; white-space: nowrap; }   /* level with the last address line */
+.foot-side > .foot-contact { grid-column: 1; grid-row: 2;
+  /* mail box -> address: one paragraph gap, box edge to the capitals' top (0.26em above them in the line) */
+  margin-top: calc(var(--s4) - 0.26em); }
+.foot-copy { grid-column: 2; grid-row: 2; justify-self: end; align-self: end; white-space: nowrap; }   /* level with the last address line */
 
-/* buttons: plain rectangles, text the size of the city names */
-.foot-links { display: flex; flex-wrap: wrap; gap: 6px; margin-top: var(--fg); }
-.foot-links a {
-  display: inline-block;
-  border: 1px solid #C9C9C6; border-radius: 0;
-  padding: 0.5em 0.67em 0.245em;   /* see .foot-mail: the same visible gap on all four sides */
-  color: var(--stone); text-decoration: none;   /* same grey as the city names */
-  font-family: var(--serif); font-weight: 400; font-size: var(--t-small); line-height: 1.3;
-  transition: background .2s ease, color .2s ease, border-color .2s ease;
-}
-.foot-links a, .foot-mail {
-  background-color: transparent; background-origin: border-box;   /* fill right to the border, no seam */
-  background-repeat: no-repeat; background-position: 0 100%;
-  transition: background-size .45s cubic-bezier(.45, 0, .25, 1), color .45s ease, border-color .45s ease;
-}
-.foot-links a { background-image: linear-gradient(var(--crimson), var(--crimson)); background-size: 100% 0; }
-/* hover: crimson rises from the bottom edge and fills the box, the letters turning white -- as on text links */
-.foot-links a:hover { background-size: 100% 100%; border-color: var(--crimson); color: #fff; }
-.foot-links { align-items: center; }
-/* mail, right under the Seoul time: the same plain rectangle as the page buttons, at body size */
-.clock-mail { margin-top: var(--s2) !important; display: flex; flex-wrap: nowrap; align-items: baseline; column-gap: calc(var(--t-body) * 0.67); white-space: nowrap; }   /* gap = the box's inner left padding: "open" -> edge = edge -> "d" */   /* a short line, small and grey like "in Seoul", then the mail -- always on one line */
+/* mail, right under the Seoul time: a plain rectangle, its text the size of "Always open" */
+.clock-mail { margin-top: var(--s2) !important; display: flex; flex-wrap: nowrap; align-items: baseline; column-gap: calc(var(--t-small) * 0.67); white-space: nowrap; }   /* gap = the box's inner left padding: "open" -> edge = edge -> "d" */   /* a short line, small and grey like "in Seoul", then the mail -- always on one line */
 .foot-mail {
   display: inline-block;
   border: 1px solid #C9C9C6; border-radius: 0;
@@ -1017,7 +997,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
      (Newsreader sits high in its line box, hence more padding above than below) */
   padding: 0.5em 0.67em 0.245em;
   color: var(--stone); text-decoration: none;
-  font-family: var(--serif); font-weight: 400; font-size: var(--t-body); line-height: 1.3;
+  font-family: var(--serif); font-weight: 400; font-size: var(--t-small); line-height: 1.3;   /* the size of "Always open" */
   transition: background .2s ease, color .2s ease, border-color .2s ease;
 }
 .foot-mail {   /* crimson fill (for hover) over the footer's faint shade, here under the box's top line */
@@ -1032,7 +1012,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
    the marks, the minute hand and Seoul's hour hand share the rim's pale grey; the other cities'
    hour hands are dark. Each hour hand is named just outside the dial where it points; hands
    pointing the same way share one label. Size and place are worked out by site.js: as large as
-   fits beside the time and mail, down to the row of page buttons. */
+   fits beside the time and mail, down to the address or the copyright below it. */
 .clocks { position: relative; }
 .aclock { position: absolute; left: 0; top: 0; width: 88px; height: 88px; }
 .clock-main .brk { display: none; }
@@ -1046,7 +1026,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   .clocks .m-only { display: inline; }
   .clocks > .clock-mail > .city { display: none; }   /* "Always open" moves up beside "in Seoul," */
   .clocks > .clock-mail { flex-direction: column; align-items: flex-start; row-gap: var(--s1); }
-  .foot-mail { font-size: var(--t-small); }
+  .foot-mail { padding-top: 0.56em; padding-bottom: 0.185em; }   /* at the phone size the letters round a hair higher: a hair more above */
   .clocks .aclock .lab { font-size: 0.75rem; }   /* phones: names a size down, to leave the dial room */
 }
 .aclock svg { display: block; position: relative; width: 100%; height: 100%; overflow: visible; }
@@ -1104,7 +1084,6 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   .foot-main { grid-template-columns: 1fr; }
   .foot-copy { grid-column: 1; grid-row: 4; justify-self: start; margin-top: 0; line-height: 1.5; }   /* phones: straight on from the address, as one paragraph */
   .site-foot .wrap { padding-bottom: calc(var(--fg) - 0.51em); }
-  .foot-mail, .foot-links a { padding-top: 0.56em; padding-bottom: 0.185em; }   /* small sizes: the letters round a hair higher, so a hair more above */
 }
 @media (prefers-reduced-motion: reduce) { a { animation: none !important; } }
 

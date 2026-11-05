@@ -32,7 +32,7 @@
 /* Footer dial (.aclock): one face, one minute hand, an hour hand for Seoul (data-home "Zone=Name")
    and one per city in data-zones ("Zone=Name|..."), each named just outside the dial.
    The dial is drawn as large as it can be, beside the time and mail lines and down as far as the
-   row of page buttons, its right edge on the column's right edge. On wider screens the group's top
+   address (phones) or the copyright (wider screens), its right edge on the column's right edge. On wider screens the group's top
    (highest name, or the circle) sits on the top of the time's digits; on phones the circle's top does. Every name stays inside that area and
    the column, clear of all the words and boxes around it -- at every half hour of the day, so the
    dial keeps one size as the hands turn (only its sideways place may shift a little). */
@@ -192,13 +192,14 @@
     var words = [].filter.call(host.querySelectorAll('.clock-main .hm, .clock-main .sec, .clock-main .dow, .clock-main .city, .clock-mail .city'), function (e) { return e.getClientRects().length; })
                   .map(function (e) { return rel(e, 0.2); });   /* only words actually shown */
     var mail = rel(host.querySelector('.foot-mail'), 0);
-    var btns = [].map.call(foot.querySelectorAll('.foot-links a'), function (e) { return rel(e, 0); });
-    var keep = words.concat([mail], btns);
+    /* below: the address (and, on wider screens, the copyright on the right) -- the dial stays clear of them */
+    var below = [].map.call(foot.querySelectorAll('.foot-contact > *, .foot-copy'), function (e) { return rel(e, 0.2); });
+    var keep = words.concat([mail], below);
     var top = Math.min.apply(null, words.map(function (r) { return r.t; }));
-    /* down to the page buttons: on phones they fill the width, so up to their top edge; on wider
-       screens they sit at the left, so the dial may come down beside them to their bottom edge */
-    var bot = !btns.length ? mail.b : phone ? Math.min.apply(null, btns.map(function (r) { return r.t; })) - 4
-                                            : Math.max.apply(null, btns.map(function (r) { return r.b; }));
+    /* down to the first thing under it: on phones the address line right under the mail (it runs the
+       full width); on wider screens the copyright, which sits under the dial on the right */
+    var bot = phone ? Math.min.apply(null, below.map(function (r) { return r.t; })) - 4
+                    : (below.length ? below[below.length - 1].t - 8 : mail.b);
     var colR = hr.width;
     return { keep: keep, top: top, bot: bot, cy: (top + bot) / 2, colR: colR,
              cx0: phone ? (mail.r + colR) / 2 : colR };   /* phones: middle of the room beside the mail; wider: as far right as it goes */
