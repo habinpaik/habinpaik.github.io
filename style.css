@@ -119,7 +119,7 @@ body {
 /* One content column width everywhere: header, main, footer, home blocks.
    Wide/full photos and grids break out of this on their own. */
 main.wrap, .site-head .wrap, .site-foot .wrap { max-width: 46rem; }
-.lead, .identity-band .wrap, .bio { max-width: 46rem; margin-inline: auto; }
+.lead, .bio { max-width: 46rem; margin-inline: auto; }
 
 /* ============================================================
    ONE body-text rule. Every paragraph of running copy is just <p>.
@@ -388,19 +388,17 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
 .lead { padding-top: var(--s7); padding-bottom: var(--s7); }
 .bio { margin-bottom: var(--s7); }
 
-/* space between the leading block and the black banner (home) */
-.identity-band { margin-top: 0; }
-
-/* ---------- Identity band (HOME ONLY) ---------- */
-.identity-band { background: var(--brand) var(--shade-light) no-repeat; color: var(--ink); }   /* grey band, no lines above/below; the light shade along its top edge */
-.identity-band .wrap { padding-block: var(--s5); }
-.identity-band p {
-  margin: 0;
-  font-size: var(--t-display);
-  font-weight: 400;   /* the body's own face and weight, only larger */
-  line-height: 1.5;
-  max-width: none;
-  letter-spacing: -0.01em;
+/* Home: the top block ends the way a section does -- 25px under its last line, a hairline with the
+   light shade -- and the next part opens with no title: the one-sentence opener (.dek) takes the
+   title's place, at the title's distance (8px of shade, then 50px to its capitals), and the
+   paragraphs run on from it as on the Portfolio page */
+.lead { padding-bottom: 0; }
+.lead > p:last-child { margin-bottom: 0; }
+.lead + main { padding-top: var(--sec-gap); }
+p.dek.opener {
+  border-top: 1px solid var(--line); background: var(--shade-light) no-repeat;
+  padding-top: calc(var(--s2) + 3.125rem);
+  text-box-trim: trim-start; text-box-edge: cap alphabetic;   /* so the padding reaches the capitals */
 }
 /* a page's one-sentence opener (.dek), at the band's size in the body face -- one sentence only,
    standing as a section of its own (after the NYT's article deks) */
@@ -408,7 +406,6 @@ p.dek {
   font-size: var(--t-display); font-weight: 400; line-height: 1.5; letter-spacing: -0.01em;
   margin: 0 0 var(--s4);
 }
-.identity-band .ko { color: var(--ink); }
 
 main { padding-block: var(--s6); }
 
@@ -425,6 +422,7 @@ h2.section-title {
   background: var(--shade-light) no-repeat;
 }
 section { margin-top: var(--sec-gap); }
+main > p:has(+ section) { margin-bottom: 0; }   /* a paragraph right before a section: the 25px is the section's alone */
 h2.section-title + * { margin-top: 0 !important; }   /* whatever follows a title starts the same gap below it */
 /* a lead paragraph before the first section (research/journalism/portfolio) */
 main > p:first-child { margin-bottom: var(--sec-gap); }
