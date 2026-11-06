@@ -237,7 +237,7 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
 .hero .wrap { position: relative; z-index: 1; width: 100%; max-width: 46rem; text-align: right; }
 .hero-name {
   margin: 0;
-  font-family: var(--serif); font-weight: 700;
+  font-family: var(--serif); font-weight: 400;   /* regular, as the menu and the copyright */
   font-size: var(--t-name);
   line-height: 1.15; letter-spacing: -0.02em;
   margin-top: -0.04em;   /* evens the gaps above the letters and below them */
