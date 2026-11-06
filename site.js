@@ -47,7 +47,7 @@
   var svg = el('svg', { viewBox: '0 0 ' + S + ' ' + S, 'aria-hidden': 'true' });
   svg.appendChild(el('circle', { 'class': 'face', cx: C, cy: C, r: R }));
   for (var i = 0; i < 12; i++) {
-    var a = i * Math.PI / 6, l = i % 3 === 0 ? 5 : 3;
+    var a = i * Math.PI / 6, l = 3;   /* every hour mark the same length */
     svg.appendChild(el('line', { 'class': 'tick',
       x1: C + Math.sin(a) * (R - l), y1: C - Math.cos(a) * (R - l), x2: C + Math.sin(a) * R, y2: C - Math.cos(a) * R }));
   }
