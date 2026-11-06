@@ -930,7 +930,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   text-decoration: none;
   padding: 0 0.12em; margin: 0 -0.12em;   /* the box reaches a hair past the letters; the text doesn't move */
   -webkit-box-decoration-break: clone; box-decoration-break: clone;   /* a link over two lines gets a box on each */
-  background-image: linear-gradient(var(--crimson), var(--crimson)), linear-gradient(currentColor, currentColor);
+  background-image: linear-gradient(var(--crimson), var(--crimson)), linear-gradient(var(--crimson), var(--crimson));   /* the fill, and a crimson hairline underline */
   background-repeat: no-repeat;
   background-position: 0 100%, 0.12em 100%;
   background-size: 100% 0, calc(100% - 0.24em) 1px;
