@@ -1083,7 +1083,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 @media (max-width: 40rem) {
   figure.ph.left, figure.ph.right,
   figure.ph.small.left, figure.ph.small.right { float: none; width: 100%; margin: var(--s5) 0; }
-  .site-head .bar { flex-direction: column; gap: var(--s2); align-items: flex-start; }
+  .site-head .bar { flex-direction: column; gap: 0; align-items: flex-start; padding-top: calc(var(--s2) - 0.8px); }   /* two rows: the space between them already holds the name's room below and the menu's room above, so no gap -- above, between and below then read the same */
   .site-head .bar .nav { align-self: center; }   /* the menu row is centred */
   .site-head .bar .brand { align-self: center; }  /* so is the name row: "Habin Paik 백하빈" itself is centred, */
   .wordmark .back-ico {                            /* and the back arrow hangs to its left */
