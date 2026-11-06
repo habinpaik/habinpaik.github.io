@@ -935,11 +935,13 @@ figure.ph.margin-left, figure.ph.margin-right { width: 12rem; margin: var(--s4) 
 :root { --link-hover: #fff; }
 a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .foot-mail)) {
   text-decoration: none;
-  padding: 0 0.12em; margin: 0 -0.12em;   /* the box reaches a hair past the letters; the text doesn't move */
+  /* the box reaches a hair past the letters on every side -- above the capitals, below the
+     descenders -- so the fill rises from under the whole word to over it; the text doesn't move */
+  padding: 0.1em 0.12em 0.08em; margin: 0 -0.12em;
   -webkit-box-decoration-break: clone; box-decoration-break: clone;   /* a link over two lines gets a box on each */
   background-image: linear-gradient(var(--crimson), var(--crimson)), linear-gradient(var(--crimson), var(--crimson));   /* the fill, and a crimson hairline underline */
   background-repeat: no-repeat;
-  background-position: 0 100%, 0.12em 100%;
+  background-position: 0 100%, 0.12em calc(100% - 0.08em);   /* the underline stays where it was */
   background-size: 100% 0, calc(100% - 0.24em) 1px;
   transition: background-size .45s cubic-bezier(.45, 0, .25, 1), color .45s ease;   /* rises from the underline, unhurried */
 }
@@ -1318,7 +1320,7 @@ main.shelf-end { padding-bottom: 0; }
    Korean headline (or a box's one label) gets the text links' crimson -- it rises from the bottom
    behind the letters, a hair wider than them, one box per line, and the letters turn white */
 .kh {
-  padding: 0 0.12em; margin: 0 -0.12em;
+  padding: 0.1em 0.12em 0.08em; margin: 0 -0.12em;   /* a hair past the letters on every side */
   -webkit-box-decoration-break: clone; box-decoration-break: clone;
   background: linear-gradient(var(--crimson), var(--crimson)) no-repeat 0 100% / 100% 0;
   transition: background-size .45s cubic-bezier(.45, 0, .25, 1), color .45s ease;

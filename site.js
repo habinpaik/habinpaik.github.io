@@ -199,7 +199,7 @@
     /* down to the first thing under it: on phones the address line right under the mail (it runs the
        full width); on wider screens the copyright, which sits under the dial on the right */
     var bot = phone ? Math.min.apply(null, below.map(function (r) { return r.t; })) - 4
-                    : (below.length ? below[below.length - 1].t - 8 : mail.b);
+                    : (below.length ? below[below.length - 1].t - 20 : mail.b);   /* --s4 clear of the copyright */
     var colR = hr.width;
     return { keep: keep, top: top, bot: bot, cy: (top + bot) / 2, colR: colR,
              cx0: phone ? (mail.r + colR) / 2 : colR };   /* phones: middle of the room beside the mail; wider: as far right as it goes */
