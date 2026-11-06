@@ -404,7 +404,7 @@ p.dek.jc-dek { margin: 0 0 var(--sec-gap); opacity: 0; transition: opacity 2.3s 
 .hero-on .nav a[aria-current="page"]::after { background: #fff; }
 
 /* the leading top block (home) shares the plain <p> rule */
-.lead { padding-top: var(--s7); padding-bottom: var(--s7); }
+.lead { padding-top: calc(var(--s6) + 1px); padding-bottom: var(--s7); }   /* the same top gap as the other pages' main column (+1px: the bar stops 1px into the page) */
 .bio { margin-bottom: var(--s7); }
 
 /* Home: the opener, then "Engineer, Physician, Journalist." and the rest, all one run of text --
