@@ -987,7 +987,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
    mail button, clocks (Seoul / LA / New York), then the address with the copyright at its right. */
 .site-foot {
   margin-top: 0;
-  background: var(--brand); color: var(--stone);   /* every word in the footer grey */
+  background: var(--paper); color: var(--stone);   /* no ground of its own: set apart by the line and shade alone; every word grey */
   border-top: 1px solid var(--line);             /* a line to set it apart from the page above */
   background-image: var(--shade-light); background-repeat: no-repeat;   /* and the light shade just under it, as every other edge below a page's top */
 }
@@ -1003,7 +1003,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 .foot-side > .clocks { grid-column: 1 / -1; grid-row: 1; }
 .foot-side > .foot-contact { grid-column: 1; grid-row: 2;
   /* mail box -> address: --s5, box edge to the capitals' top (0.26em above them in the line) */
-  margin-top: calc(var(--s5) - 0.26em); }
+  margin-top: calc(var(--fg) - 0.26em); }   /* the same gap as above the time and below the last line */
 .foot-copy { grid-column: 2; grid-row: 2; justify-self: end; align-self: end; white-space: nowrap; }   /* level with the last address line */
 
 /* mail, right under the Seoul time: a plain rectangle, its text the size of "Always open" */
@@ -1073,7 +1073,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
    1) Seoul -- the time large (twice the body, regular weight), then the weekday
       (Thursday) small, then "in Seoul" small and grey
    2) New York, California, London, Beijing -- the city small and grey, the time at body size */
-.clocks { margin-top: -0.33em; }   /* the space above the figures in Newsreader: the top gap then reads as --fg */
+.clocks { margin-top: -0.3em; }   /* the space above the figures in Newsreader: the top gap then reads as --fg */
 .clocks p { margin: 0; }
 .clocks .city {
   font-family: var(--sans); font-feature-settings: normal; font-size: var(--t-small);
