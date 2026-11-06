@@ -51,8 +51,8 @@
   --brand-deep: #424245;   /* 같은 계열의 진한 회색: 본문 링크 */
   /* two shades only, each laid just under a top edge:
      strong -- the top edge of each page only (under the menu, or where the page meets the photo
-     above it); light -- the footer's top line, -- section lines, the
-     "I inquire..." band, the mail box, the story box, portfolio cards */
+     above it); light -- everything else: section lines and the openers' lines, the footer's top
+     line, the mail box, story boxes, portfolio cards, shelves */
   --shade-strong: linear-gradient(to bottom, rgba(0,0,0,.14), rgba(0,0,0,0) 12px);
   --shade-light:  linear-gradient(to bottom, rgba(0,0,0,.07), rgba(0,0,0,0) var(--s2));   /* a short fade, 8px */
   --sec-gap: calc(1.5625rem - 0.5em);   /* above a section line: last baseline -> line = 25px (0.5em of the line sits under the baseline) */
