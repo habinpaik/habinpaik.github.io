@@ -45,7 +45,6 @@
 :root {
   --paper: #FFFFFF;   /* NYT 페이지 배경 */
   --ink:   #1A1A1A;
-  --dark:  #141414;
   --stone: #6B6B66;
   --line:  #DFDFDF;   /* NYT 광고 띠 경계선 */
   --brand:      #F8F8F8;   /* NYT 광고 띠 배경: 배너·표지책장 배경 */
@@ -59,7 +58,12 @@
   --sec-gap: calc(1.5625rem - 0.5em);   /* above a section line: last baseline -> line = 25px (0.5em of the line sits under the baseline) */
   --inset: var(--s4);   /* box inset, edge -> letters on every side: the paragraph gap; a step less on phones */
   --crimson: #862633;   /* 고려대 교색 Crimson, PANTONE 202C */
-  --crimson-light: color-mix(in srgb, var(--crimson) 35%, #fff);   /* the same crimson lightened: hover on dark photos, hover bars */
+  --crimson-light: color-mix(in srgb, var(--crimson) 35%, #fff);
+  /* everything else is one of these four, so the page keeps a short palette */
+  --on-dark: rgba(255,255,255,.85);   /* second-rank words on photos and dark grounds (dates, English heads) */
+  --veil:    var(--veil);         /* darkening behind words on photos; halos */
+  --shadow:  var(--shadow);         /* a cast shadow (books, tooltips) */
+  --tip-bg:  var(--tip-bg);       /* tooltips and the link address */   /* the same crimson lightened: hover on dark photos, hover bars */
   --link:  inherit;   /* text links take the colour of the words around them, with a hairline underline; crimson only on hover */
   --hero-bg: var(--brand-deep);   /* Home 상단 이름 영역 + 그때의 메뉴 배경 */
 
@@ -75,7 +79,7 @@
   --t-title: clamp(1.18rem, 1.06rem + 0.62vw, 1.58rem);
   /* subject colours (Research bookshelf): filter buttons, cover tags and spines all use these */
   --c-meche: #7a5a2b; --c-phys: #1f5a63; --c-math: #5a3d6b;
-  --c-gensci: #2f4058; --c-classics: #4a5d40; --c-journalism: #6d2b2f;
+  --c-gensci: #2f4058; --c-classics: #4a5d40; --c-journalism: var(--crimson);
   --t-display: clamp(1.3rem, 2.6vw, 1.75rem);   /* identity line */
   --t-name: clamp(1.75rem, 0.75rem + 4.6vw, 3.5rem);   /* big name = clocks: 56px on desktop, ~29–31px on phones */
 
@@ -191,7 +195,7 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
   .hero-on .nav a:not([aria-current="page"]):hover::after,
   .hero-on .wordmark:not([aria-current="page"]):hover::after,
   .j-page.cover-on .nav a:not([aria-current="page"]):hover::after,
-  .j-page.cover-on .wordmark:not([aria-current="page"]):hover::after { background: rgba(255,255,255,.85); }
+  .j-page.cover-on .wordmark:not([aria-current="page"]):hover::after { background: var(--on-dark); }
 }
 
 /* ---------- Hero (HOME ONLY) ----------
@@ -283,9 +287,9 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
 }
 .jc-line.white { color: #fff; }
 .jc-line.black { color: #000; clip-path: inset(100%); }
-.jc-line.black { text-shadow: 0 0 .35em rgba(255,255,255,.55), 0 0 .08em rgba(255,255,255,.5); }   /* dark words: a light halo */
-.jc-line.black.on-dark { text-shadow: 0 0 .35em rgba(0,0,0,.6), 0 0 .08em rgba(0,0,0,.5); }      /* lighter words: a dark halo */
-.jc-line.white { text-shadow: 0 0 .5em rgba(0,0,0,.55), 0 0 .1em rgba(0,0,0,.4); }   /* regular weight: a firmer dark halo keeps it clear on pale photos */
+.jc-line.black { text-shadow: 0 0 .35em rgba(255,255,255,.55), 0 0 .08em rgba(255,255,255,.55); }   /* dark words: a light halo */
+.jc-line.black.on-dark { text-shadow: 0 0 .35em var(--veil), 0 0 .08em var(--veil); }      /* lighter words: a dark halo */
+.jc-line.white { text-shadow: 0 0 .5em var(--veil), 0 0 .1em var(--veil); }   /* regular weight: a firmer dark halo keeps it clear on pale photos */
 .j-cover.open .jc-line { opacity: 1; }
 /* the opener on the cover keeps the opener's own style -- the body face at the band's size, regular
    weight -- in white, centred, no wider than the text column */
@@ -318,8 +322,8 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
 /* caption in the corner of the taller photo */
 .jc-cap {
   position: absolute; z-index: 2; margin: 0; max-width: 40%; pointer-events: none;
-  font-family: var(--sans); font-size: var(--t-small); line-height: 1.4; color: rgba(255,255,255,.9);
-  text-shadow: 0 0 .5em rgba(0,0,0,.6); opacity: 0; transition: opacity 2.3s cubic-bezier(.37,0,.63,1);
+  font-family: var(--sans); font-size: var(--t-small); line-height: 1.4; color: var(--on-dark);
+  text-shadow: 0 0 .5em var(--veil); opacity: 0; transition: opacity 2.3s cubic-bezier(.37,0,.63,1);
 }
 .jc-cap b { font-weight: 600; color: #fff; }
 .j-cover.open .jc-cap { opacity: 1; }   /* the arrow (64px, 12px off the bottom) plus 12px above it */
@@ -342,7 +346,7 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
   backdrop-filter: none; -webkit-backdrop-filter: none;
 }
 .j-page.cover-on .wordmark,
-.j-page.cover-on .nav a { color: rgba(255,255,255,.85); }
+.j-page.cover-on .nav a { color: var(--on-dark); }
 .j-page.cover-on .nav a[aria-current="page"] { color: #fff; }
 .j-page.cover-on .nav a[aria-current="page"]::after { background: #fff; }
 
@@ -375,10 +379,10 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
 }
 /* hidden (space kept, so the menu doesn't shift) until the page has covered the big name */
 .hero-on:not(.named) .wordmark { opacity: 0; visibility: hidden; }
-.hero-on .wordmark { color: rgba(255,255,255,.85); }
+.hero-on .wordmark { color: var(--on-dark); }
 .hero-on .wordmark[aria-current="page"] { color: #fff; }
 .hero-on .wordmark[aria-current="page"]::after { background: #fff; }
-.hero-on .nav a { color: rgba(255,255,255,.85); }
+.hero-on .nav a { color: var(--on-dark); }
 .hero-on .nav a[aria-current="page"] { color: #fff; }
 .hero-on .nav a[aria-current="page"]::after { background: #fff; }
 
@@ -456,7 +460,7 @@ main > p:first-child { margin-bottom: var(--sec-gap); }
 .entry h3 { font-family: var(--serif-ko); font-size: var(--t-title); font-weight: 400; line-height: 1.3; margin: 0; letter-spacing: -0.02em; word-break: keep-all; }
 .entry h3 a { color: var(--ink); text-decoration: none; }
 .entry h3 a:hover { color: #fff; }
-.shelf-note { margin: calc(var(--s3) - var(--s4)) 0 0; font-family: var(--sans); font-size: var(--t-small); line-height: 1.6; color: #2E3A46; }
+.shelf-note { margin: calc(var(--s3) - var(--s4)) 0 0; font-family: var(--sans); font-size: var(--t-small); line-height: 1.6; color: var(--ink); }
 .shelf-note a { color: inherit; }
 .entry .date { color: var(--stone); font-size: var(--t-small); white-space: nowrap; }
 .entry .desc { margin: var(--s2) 0 0; }
@@ -542,7 +546,7 @@ main > p.dek:first-child + section { margin-top: 0; }   /* the opener is larger:
   position: absolute; bottom: 0; z-index: 0;
   left: calc(var(--gutter) - 20px); right: calc(var(--gutter) - 20px);
   height: 8px; border-radius: 2px;
-  background: linear-gradient(#E8DAC4, #DCCAAE);
+  background: linear-gradient(#E8DAC4, #CDBDA3);
   border: 1px solid #CDBDA3;
 }
 /* 더미: 아래부터 위로 쌓임 */
@@ -550,11 +554,11 @@ main > p.dek:first-child + section { margin-top: 0; }   /* the opener is larger:
 .pile > .spine:last-child { margin-top: 0; }   /* 맨 위 책은 올리지 않음 → 위쪽 경계에 안 잘림 */
 /* 눕힌 책: 옆면(책등)이 보이는 띠. 채움 없이 테두리와 글자만 */
 .spine {
-  --cat: #888; --rot: 0deg;
+  --cat: var(--stone); --rot: 0deg;
   display: flex; align-items: center; box-sizing: border-box;
   position: relative; z-index: 1;
   background: var(--cat);             /* filled with the subject colour */
-  border: 1px solid rgba(255, 255, 255, .75);   /* thin light outline: stacked books stay distinct */
+  border: 1px solid var(--on-dark);   /* thin light outline: stacked books stay distinct */
   border-radius: 5px;
   margin-top: -1px;                 /* 위아래 책 테두리가 한 줄로 겹침 (두 겹으로 두꺼워지지 않게) */
   padding: 0 10px;
@@ -580,28 +584,28 @@ main > p.dek:first-child + section { margin-top: 0; }   /* the opener is larger:
 .spine-nav { position: absolute; bottom: calc(var(--s4) + 0.9rem); right: calc(var(--gutter) + 0.6rem); display: flex; gap: var(--s2); z-index: 3; }
 .spine-nav button {
   width: 2.1rem; height: 2.1rem; border-radius: 999px;
-  border: 1px solid rgba(0,0,0,.12);
+  border: 1px solid var(--line);
   background: rgba(255,255,255,.55);
   -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
   color: var(--ink); cursor: pointer; font-size: 0.9rem; line-height: 1;
   display: flex; align-items: center; justify-content: center;
   transition: background .15s ease;
 }
-.spine-nav button:hover { background: rgba(255,255,255,.85); }
+.spine-nav button:hover { background: var(--on-dark); }
 
 /* hover tooltip near cursor */
 .spine-tip {
   position: fixed; z-index: 100; pointer-events: none;
   max-width: 16rem; padding: var(--s2) var(--s3);
-  background: rgba(20,20,20,.92); color: #fff; border-radius: 4px;
+  background: var(--tip-bg); color: #fff; border-radius: 4px;
   font-family: var(--sans); font-size: var(--t-small); line-height: 1.4;
   opacity: 0; transition: opacity .12s ease;
-  box-shadow: 0 4px 14px rgba(0,0,0,.25);
+  box-shadow: 0 4px 14px var(--shadow);
 }
 .spine-tip.show { opacity: 1; }
 .spine-tip .tt-title { font-weight: 700; display: block; margin-bottom: 2px; }
-.spine-tip .tt-en { color: #C9C7C0; font-style: italic; }
-.spine-tip .tt-meta { color: #C9C7C0; }
+.spine-tip .tt-en { color: var(--on-dark); font-style: italic; }
+.spine-tip .tt-meta { color: var(--on-dark); }
 
 /* ---------- Cover shelf: books at their natural proportions on a shelf ----------
    Covers keep their own aspect ratio (only height is normalised), standing
@@ -614,18 +618,18 @@ main > p.dek:first-child + section { margin-top: 0; }   /* the opener is larger:
   position: relative;
 }
 .cover-shelf::-webkit-scrollbar { height: 6px; }
-.cover-shelf::-webkit-scrollbar-thumb { background: #CFC9BB; border-radius: 3px; }
+.cover-shelf::-webkit-scrollbar-thumb { background: #CDBDA3; border-radius: 3px; }
 .cover-shelf .bk { flex: 0 0 auto; text-decoration: none; display: block; transition: transform .15s ease; }
 .cover-shelf .bk img {
   height: 130px; width: auto; display: block;
-  box-shadow: 0 2px 5px rgba(0,0,0,.25);
+  box-shadow: 0 2px 5px var(--shadow);
 }
 .cover-shelf .bk:hover { transform: translateY(-5px); }
 /* the shelf board the books stand on */
 .cover-shelf-board {
   height: 10px; border-radius: 2px;
-  background: linear-gradient(#C9B79C, #A9906F);
-  box-shadow: 0 2px 5px rgba(0,0,0,.22);
+  background: linear-gradient(#CDBDA3, #A9906F);
+  box-shadow: 0 2px 5px var(--shadow);
   margin-top: -4px;
 }
 @media (max-width: 40rem) { .cover-shelf .bk img { height: 105px; } }
@@ -653,7 +657,7 @@ main > p.dek:first-child + section { margin-top: 0; }   /* the opener is larger:
 .shelf-boards { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
 .shelf-boards .board {
   position: absolute; left: -20px; right: -20px;
-  background: linear-gradient(#E8DAC4, #DCCAAE);
+  background: linear-gradient(#E8DAC4, #CDBDA3);
   border: 1px solid #CDBDA3;
 }
 .shelf .book { position: relative; z-index: 1; }
@@ -670,13 +674,13 @@ main > p.dek:first-child + section { margin-top: 0; }   /* the opener is larger:
 .book[data-subject="Math"]        { --cat: var(--c-math); }
 .book[data-subject="General Sci"] { --cat: var(--c-gensci); }
 .book .face { position: relative; display: block; }
-.book img { width: 100%; height: auto; display: block; box-shadow: 0 2px 5px rgba(0,0,0,.22); }
+.book img { width: 100%; height: auto; display: block; box-shadow: 0 2px 5px var(--shadow); }
 .book .tag {   /* 위 분류 버튼과 같은 모양, 반투명, 표지 모서리 밖으로 반쯤 걸침 */
   position: absolute; top: 0; left: 0;
   transform: translateY(-35%);   /* 왼쪽 끝은 표지 왼쪽 선에 맞춤, 위로만 반쯤 걸침 */
   font-family: var(--sans); font-size: var(--t-small); font-weight: 400; line-height: 1.6;
   color: #fff; border: 1px solid transparent;
-  background: color-mix(in srgb, var(--cat, #666) 88%, transparent);
+  background: color-mix(in srgb, var(--cat, var(--stone)) 88%, transparent);
   -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
   padding: 0 10px; border-radius: 999px;
 }
@@ -689,17 +693,17 @@ main > p.dek:first-child + section { margin-top: 0; }   /* the opener is larger:
 .shelf-more button {
   font-family: var(--sans); font-size: var(--t-small); font-weight: 600;
   color: var(--ink); background: transparent;
-  border: 1px solid #CFC9BB; border-radius: 999px;
+  border: 1px solid #CDBDA3; border-radius: 999px;
   padding: var(--s2) var(--s4); cursor: pointer; transition: background .15s ease;
 }
-.shelf-more button:hover { background: #E3DFD3; }
+.shelf-more button:hover { background: #E8DAC4; }
 .shelf-more button[hidden] { display: none; }
 
 .shelf-toast {
   position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%);
   z-index: 200;
   font-family: var(--sans); font-weight: 700; font-size: 1.5rem;
-  color: #fff; background: rgba(20,20,20,.9);
+  color: #fff; background: var(--tip-bg);
   padding: var(--s4) var(--s6); border-radius: 999px;
   opacity: 0; transition: opacity .2s ease; pointer-events: none;
 }
@@ -754,7 +758,7 @@ figure.ph.overlay figcaption {
   position: absolute; left: 0; right: 0; bottom: 0; margin: 0;
   color: #fff; padding: var(--s5) var(--s4) var(--s3);
   font-size: var(--t-body); line-height: 1.5;   /* the Portfolio card-title size */
-  background: linear-gradient(to top, rgba(0,0,0,.72), rgba(0,0,0,0));
+  background: linear-gradient(to top, rgba(0,0,0,.82), rgba(0,0,0,0));
 }
 
 /* two clickable overlay cards side by side: image + title on it, links out */
@@ -779,7 +783,7 @@ figure.ph.overlay figcaption {
 }
 .overlay-card .cap .meta {
   display: block; margin-top: var(--s2); text-box-trim: trim-end; text-box-edge: cap alphabetic;
-  font-family: var(--sans); font-size: var(--t-small); color: rgba(255,255,255,.8);
+  font-family: var(--sans); font-size: var(--t-small); color: var(--on-dark);
   word-break: keep-all;
 }
 @media (max-width: 34rem) { .overlay-duo { grid-template-columns: 1fr; } }
@@ -855,12 +859,12 @@ figure.ph.margin-left, figure.ph.margin-right { width: 12rem; margin: var(--s4) 
 /* 1. photo, headline on it */
 .feat-photo { position: relative; display: block; overflow: hidden; background: var(--line); }
 .feat-photo img { display: block; width: 100%; aspect-ratio: 2 / 1; object-fit: cover; filter: grayscale(1); }
-.feat-photo::after { content: ""; position: absolute; inset: 45% 0 0; background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,.6)); pointer-events: none; }
+.feat-photo::after { content: ""; position: absolute; inset: 45% 0 0; background: linear-gradient(to bottom, rgba(0,0,0,0), var(--veil)); pointer-events: none; }
 .feat-head {
   position: absolute; z-index: 1; left: 50%; bottom: var(--s4); transform: translateX(-50%);   /* a photo story keeps more room under its headline than a box */
   width: min(36rem, 86%); text-align: center; color: #fff; text-wrap: balance;
 }
-.feat-head .en { color: rgba(255,255,255,.85); }
+.feat-head .en { color: var(--on-dark); }
 .feat-head { z-index: 2; }
 
 /* Boxes tucked behind the story above them, centred and each narrower than the one above, as if
@@ -947,7 +951,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 .link-tip {
   position: fixed; left: 0; top: 0; z-index: 100; pointer-events: none;
   font-family: var(--sans); font-size: 0.75rem; line-height: 1.3; letter-spacing: 0;
-  color: #fff; background: rgba(20, 20, 20, .88);
+  color: #fff; background: var(--tip-bg);
   padding: 0.3rem 0.5rem; border-radius: 4px;
   white-space: nowrap; max-width: 60vw; overflow: hidden; text-overflow: ellipsis;
   opacity: 0; transition: opacity .12s ease;
@@ -982,7 +986,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 .clock-mail { margin-top: var(--s2) !important; display: flex; flex-wrap: nowrap; align-items: baseline; column-gap: calc(var(--t-small) * 0.67); white-space: nowrap; }   /* gap = the box's inner left padding: "open" -> edge = edge -> "d" */   /* a short line, small and grey like "in Seoul", then the mail -- always on one line */
 .foot-mail {
   display: inline-block;
-  border: 1px solid #C9C9C6; border-radius: 0;
+  border: 1px solid var(--line); border-radius: 0;
   /* the same visible gap, 0.65em, on all four sides, measured from the capitals' top and the baseline
      (Newsreader sits high in its line box, hence more padding above than below) */
   padding: 0.5em 0.67em 0.245em;
@@ -1063,7 +1067,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   font-weight: 400; font-size: calc(var(--t-body) * 2); line-height: 1.3;
 }
 .clock-main .dow { font-size: var(--t-small); letter-spacing: 0; }
-.foot-copy { margin: 0; font-family: var(--serif); font-weight: 600; font-size: var(--t-body); color: var(--stone); }   /* same grey as the city names */
+.foot-copy { margin: 0; font-family: var(--serif); font-weight: 400; font-size: var(--t-body); color: var(--stone); }   /* same grey as the city names */
 .foot-copy .ko { font-weight: 600; }
 
 @media (max-width: 40rem) {
@@ -1089,9 +1093,9 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 a:focus-visible { outline: 2px solid var(--crimson); outline-offset: 3px; }
 
 /* 디자인 색 배경의 표지 책장 위 요소 */
-.shelf-panel .book .t { color: #2E3A46; }
-.shelf-panel .shelf-more button { color: var(--ink); border-color: rgba(0,0,0,.25); background: transparent; }
-.shelf-panel .shelf-more button:hover { background: rgba(255,255,255,.35); }
+.shelf-panel .book .t { color: var(--ink); }
+.shelf-panel .shelf-more button { color: var(--ink); border-color: var(--shadow); background: transparent; }
+.shelf-panel .shelf-more button:hover { background: rgba(255,255,255,.55); }
 
 /* 책은 링크가 아니므로 일반 커서 */
 .spine, .book { cursor: default; }
@@ -1113,7 +1117,7 @@ main.shelf-end { padding-bottom: 0; }
   font-family: var(--sans); font-size: var(--t-small); line-height: 1.6;
   padding: 2px 12px; border-radius: 999px; cursor: pointer;
   background: var(--paper); color: var(--cat, var(--stone));
-  border: 1px solid color-mix(in srgb, var(--cat, #999) 45%, transparent);
+  border: 1px solid color-mix(in srgb, var(--cat, var(--stone)) 45%, transparent);
   transition: background .15s ease, color .15s ease, border-color .15s ease;
 }
 .filter-btn:hover { border-color: var(--cat, var(--ink)); }
@@ -1149,13 +1153,13 @@ main.shelf-end { padding-bottom: 0; }
   display: flex; flex-direction: column;
   scroll-snap-align: start;
   color: var(--ink); text-decoration: none;
-  background: #F2F2F0;
+  background: var(--brand);
 }
 .card-img { display: block; aspect-ratio: 3 / 2; overflow: hidden; background: var(--line); }
 .card-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s ease; }
 .card:hover .card-img img { transform: scale(1.04); }
 .card-txt { flex: 1; display: flex; flex-direction: column; padding: calc(var(--inset) + 1px) var(--inset) var(--inset); min-height: 11rem; background: var(--shade-light) no-repeat; }   /* 3.99px: the space above the title's capitals */   /* light shade under the photo's edge */
-.card-date { font-family: var(--sans); font-size: var(--t-small); line-height: 1.5; color: var(--stone); }
+.card-date { font-family: var(--sans); font-size: var(--t-small); line-height: 1.5; color: var(--crimson); }
 .card-title {
   margin-top: 0; text-box-trim: trim-start; text-box-edge: cap alphabetic;
   font-family: var(--serif); font-size: var(--t-body); line-height: 1.5; letter-spacing: -0.01em;
@@ -1165,8 +1169,8 @@ main.shelf-end { padding-bottom: 0; }
 .card-date { white-space: nowrap; line-height: 18px; }   /* one line as tall as a tag, so the two sit level */
 .card-tags { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px; }
 .chip {
-  font-family: var(--sans); font-size: 0.75rem; line-height: 1.5; color: rgba(0, 0, 0, .5);
-  background: rgba(0, 0, 0, .05); padding: 0 8px;
+  font-family: var(--sans); font-size: 0.75rem; line-height: 1.5; color: var(--stone);
+  background: var(--paper); padding: 0 8px;
 }
 .rail-foot { display: flex; align-items: center; gap: var(--s2); margin-top: var(--s4); padding-right: var(--gutter); }
 .rail-bar { position: relative; flex: 1; height: 1px; background: var(--line); }
@@ -1176,7 +1180,7 @@ main.shelf-end { padding-bottom: 0; }
   color: var(--ink); display: none;
 }
 .rail-btn svg { display: block; width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-.rail-btn[disabled] { color: #C9C9C6; cursor: default; }
+.rail-btn[disabled] { color: var(--line); cursor: default; }
 @media (hover: hover) and (pointer: fine) { .rail-btn { display: block; } }   /* phones swipe instead */
 
 /* Portfolio: the cards no longer scroll sideways -- they fill the text column in rows and the
@@ -1231,11 +1235,11 @@ main.shelf-end { padding-bottom: 0; }
 .blur-card .cap::before {   /* the frosted band: blur + a little dark, fading out upward */
   content: ""; position: absolute; inset: 0; z-index: -1;
   backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-  background: linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,.15));
+  background: linear-gradient(to top, var(--veil), rgba(0,0,0,.14));
   -webkit-mask-image: linear-gradient(to top, #000 55%, transparent);
           mask-image: linear-gradient(to top, #000 55%, transparent);
 }
-.blur-card .cap .meta { display: block; font-family: var(--sans); font-size: var(--t-small); color: rgba(255,255,255,.8); }
+.blur-card .cap .meta { display: block; font-family: var(--sans); font-size: var(--t-small); color: var(--on-dark); }
 .blur-card .cap .title {   /* body size, in the serif (myeongjo) at the headline weight */
   display: block;
   font-family: var(--serif-ko); font-size: var(--t-body); font-weight: 600; line-height: 1.3;
@@ -1244,9 +1248,9 @@ main.shelf-end { padding-bottom: 0; }
 /* the English headline under the Korean one: room for up to three lines */
 .blur-card .cap .en {
   display: block; margin-top: var(--s2); text-box-trim: trim-end; text-box-edge: cap alphabetic;
-  font-family: var(--sans); font-size: var(--t-small); line-height: 1.5; color: rgba(255,255,255,.78);
+  font-family: var(--sans); font-size: var(--t-small); line-height: 1.5; color: var(--on-dark);
 }
-.blur-card .cap .en .date, .blur-card .cap .en .dash { color: rgba(255,255,255,.9); }   /* date leads the English line */
+.blur-card .cap .en .date, .blur-card .cap .en .dash { color: var(--on-dark); }   /* date leads the English line */
 .blur-card.no-img .cap::before { display: none; }   /* no photo: plain deep grey */
 @media (max-width: 23rem) { .foot-mail { font-size: var(--t-small); } }   /* very narrow phones: still one line */
 
@@ -1266,7 +1270,7 @@ main.shelf-end { padding-bottom: 0; }
 .ebox + .ebox { margin-top: calc(-1 * var(--s3)); }   /* overlaps the box above */
 .ebox:nth-child(2) { margin-left: var(--s4); z-index: 1; }
 .ebox:nth-child(3) { margin-left: calc(2 * var(--s4)); z-index: 2; }
-.ebox .ekick { display: block; margin-bottom: var(--s1); font-family: var(--sans); font-size: var(--t-small); color: var(--stone); transition: color .45s ease; }   /* which race, small, above the headline */
+.ebox .ekick { display: block; margin-bottom: var(--s1); font-family: var(--sans); font-size: var(--t-small); color: var(--crimson); transition: color .45s ease; }   /* which race, small, above the headline */
 .ebox h3 { margin: 0; font-family: var(--serif-ko); font-size: var(--t-body); font-weight: 600; line-height: 1.3; letter-spacing: -0.0125em; word-break: keep-all; }
 .ebox h3 a { color: var(--ink); transition: color .45s ease; }
 .ebox .go { display: inline-block; margin-top: var(--s1); font-family: var(--sans); font-size: var(--t-small); color: var(--stone); transition: color .45s ease; }
