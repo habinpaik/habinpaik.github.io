@@ -407,18 +407,11 @@ p.dek.jc-dek { margin: 0 0 var(--sec-gap); opacity: 0; transition: opacity 2.3s 
 .lead { padding-top: var(--s7); padding-bottom: var(--s7); }
 .bio { margin-bottom: var(--s7); }
 
-/* Home: the top block ends the way a section does -- 25px under its last line, a hairline with the
-   light shade -- and the next part opens with no title: the one-sentence opener (.dek) takes the
-   title's place, at the title's distance (8px of shade, then 50px to its capitals), and the
-   paragraphs run on from it as on the Portfolio page */
+/* Home: the opener, then "Engineer, Physician, Journalist." and the rest, all one run of text --
+   no line between the top block and the paragraphs that follow */
 .lead { padding-bottom: 0; }
-.lead > p:last-child { margin-bottom: 0; }
-.lead + main { padding-top: var(--sec-gap); }
-p.dek.opener {
-  border-top: 1px solid var(--line); background: var(--shade-light) no-repeat;
-  padding-top: calc(var(--s2) + 3.125rem);
-  text-box-trim: trim-start; text-box-edge: cap alphabetic;   /* so the padding reaches the capitals */
-}
+.lead + main { padding-top: var(--s4); }   /* the last line above runs on into the paragraphs below at the paragraph gap */
+.lead > p.dek { margin-bottom: var(--sec-gap); }   /* as the openers on the other pages */
 /* a page's one-sentence opener (.dek), at the band's size in the body face -- one sentence only,
    standing as a section of its own (after the NYT's article deks) */
 p.dek {
