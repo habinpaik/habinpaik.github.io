@@ -987,7 +987,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
    mail button, clocks (Seoul / LA / New York), then the address with the copyright at its right. */
 .site-foot {
   margin-top: 0;
-  background: var(--brand); color: var(--ink);   /* light grey, the same as the Home banner */
+  background: var(--brand); color: var(--stone);   /* every word in the footer grey */
   border-top: 1px solid var(--line);             /* a line to set it apart from the page above */
   background-image: var(--shade-light); background-repeat: no-repeat;   /* and the light shade just under it, as every other edge below a page's top */
 }
@@ -1080,7 +1080,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   color: var(--stone);
 }
 .clocks time {
-  font-family: var(--serif); color: var(--ink); letter-spacing: -0.01em;   /* the body's own tracking */
+  font-family: var(--serif); color: var(--stone); letter-spacing: -0.01em;   /* the body's own tracking; grey, as all the footer's words */
   font-feature-settings: "lnum" 1, "pnum" 1, "kern" 1;               /* natural-width lining figures */
 }
 .clock-main { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 0.5rem; }
