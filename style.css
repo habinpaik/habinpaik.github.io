@@ -50,8 +50,8 @@
   --brand:      #F8F8F8;   /* NYT 광고 띠 배경: 배너·표지책장 배경 */
   --brand-deep: #424245;   /* 같은 계열의 진한 회색: 본문 링크 */
   /* two shades only, each laid just under a top edge:
-     strong -- the top edge of each page (under the menu, or where the page meets the photo above
-     it) and the footer's top line; light -- section lines, the
+     strong -- the top edge of each page only (under the menu, or where the page meets the photo
+     above it); light -- the footer's top line, -- section lines, the
      "I inquire..." band, the mail box, the story box, portfolio cards */
   --shade-strong: linear-gradient(to bottom, rgba(0,0,0,.14), rgba(0,0,0,0) 12px);
   --shade-light:  linear-gradient(to bottom, rgba(0,0,0,.07), rgba(0,0,0,0) var(--s2));   /* a short fade, 8px */
@@ -302,8 +302,12 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
   padding-top: var(--s6); padding-bottom: 0;   /* then rests a paragraph gap (the dek's own margin) above the first paragraph, as on Portfolio */
   pointer-events: none;
 }
-p.dek.jc-dek { margin: 0 0 var(--sec-gap); opacity: 0; transition: opacity 2.3s cubic-bezier(.37,0,.63,1), color .4s ease, text-shadow .4s ease; }
+p.dek.jc-dek { opacity: 0; transition: opacity 2.3s cubic-bezier(.37,0,.63,1), color .4s ease, text-shadow .4s ease; }
 .jc-hold.open .jc-dek { opacity: 1; }
+.jc-dek-wrap.on-cover .jc-dek { border-bottom-color: transparent; }
+.jc-dek-wrap.on-cover .jc-dek::after { opacity: 0; }   /* the line and shade show once it is over the page */
+.jc-dek { transition: opacity 2.3s cubic-bezier(.37,0,.63,1), color .4s ease, text-shadow .4s ease, border-color .4s ease; }
+.jc-dek::after { transition: opacity .4s ease; }
 .jc-dek-wrap.on-cover .jc-dek { color: #fff; text-shadow: 0 0 .5em var(--veil), 0 0 .1em var(--veil); }
 .jc-hold + main { padding-top: 0; }
 .jc-hold + main::before { display: none; }   /* the cover's own edge carries the strong shade instead: */
@@ -411,13 +415,19 @@ p.dek.jc-dek { margin: 0 0 var(--sec-gap); opacity: 0; transition: opacity 2.3s 
    no line between the top block and the paragraphs that follow */
 .lead { padding-bottom: 0; }
 .lead + main { padding-top: var(--s4); }   /* the last line above runs on into the paragraphs below at the paragraph gap */
-.lead > p.dek { margin-bottom: var(--sec-gap); }   /* as the openers on the other pages */
 /* a page's one-sentence opener (.dek), at the band's size in the body face -- one sentence only,
    standing as a section of its own (after the NYT's article deks) */
 p.dek {
   font-size: var(--t-display); font-weight: 400; line-height: 1.5; letter-spacing: -0.01em;
-  margin: 0 0 var(--s4);
+  /* every opener closes like a section: 25px under its last line (--sec-gap) a hairline with the light
+     shade, then 50px from the shade's end to the next line's capitals, as under a section title
+     (0.3em of a body line sits above its capitals) */
+  position: relative;
+  padding-bottom: var(--sec-gap); border-bottom: 1px solid var(--line);
 }
+p.dek, main > p.dek:first-child { margin: 0 0 calc(var(--s2) + 3.125rem - 0.265 * var(--t-body)); }
+p.dek::after { content: ""; position: absolute; left: 0; right: 0; top: 100%; height: var(--s2); background: var(--shade-light); pointer-events: none; }
+
 
 main { padding-block: var(--s6); }
 
@@ -480,7 +490,6 @@ hr.rule { border: 0; border-top: 1px solid var(--line); height: 0; margin: calc(
 
 /* centred closing line (portfolio) */
 main > p.epigraph:first-child { margin-bottom: var(--s3); }
-main > p.dek:first-child { margin-bottom: var(--sec-gap); }
 main > p.dek:first-child + section { margin-top: 0; }   /* the opener is larger: its own measure sets the 25px */   /* the opener is a section of its own: the same gap below it as between sections */   /* the Korean of the opener, right under it at body size */
 .epigraph {
   text-align: left; max-width: none;
@@ -980,7 +989,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   margin-top: 0;
   background: var(--brand); color: var(--ink);   /* light grey, the same as the Home banner */
   border-top: 1px solid var(--line);             /* a line to set it apart from the page above */
-  background-image: var(--shade-strong);   /* and the strong shade just under it */
+  background-image: var(--shade-light); background-repeat: no-repeat;   /* and the light shade just under it, as every other edge below a page's top */
 }
 /* Footer spacing uses exactly two sizes, measured on what you see (letters and the pill's edge):
    --fg (40px) for every small gap -- top, mail -> clocks, address -> copyright, bottom --
