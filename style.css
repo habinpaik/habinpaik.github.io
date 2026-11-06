@@ -652,14 +652,18 @@ main > p.dek:first-child + section { margin-top: 0; }   /* the opener is larger:
   position: relative;
 }
 /* 독서대: 줄마다 뒤에 깔리는 가로로 긴 직사각형 (JS가 행 위치를 재서 그림) */
-.shelf-boards { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+.shelf-boards { position: absolute; inset: 0; pointer-events: none; }   /* no stacking of its own: the ledge's lip can rise above the covers */
+.shelf-boards .board { z-index: 0; }
+/* the ledge's front lip, at the covers' feet: the light shade falls from there, drawn over the covers'
+   bottom edges (so where the two edges meet, the shade wins); the titles sit above it */
+.shelf-boards .board::after { content: ""; position: absolute; left: 0; right: 0; top: 100%; height: var(--s2); background: var(--shade-light); z-index: 2; }
 .shelf-boards .board {
   position: absolute; left: -20px; right: -20px;
   /* a reading ledge, as any top edge: a hairline, the light shade under it, the paper grey */
   background: var(--shade-light), var(--brand);
   border-top: 1px solid var(--line);
 }
-.shelf .book { position: relative; z-index: 1; }
+.shelf .book { position: relative; }   /* no stacking of its own: cover (1), lip shade (2), title (3) */
 .book { text-decoration: none; color: inherit; position: relative; }
 .book .cover { position: relative; }
 .book .cover img { position: relative; z-index: 1; }
@@ -683,7 +687,7 @@ main > p.dek:first-child + section { margin-top: 0; }   /* the opener is larger:
   -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
   padding: 0 10px; border-radius: 999px;
 }
-.book .t { display: block; margin-top: var(--s2); color: var(--stone); font-size: var(--t-small); line-height: 1.6; font-family: var(--sans); }
+.book .t { position: relative; z-index: 3; display: block; margin-top: var(--s2); color: var(--stone); font-size: var(--t-small); line-height: 1.6; font-family: var(--sans); }
 
 /* books past the first row start hidden; revealed downward by 더보기 */
 .book.is-hidden { display: none; }
