@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
-<link rel="stylesheet" href="style.css?v=20261107b">
+<link rel="stylesheet" href="style.css?v=20261107e">
 <script>
 /* Journalism cover, decided before anything else loads: which pair to show, and which size of
    photo this screen needs -- so those downloads start first, at the top of the page. */
@@ -68,7 +68,14 @@ f(); window.addEventListener('resize',f);})();
 <!-- Journalism only: fills the whole first screen, behind the menu bar.
      12 photos in a grid; a few seconds later one pair (e.g. morning / night) grows out of it,
      split at the cursor: the first photo left of it, the second right of it. Built by script. -->
+<div class="jc-hold">
 <div class="j-cover" aria-hidden="true"></div>
+<!-- the page's one-line opener: left-aligned in the text column, it floats in the middle of the screen
+     over the cover as the page scrolls, comes to rest just above the first paragraph and then goes
+     up with the page -->
+<div class="jc-edge" aria-hidden="true"></div>
+<div class="wrap jc-dek-wrap"><p class="dek jc-dek">Covering the campus, then editing the desk that covers it.</p></div>
+</div>
 
 <main class="wrap">
 
@@ -678,6 +685,7 @@ f(); window.addEventListener('resize',f);})();
     placeLine();
     cover.offsetWidth;
     cover.classList.add('open');
+    document.querySelector('.jc-hold').classList.add('open');
     open = true; intro = true;
     var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var start = performance.now();
@@ -743,5 +751,19 @@ f(); window.addEventListener('resize',f);})();
 })();
 </script>
 <script src="site.js?v=20261106n"></script>
+<script>
+/* the opener: centred on the screen while it rides the cover (sticky, bottom offset set from its own
+   height), white over the photos and ink once it is over the page */
+(function () {
+  var w = document.querySelector('.jc-dek-wrap'), d = w && w.querySelector('.jc-dek'), cover = document.querySelector('.j-cover');
+  if (!w) return;
+  function size() { document.documentElement.style.setProperty('--dek-h', d.getBoundingClientRect().height + 'px'); }
+  function tone() { var r = d.getBoundingClientRect(), c = cover.getBoundingClientRect(); w.classList.toggle('on-cover', (r.top + r.bottom) / 2 < c.bottom); }
+  size(); tone();
+  window.addEventListener('resize', function () { size(); tone(); });
+  window.addEventListener('scroll', tone, { passive: true });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { size(); tone(); });
+})();
+</script>
 </body>
 </html>

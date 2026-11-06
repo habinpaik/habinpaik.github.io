@@ -295,6 +295,25 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
 .jc-line span { max-width: calc(46rem - 2 * var(--gutter)); padding-inline: var(--gutter); box-sizing: content-box; }
 /* tall phone screens: the line sits above the photos (placed by script), just clear of them */
 .j-cover.line-above .jc-line { justify-content: flex-end; padding-bottom: var(--s4); }
+.jc-line { display: none; }   /* the opener now lives in the page (.jc-dek), not on the cover */
+.jc-hold { position: relative; }
+.jc-dek-wrap {
+  position: sticky; z-index: 5; bottom: calc(50vh - var(--dek-h, 3rem) / 2);   /* rides in the middle of the screen */
+  padding-top: var(--s6); padding-bottom: 0;   /* then rests a paragraph gap (the dek's own margin) above the first paragraph, as on Portfolio */
+  pointer-events: none;
+}
+p.dek.jc-dek { margin: 0 0 var(--sec-gap); opacity: 0; transition: opacity 2.3s cubic-bezier(.37,0,.63,1), color .4s ease, text-shadow .4s ease; }
+.jc-hold.open .jc-dek { opacity: 1; }
+.jc-dek-wrap.on-cover .jc-dek { color: #fff; text-shadow: 0 0 .5em var(--veil), 0 0 .1em var(--veil); }
+.jc-hold + main { padding-top: 0; }
+.jc-hold + main::before { display: none; }   /* the cover's own edge carries the strong shade instead: */
+.jc-edge { position: relative; height: 0; }
+.jc-edge::before {
+  content: ""; position: absolute; top: 0; height: 12px; pointer-events: none;
+  left: calc(50% - (100vw - var(--sbw, 0px)) / 2); width: calc(100vw - var(--sbw, 0px));
+  background: var(--shade-strong);
+}
+.jc-dek-wrap { max-width: 46rem; }   /* the text column, as main */
 /* arrow at the bottom of the cover, appears with the line */
 .jc-down {
   position: absolute; z-index: 4; left: 50%; bottom: 12px; transform: translateX(-50%);
