@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
-<link rel="stylesheet" href="style.css?v=20261107v">
+<link rel="stylesheet" href="style.css?v=20261107w">
 </head>
 <body>
 <script>
@@ -434,7 +434,7 @@ f(); window.addEventListener('resize',f);})();
     var sp = on.filter(function (f) { return f.spine; }).map(function (f) { return f.spine; });
     var cv = on.filter(function (f) { return f.cover; }).map(function (f) { return f.cover; });
     /* the two rows work on their own: spine tags filter only the spines, cover tags only the covers */
-    spineSel = sp; packPiles(); if (spineShelf) spineShelf.scrollLeft = 0;
+    if (sp.join() !== spineSel.join()) { spineSel = sp; packPiles(); if (spineShelf) spineShelf.scrollLeft = 0; }   /* only a spine tag re-stacks the spines */
     grid.querySelectorAll('.book').forEach(function (b) {
       b.classList.toggle('is-filtered', cv.length > 0 && cv.indexOf(b.getAttribute('data-subject')) < 0);
     });
