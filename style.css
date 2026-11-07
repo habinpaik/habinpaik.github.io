@@ -1004,7 +1004,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 .foot-side > .foot-contact { grid-column: 1; grid-row: 2;
   /* mail box -> address: --s5, box edge to the capitals' top (0.26em above them in the line) */
   margin-top: calc(var(--fg) - 0.26em); }   /* the same gap as above the time and below the last line */
-.foot-copy { grid-column: 2; grid-row: 2; justify-self: end; align-self: end; margin-bottom: calc(0.137 * var(--t-body)) !important; white-space: nowrap; }   /* on the last address line's baseline */
+.foot-copy { grid-column: 2; grid-row: 2; justify-self: end; align-self: end; white-space: nowrap; }   /* level with the last address line */
 
 /* mail, right under the Seoul time: a plain rectangle, its text the size of "Always open" */
 .clock-mail { margin-top: var(--s2) !important; display: flex; flex-wrap: nowrap; align-items: baseline; column-gap: calc(var(--t-small) * 0.67); white-space: nowrap; }   /* gap = the box's inner left padding: "open" -> edge = edge -> "d" */   /* a short line, small and grey like "in Seoul", then the mail -- always on one line */
@@ -1089,13 +1089,13 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   font-weight: 400; font-size: calc(var(--t-body) * 2); line-height: 1.3;
 }
 .clock-main .dow { font-size: var(--t-small); letter-spacing: 0; }
-.foot-copy { margin: 0; font-family: var(--sans); font-feature-settings: normal; font-weight: 400; font-size: var(--t-small); color: var(--stone); }   /* as "in Seoul": small grey sans */
+.foot-copy { margin: 0; font-family: var(--serif); font-weight: 400; font-size: var(--t-body); color: var(--stone); }   /* same grey as the city names */
 .foot-copy .ko { font-weight: 600; }
 
 @media (max-width: 40rem) {
   .foot-main { grid-template-columns: 1fr; }
-  .foot-copy { grid-column: 1; grid-row: 4; justify-self: start; margin-top: 0; margin-bottom: 0 !important; line-height: 1.5; }   /* phones: straight on from the address, as one paragraph */
-  .site-foot .wrap { padding-bottom: calc(var(--fg) - 0.41 * var(--t-small));   /* the copyright, small, ends the footer here */ }
+  .foot-copy { grid-column: 1; grid-row: 4; justify-self: start; margin-top: 0; line-height: 1.5; }   /* phones: straight on from the address, as one paragraph */
+  .site-foot .wrap { padding-bottom: calc(var(--fg) - 0.51em); }
 }
 @media (prefers-reduced-motion: reduce) { a { animation: none !important; } }
 
