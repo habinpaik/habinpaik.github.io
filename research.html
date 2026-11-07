@@ -327,8 +327,16 @@ f(); window.addEventListener('resize',f);})();
   if (spineShelf) {
     document.querySelectorAll('.spine-nav button').forEach(function (btn) {
       btn.addEventListener('click', function () {
+        /* the next pile not yet fully in view (on that side) comes to the middle of the shelf */
         var dir = parseInt(btn.getAttribute('data-dir'), 10);
-        spineShelf.scrollBy({ left: dir * spineShelf.clientWidth * 0.8, behavior: 'smooth' });
+        var box = spineShelf.getBoundingClientRect(), mid = box.left + spineShelf.clientWidth / 2;
+        var piles = [].slice.call(spineShelf.querySelectorAll('.pile')).filter(function (p) { return p.getClientRects().length; });
+        var target = null;
+        if (dir > 0) target = piles.filter(function (p) { return p.getBoundingClientRect().right > box.left + spineShelf.clientWidth + 1; })[0];
+        else target = piles.filter(function (p) { return p.getBoundingClientRect().left < box.left - 1; }).pop();
+        if (!target) { spineShelf.scrollBy({ left: dir * spineShelf.clientWidth, behavior: 'smooth' }); return; }
+        var r = target.getBoundingClientRect();
+        spineShelf.scrollBy({ left: (r.left + r.width / 2) - mid, behavior: 'smooth' });
       });
     });
   }
