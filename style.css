@@ -147,10 +147,9 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
   border-bottom: 1px solid var(--line);
   transition: background .25s ease, border-color .25s ease, backdrop-filter .25s ease;
 }
-/* once the page is scrolled a little, become translucent + blurred, drop the line */
+/* once the page is scrolled a little, become translucent + blurred; the line under the bar stays */
 .site-head.scrolled {
   background: color-mix(in srgb, var(--paper) 72%, transparent);
-  border-bottom-color: transparent;
   backdrop-filter: saturate(1.15) blur(10px);
   -webkit-backdrop-filter: saturate(1.15) blur(10px);
 }
@@ -353,11 +352,10 @@ p.dek.jc-dek { opacity: 0; transition: opacity 2.3s cubic-bezier(.37,0,.63,1), c
 .j-page .site-head,
 .j-page .site-head.scrolled {
   background: color-mix(in srgb, var(--paper) 72%, transparent);
-  border-bottom-color: transparent;
+  border-bottom-color: var(--line);   /* the line always under the bar, once off the cover */
   backdrop-filter: saturate(1.15) blur(10px);
   -webkit-backdrop-filter: saturate(1.15) blur(10px);
 }
-.j-page .site-head.lined { border-bottom-color: var(--line); }
 /* while the cover is in view: no bar at all, white text straight on the picture.
    Once the page has filled the screen, the bar turns into the usual blurred one. */
 .j-page .site-head { transition: background .15s ease, backdrop-filter .15s ease, border-color .15s ease; }
@@ -389,9 +387,8 @@ p.dek.jc-dek { opacity: 0; transition: opacity 2.3s cubic-bezier(.37,0,.63,1), c
 }
 .home:not(.hero-on) .sheet::before { opacity: 1; }
 
-/* menu bar on Home: line appears/disappears instantly (no fade) */
+/* menu bar on Home: the line shows the moment the bar leaves the photo (no fade) */
 .home .site-head { transition: background .15s ease, backdrop-filter .15s ease; }
-.home .site-head.scrolled.lined { border-bottom-color: var(--line); }
 .hero-on .site-head,
 .hero-on .site-head.scrolled {
   background: transparent;
