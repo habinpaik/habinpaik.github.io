@@ -43,11 +43,11 @@
   src: url(fonts/newsreader-latin-ext-400-italic.woff2) format("woff2"); unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF; }
 
 :root {
-  --paper: #FFFFFF;   /* NYT 페이지 배경 */
+  --paper: #FAF9F6;   /* a white with a little warmth: easier on the eye than pure white */
   --ink:   #1A1A1A;
   --stone: #6B6B66;
-  --line:  #DFDFDF;   /* NYT 광고 띠 경계선 */
-  --brand:      #F8F8F8;   /* NYT 광고 띠 배경: 배너·표지책장 배경 */
+  --line:  #E0DDD7;   /* NYT 광고 띠 경계선 */
+  --brand:      #F3F1EC;   /* NYT 광고 띠 배경: 배너·표지책장 배경 */
   --brand-deep: #424245;   /* 같은 계열의 진한 회색: 본문 링크 */
   /* two shades only, each laid just under a top edge:
      strong -- the top edge of each page only (under the menu, or where the page meets the photo
