@@ -499,20 +499,27 @@ f(); window.addEventListener('resize',f);})();
     sunny: ['Sun', ''], rain: ['Rain', ''], summer: ['Summer', ''], winter: ['Winter', ''],
     black: ['Black', ''], color: ['Color', '']
   };
-  var cap = document.createElement('p'); cap.className = 'jc-cap';
+  /* a caption on each photo, always: the left (or top) one in its bottom-left corner, the right (or
+     bottom) one in its bottom-right -- inside the part of the photo on screen */
+  var caps = [0, 1].map(function (k) {
+    var c = document.createElement('p'); c.className = 'jc-cap';
+    var t = CAPTIONS[pair[k]] || ['', ''];
+    c.innerHTML = '<b></b> <span></span>'; c.firstChild.textContent = t[0]; c.lastChild.textContent = t[1];
+    return c;
+  });
   function placeCaption() {
     if (!open || !panes) return;
-    var o = cover.getBoundingClientRect(), a = panes[0].getBoundingClientRect(), b = panes[1].getBoundingClientRect();
-    var useRight = vertical ? b.width * b.height >= a.width * a.height : b.height > a.height;
-    var r = useRight ? b : a, c = CAPTIONS[pair[useRight ? 1 : 0]] || ['', ''];
-    if (cap.getAttribute('data-k') !== pair[useRight ? 1 : 0]) {
-      cap.setAttribute('data-k', pair[useRight ? 1 : 0]);
-      cap.innerHTML = '<b></b> <span></span>'; cap.firstChild.textContent = c[0]; cap.lastChild.textContent = c[1];
-    }
-    var m = 12;
-    cap.style.top = (Math.min(r.bottom, o.bottom) - o.top - m - cap.offsetHeight) + 'px';   /* inside the part of the photo on screen */
-    if (useRight) { cap.style.left = ''; cap.style.right = (o.right - r.right + m) + 'px'; cap.style.textAlign = 'right'; }
-    else { cap.style.right = ''; cap.style.left = (r.left - o.left + m) + 'px'; cap.style.textAlign = 'left'; }
+    var o = cover.getBoundingClientRect(), m = 12;
+    caps.forEach(function (cap, k) {
+      var r = panes[k].getBoundingClientRect();
+      var L = Math.max(r.left, o.left), R = Math.min(r.right, o.right), B = Math.min(r.bottom, o.bottom), T = Math.max(r.top, o.top);
+      var room = R - L - 2 * m;
+      cap.style.maxWidth = Math.max(0, Math.min(o.width * 0.4, room)) + 'px';
+      cap.style.visibility = room < 60 || B - T < cap.offsetHeight + 2 * m ? 'hidden' : '';   /* only when the photo is too thin to hold it */
+      cap.style.top = (B - o.top - m - cap.offsetHeight) + 'px';
+      if (k === 1) { cap.style.left = ''; cap.style.right = (o.right - R + m) + 'px'; cap.style.textAlign = 'right'; }
+      else { cap.style.right = ''; cap.style.left = (L - o.left + m) + 'px'; cap.style.textAlign = 'left'; }
+    });
   }
 
   /* columns x rows to suit the screen: the arrangement whose cells come closest to 5:4 */
@@ -680,7 +687,7 @@ f(); window.addEventListener('resize',f);})();
     var from = pair.map(cellRect);
     panes.forEach(function (p, i) { place(p, from[i]); cover.appendChild(p); cells[pair[i]].classList.add('lifted'); });
     words.forEach(function (w) { cover.appendChild(w); });
-    cover.appendChild(cap);
+    caps.forEach(function (c) { cover.appendChild(c); });
     placeLine();
     cover.offsetWidth;
     cover.classList.add('open');
