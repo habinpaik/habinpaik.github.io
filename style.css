@@ -953,7 +953,7 @@ figure.ph.margin-left, figure.ph.margin-right { width: 12rem; margin: var(--s4) 
    the letters turn white. (Menu, wordmark, image cards and the footer's buttons are excluded.)
    Links with no underline at rest (headlines, the footer address) fill the same way. */
 :root { --link-hover: #fff; }
-a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story)) {
+a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .foot-mail)) {
   text-decoration: none;
   /* the box reaches a hair past the letters on every side -- above the capitals, below the
      descenders -- so the fill rises from under the whole word to over it; the text doesn't move */
@@ -965,7 +965,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   background-size: 100% 0, calc(100% - 0.24em) 1px;
   transition: background-size .45s cubic-bezier(.45, 0, .25, 1), color .45s ease;   /* rises from the underline, unhurried */
 }
-a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story)):hover {
+a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .foot-mail)):hover {
   color: var(--link-hover);
   background-size: 100% 100%, calc(100% - 0.24em) 1px;
 }
@@ -1310,3 +1310,21 @@ main.shelf-end { padding-bottom: 0; }
 .overlay-card:hover .kh, .blur-card:hover .kh, .card:hover .kh { background-size: 100% 100%; color: #fff; }
 /* a whole box is the link, not just its words */
 .ebox:not(.split) h3 a::after, .eup h3 a::after { content: ""; position: absolute; inset: 0; }
+
+/* Research buttons: the light shade just inside the top edge, as if set into the page */
+.filter-btn, .spine-nav button, .shelf-more button { position: relative; }
+.filter-btn::after, .spine-nav button::after, .shelf-more button::after {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: var(--s2);
+  background: var(--shade-light); pointer-events: none;
+}
+
+/* footer address: a box, as the buttons -- 1px line, the light shade inside its top, crimson rising on hover */
+.clocks .foot-mail {
+  display: inline-block; position: relative; margin-top: var(--s4);
+  padding: var(--s2) var(--s4); line-height: 1.23;
+  border: 1px solid var(--line); color: inherit; text-decoration: none;
+  background: linear-gradient(var(--crimson), var(--crimson)) no-repeat 0 100% / 100% 0;
+  transition: background-size .45s cubic-bezier(.45,0,.25,1), color .45s ease, border-color .45s ease;
+}
+.clocks .foot-mail::after { content: ""; position: absolute; left: 0; right: 0; top: 0; height: var(--s2); background: var(--shade-light); pointer-events: none; }
+.clocks .foot-mail:hover { background-size: 100% 100%; color: #fff; border-color: var(--crimson); }
