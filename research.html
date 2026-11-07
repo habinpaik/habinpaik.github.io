@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
-<link rel="stylesheet" href="style.css?v=20261107t">
+<link rel="stylesheet" href="style.css?v=20261107u">
 </head>
 <body>
 <script>
@@ -43,7 +43,7 @@ f(); window.addEventListener('resize',f);})();
 
   <section>
     <h2 class="section-title">Bookshelf</h2>
-    <p class="shelf-note">각주: 표지 이미지는 각 출판사가 공개한 자료에서 가져왔으며, 저작권은 각 출판사에 있습니다.</p>
+    <p class="shelf-note">Cover images come from material released by each publisher; copyright remains with the publishers.</p>
 
     <div class="shelf-filter"><div class="filter-wrap" role="group" aria-label="Filter by category"></div></div>
     <div class="shelf-box">
@@ -54,6 +54,8 @@ f(); window.addEventListener('resize',f);})();
     <div class="spine-shelf">
     <div class="spine-track">
       <span class="spine journalism" data-title="리처드 닉슨" data-author="김형곤" data-year="2022" data-en="[KOR] Richard Nixon" data-subject="역사"><span class="t">Richard Nixon</span></span>
+      <span class="spine science" data-title="Chemistry" data-author="Steven S. Zumdahl" data-year="1986" data-en="Cengage Learning" data-subject="화학"><span class="t">Zumdahl Chemistry</span></span>
+      <span class="spine science" data-title="Campbell Biology" data-author="Lisa A. Urry" data-year="1987" data-en="Pearson" data-subject="생물학"><span class="t">Campbell Biology</span></span>
       <span class="spine science" data-title="피타고라스로 푸는 상대성이론" data-author="임성민" data-year="2020" data-en="[KOR] Relativity via Pythagoras" data-subject="상대성이론"><span class="t">Relativity via Pythagoras</span></span>
       <span class="spine humanities" data-title="인간 실격" data-author="다자이 오사무" data-year="1948" data-en="人間失格" data-subject="문학"><span class="t">No Longer Human</span></span>
       <span class="spine journalism" data-title="최암흑의 도쿄" data-author="마쓰바라 이와고로" data-year="1893" data-en="最暗黒の東京" data-subject="르포"><span class="t">In Darkest Tokyo</span></span>
@@ -154,7 +156,6 @@ f(); window.addEventListener('resize',f);})();
       <div class="book" data-title="Quantum Computation and Quantum Information" data-author="Michael A. Nielsen" data-year="2000" data-en="Cambridge University Press" data-subject="Phys"><span class="cover"><span class="face" style="width:89.4%"><img src="images/covers/20_Nielsen_Quantum_Computation.webp" alt="Quantum Computation and Quantum Information"><span class="tag">Phys</span></span></span><span class="t">Quantum Information</span></div>
       <div class="book" data-title="Reinforcement Learning: An Introduction" data-author="Richard S. Sutton" data-year="1998" data-en="The MIT Press" data-subject="Math"><span class="cover"><span class="face" style="width:91.6%"><img src="images/covers/33_Sutton_Reinforcement_Learning.webp" alt="Reinforcement Learning: An Introduction"><span class="tag">Math</span></span></span><span class="t">Reinforcement Learning</span></div>
       <div class="book" data-title="Mechanics of Materials" data-author="Russell C. Hibbeler" data-year="1991" data-en="Pearson" data-subject="MechE"><span class="cover"><span class="face" style="width:100.0%"><img src="images/covers/12_Hibbeler_Mechanics_of_Materials.webp" alt="Mechanics of Materials"><span class="tag">MechE</span></span></span><span class="t">Mechanics of Materials</span></div>
-      <div class="book" data-title="Chemistry" data-author="Steven S. Zumdahl" data-year="1986" data-en="Cengage Learning" data-subject="General Sci"><span class="cover"><span class="face" style="width:94.8%"><img src="images/covers/25_Zumdahl_Chemistry.webp" alt="Chemistry"><span class="tag">General Sci</span></span></span><span class="t">Chemistry</span></div>
       <div class="book" data-title="Nanoscale Energy Transport and Conversion" data-author="Gang Chen" data-year="2005" data-en="Oxford University Press" data-subject="MechE"><span class="cover"><span class="face" style="width:84.6%"><img src="images/covers/04_Chen_Nanoscale_Energy.webp" alt="Nanoscale Energy Transport and Conversion"><span class="tag">MechE</span></span></span><span class="t">Nanoscale Energy</span></div>
       <div class="book" data-title="Atomic Physics" data-author="Christopher J. Foot" data-year="2004" data-en="Oxford University Press" data-subject="Phys"><span class="cover"><span class="face" style="width:96.9%"><img src="images/covers/17_Foot_Atomic_Physics.webp" alt="Atomic Physics"><span class="tag">Phys</span></span></span><span class="t">Atomic Physics</span></div>
       <div class="book" data-title="선형대수와 군" data-author="이인석" data-year="2005" data-en="서울대학교출판문화원" data-subject="Math"><span class="cover"><span class="face" style="width:91.1%"><img src="images/covers/30_Lee_Linear_Algebra_and_Groups.webp" alt="선형대수와 군"><span class="tag">Math</span></span></span><span class="t">Linear Algebra & Group Theory</span></div>
@@ -167,7 +168,6 @@ f(); window.addEventListener('resize',f);})();
       <div class="book" data-title="Introduction to Electrodynamics" data-author="David J. Griffiths" data-year="1981" data-en="Cambridge University Press" data-subject="Phys"><span class="cover"><span class="face" style="width:89.7%"><img src="images/covers/19_Griffiths_Electrodynamics.webp" alt="Introduction to Electrodynamics"><span class="tag">Phys</span></span></span><span class="t">Electrodynamics</span></div>
       <div class="book" data-title="Machine Learning: A Probabilistic Perspective" data-author="Kevin P. Murphy" data-year="2012" data-en="The MIT Press" data-subject="Math"><span class="cover"><span class="face" style="width:99.2%"><img src="images/covers/32_Murphy_Machine_Learning.webp" alt="Machine Learning: A Probabilistic Perspective"><span class="tag">Math</span></span></span><span class="t">Machine Learning</span></div>
       <div class="book" data-title="Fox and McDonald's Introduction to Fluid Mechanics" data-author="Robert W. Fox" data-year="1973" data-en="John Wiley &amp; Sons" data-subject="MechE"><span class="cover"><span class="face" style="width:95.0%"><img src="images/covers/11_Fox_Fluid_Mechanics.webp" alt="Fox and McDonald's Introduction to Fluid Mechanics"><span class="tag">MechE</span></span></span><span class="t">Fluid Mechanics</span></div>
-      <div class="book" data-title="Campbell Biology" data-author="Lisa A. Urry" data-year="1987" data-en="Pearson" data-subject="General Sci"><span class="cover"><span class="face" style="width:97.7%"><img src="images/covers/24_Campbell_Biology.webp" alt="Campbell Biology"><span class="tag">General Sci</span></span></span><span class="t">Biology</span></div>
       <div class="book" data-title="Fundamentals of Heat and Mass Transfer" data-author="Frank P. Incropera" data-year="1981" data-en="John Wiley &amp; Sons" data-subject="MechE"><span class="cover"><span class="face" style="width:96.3%"><img src="images/covers/03_Incropera_Heat_Mass_Transfer.webp" alt="Fundamentals of Heat and Mass Transfer"><span class="tag">MechE</span></span></span><span class="t">Heat Transfer</span></div>
       <div class="book" data-title="Introduction to Solid State Physics" data-author="Charles Kittel" data-year="1953" data-en="John Wiley &amp; Sons" data-subject="Phys"><span class="cover"><span class="face" style="width:96.2%"><img src="images/covers/16_Kittel_Solid_State_Physics.webp" alt="Introduction to Solid State Physics"><span class="tag">Phys</span></span></span><span class="t">Solid State Physics</span></div>
       <div class="book" data-title="Understanding Analysis" data-author="Stephen Abbott" data-year="2001" data-en="Springer" data-subject="Math"><span class="cover"><span class="face" style="width:87.5%"><img src="images/covers/29_Abbott_Understanding_Analysis.webp" alt="Understanding Analysis"><span class="tag">Math</span></span></span><span class="t">Real Analysis</span></div>
@@ -417,10 +417,10 @@ f(); window.addEventListener('resize',f);})();
   window.drawBoards = drawBoards;
 
   // 분류 버튼: 순서는 매번 무작위, 여러 개 선택 가능
-  var FILTERS = [   // spine: 가로책장 분류 / cover: 표지책장 분류. General Sci는 둘 다. color: 분류색
+  var FILTERS = [   // spine: 가로책장 분류 / cover: 표지책장 분류. color: 분류색
     { label: 'MechE', cover: 'MechE', color: '--c-meche' }, { label: 'Phys', cover: 'Phys', color: '--c-phys' },
     { label: 'Math', cover: 'Math', color: '--c-math' },
-    { label: 'General Sci', spine: 'science', cover: 'General Sci', color: '--c-gensci' },
+    { label: 'General Sci', spine: 'science', color: '--c-gensci' },
     { label: 'Classics', spine: 'humanities', color: '--c-classics' }, { label: 'Journalism', spine: 'journalism', color: '--c-journalism' }
   ];
   for (var fi = FILTERS.length - 1; fi > 0; fi--) {
@@ -445,6 +445,10 @@ f(); window.addEventListener('resize',f);})();
     if (window.resetReveal) window.resetReveal();
     drawBoards();
   }
+  /* two rows of tags: the spine shelf's subjects above it, the covers' subjects above the covers */
+  var fwrap2 = document.createElement('div'); fwrap2.className = 'filter-wrap filter-covers';
+  fwrap2.setAttribute('role', 'group'); fwrap2.setAttribute('aria-label', 'Filter the covers by subject');
+  if (coverPanel) coverPanel.insertBefore(fwrap2, coverPanel.firstChild);
   if (fwrap) FILTERS.forEach(function (f) {
     var btn = document.createElement('button');
     btn.type = 'button'; btn.className = 'filter-btn'; btn.textContent = f.label;
@@ -456,7 +460,7 @@ f(); window.addEventListener('resize',f);})();
       btn.setAttribute('aria-pressed', i >= 0 ? 'false' : 'true');
       applyFilter();
     });
-    fwrap.appendChild(btn);
+    (f.cover ? fwrap2 : fwrap).appendChild(btn);
   });
   window.addEventListener('load', drawBoards);
   window.addEventListener('resize', drawBoards);

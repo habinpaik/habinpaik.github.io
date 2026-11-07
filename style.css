@@ -1142,6 +1142,7 @@ main.shelf-end { padding-bottom: 0; }
 .shelf-box.no-spines .shelf-panel { padding-top: 20px; }   /* 가로책장이 숨으면 박스 위→표지 첫 줄도 20px */   /* 표지책장이 숨으면 바닥 막대 아래 여백 8px */
 .shelf-filter { margin-top: var(--s3); }   /* 각주 아래, 회색 박스 밖 */
 .filter-wrap { display: flex; flex-wrap: wrap; gap: 6px; }
+.filter-covers { max-width: 46rem; margin: 0 auto var(--s5); padding-inline: var(--gutter); }   /* the covers' row, over the covers, in the text column */
 .filter-btn {
   font-family: var(--sans); font-size: var(--t-small); line-height: 1.6;
   padding: 2px 12px; border-radius: 999px; cursor: pointer;
