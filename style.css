@@ -697,13 +697,13 @@ main > p.dek:first-child + section { margin-top: 0; }   /* the opener is larger:
 .book[data-subject="General Sci"] { --cat: var(--c-gensci); }
 .book .face { position: relative; display: block; }
 .book img { width: 100%; height: auto; display: block; }
-.book .tag {   /* 위 분류 버튼과 같은 모양, 반투명, 표지 모서리 밖으로 반쯤 걸침 */
-  position: absolute; top: 0; left: 0;
-  transform: translateY(-35%);   /* 왼쪽 끝은 표지 왼쪽 선에 맞춤, 위로만 반쯤 걸침 */
+.book .tag {   /* the filter buttons' shape, unfilled: the page colour inside, the subject in the outline
+                 and the word -- on the cover's bottom-right corner, hanging half over its edge */
+  position: absolute; right: 0; bottom: 0;
+  transform: translateY(35%);
   font-family: var(--sans); font-size: var(--t-small); font-weight: 400; line-height: 1.6;
-  color: #fff; border: 1px solid transparent;
-  background: color-mix(in srgb, var(--cat, var(--stone)) 88%, transparent);
-  -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+  color: var(--cat, var(--stone)); border: 1px solid var(--cat, var(--stone));
+  background: var(--paper);
   padding: 0 10px; border-radius: 999px;
 }
 .book .t { position: relative; z-index: 3; display: block; margin-top: var(--s2); color: var(--stone); font-size: var(--t-small); line-height: 1.6; font-family: var(--sans); }
