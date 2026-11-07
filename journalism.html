@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
-<link rel="stylesheet" href="style.css?v=20261107w">
+<link rel="stylesheet" href="style.css?v=20261107x">
 <script>
 /* Journalism cover, decided before anything else loads: which pair to show, and which size of
    photo this screen needs -- so those downloads start first, at the top of the page. */
@@ -659,7 +659,7 @@ f(); window.addEventListener('resize',f);})();
   /* small arrow at the bottom of the cover: there's more below. Click/tap scrolls to the page. */
   var down = document.createElement('button');
   down.type = 'button'; down.className = 'jc-down'; down.setAttribute('aria-label', 'Scroll to the page');
-  down.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12"/><path d="M7.5 10.25l4.5 4.5 4.5-4.5"/></svg>';   /* a dark arrow in a white disc, as on nytco.com */
+  down.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24"/><path d="M7.5 10.25l4.5 4.5 4.5-4.5"/></svg>';   /* a dark arrow in a white disc, as on nytco.com */
   down.addEventListener('click', function () {
     var y = window.scrollY + cover.getBoundingClientRect().bottom - head.getBoundingClientRect().height;
     window.scrollTo({ top: y, behavior: 'smooth' });
