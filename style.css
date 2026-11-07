@@ -613,7 +613,7 @@ main > p.dek:first-child + section { margin-top: 0; }   /* the opener is larger:
 }
 .spine-nav button:hover { background-size: 100% 100%; color: #fff; border-color: var(--crimson); }
 .spine-nav button { font-size: var(--t-small); }
-.spine-nav svg { display: block; width: 1.75rem; height: 1.23em; padding-block: calc((1.23em - 0.75rem) / 2); box-sizing: border-box;   /* as tall as the "more" button's line */ fill: none; stroke: currentColor; stroke-width: 2px; vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round; }   /* a long thin arrow, the icons' 2px line */
+.spine-nav svg { display: block; width: 1.75rem; height: 1.23em; padding-block: calc((1.23em - 0.75rem) / 2); box-sizing: border-box;   /* as tall as the "more" button's line */ fill: none; stroke: currentColor; stroke-width: 1px; vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round; }   /* a long thin arrow, a 1px line */
 .spine-nav button:disabled { color: var(--line); cursor: default; background-size: 100% 0; border-color: var(--line); }
 
 /* hover tooltip near cursor */
@@ -657,7 +657,7 @@ main > p.dek:first-child + section { margin-top: 0; }   /* the opener is larger:
 
 /* ---------- Research bookshelf (legacy cover grid) ---------- */
 .shelf-panel {
-  padding-top: 40px;                     /* 가로책장 바닥 막대 ↔ 표지 첫 줄 */
+  padding-top: 4px;                      /* its own section now: the tags sit over the covers as over the desk */
   padding-bottom: 40px;                  /* 버튼 ↔ 박스 아래 (바로 아래가 푸터라 넉넉히) */
   margin-top: 0;
   position: relative;
@@ -694,22 +694,13 @@ main > p.dek:first-child + section { margin-top: 0; }   /* the opener is larger:
 /* 틀은 2:3로 고정, 표지는 원본 비율 그대로 틀 바닥에 세움 */
 .book .cover { display: flex; flex-direction: column; justify-content: flex-end; aspect-ratio: 2 / 3; width: 100%; min-height: 0; overflow: visible; }
 .book .face { flex: 0 0 auto; align-self: flex-start; }   /* 표지 왼쪽 정렬 */
-.book .tag { z-index: 2; }
 .book[data-subject="MechE"]       { --cat: var(--c-meche); }
 .book[data-subject="Phys"]        { --cat: var(--c-phys); }
 .book[data-subject="Math"]        { --cat: var(--c-math); }
 .book[data-subject="General Sci"] { --cat: var(--c-gensci); }
 .book .face { position: relative; display: block; }
 .book img { width: 100%; height: auto; display: block; }
-.book .tag {   /* the filter buttons' shape, unfilled: the page colour inside, the subject in the outline
-                 and the word -- on the cover's bottom-right corner, hanging half over its edge */
-  position: absolute; right: 0; bottom: 0;
-  transform: translateY(35%);
-  font-family: var(--sans); font-size: var(--t-small); font-weight: 400; line-height: 1.6;
-  color: var(--cat, var(--stone)); border: 1px solid var(--cat, var(--stone));
-  background: var(--paper);
-  padding: 0 10px; border-radius: 0;
-}
+.book img { outline: 1px solid var(--cat, var(--line)); outline-offset: -1px; }   /* the subject in a hairline round the cover, as on the spines */
 .book .t { position: relative; z-index: 3; display: block; margin-top: var(--s2); color: var(--stone); font-size: var(--t-small); line-height: 1.6; font-family: var(--sans); }
 
 /* books past the first row start hidden; revealed downward by 더보기 */
@@ -1102,11 +1093,12 @@ a:focus-visible { outline: 2px solid var(--crimson); outline-offset: 3px; }
 /* Research: the bookshelf box runs straight into the dark footer -- no white strip between */
 main.shelf-end { padding-bottom: 0; }
 .shelf-box [hidden] { display: none !important; }
+.shelf-box:has(.spine-panel) { padding-bottom: calc(1.5625rem - var(--sec-gap)); }   /* the desk closes like text: arrow buttons -> section line 25px */
 .shelf-box.no-covers .spine-panel { padding-bottom: 20px; }
 .shelf-box.no-spines .shelf-panel { padding-top: 20px; }   /* 가로책장이 숨으면 박스 위→표지 첫 줄도 20px */   /* 표지책장이 숨으면 바닥 막대 아래 여백 8px */
 .shelf-filter { margin-top: var(--s3); }   /* 각주 아래, 회색 박스 밖 */
 .filter-wrap { display: flex; flex-wrap: wrap; gap: 6px; }
-.filter-covers { max-width: 46rem; margin: 0 auto var(--s3); padding-inline: var(--gutter); }   /* the covers' row, over the covers, in the text column */
+
 .filter-btn {
   font-family: var(--sans); font-size: var(--t-small); line-height: 1.6;
   padding: 2px 12px; border-radius: 0; cursor: pointer;
