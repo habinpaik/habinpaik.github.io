@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
-<link rel="stylesheet" href="style.css?v=20261108k">
+<link rel="stylesheet" href="style.css?v=20261108l">
 </head>
 <body>
 <script>
@@ -180,7 +180,7 @@ f(); window.addEventListener('resize',f);})();
       <div class="book" data-title="Control Systems Engineering" data-author="Norman S. Nise" data-year="1992" data-en="John Wiley &amp; Sons" data-subject="MechE"><span class="cover"><span class="face" style="width:96.1%"><img src="images/covers/08_Nise_Control_Systems.webp" alt="Control Systems Engineering"></span></span><span class="t">Control Engineering</span></div>
       <div class="book" data-title="The Feynman Lectures on Physics" data-author="Richard P. Feynman" data-year="1963" data-en="Basic Books" data-subject="Phys"><span class="cover"><span class="face" style="width:93.0%"><img src="images/covers/21_Feynman_Lectures.webp" alt="The Feynman Lectures on Physics"></span></span><span class="t">General Physics</span></div>
     </div>
-    <div class="shelf-more"><button type="button" data-more>A prime more +2</button></div>
+    <div class="shelf-more"><button type="button" data-more><span class="kh">A prime more +2</span></button></div>
     <p class="shelf-note">Cover images come from material released by each publisher; copyright remains with the publishers.</p>
     </div>
     </div>
@@ -247,7 +247,7 @@ f(); window.addEventListener('resize',f);})();
     }
     function setLabel() {
       var n = CHUNKS[Math.min(step, CHUNKS.length - 1)];
-      moreBtn.textContent = 'A prime more +' + n;
+      moreBtn.firstChild.textContent = 'A prime more +' + n;
     }
     window.resetReveal();
     moreBtn.addEventListener('click', function () {
