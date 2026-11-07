@@ -960,7 +960,7 @@ figure.ph.margin-left, figure.ph.margin-right { width: 12rem; margin: var(--s4) 
    the letters turn white. (Menu, wordmark, image cards and the footer's buttons are excluded.)
    Links with no underline at rest (headlines, the footer address) fill the same way. */
 :root { --link-hover: #fff; }
-a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .foot-mail)) {
+a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story)) {
   text-decoration: none;
   /* the box reaches a hair past the letters on every side -- above the capitals, below the
      descenders -- so the fill rises from under the whole word to over it; the text doesn't move */
@@ -972,7 +972,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   background-size: 100% 0, calc(100% - 0.24em) 1px;
   transition: background-size .45s cubic-bezier(.45, 0, .25, 1), color .45s ease;   /* rises from the underline, unhurried */
 }
-a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .foot-mail)):hover {
+a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story)):hover {
   color: var(--link-hover);
   background-size: 100% 100%, calc(100% - 0.24em) 1px;
 }
@@ -1010,27 +1010,9 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 .foot-side { display: contents; }
 .foot-side > .clocks { grid-column: 1 / -1; grid-row: 1; }
 .foot-side > .foot-contact { grid-column: 1; grid-row: 2;
-  /* mail box -> address: --s5, box edge to the capitals' top (0.26em above them in the line) */
-  margin-top: calc(var(--fg) - 0.26em); }   /* the same gap as above the time and below the last line */
+  margin-top: var(--s4); }   /* the mail's line -> address: the paragraph gap, two paragraphs of text */
 .foot-copy { grid-column: 2; grid-row: 2; justify-self: end; align-self: end; white-space: nowrap; }   /* level with the last address line */
 
-/* mail, right under the Seoul time: a plain rectangle, its text the size of "Always open" */
-.clock-mail { margin-top: var(--s2) !important; display: flex; flex-wrap: nowrap; align-items: baseline; column-gap: calc(var(--t-body) * 0.67); white-space: nowrap; }   /* gap = the box's inner left padding: "open" -> edge = edge -> "d" */   /* a short line, small and grey like "in Seoul", then the mail -- always on one line */
-.foot-mail {
-  display: inline-block;
-  border: 1px solid var(--line); border-radius: 0;
-  /* the same visible gap, 0.65em, on all four sides, measured from the capitals' top and the baseline */
-  padding: 0.7em 0.65em 0.65em; text-box-trim: trim-both; text-box-edge: cap alphabetic;   /* lines trimmed to capitals and baseline: the padding is what you see (+0.05em: the H stands a hair above the cap line) */
-  color: var(--stone); text-decoration: none;
-  font-family: var(--sans); font-weight: 400; font-size: var(--t-body); line-height: 1.3;   /* the body size, as every word of the clock */
-  transition: background .2s ease, color .2s ease, border-color .2s ease;
-}
-.foot-mail {   /* crimson fill (for hover) over the footer's faint shade, here under the box's top line */
-  background-image: linear-gradient(var(--crimson), var(--crimson)), var(--shade-light);
-  background-size: 100% 0, 100% 100%; background-repeat: no-repeat; background-position: 0 100%, 0 0; background-origin: border-box;
-  transition: background-size .45s cubic-bezier(.45, 0, .25, 1), color .45s ease, border-color .45s ease;
-}
-.foot-mail:hover { background-size: 100% 100%, 100% 100%; border-color: var(--crimson); color: #fff; }
 
 /* one dial for all five cities: the minutes are the same everywhere, so one minute hand and an hour
    hand per city. Every line in it -- rim, hour marks, hands -- is the same 1px hairline. The rim,
@@ -1040,19 +1022,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
    fits beside the time and mail, down to the address or the copyright below it. */
 .clocks { position: relative; }
 .aclock { position: absolute; left: 0; top: 0; width: 88px; height: 88px; }
-.clock-main .brk { display: none; }
-.m-only { display: none; }
-@media (max-width: 40rem) {   /* phones: four short lines on the left -- time, weekday + "in Seoul",
-     "Always open", the mail (small) -- and the dial beside them */
-  /* first line: the time, the seconds and the weekday; second line: "in Seoul, Always open";
-     then the mail */
-  .clocks .clock-main time { display: contents; }
-  .clocks .clock-main .brk { display: block; flex-basis: 100%; height: 0; }   /* line break after the weekday */
-  .clocks .m-only { display: inline; }
-  .clocks > .clock-mail > .city { display: none; }   /* "Always open" moves up beside "in Seoul," */
-  .clocks > .clock-mail { flex-direction: column; align-items: flex-start; row-gap: var(--s1); }
-  .clocks .aclock .lab { font-size: 0.75rem; }   /* phones: names a size down, to leave the dial room */
-}
+@media (max-width: 40rem) { .clocks .aclock .lab { font-size: 0.75rem; } }   /* phones: names a size down, to leave the dial room */
 .aclock svg { display: block; position: relative; width: 100%; height: 100%; overflow: visible; }
 /* hover: the face fills with crimson in step with the seconds (drawn by site.js); it fades in and out */
 .aclock-fill { position: absolute; inset: 0; border-radius: 50%; pointer-events: none; opacity: 0; transition: opacity .3s ease; }
@@ -1081,22 +1051,14 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
    1) Seoul -- the time large (twice the body, regular weight), then the weekday
       (Thursday) small, then "in Seoul" small and grey
    2) New York, California, London, Beijing -- the city small and grey, the time at body size */
-.clocks { margin-top: -0.3em; }   /* the space above the figures in Newsreader: the top gap then reads as --fg */
-.clocks p { margin: 0; }
-.clocks .city {
-  font-family: var(--sans); font-feature-settings: normal; font-size: var(--t-body);
-  color: var(--stone);
-}
+.clocks { margin-top: -0.24em; }   /* the space above the figures in Newsreader: the top gap then reads as --fg */
+/* the clock reads as a paragraph of text: "22:12 Saturday in Seoul," / "Always open" / the mail,
+   all at the body size and grey, the mail a link like any other */
+.clocks p { margin: 0; font-size: var(--t-body); line-height: 1.5; color: var(--stone); }
 .clocks time {
   font-family: var(--serif); color: var(--stone); letter-spacing: -0.01em;   /* the body's own tracking; grey, as all the footer's words */
   font-feature-settings: "lnum" 1, "pnum" 1, "kern" 1;               /* natural-width lining figures */
 }
-.clock-main { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 0.5rem; }
-.clock-main time {
-  display: flex; align-items: baseline; gap: 0.35rem;
-  font-weight: 400; font-size: var(--t-body); line-height: 1.5;   /* the body size: the time reads as a line of text */
-}
-.clock-main .dow { font-size: var(--t-body); letter-spacing: 0; }
 .foot-copy { margin: 0; font-family: var(--serif); font-weight: 400; font-size: var(--t-body); color: var(--stone); }   /* same grey as the city names */
 .foot-copy .ko { font-weight: 600; }
 
@@ -1282,7 +1244,6 @@ main.shelf-end { padding-bottom: 0; }
 }
 .blur-card .cap .en .date, .blur-card .cap .en .dash { color: var(--on-dark); }   /* date leads the English line */
 .blur-card.no-img .cap::before { display: none; }   /* no photo: plain deep grey */
-@media (max-width: 23rem) { .foot-mail { font-size: var(--t-small); } }   /* very narrow phones: still one line */
 
 /* Local election desking: the three headlines in boxes stacked down the left, each overlapping the
    one above a little and stepping right; the one description flows to their right and on below.

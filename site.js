@@ -189,7 +189,7 @@
       var r = e.getBoundingClientRect(), c = r.height * cut;
       return { l: r.left - hr.left, r: r.right - hr.left, t: r.top - hr.top + c, b: r.bottom - hr.top - c };
     }
-    var words = [].filter.call(host.querySelectorAll('.clock-main .hm, .clock-main .sec, .clock-main .dow, .clock-main .city, .clock-mail .city'), function (e) { return e.getClientRects().length; })
+    var words = [].filter.call(host.querySelectorAll('.clock-main .hm, .clock-main .dow, .clock-main .city'), function (e) { return e.getClientRects().length; })
                   .map(function (e) { return rel(e, 0.2); });   /* only words actually shown */
     var mail = rel(host.querySelector('.foot-mail'), 0);
     /* below: the address (and, on wider screens, the copyright on the right) -- the dial stays clear of them */
