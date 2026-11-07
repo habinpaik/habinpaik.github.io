@@ -76,8 +76,9 @@
   --t-body:  clamp(1rem, 0.93rem + 0.32vw, 1.2rem);
   --t-title: clamp(1.18rem, 1.06rem + 0.62vw, 1.58rem);
   /* subject colours (Research bookshelf): filter buttons, cover tags and spines all use these */
-  --c-meche: #7a5a2b; --c-phys: #1f5a63; --c-math: #5a3d6b;
-  --c-gensci: #2f4058; --c-classics: #4a5d40; --c-journalism: var(--crimson);
+  /* picked so that the two closest are still far apart (CIEDE2000 >= 28), all >= 4.8:1 with white */
+  --c-meche: #a76118; --c-phys: #1d689c; --c-math: #a050b9;
+  --c-gensci: #004c3e; --c-classics: #637b0e; --c-journalism: var(--crimson);
   --t-display: clamp(1.3rem, 2.6vw, 1.75rem);   /* identity line */
   --t-name: clamp(1.75rem, 0.75rem + 4.6vw, 3.5rem);   /* big name = clocks: 56px on desktop, ~29–31px on phones */
 
@@ -572,28 +573,30 @@ main > p.dek:first-child + section { margin-top: 0; }   /* the opener is larger:
   --cat: var(--stone); --rot: 0deg;
   display: flex; align-items: center; box-sizing: border-box;
   position: relative; z-index: 1;
-  background: var(--cat);             /* filled with the subject colour */
-  border: 1px solid var(--on-dark);   /* thin light outline: stacked books stay distinct */
+  background: var(--paper);           /* every spine the page's own colour ... */
+  border: 1.5px solid var(--cat);     /* ... the subject only in its outline */
   border-radius: 5px;
-  margin-top: -1px;                 /* 위아래 책 테두리가 한 줄로 겹침 (두 겹으로 두꺼워지지 않게) */
+  margin-top: -1.5px;               /* 위아래 책 테두리가 한 줄로 겹침 (두 겹으로 두꺼워지지 않게) */
   padding: 0 10px;
   transition: transform .15s ease;
 }
 .spine:hover { transform: translateX(6px); z-index: 2; }   /* 살짝 빼내는 느낌 */
 .spine .t {
   font-family: var(--sans); font-size: var(--t-small); font-weight: 400;
-  line-height: 1; letter-spacing: -0.01em; color: #fff;
+  line-height: 1; letter-spacing: -0.01em; color: var(--ink);
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;   /* 길면 … */
 }
 /* 분류별 지정 두께(띠 높이)·길이·테두리색 — 기존 책등 규칙 그대로 */
-.spine.humanities { --cat: var(--c-classics); height: 44px; width: 150px; }  /* Classics */
-.spine.journalism { --cat: var(--c-journalism); height: 34px; width: 188px; }  /* Journalism */
-.spine.science    { --cat: var(--c-gensci); height: 26px; width: 225px; }  /* General Sci */
+.spine { width: max-content; max-width: 225px; }   /* as long as its title, up to the longest book */
+.spine.humanities { --cat: var(--c-classics); height: 44px; }  /* Classics */
+.spine.journalism { --cat: var(--c-journalism); height: 34px; }  /* Journalism */
+.spine.science    { --cat: var(--c-gensci); height: 26px; }  /* General Sci */
 @media (max-width: 40rem) {
   .spine-shelf { --pile-max: 220px; }
-  .spine.humanities { height: 40px; width: 128px; }
-  .spine.journalism { height: 32px; width: 160px; }
-  .spine.science    { height: 26px; width: 192px; }
+  .spine { max-width: 192px; }
+  .spine.humanities { height: 40px; }
+  .spine.journalism { height: 32px; }
+  .spine.science    { height: 26px; }
 }
 /* left/right scroll arrows — bottom-right, translucent */
 .spine-nav { position: absolute; bottom: calc(var(--s4) + 0.9rem); right: calc(var(--gutter) + 0.6rem); display: flex; gap: var(--s2); z-index: 3; }
