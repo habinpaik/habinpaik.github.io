@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
-<link rel="stylesheet" href="style.css?v=20261107u">
+<link rel="stylesheet" href="style.css?v=20261107v">
 </head>
 <body>
 <script>
@@ -43,7 +43,6 @@ f(); window.addEventListener('resize',f);})();
 
   <section>
     <h2 class="section-title">Bookshelf</h2>
-    <p class="shelf-note">Cover images come from material released by each publisher; copyright remains with the publishers.</p>
 
     <div class="shelf-filter"><div class="filter-wrap" role="group" aria-label="Filter by category"></div></div>
     <div class="shelf-box">
@@ -175,6 +174,7 @@ f(); window.addEventListener('resize',f);})();
       <div class="book" data-title="The Feynman Lectures on Physics" data-author="Richard P. Feynman" data-year="1963" data-en="Basic Books" data-subject="Phys"><span class="cover"><span class="face" style="width:93.0%"><img src="images/covers/21_Feynman_Lectures.webp" alt="The Feynman Lectures on Physics"><span class="tag">Phys</span></span></span><span class="t">General Physics</span></div>
     </div>
     <div class="shelf-more"><button type="button" data-more>A prime more +2</button></div>
+    <p class="shelf-note">Cover images come from material released by each publisher; copyright remains with the publishers.</p>
     </div>
     </div>
     </div>
@@ -418,9 +418,9 @@ f(); window.addEventListener('resize',f);})();
 
   // 분류 버튼: 순서는 매번 무작위, 여러 개 선택 가능
   var FILTERS = [   // spine: 가로책장 분류 / cover: 표지책장 분류. color: 분류색
-    { label: 'MechE', cover: 'MechE', color: '--c-meche' }, { label: 'Phys', cover: 'Phys', color: '--c-phys' },
-    { label: 'Math', cover: 'Math', color: '--c-math' },
-    { label: 'General Sci', spine: 'science', color: '--c-gensci' },
+    { label: 'Mechanical Engineering', cover: 'MechE', color: '--c-meche' }, { label: 'Physics', cover: 'Phys', color: '--c-phys' },
+    { label: 'Mathematics', cover: 'Math', color: '--c-math' },
+    { label: 'General Science', spine: 'science', color: '--c-gensci' },
     { label: 'Classics', spine: 'humanities', color: '--c-classics' }, { label: 'Journalism', spine: 'journalism', color: '--c-journalism' }
   ];
   for (var fi = FILTERS.length - 1; fi > 0; fi--) {
@@ -433,11 +433,7 @@ f(); window.addEventListener('resize',f);})();
     var on = FILTERS.filter(function (f) { return selected.indexOf(f.label) >= 0; });
     var sp = on.filter(function (f) { return f.spine; }).map(function (f) { return f.spine; });
     var cv = on.filter(function (f) { return f.cover; }).map(function (f) { return f.cover; });
-    var any = selected.length > 0;
-    spinePanel.hidden = any && !sp.length;                       // 표지책장 분류만 골랐으면 가로책장 숨김
-    coverPanel.hidden = any && !cv.length;                       // 가로책장 분류만 골랐으면 표지책장 숨김
-    box.classList.toggle('no-covers', coverPanel.hidden);
-    box.classList.toggle('no-spines', spinePanel.hidden);
+    /* the two rows work on their own: spine tags filter only the spines, cover tags only the covers */
     spineSel = sp; packPiles(); if (spineShelf) spineShelf.scrollLeft = 0;
     grid.querySelectorAll('.book').forEach(function (b) {
       b.classList.toggle('is-filtered', cv.length > 0 && cv.indexOf(b.getAttribute('data-subject')) < 0);
