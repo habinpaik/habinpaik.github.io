@@ -566,7 +566,7 @@ main > p.dek:first-child + section { margin-top: 0; }   /* the opener is larger:
   border-top: 1px solid var(--line);
 }
 /* 더미: 아래부터 위로 쌓임 */
-.pile { display: flex; flex-direction: column-reverse; align-items: flex-start; flex: 0 0 auto; }
+.pile { display: flex; flex-direction: column-reverse; align-items: center; flex: 0 0 auto; padding-inline: 8px; }   /* centred, so every book bears the ones above it; 8px room for the jitter */
 .pile > .spine:last-child { margin-top: 0; }   /* 맨 위 책은 올리지 않음 → 위쪽 경계에 안 잘림 */
 /* 눕힌 책: 옆면(책등)이 보이는 띠. 채움 없이 테두리와 글자만 */
 .spine {
