@@ -616,7 +616,6 @@ main > p.dek:first-child + section { margin-top: 0; }   /* the opener is larger:
   position: fixed; z-index: 100; pointer-events: none;
   max-width: 16rem; padding: var(--s2) var(--s3);
   background: var(--crimson); color: #fff; border-radius: 0;
-  outline: 1px solid var(--paper);   /* a white edge, as the spines have, so it stays apart from a crimson spine */
   font-family: var(--sans); font-size: var(--t-small); line-height: 1.4;
   opacity: 0; transition: opacity .12s ease;
 }
