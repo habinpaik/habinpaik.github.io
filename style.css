@@ -567,7 +567,10 @@ main > p.dek:first-child + section { margin-top: 0; }   /* the opener is larger:
 }
 /* 더미: 아래부터 위로 쌓임 */
 .pile { display: flex; flex-direction: column-reverse; align-items: center; flex: 0 0 auto; padding-inline: 8px; }   /* centred, so every book bears the ones above it; 8px room for the jitter */
-.pile > .spine:last-child { margin-top: 0; }   /* 맨 위 책은 올리지 않음 → 위쪽 경계에 안 잘림 */
+.pile > .spine:last-child, .pile > .pair:last-child { margin-top: 0; }
+/* two books side by side in one layer of a pile */
+.pair { display: flex; gap: 6px; position: relative; margin-top: -1.5px; }
+.pair > .spine { margin-top: 0; }   /* 맨 위 책은 올리지 않음 → 위쪽 경계에 안 잘림 */
 /* 눕힌 책: 옆면(책등)이 보이는 띠. 채움 없이 테두리와 글자만 */
 .spine {
   --cat: var(--stone); --rot: 0deg;
@@ -717,7 +720,13 @@ main > p.dek:first-child + section { margin-top: 0; }   /* the opener is larger:
   border: 1px solid var(--line); border-radius: 999px;
   padding: var(--s2) var(--s4); cursor: pointer; transition: background .15s ease;
 }
-.shelf-more button:hover { background: var(--brand); }
+/* hover: crimson rises from the bottom and fills the button, the words turning white -- as on links */
+.shelf-more button {
+  background-image: linear-gradient(var(--crimson), var(--crimson)); background-repeat: no-repeat;
+  background-position: 0 100%; background-size: 100% 0;
+  transition: background-size .45s cubic-bezier(.45, 0, .25, 1), color .45s ease, border-color .45s ease;
+}
+.shelf-more button:hover, .shelf-panel .shelf-more button:hover { background-size: 100% 100%; color: #fff; border-color: var(--crimson); }
 .shelf-more button[hidden] { display: none; }
 
 .shelf-toast {
@@ -1115,8 +1124,7 @@ a:focus-visible { outline: 2px solid var(--crimson); outline-offset: 3px; }
 
 /* 디자인 색 배경의 표지 책장 위 요소 */
 .shelf-panel .book .t { color: var(--ink); }
-.shelf-panel .shelf-more button { color: var(--ink); border-color: var(--line); background: transparent; }
-.shelf-panel .shelf-more button:hover { background: rgba(255,255,255,.55); }
+.shelf-panel .shelf-more button { color: var(--ink); border-color: var(--line); background-color: transparent; }
 
 /* 책은 링크가 아니므로 일반 커서 */
 .spine, .book { cursor: default; }

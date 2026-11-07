@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
-<link rel="stylesheet" href="style.css?v=20261107r">
+<link rel="stylesheet" href="style.css?v=20261107t">
 </head>
 <body>
 <script>
@@ -273,16 +273,40 @@ f(); window.addEventListener('resize',f);})();
   if (pileTrack) pileTrack.appendChild(pileHold);
   function packPiles() {
     if (!pileTrack) return;
-    pileBooks.forEach(function (b) { pileTrack.appendChild(b); });
+    pileBooks.forEach(function (b) { pileTrack.appendChild(b); b.style.left = Math.round(Math.random() * 16 - 8) + 'px'; });
+    [].slice.call(pileTrack.querySelectorAll('.pair')).forEach(function (p) { p.remove(); });
     [].slice.call(pileTrack.querySelectorAll('.pile')).forEach(function (p) { p.remove(); });
     var max = parseFloat(getComputedStyle(document.querySelector('.spine-shelf')).getPropertyValue('--pile-max')) || 260;
-    var pile = null, h = 0;
-    pileBooks.forEach(function (b) {
-      if (spineSel.length && spineSel.indexOf(b.classList[1]) < 0) { pileHold.appendChild(b); return; }
-      var t = b.offsetHeight;
-      if (!pile || h + t > max) { pile = document.createElement('div'); pile.className = 'pile'; pileTrack.appendChild(pile); h = 0; }
-      pile.appendChild(b); h += t - 1;     // 겹친 테두리만큼 빼기
+    var pile = null, h = 0, cap = 0, below = 0;
+    var shown = pileBooks.filter(function (b) {
+      if (spineSel.length && spineSel.indexOf(b.classList[1]) < 0) { pileHold.appendChild(b); return false; }
+      return true;
     });
+    if (shown[0]) cap = parseFloat(getComputedStyle(shown[0]).maxWidth) || 225;
+    for (var k = 0; k < shown.length; k++) {
+      var b = shown[k], layer = b, t = b.offsetHeight;
+      /* now and then two thin books lie side by side in one layer: same thickness (so the layer is
+         level and the book above rests on both), together no wider than the longest book */
+      var fresh0 = !pile || h + t > max, n = null, ni = -1;
+      for (var q = k + 1; q < Math.min(shown.length, k + 6); q++) {   /* a partner among the next few books */
+        var c = shown[q], w2 = b.offsetWidth + c.offsetWidth + 6;
+        if (c.offsetHeight === t && w2 <= cap && (fresh0 || w2 + 16 <= below)) { n = c; ni = q; break; }
+      }
+      var pw = n ? b.offsetWidth + n.offsetWidth + 6 : 0;
+      /* ... and only on a book at least as long as the pair (or on the shelf itself), so each of the
+         two lies wholly on what is under it */
+      var fresh = !pile || h + t > max;
+      if (n && n.offsetHeight === t && pw <= cap && (fresh || pw + 16 <= below) && Math.random() < 0.5) {
+        layer = document.createElement('div'); layer.className = 'pair';
+        b.style.left = ''; n.style.left = '';
+        layer.appendChild(b); layer.appendChild(n);
+        shown.splice(ni, 1);
+        layer.style.left = Math.round(Math.random() * 16 - 8) + 'px';
+      }
+      if (!pile || h + t > max) { pile = document.createElement('div'); pile.className = 'pile'; pileTrack.appendChild(pile); h = 0; }
+      pile.appendChild(layer); h += t - 1;     // 겹친 테두리만큼 빼기
+      below = layer.offsetWidth;
+    }
   }
   packPiles();
   var lastMax = null;
