@@ -170,7 +170,7 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
 /* back arrow on Research / Journalism / Portfolio: part of the same name link */
 .wordmark .back-ico {
   display: inline-block; width: 0.8em; height: 0.8em; margin-right: 0.3em; vertical-align: -0.04em;
-  fill: none; stroke: currentColor; stroke-width: 2.8; stroke-linecap: round; stroke-linejoin: round;
+  fill: none; stroke: currentColor; stroke-width: 2px; vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round;   /* every icon line 2px on screen */
 }
 .nav { display: flex; gap: var(--s4); font-size: var(--t-body); }
 .nav a { position: relative; color: var(--stone); text-decoration: none; font-weight: 400; font-size: var(--t-body); transition: color .15s ease; }
@@ -327,7 +327,7 @@ p.dek.jc-dek { opacity: 0; transition: opacity 2.3s cubic-bezier(.37,0,.63,1), c
 }
 .jc-down svg { display: block; width: 100%; height: 100%; }
 .jc-down rect { fill: #fff; }   /* a square, as every button on the site */
-.jc-down path { fill: none; stroke: var(--ink); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: stroke .45s ease; }
+.jc-down path { fill: none; stroke: var(--ink); stroke-width: 2px; vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round; transition: stroke .45s ease; }
 .jc-down:hover path { stroke: var(--crimson); }
 .j-cover.open .jc-down { opacity: 1; }
 .jc-down:hover { opacity: 1; }
@@ -569,7 +569,7 @@ main > p.dek:first-child + section { margin-top: 0; }   /* the opener is larger:
 .pile { display: flex; flex-direction: column-reverse; align-items: center; flex: 0 0 auto; padding-inline: 8px; }   /* centred, so every book bears the ones above it; 8px room for the jitter */
 .pile > .spine:last-child, .pile > .pair:last-child { margin-top: 0; }
 /* two books side by side in one layer of a pile */
-.pair { display: flex; gap: 6px; position: relative; margin-top: -1.5px; }
+.pair { display: flex; gap: 6px; position: relative; margin-top: -1px; }
 .pair > .spine { margin-top: 0; }   /* 맨 위 책은 올리지 않음 → 위쪽 경계에 안 잘림 */
 /* 눕힌 책: 옆면(책등)이 보이는 띠. 채움 없이 테두리와 글자만 */
 .spine {
@@ -577,9 +577,9 @@ main > p.dek:first-child + section { margin-top: 0; }   /* the opener is larger:
   display: flex; align-items: center; box-sizing: border-box;
   position: relative; z-index: 1;
   background: var(--paper);           /* every spine the page's own colour ... */
-  border: 1.5px solid var(--cat);     /* ... the subject only in its outline */
+  border: 1px solid var(--cat);       /* ... the subject only in its outline */
   border-radius: 0;
-  margin-top: -1.5px;               /* 위아래 책 테두리가 한 줄로 겹침 (두 겹으로 두꺼워지지 않게) */
+  margin-top: -1px;               /* 위아래 책 테두리가 한 줄로 겹침 (두 겹으로 두꺼워지지 않게) */
   padding: 0 10px;
   transition: transform .15s ease;
 }
@@ -1209,7 +1209,7 @@ main.shelf-end { padding-bottom: 0; }
   width: 32px; height: 32px; padding: 7px; margin: 0; border: 0; background: none; cursor: pointer;
   color: var(--ink); display: none;
 }
-.rail-btn svg { display: block; width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.rail-btn svg { display: block; width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 2px; vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round; }
 .rail-btn[disabled] { color: var(--line); cursor: default; }
 @media (hover: hover) and (pointer: fine) { .rail-btn { display: block; } }   /* phones swipe instead */
 
