@@ -1310,12 +1310,14 @@ main.shelf-end { padding-bottom: 0; }
   background: var(--shade-light); pointer-events: none;
 }
 
-/* footer address: a hairline box drawn round the words inline, so it stays a line of the paragraph
-   (no extra height, the clock beside it unmoved); the box edge lines up with the text column */
+/* footer address: a hairline box with the same room on all four sides of the letters (box edge -> capitals,
+   baseline, first and last letter: --s2), trimmed to the capitals so the padding is the gap you see;
+   set a little below the line above so the two never touch */
 .clocks .foot-mail {
-  position: relative; padding: 0.06em 0.3em 0.1em;
+  display: inline-block; position: relative; vertical-align: top;
+  margin-top: var(--s2); padding: var(--s2);
+  line-height: 1.5; text-box-trim: trim-both; text-box-edge: cap alphabetic;
   border: 1px solid var(--line); color: inherit; text-decoration: none;
-  -webkit-box-decoration-break: clone; box-decoration-break: clone;
   background: linear-gradient(var(--crimson), var(--crimson)) no-repeat 0 100% / 100% 0;
   transition: background-size .45s cubic-bezier(.45,0,.25,1), color .45s ease, border-color .45s ease;
 }
