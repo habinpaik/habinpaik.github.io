@@ -586,7 +586,7 @@ main > p.dek:first-child + section { margin-top: 0; }   /* the opener is larger:
 .spine:hover { transform: translateX(6px); z-index: 2; }   /* 살짝 빼내는 느낌 */
 .spine .t {
   font-family: var(--sans); font-size: var(--t-small); font-weight: 400;
-  line-height: 1; letter-spacing: -0.01em; color: var(--ink);
+  line-height: 1; letter-spacing: -0.01em; color: var(--cat);   /* the title in its subject colour */
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;   /* 길면 … */
 }
 /* 분류별 지정 두께(띠 높이)·길이·테두리색 — 기존 책등 규칙 그대로 */
@@ -1070,7 +1070,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 a:focus-visible { outline: 2px solid var(--crimson); outline-offset: 3px; }
 
 /* 디자인 색 배경의 표지 책장 위 요소 */
-.shelf-panel .book .t { color: var(--ink); }
+.shelf-panel .book .t { color: var(--cat, var(--ink)); }   /* the title in its subject colour */
 .shelf-panel .shelf-more button { color: var(--ink); border-color: var(--line); background-color: transparent; }
 
 /* 책은 링크가 아니므로 일반 커서 */
