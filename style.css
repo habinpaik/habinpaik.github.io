@@ -1137,7 +1137,7 @@ main.shelf-end { padding-bottom: 0; }
 .card-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s ease; }
 .card:hover .card-img img { transform: scale(1.04); }
 .card-txt { flex: 1; display: flex; flex-direction: column; padding: calc(var(--inset) + 1px) var(--inset) var(--inset); min-height: 11rem; background: var(--shade-light) no-repeat; }   /* 3.99px: the space above the title's capitals */   /* light shade under the photo's edge */
-.card-date { font-family: var(--sans); font-size: var(--t-small); line-height: 1.5; color: var(--crimson); }
+.card-date { font-family: var(--sans); font-size: var(--t-small); line-height: 1.5; color: var(--stone);   /* dates are grey, as everywhere */ }
 .card-title {
   margin-top: 0; text-box-trim: trim-start; text-box-edge: cap alphabetic;
   font-family: var(--serif); font-size: var(--t-body); line-height: 1.5; letter-spacing: -0.01em;
