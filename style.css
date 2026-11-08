@@ -1325,23 +1325,15 @@ section:has(.spine-panel) + section > h2.section-title { background: none; borde
 }
 .spine-nav svg { height: 1cap; padding-block: 0.14px; box-sizing: content-box; }   /* +0.28px: the font's trimmed capitals run a hair taller than 1cap */
 
-/* In-page buttons (they act here, they don't lead to another page): the desk's arrows and
-   "A prime more". Pressing one sinks it: the shade inside its top deepens (to the strong one) and the
-   button drops 1px, then both ease back. Once pressed, the crimson fill drains away and stays gone
-   until the pointer leaves (.pressed, set by site.js); on touch screens there's no hover fill at all,
-   so nothing is left standing after a tap. */
-.spine-nav button, .shelf-more button { position: relative; transition: background-size .45s cubic-bezier(.45,0,.25,1), color .45s ease, border-color .45s ease, transform .25s ease; }
+/* In-page buttons (they act here, they don't lead to another page): the desk's arrows and "A prime more".
+   No crimson: pressing one only deepens the shade inside its top (to the strong one), which then fades back. */
+.spine-nav button, .shelf-more button { position: relative; }
+.spine-nav button, .spine-nav button:hover { background-size: 100% 0; color: var(--ink); border-color: var(--line); }
+.shelf-panel .shelf-more button:hover, .shelf-more button:hover { background-size: auto; color: var(--stone); border-color: var(--line); }
+.shelf-more button:hover .kh { background-size: 100% 0; color: inherit; }
+.spine-nav button:disabled, .spine-nav button:disabled:hover { color: var(--line); }
 .spine-nav button::before, .shelf-more button::before {
   content: ""; position: absolute; left: 0; right: 0; top: 0; height: 12px; background: var(--shade-strong);
-  opacity: 0; pointer-events: none; transition: opacity .35s ease;
+  opacity: 0; pointer-events: none; transition: opacity .45s ease;
 }
 .spine-nav button:active::before, .shelf-more button:active::before { opacity: 1; transition-duration: .06s; }
-.spine-nav button:active, .shelf-more button:active { transform: translateY(1px); transition-duration: .06s; }
-.spine-nav button.pressed, .spine-nav button:disabled { background-size: 100% 0; color: var(--ink); border-color: var(--line); }
-.spine-nav button:disabled { color: var(--line); }
-.shelf-more button.pressed .kh { background-size: 100% 0; color: inherit; }
-@media (hover: none) {
-  .spine-nav button:hover { background-size: 100% 0; color: var(--ink); border-color: var(--line); }
-  .spine-nav button:disabled:hover { color: var(--line); }
-  .shelf-more button:hover .kh { background-size: 100% 0; color: inherit; }
-}
