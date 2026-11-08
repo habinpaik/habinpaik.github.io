@@ -76,8 +76,9 @@
   --t-body:  clamp(1rem, 0.93rem + 0.32vw, 1.2rem);
   --t-title: clamp(1.18rem, 1.06rem + 0.62vw, 1.58rem);
   /* subject colours (Research bookshelf): filter buttons, cover tags and spines all use these */
-  /* picked so that the two closest are still far apart (CIEDE2000 >= 28), all >= 4.8:1 with white */
-  --c-meche: #a76118; --c-phys: #1d689c; --c-math: #a050b9;
+  /* picked so that the two closest are still far apart (CIEDE2000 >= 28), all >= 4.8:1 with white; maths a deep navy so it
+     stays apart from physics under red-green colour blindness too (ΔE00 phys–math, protan/deutan: 24.7, 23.9) */
+  --c-meche: #a76118; --c-phys: #1d689c; --c-math: #000060;
   --c-gensci: #004c3e; --c-classics: #637b0e; --c-journalism: var(--crimson);
   --t-display: clamp(1.3rem, 2.6vw, 1.75rem);   /* identity line */
   --t-name: clamp(1.75rem, 0.75rem + 4.6vw, 3.5rem);   /* big name = clocks: 56px on desktop, ~29–31px on phones */
