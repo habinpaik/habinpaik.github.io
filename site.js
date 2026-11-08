@@ -384,7 +384,7 @@
 
 /* in-page buttons: once pressed, the hover fill drains until the pointer leaves (see .pressed in the css) */
 (function () {
-  var SEL = '.filter-btn, .spine-nav button, .shelf-more button';
+  var SEL = '.spine-nav button, .shelf-more button';
   document.addEventListener('pointerdown', function (e) {
     var b = e.target.closest && e.target.closest(SEL);
     if (!b || b.classList.contains('pressed')) return;
