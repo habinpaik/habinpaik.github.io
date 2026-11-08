@@ -89,7 +89,9 @@
     pin.style.fill = (el > FILL * 0.5 && el < FILL + HOLD + CLEAR * 0.5) ? '#fff' : '';
     sweeping = requestAnimationFrame(wipe);
   }
+  var canHover = !window.matchMedia || window.matchMedia('(hover: hover)').matches;   /* touch screens: no sweep (a tap would leave it stuck) */
   box.addEventListener('mouseenter', function () {
+    if (!canHover) return;
     var now = new Date(), H = hm(home, now);
     homeA = hourAng(H) * 180 / Math.PI; minA = (H.m + H.s / 60) * 6;
     cityA = zones.map(function (z) { return hourAng(hm(z.tz, now)) * 180 / Math.PI; });

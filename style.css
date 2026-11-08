@@ -1016,8 +1016,10 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 .aclock .face, .aclock .tick, .aclock .pin { transition: stroke .3s ease, fill .3s ease; }
 .aclock .hand { transition: stroke .12s ease; }   /* quick, so each hand lights as the crimson reaches it */
 /* while the face is part pale, part crimson, the hands go dark so they read on both */
-.aclock:hover .hand.city { stroke: var(--ink); }
-.aclock:hover .hand.min, .aclock:hover .hand.home { stroke: var(--stone); }
+@media (hover: hover) {   /* not on touch screens, where a tap would leave the hands dark */
+  .aclock:hover .hand.city { stroke: var(--ink); }
+  .aclock:hover .hand.min, .aclock:hover .hand.home { stroke: var(--stone); }
+}
 .aclock .face { fill: none; }
 .aclock .face, .aclock line { stroke-width: 1; vector-effect: non-scaling-stroke; }   /* 1px at any size */
 .aclock .face, .aclock .tick, .aclock .hand.min, .aclock .hand.home { stroke: var(--line); }
