@@ -1337,3 +1337,7 @@ section:has(.spine-panel) + section > h2.section-title { background: none; borde
   opacity: 0; pointer-events: none; transition: opacity .45s ease;
 }
 .spine-nav button:active::before, .shelf-more button:active::before { opacity: 1; transition-duration: .06s; }
+
+/* "Pledge analysis" strips: the light shade under their top line, as every top edge */
+.ebox.split .go { position: relative; }
+.ebox.split .go::after { content: ""; position: absolute; left: 0; right: 0; top: 0; height: var(--s2); background: var(--shade-light); pointer-events: none; }
