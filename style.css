@@ -593,13 +593,13 @@ main > p.dek:first-child + section { margin-top: 0; }   /* the opener is larger:
 .spine { width: max-content; max-width: 225px; }   /* as long as its title, up to the longest book */
 .spine.humanities { --cat: var(--c-classics); height: 44px; }  /* Classics */
 .spine.journalism { --cat: var(--c-journalism); height: 34px; }  /* Journalism */
-.spine.science    { --cat: var(--c-gensci); height: 26px; }  /* General Sci */
+.spine.science    { --cat: var(--c-gensci); height: 22px; }  /* General Sci */
 @media (max-width: 40rem) {
   .spine-shelf { --pile-max: 220px; }
   .spine { max-width: 192px; }
   .spine.humanities { height: 40px; }
   .spine.journalism { height: 32px; }
-  .spine.science    { height: 26px; }
+  .spine.science    { height: 22px; }
 }
 /* left/right scroll arrows — bottom-right, translucent */
 /* left/right: two square buttons under the shelf, as the "more" button under the covers */
