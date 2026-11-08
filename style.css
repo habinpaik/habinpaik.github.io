@@ -76,9 +76,8 @@
   --t-body:  clamp(1rem, 0.93rem + 0.32vw, 1.2rem);
   --t-title: clamp(1.18rem, 1.06rem + 0.62vw, 1.58rem);
   /* subject colours (Research bookshelf): filter buttons, cover tags and spines all use these */
-  /* picked so that the two closest are still far apart (CIEDE2000 >= 28), all >= 4.8:1 with white; maths a deep navy so it
-     stays apart from physics under red-green colour blindness too (ΔE00 phys–math, protan/deutan: 24.7, 23.9) */
-  --c-meche: #a76118; --c-phys: #1d689c; --c-math: #000060;
+  /* picked to stay far apart (CIEDE2000), all >= 4.8:1 with white; maths a mid green, the same weight as the others */
+  --c-meche: #a76118; --c-phys: #1d689c; --c-math: #00804c;
   --c-gensci: #004c3e; --c-classics: #637b0e; --c-journalism: var(--crimson);
   --t-display: clamp(1.3rem, 2.6vw, 1.75rem);   /* identity line */
   --t-name: clamp(1.75rem, 0.75rem + 4.6vw, 3.5rem);   /* big name = clocks: 56px on desktop, ~29–31px on phones */
@@ -1331,7 +1330,7 @@ section:has(.spine-panel) + section > h2.section-title { background: none; borde
 /* In-page buttons (they act here, they don't lead to another page): the desk's arrows and "A prime more".
    No crimson: pressing one only deepens the shade inside its top (to the strong one), which then fades back. */
 .spine-nav button, .shelf-more button { position: relative; }
-.spine-nav button, .spine-nav button:hover { background-size: 100% 0; color: var(--ink); border-color: var(--line); }
+.spine-nav button, .spine-nav button:hover { background-size: 100% 0; color: var(--stone); border-color: var(--line); }   /* arrows grey */
 .shelf-panel .shelf-more button:hover, .shelf-more button:hover { background-size: auto; color: var(--stone); border-color: var(--line); }
 .shelf-more button:hover .kh { background-size: 100% 0; color: inherit; }
 .spine-nav button:disabled, .spine-nav button:disabled:hover { color: var(--line); }
