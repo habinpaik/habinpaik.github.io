@@ -1321,6 +1321,6 @@ section:has(.spine-panel) + section > h2.section-title { background: none; borde
 /* Research buttons, one height: every button's words trimmed to capitals and baseline, with --s3 above
    and below them (the arrows drawn as tall as the capitals) -- tags, arrows and "more" all alike */
 .filter-btn, .spine-nav button, .shelf-panel .shelf-more button, .shelf-more button {
-  padding-block: var(--s3); line-height: 1.5; text-box-trim: trim-both; text-box-edge: cap alphabetic;
+  padding-block: var(--s2); line-height: 1.5; text-box-trim: trim-both; text-box-edge: cap alphabetic;
 }
 .spine-nav svg { height: 1cap; padding-block: 0.14px; box-sizing: content-box; }   /* +0.28px: the font's trimmed capitals run a hair taller than 1cap */

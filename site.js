@@ -154,12 +154,18 @@
   function geom(g, D, stackAll, phone) {
     var a = (g.a0 + g.a1) / 2, s = Math.sin(a), c = Math.cos(a), Rk = R * D / S, Ck = D / 2;
     var stacked = g.names.length > 1 && (stackAll || (phone && Math.abs(s) > Math.abs(c)));
-    var m = measure(g.names, stacked), lo = 0, hi = Rk + GAP + m.w + m.h;
+    /* the label hangs off its point the way the hand points: straight out -> centred on it; on a
+       diagonal -> by its near corner (a label up and to the left sits with its bottom-right corner
+       there), so a wide shared label doesn't slide round to the top. The point goes out along the
+       hand until the letters' nearest edge or corner is exactly GAP outside the rim. */
+    var m = measure(g.names, stacked), k = 1 / Math.max(Math.abs(s), Math.abs(c));
+    var ox = s * k * m.w / 2, oy = -c * k * m.ih, lo = 0, hi = Rk + GAP + m.w + m.h;
     for (var it = 0; it < 24; it++) {
-      var md = (lo + hi) / 2, ex = Math.max(Math.abs(s * md) - m.w / 2, 0), ey = Math.max(Math.abs(c * md) - m.ih, 0);
+      var md = (lo + hi) / 2, px = s * md + ox, py = -c * md + oy;
+      var ex = Math.max(Math.abs(px) - m.w / 2, 0), ey = Math.max(Math.abs(py) - m.ih, 0);
       if (Math.hypot(ex, ey) < Rk + GAP) lo = md; else hi = md;
     }
-    var cx = Ck + s * hi, cy = Ck - c * hi;
+    var cx = Ck + s * hi + ox, cy = Ck - c * hi + oy;
     return { names: g.names, stacked: stacked, x: cx - m.w / 2, y: cy - m.h / 2, w: m.w, h: m.h,
              l: cx - m.w / 2, r: cx + m.w / 2, t: cy - m.ih, b: cy + m.ih };
   }
