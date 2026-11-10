@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
-<link rel="stylesheet" href="style.css?v=20261110j">
+<link rel="stylesheet" href="style.css?v=20261110k">
 </head>
 <body>
 <script>
@@ -243,20 +243,36 @@ f(); window.addEventListener('resize',f);})();
     /* a blurred glimpse of the next books behind "A prime more" and the note */
     var peek = document.createElement('div'); peek.className = 'shelf-peek'; peek.setAttribute('aria-hidden', 'true');
     shelf.parentNode.insertBefore(peek, shelf.nextSibling);
+    /* the books the next press will bring, each blurred exactly where it will land: first the empty
+       places left in the last row, then the row below (behind "A prime more" and the note) */
+    var peekSig = '';
     window.updatePeek = function () {
       var cols = getComputedStyle(shelf).gridTemplateColumns.split(' ').filter(Boolean).length || 4;
-      var next = [].slice.call(shelf.querySelectorAll('.book.is-hidden:not(.is-filtered)'), 0, cols);
+      var vis = [].slice.call(shelf.querySelectorAll('.book:not(.is-hidden):not(.is-filtered)'));
+      var hid = shelf.querySelectorAll('.book.is-hidden:not(.is-filtered)');
+      var n = Math.min(hid.length, CHUNKS[Math.min(step, CHUNKS.length - 1)]);
+      if (!vis.length || !n) { peek.style.display = 'none'; peekSig = ''; return; }
+      var gapX = parseFloat(getComputedStyle(shelf).columnGap) || 0, cw = (shelf.offsetWidth - gapX * (cols - 1)) / cols;
+      var last = vis[vis.length - 1], lastRowTop = last.offsetTop, faceImg = vis[0].querySelector('img');
+      var iw = faceImg ? faceImg.getBoundingClientRect().width : cw;
+      var note = document.querySelector('.shelf-note');
+      var top = shelf.offsetTop + lastRowTop, bottom = note ? note.offsetTop + note.offsetHeight : top + 400;
+      var rowBelow = shelf.offsetHeight + (parseFloat(getComputedStyle(shelf).rowGap) || 32) - lastRowTop;
+      var sig = vis.length + '|' + n + '|' + Math.round(cw) + '|' + Math.round(top);
+      var fresh = sig.split('|').slice(0, 2).join() !== peekSig.split('|').slice(0, 2).join();
       peek.innerHTML = '';
-      next.forEach(function (b) {
-        var img = b.querySelector('img'), cell = document.createElement('div');
-        if (img) { var c = document.createElement('img'); c.src = img.currentSrc || img.src; c.alt = ''; cell.appendChild(c); }
-        peek.appendChild(cell);
-      });
-      var note = document.querySelector('.shelf-note'), top = shelf.offsetTop + shelf.offsetHeight + 32;
-      var bottom = note ? note.offsetTop + note.offsetHeight : top + 200;
+      for (var j = 0; j < n; j++) {
+        var k = vis.length + j, row = Math.floor(k / cols) - Math.floor((vis.length - 1) / cols), col = k % cols;
+        var img = hid[j].querySelector('img'); if (!img) continue;
+        var c = document.createElement('img'); c.src = img.currentSrc || img.getAttribute('src'); c.alt = '';
+        c.style.left = (col * (cw + gapX)) + 'px'; c.style.top = (row === 0 ? 0 : rowBelow + (row - 1) * 400) + 'px'; c.style.width = iw + 'px';
+        peek.appendChild(c);
+      }
       peek.style.left = shelf.offsetLeft + 'px'; peek.style.width = shelf.offsetWidth + 'px';
       peek.style.top = top + 'px'; peek.style.height = Math.max(0, bottom - top) + 'px';
-      peek.style.display = next.length ? '' : 'none';
+      peek.style.display = '';
+      if (fresh) { peek.classList.remove('in'); peek.offsetHeight; peek.classList.add('in'); }   /* fades in, never pops */
+      peekSig = sig;
     };
     window.addEventListener('resize', function () { window.updatePeek(); });
     if (window.ResizeObserver) new ResizeObserver(function () { if (!busy) window.updatePeek(); }).observe(shelf);
@@ -278,7 +294,7 @@ f(); window.addEventListener('resize',f);})();
       moreBtn.offsetHeight;
       moreBtn.style.height = hBig + 'px';                           /* 1. swell */
       setTimeout(function () {   /* 2. at once: it shrinks back to "A prime more +next" and the shelf opens, carrying it down */
-        peek.style.display = 'none';
+        peek.style.display = 'none'; peekSig = '';
         var h0 = shelf.getBoundingClientRect().height;
         var i = 0, opened = [];
         hidden.forEach(function (b) { if (i < n) { b.classList.remove('is-hidden'); b.classList.add('arriving'); opened.push(b); i++; } });

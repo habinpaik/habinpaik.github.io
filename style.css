@@ -1376,7 +1376,7 @@ html:has(.snap-top) { scroll-snap-type: y mandatory; }
    in the column stay exactly where they were: the shelf only widens outward, padded by the same
    amount), and there, outside the column, it blurs progressively away -- a cue that more lies that
    way. The blur lives only in the margins; nothing in the column is touched. */
-.spine-wrap { --ext: max(var(--gutter), (100vw - var(--sbw, 0px) - 46rem) / 2 + var(--gutter)); }
+.spine-wrap { --ext: max(var(--gutter), min((100vw - var(--sbw, 0px) - 46rem) / 2 + var(--gutter), var(--gutter) + 5rem)); }   /* at most 5rem past the column */
 .spine-shelf { margin-inline: calc(var(--gutter) - var(--ext)); padding-inline: calc(var(--ext) - var(--gutter)); }
 .desk-edge { position: absolute; top: 0; bottom: 8px; width: calc(var(--ext) - var(--gutter) + var(--gutter)); z-index: 2; pointer-events: none; opacity: 0; transition: opacity .35s ease; }
 .desk-edge.on { opacity: 1; }
@@ -1393,10 +1393,9 @@ html:has(.snap-top) { scroll-snap-type: y mandatory; }
 .shelf-wrap { position: relative; }
 .shelf-peek {
   position: absolute; z-index: 0; pointer-events: none; overflow: hidden;
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px var(--s4); align-items: start;
-  filter: blur(6px); opacity: .55;
-  -webkit-mask-image: linear-gradient(#000, transparent); mask-image: linear-gradient(#000, transparent);
+  filter: blur(6px); opacity: 0; transition: opacity .6s ease;
+  -webkit-mask-image: linear-gradient(#000 40%, transparent); mask-image: linear-gradient(#000 40%, transparent);
 }
-@media (max-width: 34rem) { .shelf-peek { grid-template-columns: repeat(3, 1fr); } }
-.shelf-peek img { display: block; width: 100%; height: auto; }
+.shelf-peek.in { opacity: .5; }
+.shelf-peek img { position: absolute; display: block; height: auto; }
 .shelf-more, .shelf-note { position: relative; z-index: 1; }
