@@ -58,35 +58,27 @@
   var fillDisc = document.createElement('span'); fillDisc.className = 'aclock-fill'; fillDisc.setAttribute('aria-hidden', 'true');
   box.appendChild(fillDisc);
   box.appendChild(svg);
-  /* hover: a broadcast-clock wipe. Crimson sweeps once round the face from Seoul's hour hand, with a
-     light leading edge, until the face is solid; after a beat it clears, sweeping once round from the
-     minute hand -- so the minute hand is the last thing to come back out. Quick and eased (fast in
-     the middle, soft at the ends). Each hand turns white while crimson lies under it. Repeats while
-     the pointer stays. */
+  /* hover: one quick sweep, all of a piece -- a crimson arc (a light leading edge) runs once round the
+     face from Seoul's hour hand, its tail following close behind, so it fills and clears in the same
+     pass. Eased (fast in the middle, soft at the ends). Each city hand turns white while crimson lies
+     under it. Repeats after a beat while the pointer stays. */
   var sweeping = 0, t0 = 0, homeA = 0, minA = 0, cityA = [];
-  var FILL = 950, HOLD = 350, CLEAR = 950, REST = 600, BAND = 70;
-  function easeInOut(x) { return x < .5 ? 8 * x * x * x * x : 1 - Math.pow(-2 * x + 2, 4) / 2; }
+  var SWEEP = 820, REST = 650, BAND = 50, TAIL = 200;
+  function easeInOut(x) { return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; }
   function cg(from, stops) { return 'conic-gradient(from ' + from + 'deg, ' + stops + ')'; }
   function rel(a, from) { return ((a - from) % 360 + 360) % 360; }
   function light(line, on) { line.style.stroke = on ? '#fff' : ''; }
   function wipe(now) {
-    var C1 = 'var(--crimson)', C2 = 'var(--crimson-light)', el = (now - t0) % (FILL + HOLD + CLEAR + REST), bg, covered;
-    if (el < FILL) {   /* filling from the hour hand */
-      var L = easeInOut(el / FILL) * (360 + BAND), Lc = Math.min(360, L);
-      bg = cg(homeA, C1 + ' 0deg ' + Math.max(0, L - BAND) + 'deg, ' + C2 + ' ' + Lc + 'deg, transparent ' + Lc + 'deg');
-      if (L >= 360 + BAND - 0.5) bg = C1;
-      covered = function (a) { return rel(a, homeA) < Math.max(0, L - BAND / 2); };
-    } else if (el < FILL + HOLD) { bg = C1; covered = function () { return true; }; }
-    else if (el < FILL + HOLD + CLEAR) {   /* clearing from the minute hand: it comes out last */
-      var E = easeInOut((el - FILL - HOLD) / CLEAR) * (360 + BAND), Ec = Math.min(360, E);
-      bg = cg(minA, 'transparent 0deg ' + Math.max(0, E - BAND) + 'deg, ' + C2 + ' ' + Ec + 'deg, ' + C1 + ' ' + Ec + 'deg');
-      if (E >= 360 + BAND - 0.5) bg = 'transparent';
-      covered = function (a) { var r = rel(a, minA); return r > E - BAND / 2 && !(r < 0.5 && E > 300); };
+    var C1 = 'var(--crimson)', C2 = 'var(--crimson-light)', el = (now - t0) % (SWEEP + REST), bg, covered;
+    if (el < SWEEP) {
+      var L = easeInOut(el / SWEEP) * (360 + TAIL), Tr = Math.max(0, L - TAIL), Lc = Math.min(360, L), Lb = Math.max(Tr, Math.min(360, L - BAND));
+      bg = cg(homeA, 'transparent 0deg ' + Tr + 'deg, ' + C1 + ' ' + Tr + 'deg ' + Lb + 'deg, ' + C2 + ' ' + Lc + 'deg, transparent ' + Lc + 'deg');
+      covered = function (a) { var r = rel(a, homeA); return r >= Tr && r < Math.min(360, L - BAND / 2); };
     } else { bg = 'transparent'; covered = function () { return false; }; }
     fillDisc.style.background = bg;
     /* the Seoul hour and minute hands stay pale grey throughout */
     cityHands.forEach(function (h, k) { light(h, covered(cityA[k])); });
-    pin.style.fill = (el > FILL * 0.5 && el < FILL + HOLD + CLEAR * 0.5) ? '#fff' : '';
+    pin.style.fill = (el > SWEEP * 0.3 && el < SWEEP * 0.75) ? '#fff' : '';
     sweeping = requestAnimationFrame(wipe);
   }
   var canHover = !window.matchMedia || window.matchMedia('(hover: hover)').matches;   /* touch screens: no sweep (a tap would leave it stuck) */
