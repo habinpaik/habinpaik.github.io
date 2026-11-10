@@ -714,15 +714,6 @@ main > p.dek:first-child + section { margin-top: 0; }   /* the opener is larger:
 .shelf-more button:hover, .shelf-panel .shelf-more button:hover { background-size: 100% 100%; color: #fff; border-color: var(--crimson); }
 .shelf-more button[hidden] { display: none; }
 
-.shelf-toast {
-  position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%);
-  z-index: 200;
-  font-family: var(--sans); font-weight: 700; font-size: 1.5rem;
-  color: #fff; background: var(--crimson);
-  padding: var(--s4) var(--s6); border-radius: 0;
-  opacity: 0; transition: opacity .2s ease; pointer-events: none;
-}
-.shelf-toast.show { opacity: 1; }
 
 @media (max-width: 34rem) { .shelf { grid-template-columns: repeat(3, 1fr); } }
 
@@ -1360,3 +1351,18 @@ html:has(.snap-top) { scroll-snap-type: y mandatory; }
 }
 .spine-nav button, .shelf-more button { transition: color .45s ease; }
 .spine-nav button:not(:disabled):active, .shelf-panel .shelf-more button:active, .shelf-more button:active { color: var(--ink); transition-duration: .06s; }
+
+/* "A prime more" pressed: it swells downward into a crimson block with a big "+n" (white), the shelf
+   opens beneath the covers carrying it down, the new books fade in; then it settles back */
+.shelf-more button .big { display: none; }
+.shelf-more button { transition: color .45s ease, height .38s cubic-bezier(.3,0,.2,1), background-color .25s ease, border-color .25s ease; overflow: hidden; vertical-align: top; }
+.shelf-panel .shelf-more button.burst, .shelf-more button.burst { background: var(--crimson); border-color: var(--crimson); color: #fff; }
+.shelf-more button.burst::before { opacity: 0 !important; }
+.shelf-more button.burst .kh { display: none; }
+.shelf-more button.burst .big {
+  display: block; font-family: var(--sans); font-weight: 600; font-size: var(--t-name); line-height: 1;
+  color: #fff; text-box-trim: trim-both; text-box-edge: cap alphabetic; padding-block: var(--s4);
+}
+.shelf.opening { transition: height .75s cubic-bezier(.3,0,.2,1); }
+.shelf .book { transition: opacity .6s ease .1s; }
+.shelf .book.arriving { opacity: 0; transition: none; }

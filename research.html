@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
-<link rel="stylesheet" href="style.css?v=20261110d">
+<link rel="stylesheet" href="style.css?v=20261110e">
 </head>
 <body>
 <script>
@@ -191,7 +191,6 @@ f(); window.addEventListener('resize',f);})();
 
 <div class="spine-tip" aria-hidden="true"></div>
 
-<div class="shelf-toast" aria-hidden="true"></div>
 
 <footer class="site-foot">
   <div class="wrap">
@@ -222,10 +221,9 @@ f(); window.addEventListener('resize',f);})();
   onScroll();
   window.addEventListener('scroll', onScroll, { passive: true });
 
-  // Bookshelf: reveal hidden books in chunks (+2, +3, +5, +7…), with a toast.
+  // Bookshelf: reveal hidden books in chunks (+2, +3, +5, +7…).
   var shelf = document.querySelector('.shelf');
   var moreBtn = document.querySelector('[data-more]');
-  var toast = document.querySelector('.shelf-toast');
   if (shelf && moreBtn) {
     var CHUNKS = [2, 3, 5, 7, 11];
     var step = 0;
@@ -237,29 +235,45 @@ f(); window.addEventListener('resize',f);})();
       step = 0; setLabel();
       moreBtn.hidden = shown.length <= cols * 2;
     };
-    var toastTimer = null;
-    function showToast(n) {
-      if (!toast) return;
-      toast.textContent = '+' + n;
-      toast.classList.add('show');
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(function () { toast.classList.remove('show'); }, 1200);
-    }
     function setLabel() {
       var n = CHUNKS[Math.min(step, CHUNKS.length - 1)];
       moreBtn.firstChild.textContent = 'A prime more +' + n;
     }
     window.resetReveal();
+    /* a press: the button swells downward into a crimson block with a big "+n", then the new books
+       open the shelf beneath the covers and carry the button down with them; then it settles back */
+    var busy = false;
     moreBtn.addEventListener('click', function () {
       var hidden = shelf.querySelectorAll('.book.is-hidden:not(.is-filtered)');
-      if (!hidden.length) return;
+      if (!hidden.length || busy) return;
+      busy = true;
       var n = CHUNKS[Math.min(step, CHUNKS.length - 1)];   // 실제 남은 수와 무관하게 정해진 숫자를 그대로 표시
-      var i = 0;
-      hidden.forEach(function (b) { if (i < n) { b.classList.remove('is-hidden'); i++; } });
-      showToast(n);
-      if (window.drawBoards) window.drawBoards();
-      step++;
-      if (!shelf.querySelectorAll('.book.is-hidden:not(.is-filtered)').length) { moreBtn.hidden = true; } else { setLabel(); }
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var b0 = moreBtn.getBoundingClientRect();
+      moreBtn.style.width = b0.width + 'px'; moreBtn.style.height = b0.height + 'px';
+      var big = document.createElement('span'); big.className = 'big'; big.textContent = '+' + n;
+      moreBtn.appendChild(big); moreBtn.classList.add('burst');
+      moreBtn.style.height = 'auto'; var hBig = moreBtn.getBoundingClientRect().height; moreBtn.style.height = b0.height + 'px';
+      moreBtn.offsetHeight;
+      moreBtn.style.height = hBig + 'px';                           /* 1. swell */
+      setTimeout(function () {                                      /* 2. the shelf opens, carrying it down */
+        var h0 = shelf.getBoundingClientRect().height;
+        var i = 0, opened = [];
+        hidden.forEach(function (b) { if (i < n) { b.classList.remove('is-hidden'); b.classList.add('arriving'); opened.push(b); i++; } });
+        if (window.drawBoards) window.drawBoards();
+        var h1 = shelf.getBoundingClientRect().height;
+        shelf.style.height = h0 + 'px'; shelf.style.overflow = 'hidden'; shelf.offsetHeight;
+        shelf.classList.add('opening'); shelf.style.height = h1 + 'px';
+        requestAnimationFrame(function () { opened.forEach(function (b) { b.classList.remove('arriving'); }); });
+        setTimeout(function () {                                    /* 3. settle back */
+          shelf.classList.remove('opening'); shelf.style.height = ''; shelf.style.overflow = '';
+          moreBtn.classList.remove('burst'); big.remove();
+          moreBtn.style.height = ''; moreBtn.style.width = '';
+          step++;
+          if (!shelf.querySelectorAll('.book.is-hidden:not(.is-filtered)').length) { moreBtn.hidden = true; } else { setLabel(); }
+          busy = false;
+        }, reduce ? 0 : 750);
+      }, reduce ? 0 : 380);
     });
   }
 
