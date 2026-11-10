@@ -84,7 +84,7 @@
       covered = function (a) { var r = rel(a, minA); return r > E - BAND / 2 && !(r < 0.5 && E > 300); };
     } else { bg = 'transparent'; covered = function () { return false; }; }
     fillDisc.style.background = bg;
-    light(homeHand, covered(homeA)); light(minHand, covered(minA));
+    /* the Seoul hour and minute hands stay pale grey throughout */
     cityHands.forEach(function (h, k) { light(h, covered(cityA[k])); });
     pin.style.fill = (el > FILL * 0.5 && el < FILL + HOLD + CLEAR * 0.5) ? '#fff' : '';
     sweeping = requestAnimationFrame(wipe);

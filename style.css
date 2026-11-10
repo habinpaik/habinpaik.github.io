@@ -1017,11 +1017,12 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 /* while the face is part pale, part crimson, the hands go dark so they read on both */
 @media (hover: hover) {   /* not on touch screens, where a tap would leave the hands dark */
   .aclock:hover .hand.city { stroke: var(--ink); }
-  .aclock:hover .hand.min, .aclock:hover .hand.home { stroke: var(--stone); }
+  /* the Seoul hour and minute hands never change: always pale grey (below) */
 }
 .aclock .face { fill: none; }
 .aclock .face, .aclock line { stroke-width: 1; vector-effect: non-scaling-stroke; }   /* 1px at any size */
-.aclock .face, .aclock .tick, .aclock .hand.min, .aclock .hand.home { stroke: var(--line); }
+.aclock .face, .aclock .tick { stroke: var(--line); }
+.aclock .hand.min, .aclock .hand.home { stroke: var(--line) !important; transition: none; }   /* fixed pale grey, hover or not */
 .aclock .hand { stroke-linecap: round; }
 .aclock .hand.city { stroke: var(--crimson); }
 .aclock .pin { fill: var(--ink); }
