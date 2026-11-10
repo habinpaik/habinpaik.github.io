@@ -73,7 +73,7 @@
   --s5: 1.75rem; --s6: 2.5rem; --s7: 3.5rem; --s8: 5rem;
 
   --t-small: clamp(0.8rem, 0.76rem + 0.19vw, 0.92rem);
-  --t-body:  clamp(1rem, 0.93rem + 0.32vw, 1.2rem);
+  --t-body:  clamp(0.9375rem, 0.875rem + 0.3vw, 1.125rem);   /* 15 -> 18px (was 16 -> 19.2) */
   --t-title: clamp(1.18rem, 1.06rem + 0.62vw, 1.58rem);
   /* subject colours (Research bookshelf): filter buttons, cover tags and spines all use these */
   /* picked to stay far apart (CIEDE2000), all >= 4.8:1 with white; maths a mid green, the same weight as the others */
