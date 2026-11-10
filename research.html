@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
-<link rel="stylesheet" href="style.css?v=20261110g">
+<link rel="stylesheet" href="style.css?v=20261110h">
 </head>
 <body>
 <script>
@@ -331,16 +331,33 @@ f(); window.addEventListener('resize',f);})();
       below = layer.offsetWidth;
     }
   }
-  packPiles();
+  packPiles(); if (window.deskEdges) window.deskEdges();
   var lastMax = null;
   window.addEventListener('resize', function () {
     var m = getComputedStyle(document.querySelector('.spine-shelf')).getPropertyValue('--pile-max');
-    if (m !== lastMax) { lastMax = m; packPiles(); }
+    if (m !== lastMax) { lastMax = m; packPiles(); if (window.deskEdges) window.deskEdges(); }
   });
   lastMax = getComputedStyle(document.querySelector('.spine-shelf')).getPropertyValue('--pile-max');
 
   // Spine shelf: left/right arrows scroll the row
   var spineShelf = document.querySelector('.spine-shelf');
+  /* blurred edges where more of the desk lies off to that side */
+  (function () {
+    if (!spineShelf) return;
+    var wrap = spineShelf.parentNode, edges = ['l', 'r'].map(function (k) {
+      var d = document.createElement('div'); d.className = 'desk-edge ' + k; d.setAttribute('aria-hidden', 'true');
+      d.innerHTML = '<span></span><span></span><span></span>'; wrap.appendChild(d); return d;
+    });
+    function edgesUpdate() {
+      var x = spineShelf.scrollLeft, max = spineShelf.scrollWidth - spineShelf.clientWidth;
+      edges[0].classList.toggle('on', x > 2); edges[1].classList.toggle('on', x < max - 2);
+      var top = spineShelf.offsetTop; edges.forEach(function (d) { d.style.top = top + 'px'; d.style.height = (spineShelf.clientHeight - 8) + 'px'; d.style.bottom = 'auto'; });
+    }
+    spineShelf.addEventListener('scroll', edgesUpdate, { passive: true });
+    window.addEventListener('resize', edgesUpdate);
+    window.deskEdges = edgesUpdate;
+    setTimeout(edgesUpdate, 0); setTimeout(edgesUpdate, 600);
+  })();
   if (spineShelf) {
     document.querySelectorAll('.spine-nav button').forEach(function (btn) {
       btn.addEventListener('click', function () {
@@ -465,7 +482,7 @@ f(); window.addEventListener('resize',f);})();
     var sp = on.filter(function (f) { return f.spine; }).map(function (f) { return f.spine; });
     var cv = on.filter(function (f) { return f.cover; }).map(function (f) { return f.cover; });
     /* the two rows work on their own: spine tags filter only the spines, cover tags only the covers */
-    if (sp.join() !== spineSel.join()) { spineSel = sp; packPiles(); if (spineShelf) spineShelf.scrollLeft = 0; }   /* only a spine tag re-stacks the spines */
+    if (sp.join() !== spineSel.join()) { spineSel = sp; packPiles(); if (window.deskEdges) window.deskEdges(); if (spineShelf) spineShelf.scrollLeft = 0; }   /* only a spine tag re-stacks the spines */
     grid.querySelectorAll('.book').forEach(function (b) {
       b.classList.toggle('is-filtered', cv.length > 0 && cv.indexOf(b.getAttribute('data-subject')) < 0);
     });

@@ -1371,3 +1371,15 @@ html:has(.snap-top) { scroll-snap-type: y mandatory; }
 /* Journalism: hovering a story (its photo, its head, or its box) slowly enlarges its photo, as the Portfolio cards */
 .feat-photo img, .side-photo img { transition: transform .5s ease; }
 .feat-photo:hover img, .side-photo:hover img, .feat-photo.zoom img, .side-photo.zoom img { transform: scale(1.04); }
+
+/* Messy Desk: where more of the desk lies off to one side, the shelf's edge blurs progressively into
+   it (three layers, each blurrier and narrower toward the edge) -- a cue to swipe. Overlays only:
+   nothing on the desk moves, no spacing changes. The floor stays sharp. */
+.desk-edge { position: absolute; top: 0; bottom: 8px; width: 4.5rem; z-index: 2; pointer-events: none; opacity: 0; transition: opacity .35s ease; }
+.desk-edge.on { opacity: 1; }
+.desk-edge.r { right: var(--gutter); }
+.desk-edge.l { left: var(--gutter); transform: scaleX(-1); }
+.desk-edge span { position: absolute; inset: 0; }
+.desk-edge span:nth-child(1) { backdrop-filter: blur(1px); -webkit-backdrop-filter: blur(1px); -webkit-mask-image: linear-gradient(to right, transparent, #000 35%); mask-image: linear-gradient(to right, transparent, #000 35%); }
+.desk-edge span:nth-child(2) { backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); -webkit-mask-image: linear-gradient(to right, transparent 30%, #000 65%); mask-image: linear-gradient(to right, transparent 30%, #000 65%); }
+.desk-edge span:nth-child(3) { backdrop-filter: blur(7px); -webkit-backdrop-filter: blur(7px); -webkit-mask-image: linear-gradient(to right, transparent 60%, #000); mask-image: linear-gradient(to right, transparent 60%, #000); }
