@@ -219,13 +219,14 @@
     var rects = placed.map(function (p) { return { l: p.l - half, r: p.r - half, t: p.t - half, b: p.b - half }; })
                       .concat([{ l: -half, r: half, t: -half, b: half }]);
     if (!phone) {
-      /* wider screens: the group's top (its highest name, or the circle's top) on the top of the
-         time's digits, and its right edge (its rightmost name, or the circle) on the column's right */
-      var gT = Math.min.apply(null, rects.map(function (q) { return q.t; })), gR = Math.max.apply(null, rects.map(function (q) { return q.r; }));
-      var X = A.colR - gR, Y = A.top - gT;
+      /* wider screens, as on phones: the circle's top on the top of the time's digits (names above it
+         may rise into the room over the time, up to --s5 above it), and the group's right edge (its
+         rightmost name, or the circle) on the column's right */
+      var gR = Math.max.apply(null, rects.map(function (q) { return q.r; }));
+      var X = A.colR - gR, Y = A.top + half;
       var fits = rects.every(function (q) {
         var L = X + q.l, Rr = X + q.r, T = Y + q.t, B = Y + q.b;
-        if (L < 0 || B > A.bot) return false;
+        if (L < 0 || B > A.bot || T < A.top - 28) return false;
         return A.keep.every(function (w) { return !(L < w.r + 8 && w.l < Rr + 8 && T < w.b + 4 && w.t < B + 4); });
       });
       return fits ? { x: X, cy: Y, stackAll: stackAll, placed: placed } : null;
@@ -298,8 +299,13 @@
     if (key === lastKey) return;      /* labels only move a little each minute */
     lastKey = key;
 
-    /* a screen too narrow for one size all day: the largest that suits this moment */
-    var D = fit.D, res = D ? bestX(groups, D, fit.A, phone) : null;
+    /* the largest dial that suits this moment's names (at hours when they crowd less, it grows);
+       never smaller than the size that suits the whole day */
+    var D = null, res = null;
+    for (var d = Math.floor(Math.min(fit.A.bot - fit.A.top, 240)); d >= Math.max(40, fit.D || 40); d -= 2) {
+      var r0 = bestX(groups, d, fit.A, phone); if (r0) { D = d; res = r0; break; }
+    }
+    if (!res && fit.D) { D = fit.D; res = bestX(groups, D, fit.A, phone); }
     if (!res) for (D = Math.floor(fit.A.bot - fit.A.top); D >= 40 && !res; D -= 2) res = bestX(groups, D, fit.A, phone);
     if (!res) { D = 40; res = { x: fit.A.colR - 20, placed: layout(groups, 40, true, phone) }; }
 
