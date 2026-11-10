@@ -1398,6 +1398,9 @@ html:has(.snap-top) { scroll-snap-type: y mandatory; }
 }
 .shelf-peek.in { opacity: .5; }
 .shelf-peek img { position: absolute; display: block; height: auto; }
+.shelf-peek .pline { position: absolute; left: 0; right: 0; height: var(--s2); border-top: 1px solid var(--line); background: var(--shade-light) no-repeat; }
+.shelf-wrap { isolation: isolate; }
+.shelf-wrap > .shelf { z-index: 1; }   /* the real shelf, its ledges included, above the glimpse */
 .shelf-more, .shelf-note { position: relative; z-index: 1; }
 
 /* box-like controls and tags in semibold: subject tags, "A prime more", the print-edition box, the pledge-analysis strips */

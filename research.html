@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
-<link rel="stylesheet" href="style.css?v=20261110r">
+<link rel="stylesheet" href="style.css?v=20261110s">
 </head>
 <body>
 <script>
@@ -253,23 +253,33 @@ f(); window.addEventListener('resize',f);})();
       var n = Math.min(hid.length, CHUNKS[Math.min(step, CHUNKS.length - 1)]);
       if (!vis.length || !n) { peek.style.display = 'none'; peekSig = ''; return; }
       var gapX = parseFloat(getComputedStyle(shelf).columnGap) || 0, cw = (shelf.offsetWidth - gapX * (cols - 1)) / cols;
-      var last = vis[vis.length - 1], lastRowTop = last.offsetTop, faceImg = vis[0].querySelector('img');
+      var last = vis[vis.length - 1], lastCover = last.querySelector('.cover') || last, faceImg = vis[0].querySelector('img');
       var iw = faceImg ? faceImg.getBoundingClientRect().width : cw;
+      var sR = shelf.getBoundingClientRect(), lcR = lastCover.getBoundingClientRect();
+      var rowTop = lcR.top - sR.top, line0 = lcR.bottom - sR.top, coverH = lcR.height;   /* the last row's ledge: where its covers stand */
       var note = document.querySelector('.shelf-note');
-      var top = shelf.offsetTop + lastRowTop, bottom = note ? note.offsetTop + note.offsetHeight : top + 400;
-      var rowBelow = shelf.offsetHeight + (parseFloat(getComputedStyle(shelf).rowGap) || 32) - lastRowTop;
+      var top = shelf.offsetTop + rowTop, bottom = note ? note.offsetTop + note.offsetHeight : top + 400;
+      var rowGap = parseFloat(getComputedStyle(shelf).rowGap) || 32;
+      var line1 = shelf.offsetHeight + rowGap + coverH - rowTop;   /* the next row's ledge, measured from the peek's top */
+      var H = Math.max(0, bottom - top);
       var sig = vis.length + '|' + n + '|' + Math.round(cw) + '|' + Math.round(top);
       var fresh = sig.split('|').slice(0, 2).join() !== peekSig.split('|').slice(0, 2).join();
       peek.innerHTML = '';
+      var usesRow1 = false;
       for (var j = 0; j < n; j++) {
         var k = vis.length + j, row = Math.floor(k / cols) - Math.floor((vis.length - 1) / cols), col = k % cols;
         var img = hid[j].querySelector('img'); if (!img) continue;
         var c = document.createElement('img'); c.src = img.currentSrc || img.getAttribute('src'); c.alt = '';
-        c.style.left = (col * (cw + gapX)) + 'px'; c.style.top = (row === 0 ? 0 : rowBelow + (row - 1) * 400) + 'px'; c.style.width = iw + 'px';
+        var lineY = row === 0 ? line0 - rowTop : line1 + (row - 1) * (coverH + rowGap + 40);
+        if (row > 0) usesRow1 = true;
+        c.style.left = (col * (cw + gapX)) + 'px'; c.style.bottom = (H - lineY) + 'px'; c.style.width = iw + 'px'; c.style.maxHeight = coverH + 'px'; c.style.objectFit = 'contain'; c.style.objectPosition = 'left bottom';
         peek.appendChild(c);
       }
+      if (usesRow1) {   /* the next row's ledge too, so those covers stand on something */
+        var ln = document.createElement('span'); ln.className = 'pline'; ln.style.top = line1 + 'px'; peek.appendChild(ln);
+      }
       peek.style.left = shelf.offsetLeft + 'px'; peek.style.width = shelf.offsetWidth + 'px';
-      peek.style.top = top + 'px'; peek.style.height = Math.max(0, bottom - top) + 'px';
+      peek.style.top = top + 'px'; peek.style.height = H + 'px';
       peek.style.display = '';
       if (fresh) { peek.classList.remove('in'); peek.offsetHeight; peek.classList.add('in'); }   /* fades in, never pops */
       peekSig = sig;
