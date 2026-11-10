@@ -1418,3 +1418,13 @@ html:has(.snap-top) { scroll-snap-type: y mandatory; }
 .desk-map:hover .view { border-color: var(--ink); }
 .desk-map[hidden] { display: none; }
 /* arrows: the stem weight of Pretendard SemiBold at the button size (0.125em -- 1.8px on desktop), square ends and sharp corners, as the letters */
+
+/* Messy Desk edges, done plainly: the desk (and its floor) fades in from the blank page and out into it
+   across the margins beyond the column -- no blur, no cut. On phones, where there is no margin, over
+   the last 1.5rem. */
+.desk-edge { display: none !important; }
+.spine-wrap { --fade: max(1.5rem, var(--ext) - var(--gutter)); }
+.spine-shelf, .spine-wrap .spine-board {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent);
+          mask-image: linear-gradient(to right, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent);
+}
