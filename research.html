@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
-<link rel="stylesheet" href="style.css?v=20261110h">
+<link rel="stylesheet" href="style.css?v=20261110j">
 </head>
 <body>
 <script>
@@ -234,11 +234,32 @@ f(); window.addEventListener('resize',f);})();
       shown.forEach(function (b, i) { b.classList.toggle('is-hidden', i >= cols * 2); });
       step = 0; setLabel();
       moreBtn.hidden = shown.length <= cols * 2;
+      if (window.updatePeek) window.updatePeek();
     };
     function setLabel() {
       var n = CHUNKS[Math.min(step, CHUNKS.length - 1)];
       moreBtn.firstChild.textContent = 'A prime more +' + n;
     }
+    /* a blurred glimpse of the next books behind "A prime more" and the note */
+    var peek = document.createElement('div'); peek.className = 'shelf-peek'; peek.setAttribute('aria-hidden', 'true');
+    shelf.parentNode.insertBefore(peek, shelf.nextSibling);
+    window.updatePeek = function () {
+      var cols = getComputedStyle(shelf).gridTemplateColumns.split(' ').filter(Boolean).length || 4;
+      var next = [].slice.call(shelf.querySelectorAll('.book.is-hidden:not(.is-filtered)'), 0, cols);
+      peek.innerHTML = '';
+      next.forEach(function (b) {
+        var img = b.querySelector('img'), cell = document.createElement('div');
+        if (img) { var c = document.createElement('img'); c.src = img.currentSrc || img.src; c.alt = ''; cell.appendChild(c); }
+        peek.appendChild(cell);
+      });
+      var note = document.querySelector('.shelf-note'), top = shelf.offsetTop + shelf.offsetHeight + 32;
+      var bottom = note ? note.offsetTop + note.offsetHeight : top + 200;
+      peek.style.left = shelf.offsetLeft + 'px'; peek.style.width = shelf.offsetWidth + 'px';
+      peek.style.top = top + 'px'; peek.style.height = Math.max(0, bottom - top) + 'px';
+      peek.style.display = next.length ? '' : 'none';
+    };
+    window.addEventListener('resize', function () { window.updatePeek(); });
+    if (window.ResizeObserver) new ResizeObserver(function () { if (!busy) window.updatePeek(); }).observe(shelf);
     window.resetReveal();
     /* a press: the button swells downward into a crimson block with a big "+n", then the new books
        open the shelf beneath the covers and carry the button down with them; then it settles back */
@@ -257,6 +278,7 @@ f(); window.addEventListener('resize',f);})();
       moreBtn.offsetHeight;
       moreBtn.style.height = hBig + 'px';                           /* 1. swell */
       setTimeout(function () {   /* 2. at once: it shrinks back to "A prime more +next" and the shelf opens, carrying it down */
+        peek.style.display = 'none';
         var h0 = shelf.getBoundingClientRect().height;
         var i = 0, opened = [];
         hidden.forEach(function (b) { if (i < n) { b.classList.remove('is-hidden'); b.classList.add('arriving'); opened.push(b); i++; } });
@@ -274,7 +296,7 @@ f(); window.addEventListener('resize',f);})();
           shelf.classList.remove('opening'); shelf.style.height = ''; shelf.style.overflow = '';
           moreBtn.style.height = ''; moreBtn.style.width = '';
           if (!left) moreBtn.hidden = true;
-          busy = false;
+          busy = false; window.updatePeek();
         }, reduce ? 0 : 750);
       }, reduce ? 0 : 520);
     });
@@ -363,12 +385,14 @@ f(); window.addEventListener('resize',f);})();
       btn.addEventListener('click', function () {
         /* the next pile not yet fully in view (on that side) comes to the middle of the shelf */
         var dir = parseInt(btn.getAttribute('data-dir'), 10);
-        var box = spineShelf.getBoundingClientRect(), mid = box.left + spineShelf.clientWidth / 2;
+        /* the text column inside the widened shelf: piles count as in view only there */
+        var box = spineShelf.getBoundingClientRect(), E = parseFloat(getComputedStyle(spineShelf).paddingLeft) || 0;
+        var colL = box.left + E, colR = box.left + spineShelf.clientWidth - E, mid = (colL + colR) / 2;
         var piles = [].slice.call(spineShelf.querySelectorAll('.pile')).filter(function (p) { return p.getClientRects().length; });
         var target = null;
-        if (dir > 0) target = piles.filter(function (p) { return p.getBoundingClientRect().right > box.left + spineShelf.clientWidth + 1; })[0];
-        else target = piles.filter(function (p) { return p.getBoundingClientRect().left < box.left - 1; }).pop();
-        if (!target) { spineShelf.scrollBy({ left: dir * spineShelf.clientWidth, behavior: 'smooth' }); return; }
+        if (dir > 0) target = piles.filter(function (p) { return p.getBoundingClientRect().right > colR + 1; })[0];
+        else target = piles.filter(function (p) { return p.getBoundingClientRect().left < colL - 1; }).pop();
+        if (!target) { spineShelf.scrollBy({ left: dir * (colR - colL), behavior: 'smooth' }); return; }
         var r = target.getBoundingClientRect();
         spineShelf.scrollBy({ left: (r.left + r.width / 2) - mid, behavior: 'smooth' });
       });

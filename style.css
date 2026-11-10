@@ -1372,14 +1372,31 @@ html:has(.snap-top) { scroll-snap-type: y mandatory; }
 .feat-photo img, .side-photo img { transition: transform .5s ease; }
 .feat-photo:hover img, .side-photo:hover img, .feat-photo.zoom img, .side-photo.zoom img { transform: scale(1.04); }
 
-/* Messy Desk: where more of the desk lies off to one side, the shelf's edge blurs progressively into
-   it (three layers, each blurrier and narrower toward the edge) -- a cue to swipe. Overlays only:
-   nothing on the desk moves, no spacing changes. The floor stays sharp. */
-.desk-edge { position: absolute; top: 0; bottom: 8px; width: 4.5rem; z-index: 2; pointer-events: none; opacity: 0; transition: opacity .35s ease; }
+/* Messy Desk: the desk runs on past the text column into the empty margins on either side (the piles
+   in the column stay exactly where they were: the shelf only widens outward, padded by the same
+   amount), and there, outside the column, it blurs progressively away -- a cue that more lies that
+   way. The blur lives only in the margins; nothing in the column is touched. */
+.spine-wrap { --ext: max(var(--gutter), (100vw - var(--sbw, 0px) - 46rem) / 2 + var(--gutter)); }
+.spine-shelf { margin-inline: calc(var(--gutter) - var(--ext)); padding-inline: calc(var(--ext) - var(--gutter)); }
+.desk-edge { position: absolute; top: 0; bottom: 8px; width: calc(var(--ext) - var(--gutter) + var(--gutter)); z-index: 2; pointer-events: none; opacity: 0; transition: opacity .35s ease; }
 .desk-edge.on { opacity: 1; }
-.desk-edge.r { right: var(--gutter); }
-.desk-edge.l { left: var(--gutter); transform: scaleX(-1); }
+.desk-edge.r { left: calc(100% - var(--gutter)); }
+.desk-edge.l { right: calc(100% - var(--gutter)); transform: scaleX(-1); }
 .desk-edge span { position: absolute; inset: 0; }
-.desk-edge span:nth-child(1) { backdrop-filter: blur(1px); -webkit-backdrop-filter: blur(1px); -webkit-mask-image: linear-gradient(to right, transparent, #000 35%); mask-image: linear-gradient(to right, transparent, #000 35%); }
-.desk-edge span:nth-child(2) { backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); -webkit-mask-image: linear-gradient(to right, transparent 30%, #000 65%); mask-image: linear-gradient(to right, transparent 30%, #000 65%); }
-.desk-edge span:nth-child(3) { backdrop-filter: blur(7px); -webkit-backdrop-filter: blur(7px); -webkit-mask-image: linear-gradient(to right, transparent 60%, #000); mask-image: linear-gradient(to right, transparent 60%, #000); }
+.desk-edge span:nth-child(1) { backdrop-filter: blur(1.5px); -webkit-backdrop-filter: blur(1.5px); -webkit-mask-image: linear-gradient(to right, transparent, #000 25%); mask-image: linear-gradient(to right, transparent, #000 25%); }
+.desk-edge span:nth-child(2) { backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); -webkit-mask-image: linear-gradient(to right, transparent 15%, #000 50%); mask-image: linear-gradient(to right, transparent 15%, #000 50%); }
+.desk-edge span:nth-child(3) { backdrop-filter: blur(9px); -webkit-backdrop-filter: blur(9px); -webkit-mask-image: linear-gradient(to right, transparent 40%, #000 80%); mask-image: linear-gradient(to right, transparent 40%, #000 80%); }
+.desk-edge::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to right, transparent 55%, var(--paper)); }   /* and fades into the page at the far edge */
+
+/* Bookshelf: the next books, a blurred glimpse in the background where "A prime more" and the note sit
+   -- a cue that more lies below. Behind everything, no effect on layout; fades out downward. */
+.shelf-wrap { position: relative; }
+.shelf-peek {
+  position: absolute; z-index: 0; pointer-events: none; overflow: hidden;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px var(--s4); align-items: start;
+  filter: blur(6px); opacity: .55;
+  -webkit-mask-image: linear-gradient(#000, transparent); mask-image: linear-gradient(#000, transparent);
+}
+@media (max-width: 34rem) { .shelf-peek { grid-template-columns: repeat(3, 1fr); } }
+.shelf-peek img { display: block; width: 100%; height: auto; }
+.shelf-more, .shelf-note { position: relative; z-index: 1; }
