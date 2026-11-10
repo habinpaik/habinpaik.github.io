@@ -65,8 +65,9 @@
      edge. Each city hand turns white while crimson lies under it. Repeats after a beat while the
      pointer stays. Angles are measured clockwise from the hour hand and unwrapped (they run past 360). */
   var sweeping = 0, t0 = 0, homeA = 0, minA = 0, cityA = [];
-  var SWEEP = 1150, REST = 600, LAG = 0.38, BAND = 45;
+  var SWEEP = 1650, REST = 600, LAG = 0.3, BAND = 45;   /* the tail takes its time: the clearing is the slower half */
   function ease(x) { x = Math.max(0, Math.min(1, x)); return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; }
+  function easeSoft(x) { x = Math.max(0, Math.min(1, x)); return (1 - Math.cos(Math.PI * x)) / 2; }   /* gentler: for the clearing */
   function rel(a, from) { return ((a - from) % 360 + 360) % 360; }
   function light(line, on) { line.style.stroke = on ? '#fff' : ''; }
   /* the part of the face between tail and head (unwrapped angles), as conic-gradient stops from the hour hand */
@@ -92,7 +93,7 @@
   function wipe(now) {
     var el = (now - t0) % (SWEEP + REST), x = el / SWEEP, span = 360 + rel(minA, homeA);
     var head = 0, tail = 0;
-    if (el < SWEEP) { head = ease(x / (1 - LAG * 0.35)) * span; tail = ease((x - LAG) / (1 - LAG)) * span; }
+    if (el < SWEEP) { head = ease(x / 0.62) * span; tail = easeSoft((x - LAG) / (1 - LAG)) * span; }
     fillDisc.style.background = el < SWEEP ? arc(tail, head) : 'transparent';
     cityHands.forEach(function (h, k) {
       var r = rel(cityA[k], homeA), on = false;
