@@ -58,59 +58,80 @@
   var fillDisc = document.createElement('span'); fillDisc.className = 'aclock-fill'; fillDisc.setAttribute('aria-hidden', 'true');
   box.appendChild(fillDisc);
   box.appendChild(svg);
-  /* hover: one sweep from Seoul's hour hand to its minute hand. A crimson arc grows out of the hour
-     hand and runs clockwise once round the face and on to the minute hand; its tail sets off a little
-     later along the same path and catches the head there, so the arc closes up into the minute hand.
-     Head and tail are both eased (fast in the middle, soft at the ends); the head carries a light
-     edge. Each city hand turns white while crimson lies under it. Repeats after a beat while the
-     pointer stays. Angles are measured clockwise from the hour hand and unwrapped (they run past 360). */
-  var sweeping = 0, t0 = 0, homeA = 0, minA = 0, cityA = [];
-  var SWEEP = 1650, REST = 600, LAG = 0.3, BAND = 45;   /* the tail takes its time: the clearing is the slower half */
+  /* hover: one crimson arc from Seoul's hour hand round to its minute hand.
+     Path: clockwise from the hour hand h to the minute hand m, one full turn plus the way between
+       them -- D = 360 + (m - h, clockwise) -- so it passes over the whole face once.
+     One eased progress p (0 -> 1) drives everything:
+       centre  C = D * p                      (slides from the hour hand to the minute hand)
+       length  L = Lmax * sin(pi * p)         (0 at the start, largest midway, 0 at the end)
+       head = C + L/2, tail = C - L/2
+     so the arc is born as a point on the hour hand and closes to a point on the minute hand, filling
+     and clearing at mirrored speeds. Lmax = min(360, 2D/pi) keeps the head from ever passing the
+     minute hand or the tail going back past the hour hand, without clamping.
+     Each turn re-reads the hands (so a long hover never runs on stale angles), and its duration grows
+     with D, so the arc turns at an even pace whether the minute hand is just ahead of the hour hand
+     or just behind it. City hands go white while crimson lies under them; Seoul's hour and minute
+     hands stay pale grey. A beat's rest between turns. */
+  var sweeping = 0, homeA = 0, minA = 0, cityA = [];
+  var REST = 600, BAND = 45, cyc = null;
   function ease(x) { x = Math.max(0, Math.min(1, x)); return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; }
-  function easeSoft(x) { x = Math.max(0, Math.min(1, x)); return (1 - Math.cos(Math.PI * x)) / 2; }   /* gentler: for the clearing */
   function rel(a, from) { return ((a - from) % 360 + 360) % 360; }
   function light(line, on) { line.style.stroke = on ? '#fff' : ''; }
-  /* the part of the face between tail and head (unwrapped angles), as conic-gradient stops from the hour hand */
+  function readHands() {
+    var now = new Date(), H = hm(home, now);
+    homeA = hourAng(H) * 180 / Math.PI; minA = (H.m + H.s / 60) * 6;
+    cityA = zones.map(function (z) { return hourAng(hm(z.tz, now)) * 180 / Math.PI; });
+  }
+  function newCycle(t) {
+    readHands();
+    var D = 360 + rel(minA, homeA);
+    cyc = { t: t, D: D, T: 1100 + (D - 360) / 360 * 700, Lmax: Math.min(360, 2 * D / Math.PI) };   /* 1.1s for one turn, 1.8s for two */
+  }
+  /* crimson between tail and head (unwrapped angles from the hour hand); a light edge at the head */
   function arc(tail, head) {
     var C1 = 'var(--crimson)', C2 = 'var(--crimson-light)';
-    if (head - tail <= 0.1) return 'transparent';
-    if (head - tail >= 360) return C1;
-    var a = tail % 360, b = head % 360, edge = Math.max(0, Math.min(BAND, head - tail));
-    var e = ((head - edge) % 360);   /* where the light edge begins */
-    function seg(x, y) {           /* x..y within one turn, crimson then the light edge near head */
-      var out = [];
-      if (y === b && head - tail > 0) {
-        var eb = (e <= y && e >= x) ? e : x;
-        out.push(C1 + ' ' + x + 'deg ' + eb + 'deg', C2 + ' ' + y + 'deg');
-      } else out.push(C1 + ' ' + x + 'deg ' + y + 'deg');
-      return out;
+    if (head - tail <= 0.2) return 'transparent';
+    if (head - tail >= 359.9) return C1;
+    var edge = Math.min(BAND, head - tail), eS = head - edge, pieces = [];
+    function col(u) { if (u <= eS) return C1; var f = Math.round((u - eS) / edge * 100); return 'color-mix(in srgb, ' + C2 + ' ' + f + '%, ' + C1 + ')'; }
+    function add(s0, e0) {   /* split at whole turns, then fold into 0..360 */
+      for (var s1 = s0; s1 < e0 - 1e-6; ) {
+        var nxt = Math.min(e0, (Math.floor(s1 / 360) + 1) * 360), base = Math.floor(s1 / 360) * 360;
+        pieces.push({ a: s1 - base, b: nxt - base, ca: col(s1), cb: col(nxt) }); s1 = nxt;
+      }
     }
-    var st;
-    if (a < b) st = ['transparent 0deg ' + a + 'deg'].concat(seg(a, b), ['transparent ' + b + 'deg 360deg']);
-    else st = [C1 + ' 0deg'].concat(seg(0, b).slice(0), ['transparent ' + b + 'deg ' + a + 'deg', C1 + ' ' + a + 'deg 360deg']);
+    if (eS > tail) add(tail, eS);
+    var steps = 6;   /* the light edge in a few slices, so its colour runs smoothly even across 0deg */
+    for (var k = 0; k < steps; k++) add(eS + edge * k / steps, eS + edge * (k + 1) / steps);
+    pieces.sort(function (p, q) { return p.a - q.a; });
+    var st = [], cur = 0;
+    pieces.forEach(function (p) {
+      if (p.a > cur + 1e-3) st.push('transparent ' + cur + 'deg ' + p.a + 'deg');
+      st.push(p.ca + ' ' + p.a + 'deg', p.cb + ' ' + p.b + 'deg'); cur = p.b;
+    });
+    if (cur < 360) st.push('transparent ' + cur + 'deg 360deg');
     return 'conic-gradient(from ' + homeA + 'deg, ' + st.join(', ') + ')';
   }
   function wipe(now) {
-    var el = (now - t0) % (SWEEP + REST), x = el / SWEEP, span = 360 + rel(minA, homeA);
-    var head = 0, tail = 0;
-    if (el < SWEEP) { head = ease(x / 0.62) * span; tail = easeSoft((x - LAG) / (1 - LAG)) * span; }
-    fillDisc.style.background = el < SWEEP ? arc(tail, head) : 'transparent';
+    if (!cyc || now - cyc.t >= cyc.T + REST) newCycle(now);
+    var el = now - cyc.t, on = el < cyc.T, head = 0, tail = 0;
+    if (on) {
+      var p = ease(el / cyc.T), C = cyc.D * p, L = cyc.Lmax * Math.sin(Math.PI * p);
+      head = C + L / 2; tail = C - L / 2;
+    }
+    fillDisc.style.background = on ? arc(tail, head) : 'transparent';
     cityHands.forEach(function (h, k) {
-      var r = rel(cityA[k], homeA), on = false;
-      for (var t = r; t <= head; t += 360) if (t >= tail && t <= head - BAND / 2) on = true;
-      light(h, el < SWEEP && on);
+      var r = rel(cityA[k], homeA), lit = false;
+      for (var t = r; t <= head; t += 360) if (t >= tail && t <= head - BAND / 2) lit = true;
+      light(h, on && lit);
     });
-    /* the Seoul hour and minute hands stay pale grey throughout; the pin goes white while covered */
-    pin.style.fill = (el < SWEEP && head - tail > 40) ? '#fff' : '';
+    pin.style.fill = (on && head - tail > 40) ? '#fff' : '';
     sweeping = requestAnimationFrame(wipe);
   }
   var canHover = !window.matchMedia || window.matchMedia('(hover: hover)').matches;   /* touch screens: no sweep (a tap would leave it stuck) */
   box.addEventListener('mouseenter', function () {
     if (!canHover) return;
-    var now = new Date(), H = hm(home, now);
-    homeA = hourAng(H) * 180 / Math.PI; minA = (H.m + H.s / 60) * 6;
-    cityA = zones.map(function (z) { return hourAng(hm(z.tz, now)) * 180 / Math.PI; });
-    t0 = performance.now(); if (!sweeping) sweeping = requestAnimationFrame(wipe);
+    cyc = null; if (!sweeping) sweeping = requestAnimationFrame(wipe);
     box.classList.add('live');
   });
   box.addEventListener('mouseleave', function () {
