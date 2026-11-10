@@ -1343,3 +1343,11 @@ section:has(.spine-panel) + section > h2.section-title { background: none; borde
 /* "Pledge analysis" strips: the light shade under their top line, as every top edge */
 .ebox.split .go { position: relative; }
 .ebox.split .go::after { content: ""; position: absolute; left: 0; right: 0; top: 0; height: var(--s2); background: var(--shade-light); pointer-events: none; }
+
+/* Magnet (front page): between the photo and the page there is no resting place -- the browser's own
+   scroll snapping carries it to the photo or to the page (menu bar at the top), with the scroll's own
+   momentum, so it never waits and then glides. The page itself is taller than the screen, so inside it
+   scrolling stays free. The photo is sticky, so a 1px marker at the very top stands in for it. */
+html:has(.snap-top) { scroll-snap-type: y mandatory; }
+.snap-top { position: absolute; top: 0; left: 0; width: 1px; height: 1px; scroll-snap-align: start; pointer-events: none; }
+.snap-top ~ .sheet { scroll-snap-align: start; scroll-margin-top: -1px; }   /* 1px past: the bar surely stuck */

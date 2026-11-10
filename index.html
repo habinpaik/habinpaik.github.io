@@ -9,7 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@400&family=Noto+Naskh+Arabic:wght@400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20261110a">
+<link rel="stylesheet" href="style.css?v=20261110b">
 </head>
 <body class="home hero-on">
 <script>
@@ -20,6 +20,7 @@ f(); window.addEventListener('resize',f);})();
 
 
 <!-- Home only: large name above the menu, visible at the top of the page -->
+<div class="snap-top" aria-hidden="true"></div>
 <section class="hero">
   <div class="hero-photo portrait" aria-hidden="true"></div>
   <div class="hero-photo campus" aria-hidden="true"></div>
@@ -201,30 +202,6 @@ f(); window.addEventListener('resize',f);})();
   });
 })();
 
-/* Magnet: between the photo and the page there is no resting place. When scrolling stops in
-   between, the page glides the rest of the way in the direction it was going -- down: the menu bar
-   to the top with "Engineer, Physician, Journalist." under it; up: back to the photo. Not while a
-   finger is still on the screen. Below that point the page scrolls freely. */
-(function () {
-  var sheet = document.querySelector('.sheet');
-  if (!sheet || !document.querySelector('.hero')) return;
-  var lastY = window.scrollY, dir = 0, timer = 0, touching = false;
-  function stop() { return Math.ceil(window.scrollY + sheet.getBoundingClientRect().top) + 1; }   /* +1: the bar surely stuck */
-  function settle() {
-    if (touching) return;
-    var y = window.scrollY, T = stop();
-    if (y <= 0 || y >= T - 1) return;
-    window.scrollTo({ top: dir < 0 ? 0 : T, behavior: 'smooth' });
-  }
-  window.addEventListener('scroll', function () {
-    var y = window.scrollY;
-    if (y !== lastY) dir = y > lastY ? 1 : -1;
-    lastY = y;
-    clearTimeout(timer); timer = setTimeout(settle, 140);
-  }, { passive: true });
-  window.addEventListener('touchstart', function () { touching = true; }, { passive: true });
-  window.addEventListener('touchend', function () { touching = false; clearTimeout(timer); timer = setTimeout(settle, 140); }, { passive: true });
-})();
 /* the big name's first line cycles through other forms of 백하빈 once a second;
    every third second is always the English one */
 (function () {
