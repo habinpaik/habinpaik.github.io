@@ -613,7 +613,7 @@ main > p.dek:first-child + section { margin-top: 0; }   /* the opener is larger:
 }
 .spine-nav button:hover { background-size: 100% 100%; color: #fff; border-color: var(--crimson); }
 .spine-nav button { font-size: var(--t-small); }
-.spine-nav svg { display: block; width: 1.75rem; height: 1.23em; padding-block: calc((1.23em - 0.75rem) / 2); box-sizing: border-box;   /* as tall as the "more" button's line */ fill: none; stroke: currentColor; stroke-width: 1.5px; vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round; }   /* a long thin arrow, a 1px line */
+.spine-nav svg { display: block; width: 1.75rem; height: 1.23em; padding-block: calc((1.23em - 0.75rem) / 2); box-sizing: border-box;   /* as tall as the "more" button's line */ fill: none; stroke: currentColor; stroke-width: 0.125em; vector-effect: non-scaling-stroke; stroke-linecap: butt; stroke-linejoin: miter; }   /* a long thin arrow, a 1px line */
 .spine-nav button:disabled { color: var(--line); cursor: default; background-size: 100% 0; border-color: var(--line); }
 
 /* hover tooltip near cursor */
@@ -1414,3 +1414,4 @@ html:has(.snap-top) { scroll-snap-type: y mandatory; }
 .desk-map .view { position: absolute; top: 0; bottom: 0; border: 1px solid var(--stone); transition: border-color .2s ease; }
 .desk-map:hover .view { border-color: var(--ink); }
 .desk-map[hidden] { display: none; }
+/* arrows: the stem weight of Pretendard SemiBold at the button size (0.125em -- 1.8px on desktop), square ends and sharp corners, as the letters */
