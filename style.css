@@ -1361,7 +1361,7 @@ html:has(.snap-top) { scroll-snap-type: y mandatory; }
 .shelf-more button.burst::before { opacity: 0 !important; }
 .shelf-more button.burst .kh { display: none; }
 .shelf-more button.burst .big {
-  display: block; font-family: var(--sans); font-weight: 600; font-size: var(--t-display); line-height: 1;   /* the identity-line size (28px at most), was the big name
+  display: block; font-family: var(--sans); font-weight: 600; font-size: var(--t-display); line-height: 1;   /* the identity-line size (28px at most), was the big name */
   color: #fff; text-box-trim: trim-both; text-box-edge: cap alphabetic; padding-block: var(--s3);
 }
 .shelf.opening { transition: height .75s cubic-bezier(.3,0,.2,1); }
@@ -1383,10 +1383,10 @@ html:has(.snap-top) { scroll-snap-type: y mandatory; }
 .desk-edge.r { left: calc(100% - var(--gutter)); }
 .desk-edge.l { right: calc(100% - var(--gutter)); transform: scaleX(-1); }
 .desk-edge span { position: absolute; inset: 0; }
-.desk-edge span:nth-child(1) { backdrop-filter: blur(1.5px); -webkit-backdrop-filter: blur(1.5px); -webkit-mask-image: linear-gradient(to right, transparent, #000 25%); mask-image: linear-gradient(to right, transparent, #000 25%); }
-.desk-edge span:nth-child(2) { backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); -webkit-mask-image: linear-gradient(to right, transparent 15%, #000 50%); mask-image: linear-gradient(to right, transparent 15%, #000 50%); }
-.desk-edge span:nth-child(3) { backdrop-filter: blur(9px); -webkit-backdrop-filter: blur(9px); -webkit-mask-image: linear-gradient(to right, transparent 40%, #000 80%); mask-image: linear-gradient(to right, transparent 40%, #000 80%); }
-.desk-edge::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to right, transparent 55%, var(--paper)); }   /* and fades into the page at the far edge */
+.desk-edge span:nth-child(1) { backdrop-filter: blur(0.6px); -webkit-backdrop-filter: blur(0.6px); -webkit-mask-image: linear-gradient(to right, transparent, #000 25%); mask-image: linear-gradient(to right, transparent, #000 25%); }
+.desk-edge span:nth-child(2) { backdrop-filter: blur(1.4px); -webkit-backdrop-filter: blur(1.4px); -webkit-mask-image: linear-gradient(to right, transparent 15%, #000 50%); mask-image: linear-gradient(to right, transparent 15%, #000 50%); }
+.desk-edge span:nth-child(3) { backdrop-filter: blur(2.6px); -webkit-backdrop-filter: blur(2.6px); -webkit-mask-image: linear-gradient(to right, transparent 40%, #000 80%); mask-image: linear-gradient(to right, transparent 40%, #000 80%); }
+.desk-edge::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to right, transparent 75%, color-mix(in srgb, var(--paper) 70%, transparent)); }   /* a light fade only at the far edge */
 
 /* Bookshelf: the next books, a blurred glimpse in the background where "A prime more" and the note sit
    -- a cue that more lies below. Behind everything, no effect on layout; fades out downward. */
@@ -1402,3 +1402,4 @@ html:has(.snap-top) { scroll-snap-type: y mandatory; }
 
 /* box-like controls and tags in semibold: subject tags, "A prime more", the print-edition box, the pledge-analysis strips */
 .filter-btn, .shelf-panel .shelf-more button, .shelf-more button, .print-tab, .ebox .go { font-weight: 600; }
+.spine-wrap .spine-board { left: calc(2 * var(--gutter) - var(--ext)); right: calc(2 * var(--gutter) - var(--ext)); }   /* the floor runs on under the desk into the margins, as far as it shows */
