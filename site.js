@@ -384,3 +384,15 @@
 
 /* lets :active (the press shade) show on iOS */
 document.addEventListener('touchstart', function () {}, { passive: true });
+
+/* Journalism: a story's photo enlarges while any link to the same story is hovered */
+(function () {
+  var photos = [].slice.call(document.querySelectorAll('.feat-photo[href], .side-photo[href]'));
+  if (!photos.length) return;
+  function set(a, on) {
+    var href = a.getAttribute('href');
+    photos.forEach(function (p) { if (p.getAttribute('href') === href) p.classList.toggle('zoom', on); });
+  }
+  document.addEventListener('mouseover', function (e) { var a = e.target.closest && e.target.closest('a[href]'); if (a) set(a, true); });
+  document.addEventListener('mouseout', function (e) { var a = e.target.closest && e.target.closest('a[href]'); if (a && !a.contains(e.relatedTarget)) set(a, false); });
+})();

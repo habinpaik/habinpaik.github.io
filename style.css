@@ -1366,3 +1366,7 @@ html:has(.snap-top) { scroll-snap-type: y mandatory; }
 .shelf.opening { transition: height .75s cubic-bezier(.3,0,.2,1); }
 .shelf .book { transition: opacity .6s ease .1s; }
 .shelf .book.arriving { opacity: 0; transition: none; }
+
+/* Journalism: hovering a story (its photo, its head, or its box) slowly enlarges its photo, as the Portfolio cards */
+.feat-photo img, .side-photo img { transition: transform .5s ease; }
+.feat-photo:hover img, .side-photo:hover img, .feat-photo.zoom img, .side-photo.zoom img { transform: scale(1.04); }
