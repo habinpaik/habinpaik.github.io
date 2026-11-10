@@ -1399,3 +1399,6 @@ html:has(.snap-top) { scroll-snap-type: y mandatory; }
 .shelf-peek.in { opacity: .5; }
 .shelf-peek img { position: absolute; display: block; height: auto; }
 .shelf-more, .shelf-note { position: relative; z-index: 1; }
+
+/* box-like controls and tags in semibold: subject tags, "A prime more", the print-edition box, the pledge-analysis strips */
+.filter-btn, .shelf-panel .shelf-more button, .shelf-more button, .print-tab, .ebox .go { font-weight: 600; }
