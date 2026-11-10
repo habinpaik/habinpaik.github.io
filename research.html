@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
-<link rel="stylesheet" href="style.css?v=20261110f">
+<link rel="stylesheet" href="style.css?v=20261110g">
 </head>
 <body>
 <script>
@@ -256,7 +256,7 @@ f(); window.addEventListener('resize',f);})();
       moreBtn.style.height = 'auto'; var hBig = moreBtn.getBoundingClientRect().height; moreBtn.style.height = b0.height + 'px';
       moreBtn.offsetHeight;
       moreBtn.style.height = hBig + 'px';                           /* 1. swell */
-      setTimeout(function () {                                      /* 2. the shelf opens, carrying it down */
+      setTimeout(function () {   /* 2. at once: it shrinks back to "A prime more +next" and the shelf opens, carrying it down */
         var h0 = shelf.getBoundingClientRect().height;
         var i = 0, opened = [];
         hidden.forEach(function (b) { if (i < n) { b.classList.remove('is-hidden'); b.classList.add('arriving'); opened.push(b); i++; } });
@@ -265,15 +265,18 @@ f(); window.addEventListener('resize',f);})();
         shelf.style.height = h0 + 'px'; shelf.style.overflow = 'hidden'; shelf.offsetHeight;
         shelf.classList.add('opening'); shelf.style.height = h1 + 'px';
         requestAnimationFrame(function () { opened.forEach(function (b) { b.classList.remove('arriving'); }); });
-        setTimeout(function () {                                    /* 3. settle back */
+        step++;
+        var left = shelf.querySelectorAll('.book.is-hidden:not(.is-filtered)').length;
+        setLabel(); moreBtn.classList.remove('burst'); big.remove(); moreBtn.style.width = '';
+        moreBtn.style.height = 'auto'; var hN = moreBtn.getBoundingClientRect().height;
+        moreBtn.style.height = hBig + 'px'; moreBtn.offsetHeight; moreBtn.style.height = hN + 'px';
+        setTimeout(function () {                                    /* 3. done */
           shelf.classList.remove('opening'); shelf.style.height = ''; shelf.style.overflow = '';
-          moreBtn.classList.remove('burst'); big.remove();
           moreBtn.style.height = ''; moreBtn.style.width = '';
-          step++;
-          if (!shelf.querySelectorAll('.book.is-hidden:not(.is-filtered)').length) { moreBtn.hidden = true; } else { setLabel(); }
+          if (!left) moreBtn.hidden = true;
           busy = false;
         }, reduce ? 0 : 750);
-      }, reduce ? 0 : 380);
+      }, reduce ? 0 : 520);
     });
   }
 

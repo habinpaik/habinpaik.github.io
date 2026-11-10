@@ -1355,6 +1355,7 @@ html:has(.snap-top) { scroll-snap-type: y mandatory; }
 /* "A prime more" pressed: it swells downward into a crimson block with a big "+n" (white), the shelf
    opens beneath the covers carrying it down, the new books fade in; then it settles back */
 .shelf-more button .big { display: none; }
+.shelf-more button { white-space: nowrap; box-sizing: border-box; }
 .shelf-more button { transition: color .45s ease, height .38s cubic-bezier(.3,0,.2,1), background-color .25s ease, border-color .25s ease; overflow: hidden; vertical-align: top; }
 .shelf-panel .shelf-more button.burst, .shelf-more button.burst { background: var(--crimson); border-color: var(--crimson); color: #fff; }
 .shelf-more button.burst::before { opacity: 0 !important; }
