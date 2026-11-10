@@ -1428,3 +1428,4 @@ html:has(.snap-top) { scroll-snap-type: y mandatory; }
   -webkit-mask-image: linear-gradient(to right, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent);
           mask-image: linear-gradient(to right, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent);
 }
+@media (max-width: 40rem) { .desk-map { display: none !important; } }   /* phones: the tag row has no room for the minimap */
