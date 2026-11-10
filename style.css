@@ -1342,7 +1342,7 @@ section:has(.spine-panel) + section > h2.section-title { background: none; borde
    scrolling stays free. The photo is sticky, so a 1px marker at the very top stands in for it. */
 html:has(.snap-top) { scroll-snap-type: y mandatory; }
 .snap-top { position: absolute; top: 0; left: 0; width: 1px; height: 1px; scroll-snap-align: start; pointer-events: none; }
-.snap-top ~ .sheet { scroll-snap-align: start; scroll-margin-top: -1px; }   /* 1px past: the bar surely stuck */
+.snap-top ~ .sheet { scroll-snap-align: start; scroll-snap-stop: always; scroll-margin-top: -1px; }   /* a fling up from the page stops here, not past it into the photo */   /* 1px past: the bar surely stuck */
 
 /* arrows and "A prime more": hovering deepens the shade inside the top (pointer screens only);
    a press turns the words/arrow black for a moment, then they ease back to grey */

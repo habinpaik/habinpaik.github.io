@@ -9,7 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@400&family=Noto+Naskh+Arabic:wght@400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20261110s">
+<link rel="stylesheet" href="style.css?v=20261110t">
 </head>
 <body class="home hero-on">
 <script>
@@ -221,9 +221,19 @@ f(); window.addEventListener('resize',f);})();
     if (d < 0 && y > 0 && y <= t + 1) return 0;
     return null;
   }
+  /* a wheel or trackpad gesture is a run of events with no pause over 250ms. Only a gesture that
+     *starts* at the menu bar may carry the page up to the photo: one that comes up from further down
+     stops at the menu bar, its momentum spent there. */
+  var lastWheel = 0, gestureFrom = 0;
   window.addEventListener('wheel', function (e) {
     if (Math.abs(e.deltaY) < Math.abs(e.deltaX)) return;
-    var y = window.scrollY, t = T();
+    var y = window.scrollY, t = T(), nowT = Date.now();
+    if (nowT - lastWheel > 250) gestureFrom = y;
+    lastWheel = nowT;
+    if (e.deltaY < 0 && gestureFrom > t + 2) {   /* coming up from the page: halt at the menu bar */
+      if (y - (-e.deltaY) <= t) { e.preventDefault(); if (y > t) window.scrollTo({ top: t, behavior: 'auto' }); }
+      return;
+    }
     if (Date.now() - busy < 700 && y < t + 2) { e.preventDefault(); return; }   /* let one glide finish; swallow the trackpad's tail */
     var to = target(e.deltaY > 0 ? 1 : -1);
     if (to === null) return;
@@ -232,8 +242,13 @@ f(); window.addEventListener('resize',f);})();
   /* touch: the first few pixels of a drag decide; the page then holds still under the finger and
      glides the moment it lifts (a glide started under a finger is cut short by the browser) */
   var pend = null;
-  window.addEventListener('touchstart', function (e) { ty = e.touches[0].clientY; decided = false; pend = null; }, { passive: true });
+  var touchFrom = 0;
+  window.addEventListener('touchstart', function (e) { ty = e.touches[0].clientY; decided = false; pend = null; touchFrom = window.scrollY; }, { passive: true });
   window.addEventListener('touchmove', function (e) {
+    if (touchFrom > T() + 2) {   /* a drag that began in the page holds at the menu bar */
+      if (window.scrollY <= T()) { e.preventDefault(); if (window.scrollY < T()) window.scrollTo({ top: T(), behavior: 'auto' }); }
+      return;
+    }
     if (decided) { if (pend !== null) e.preventDefault(); return; }
     var dy = ty - e.touches[0].clientY;
     if (Math.abs(dy) < 4) return;
