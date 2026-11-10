@@ -202,6 +202,47 @@ f(); window.addEventListener('resize',f);})();
   });
 })();
 
+/* Magnet, a hair-trigger: between the photo and the page the slightest move down goes all the way
+   to the page (menu bar on top), the slightest move up from there all the way back to the photo.
+   (The css scroll snap catches anything this misses.) Inside the page, scrolling is free. */
+(function () {
+  var sheet = document.querySelector('.sheet');
+  if (!sheet || !document.querySelector('.hero')) return;
+  var busy = 0, ty = 0, decided = false;
+  function T() { return Math.ceil(window.scrollY + sheet.getBoundingClientRect().top) + 1; }
+  function go(top) {
+    busy = Date.now();
+    window.scrollTo({ top: top, behavior: 'smooth' });
+  }
+  /* the target for a move in direction d from where the page is, or null when it's free scrolling */
+  function target(d) {
+    var y = window.scrollY, t = T();
+    if (d > 0 && y < t - 1) return t;
+    if (d < 0 && y > 0 && y <= t + 1) return 0;
+    return null;
+  }
+  window.addEventListener('wheel', function (e) {
+    if (Math.abs(e.deltaY) < Math.abs(e.deltaX)) return;
+    var y = window.scrollY, t = T();
+    if (Date.now() - busy < 700 && y < t + 2) { e.preventDefault(); return; }   /* let one glide finish; swallow the trackpad's tail */
+    var to = target(e.deltaY > 0 ? 1 : -1);
+    if (to === null) return;
+    e.preventDefault(); go(to);
+  }, { passive: false });
+  /* touch: the first few pixels of a drag decide; the page then holds still under the finger and
+     glides the moment it lifts (a glide started under a finger is cut short by the browser) */
+  var pend = null;
+  window.addEventListener('touchstart', function (e) { ty = e.touches[0].clientY; decided = false; pend = null; }, { passive: true });
+  window.addEventListener('touchmove', function (e) {
+    if (decided) { if (pend !== null) e.preventDefault(); return; }
+    var dy = ty - e.touches[0].clientY;
+    if (Math.abs(dy) < 4) return;
+    decided = true;
+    pend = target(dy > 0 ? 1 : -1);
+    if (pend !== null) e.preventDefault();
+  }, { passive: false });
+  window.addEventListener('touchend', function () { if (pend !== null) { go(pend); pend = null; } }, { passive: true });
+})();
 /* the big name's first line cycles through other forms of 백하빈 once a second;
    every third second is always the English one */
 (function () {
