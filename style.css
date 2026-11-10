@@ -613,7 +613,7 @@ main > p.dek:first-child + section { margin-top: 0; }   /* the opener is larger:
 }
 .spine-nav button:hover { background-size: 100% 100%; color: #fff; border-color: var(--crimson); }
 .spine-nav button { font-size: var(--t-small); }
-.spine-nav svg { display: block; width: 1.75rem; height: 1.23em; padding-block: calc((1.23em - 0.75rem) / 2); box-sizing: border-box;   /* as tall as the "more" button's line */ fill: none; stroke: currentColor; stroke-width: 1px; vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round; }   /* a long thin arrow, a 1px line */
+.spine-nav svg { display: block; width: 1.75rem; height: 1.23em; padding-block: calc((1.23em - 0.75rem) / 2); box-sizing: border-box;   /* as tall as the "more" button's line */ fill: none; stroke: currentColor; stroke-width: 1.5px; vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round; }   /* a long thin arrow, a 1px line */
 .spine-nav button:disabled { color: var(--line); cursor: default; background-size: 100% 0; border-color: var(--line); }
 
 /* hover tooltip near cursor */
@@ -1403,3 +1403,14 @@ html:has(.snap-top) { scroll-snap-type: y mandatory; }
 /* box-like controls and tags in semibold: subject tags, "A prime more", the print-edition box, the pledge-analysis strips */
 .filter-btn, .shelf-panel .shelf-more button, .shelf-more button, .print-tab, .ebox .go { font-weight: 600; }
 .spine-wrap .spine-board { left: calc(2 * var(--gutter) - var(--ext)); right: calc(2 * var(--gutter) - var(--ext)); }   /* the floor runs on under the desk into the margins, as far as it shows */
+
+/* Messy Desk minimap (as an editor's overview): at the right end of the tag row, the whole desk in
+   miniature -- each pile a small grey block, standing on a hairline -- with a frame for the part in
+   view. Click or drag on it to move the desk. Hidden where the tags leave no room. */
+.shelf-filter { position: relative; }
+.desk-map { position: absolute; right: 0; bottom: 0; width: 7.5rem; height: 1.6rem; cursor: pointer; touch-action: none; }
+.desk-map .floor { position: absolute; left: 0; right: 0; bottom: 0; border-top: 1px solid var(--line); }
+.desk-map .mp { position: absolute; bottom: 1px; background: var(--line); }
+.desk-map .view { position: absolute; top: 0; bottom: 0; border: 1px solid var(--stone); transition: border-color .2s ease; }
+.desk-map:hover .view { border-color: var(--ink); }
+.desk-map[hidden] { display: none; }

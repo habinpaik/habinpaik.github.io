@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
-<link rel="stylesheet" href="style.css?v=20261110o">
+<link rel="stylesheet" href="style.css?v=20261110q">
 </head>
 <body>
 <script>
@@ -393,6 +393,51 @@ f(); window.addEventListener('resize',f);})();
     }
     spineShelf.addEventListener('scroll', edgesUpdate, { passive: true });
     window.addEventListener('resize', edgesUpdate);
+    /* minimap at the right end of the desk's tag row */
+    var filterRow = document.querySelector('.filter-spines'), mapBox = null, mapView = null;
+    if (filterRow) {
+      mapBox = document.createElement('div'); mapBox.className = 'desk-map'; mapBox.setAttribute('aria-hidden', 'true');
+      filterRow.parentNode.appendChild(mapBox);
+      var drag = false;
+      function seek(e) {
+        var r = mapBox.getBoundingClientRect(), f = (e.clientX - r.left) / r.width;
+        var E = parseFloat(getComputedStyle(spineShelf).paddingLeft) || 0, inner = spineShelf.scrollWidth, col = spineShelf.clientWidth - 2 * E;
+        spineShelf.style.scrollBehavior = drag === 2 ? 'auto' : '';
+        spineShelf.scrollLeft = f * inner - E - col / 2;
+      }
+      mapBox.addEventListener('pointerdown', function (e) { drag = 1; mapBox.setPointerCapture(e.pointerId); seek(e); });
+      mapBox.addEventListener('pointermove', function (e) { if (drag) { drag = 2; seek(e); } });
+      mapBox.addEventListener('pointerup', function () { drag = false; spineShelf.style.scrollBehavior = ''; });
+    }
+    function mapUpdate() {
+      if (!mapBox) return;
+      var tags = filterRow.querySelectorAll('.filter-btn'), lastTag = tags[tags.length - 1];
+      var room = !lastTag || lastTag.getBoundingClientRect().right < mapBox.parentNode.getBoundingClientRect().right - mapBox.offsetWidth - 16
+                 && lastTag.getBoundingClientRect().top === tags[0].getBoundingClientRect().top;
+      mapBox.hidden = !room || spineShelf.scrollWidth <= spineShelf.clientWidth + 2;
+      if (mapBox.hidden) return;
+      var W = mapBox.clientWidth, H = mapBox.clientHeight - 1, total = spineShelf.scrollWidth, k = W / total;
+      var tr = spineShelf.getBoundingClientRect(), x0 = tr.left - spineShelf.scrollLeft, maxH = 0;
+      var piles = [].slice.call(spineShelf.querySelectorAll('.pile')).filter(function (p) { return p.getClientRects().length; });
+      piles.forEach(function (p) { maxH = Math.max(maxH, p.getBoundingClientRect().height); });
+      var html = '<span class="floor"></span>';
+      piles.forEach(function (p) {
+        var r = p.getBoundingClientRect();
+        html += '<span class="mp" style="left:' + ((r.left - x0) * k).toFixed(1) + 'px;width:' + Math.max(1, r.width * k).toFixed(1) + 'px;height:' + Math.max(2, r.height / maxH * (H - 3)).toFixed(1) + 'px"></span>';
+      });
+      html += '<span class="view"></span>';
+      mapBox.innerHTML = html; mapView = mapBox.lastChild;
+      var E = parseFloat(getComputedStyle(spineShelf).paddingLeft) || 0;
+      mapView.style.left = ((spineShelf.scrollLeft + E) * k) + 'px';
+      mapView.style.width = ((spineShelf.clientWidth - 2 * E) * k) + 'px';
+    }
+    var mapRaf = 0;
+    function mapSoon() { if (!mapRaf) mapRaf = requestAnimationFrame(function () { mapRaf = 0; mapUpdate(); }); }
+    spineShelf.addEventListener('scroll', mapSoon, { passive: true });
+    window.addEventListener('resize', mapSoon);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(mapSoon);
+    if (window.ResizeObserver && filterRow) new ResizeObserver(mapSoon).observe(filterRow);
+    var edgesUpdate0 = edgesUpdate; edgesUpdate = function () { edgesUpdate0(); mapSoon(); };
     window.deskEdges = edgesUpdate;
     setTimeout(edgesUpdate, 0); setTimeout(edgesUpdate, 600);
   })();
