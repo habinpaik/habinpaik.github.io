@@ -1361,8 +1361,8 @@ html:has(.snap-top) { scroll-snap-type: y mandatory; }
 .shelf-more button.burst::before { opacity: 0 !important; }
 .shelf-more button.burst .kh { display: none; }
 .shelf-more button.burst .big {
-  display: block; font-family: var(--sans); font-weight: 600; font-size: var(--t-name); line-height: 1;
-  color: #fff; text-box-trim: trim-both; text-box-edge: cap alphabetic; padding-block: var(--s4);
+  display: block; font-family: var(--sans); font-weight: 600; font-size: var(--t-display); line-height: 1;   /* the identity-line size (28px at most), was the big name
+  color: #fff; text-box-trim: trim-both; text-box-edge: cap alphabetic; padding-block: var(--s3);
 }
 .shelf.opening { transition: height .75s cubic-bezier(.3,0,.2,1); }
 .shelf .book { transition: opacity .6s ease .1s; }
