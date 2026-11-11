@@ -1530,3 +1530,8 @@ main > section > figure:last-child figcaption { padding-bottom: calc((var(--t-bo
 .shelf-note { padding-bottom: calc((var(--t-body) - var(--t-small)) / 2); }   /* small type sits higher in its line: make up the difference to the 25px */
 .pre-foot { margin-top: var(--sec-gap); }
 section > .fact:last-child { padding-bottom: 0.068em; }   /* the sans list sits a hair higher in its line than the serif: level the 25px with every other section */
+
+/* the footer's line (right under Explore More's last row) -> the footer's first letters: the same as a
+   section line -> its title's capitals (the light shade, then 50px) */
+.site-foot .wrap { padding-top: calc(var(--s2) + 3.125rem); }
+@media (min-width: 75rem) { .site-foot .wrap { padding-top: calc(var(--s2) + 3.125rem - 0.28em); } }
