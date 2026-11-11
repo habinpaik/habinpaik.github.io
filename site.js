@@ -241,7 +241,15 @@
       var t0 = Math.min.apply(null, lines.map(function (r) { return r.t; })), b0 = Math.max.apply(null, lines.map(function (r) { return r.b; }));
       /* it may use the footer's padding too -- from --s2 under the top line's shade to --s2 above the
          page's end -- without the footer growing */
-      var fr = foot.getBoundingClientRect(), fl = (foot.querySelector('.foot-main') || foot).getBoundingClientRect(), ceil0 = fl.top - hr.top + 8 + 8, floor0 = fr.bottom - hr.top - 8;   /* from under the footer's line */
+      var fr = foot.getBoundingClientRect(), floor0 = fr.bottom - hr.top - 8;
+      /* the ceiling: an imagined line over the copyright, as far above its capitals as the address's
+         last baseline is above the page's end -- the footer's margin mirrored, so the dial keeps within */
+      var bl0 = function (el) { var z = document.createElement('span'); z.style.cssText = 'display:inline-block;width:0;height:0'; el.appendChild(z); var y = z.getBoundingClientRect().top; z.remove(); return y; };
+      var copy = foot.querySelector('.foot-copy'), addrLast = foot.querySelector('.foot-contact > :last-child');
+      var ccs = getComputedStyle(copy), cctx = document.createElement('canvas').getContext('2d');
+      cctx.font = ccs.fontWeight + ' ' + ccs.fontSize + ' ' + ccs.fontFamily;
+      var capTop = bl0(copy) - cctx.measureText('H').actualBoundingBoxAscent;
+      var ceil0 = capTop - (fr.bottom - bl0(addrLast)) - hr.top;
       return { keep: lines, top: ceil0, bot: floor0, ceil: ceil0, centre: true, cy: (ceil0 + floor0) / 2, colR: hr.width, cx0: hr.width };
     }
     var words = [].filter.call(host.querySelectorAll('.clock-main .hm, .clock-main .dow, .clock-main .city'), function (e) { return e.getClientRects().length; })
