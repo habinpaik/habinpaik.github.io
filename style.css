@@ -53,8 +53,10 @@
      strong -- the top edge of each page only (under the menu, or where the page meets the photo
      above it); light -- everything else: section lines and the openers' lines, the footer's top
      line, the mail box, story boxes, portfolio cards, shelves */
-  --shade-strong: linear-gradient(to bottom, rgba(0,0,0,.14), rgba(0,0,0,0) 12px);
-  --shade-light:  linear-gradient(to bottom, rgba(0,0,0,.07), rgba(0,0,0,0) var(--s2));   /* a short fade, 8px */
+  --sh-strong: rgba(0,0,0,.14); --sh-light: rgba(0,0,0,.07);   /* the two shades' colours (day: dark; night: light) */
+  --shade-strong: linear-gradient(to bottom, var(--sh-strong), transparent 12px);
+  --shade-light:  linear-gradient(to bottom, var(--sh-light), transparent var(--s2));   /* a short fade, 8px */
+  --dial-rim: #E0DDD7; --dial-home: #E0DDD7; --dial-city: #862633; --dial-pin: #1A1A1A; --dial-lab: #6B6B66;   /* the dial's colours, by day */
   --sec-gap: calc(1.5625rem - 0.5em);   /* above a section line: last baseline -> line = 25px (0.5em of the line sits under the baseline) */
   --inset: var(--s4);   /* box inset, edge -> letters on every side: the paragraph gap; a step less on phones */
   --crimson: #862633;   /* 고려대 교색 Crimson, PANTONE 202C */
@@ -1015,14 +1017,14 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 }
 .aclock .face { fill: none; }
 .aclock .face, .aclock line { stroke-width: 1; vector-effect: non-scaling-stroke; }   /* 1px at any size */
-.aclock .face, .aclock .tick { stroke: var(--line); }
-.aclock .hand.min, .aclock .hand.home { stroke: var(--line) !important; transition: none; }   /* fixed pale grey, hover or not */
+.aclock .face, .aclock .tick { stroke: var(--dial-rim); }
+.aclock .hand.min, .aclock .hand.home { stroke: var(--dial-home) !important; transition: none; }   /* fixed pale grey, hover or not */
 .aclock .hand { stroke-linecap: round; }
-.aclock .hand.city { stroke: var(--crimson); }
-.aclock .pin { fill: var(--ink); }
+.aclock .hand.city { stroke: var(--dial-city); }
+.aclock .pin { fill: var(--dial-pin); }
 .aclock .lab {
   position: absolute; white-space: nowrap; pointer-events: none;
-  font-family: var(--sans); font-feature-settings: normal; font-size: var(--t-small); line-height: 1.2; color: var(--stone);   /* the same size as "in Seoul" and "Always open" */
+  font-family: var(--sans); font-feature-settings: normal; font-size: var(--t-small); line-height: 1.2; color: var(--dial-lab);   /* the same size as "in Seoul" and "Always open" */
 }
 
 /* address: plain body text, no hierarchy -- only the colour is dimmer */
@@ -1464,13 +1466,13 @@ html.night {
   --paper: #1C1B19; --ink: #E6E3DD; --stone: #A9A59D; --line: #3A3834; --brand: #252421; --brand-deep: #C9C6BF;
   --crimson: #C25466;
   --c-meche: #D08B4A; --c-phys: #6FA6D0; --c-math: #4DB585; --c-gensci: #4FA893; --c-classics: #A3B84E;
-  --shade-strong: linear-gradient(to bottom, rgba(255,255,255,.17), rgba(255,255,255,0) 12px);   /* at night the shades are light: a glow under each edge, */
-  --shade-light:  linear-gradient(to bottom, rgba(255,255,255,.10), rgba(255,255,255,0) var(--s2));   /* strong enough to read on the dark */
+  --sh-strong: rgba(255,255,255,.17); --sh-light: rgba(255,255,255,.10);   /* at night the shades are light: a glow under each edge, strong enough to read on the dark */
+  --dial-rim: #A9A59D; --dial-home: #A9A59D; --dial-city: #E3808F; --dial-pin: #A9A59D; --dial-lab: #A9A59D;   /* the dial at night: one grey (the words' grey) and pink */
   color-scheme: dark;
 }
 html.night, html.night body { background-color: var(--paper); color: var(--ink); }
 /* day <-> night: the page cross-fades as one picture (site.js starts a view transition) */
-::view-transition-old(root), ::view-transition-new(root) { animation-duration: .3s; animation-timing-function: ease; }
+
 
 /* wide screens (the sketch areas are roomy): the time, "Always open" and the mail leave the footer and
    stay in the left sketch area, at its foot, lined up with the outline above; the footer keeps one
@@ -1486,12 +1488,6 @@ html.night, html.night body { background-color: var(--paper); color: var(--ink);
    Seoul's hands a quiet grey that still shows, the city hands the lifted crimson, the pin off-white */
 /* at night the dial keeps to grey and pink: one grey for the rim, marks, Seoul's hands, the pin and
    the names; pink for the cities' hands and the sweep, under which the hands turn dark */
-html.night .aclock { --dial-grey: var(--stone); }   /* the same grey as the night's grey words */
-html.night .aclock .face, html.night .aclock .tick { stroke: var(--dial-grey); }
-html.night .aclock .hand.min, html.night .aclock .hand.home { stroke: var(--dial-grey) !important; }
-html.night .aclock .hand.city { stroke: #E3808F; }
-html.night .aclock .pin { fill: var(--dial-grey); }
-html.night .aclock .lab { color: var(--dial-grey); }
 html.night .aclock .face, html.night .aclock line { stroke-width: 1.5; }   /* a hair heavier at night, so the dial holds on the dark */
 /* at night the sweep's light leading edge fades into the dark ground, not toward white (which read as cream) */
 html.night { --crimson-light: color-mix(in srgb, var(--crimson) 45%, var(--paper));
@@ -1559,3 +1555,30 @@ section > .fact:last-child { padding-bottom: 0.068em; }   /* the sans list sits 
 /* in the box the address is just words: no underline, no link of its own -- the box is the button */
 .time-rail .clock-main .foot-mail { text-decoration: none !important; pointer-events: none; color: inherit !important; background: none !important; }
 .time-rail .clock-main { color: var(--ink); }   /* the box's words in the body's colour */
+
+/* day <-> night as one: every colour of the page is a registered colour token, and only the tokens
+   change -- together, over .3s -- while every element's own transitions are paused for that moment,
+   so lines, shades, words and the dial all move at one pace; nothing is frozen, the page scrolls on */
+@property --paper { syntax: '<color>'; inherits: true; initial-value: #FAF9F6; }
+@property --ink { syntax: '<color>'; inherits: true; initial-value: #1A1A1A; }
+@property --stone { syntax: '<color>'; inherits: true; initial-value: #6B6B66; }
+@property --line { syntax: '<color>'; inherits: true; initial-value: #E0DDD7; }
+@property --brand { syntax: '<color>'; inherits: true; initial-value: #F3F1EC; }
+@property --brand-deep { syntax: '<color>'; inherits: true; initial-value: #424245; }
+@property --crimson { syntax: '<color>'; inherits: true; initial-value: #862633; }
+@property --c-meche { syntax: '<color>'; inherits: true; initial-value: #a76118; }
+@property --c-phys { syntax: '<color>'; inherits: true; initial-value: #1d689c; }
+@property --c-math { syntax: '<color>'; inherits: true; initial-value: #00804c; }
+@property --c-gensci { syntax: '<color>'; inherits: true; initial-value: #004c3e; }
+@property --c-classics { syntax: '<color>'; inherits: true; initial-value: #637b0e; }
+@property --sh-strong { syntax: '<color>'; inherits: true; initial-value: rgba(0,0,0,.14); }
+@property --sh-light { syntax: '<color>'; inherits: true; initial-value: rgba(0,0,0,.07); }
+@property --dial-rim { syntax: '<color>'; inherits: true; initial-value: #E0DDD7; }
+@property --dial-home { syntax: '<color>'; inherits: true; initial-value: #E0DDD7; }
+@property --dial-city { syntax: '<color>'; inherits: true; initial-value: #862633; }
+@property --dial-pin { syntax: '<color>'; inherits: true; initial-value: #1A1A1A; }
+@property --dial-lab { syntax: '<color>'; inherits: true; initial-value: #6B6B66; }
+html { transition: --paper .3s ease, --ink .3s ease, --stone .3s ease, --line .3s ease, --brand .3s ease, --brand-deep .3s ease,
+  --crimson .3s ease, --c-meche .3s ease, --c-phys .3s ease, --c-math .3s ease, --c-gensci .3s ease, --c-classics .3s ease,
+  --sh-strong .3s ease, --sh-light .3s ease, --dial-rim .3s ease, --dial-home .3s ease, --dial-city .3s ease, --dial-pin .3s ease, --dial-lab .3s ease; }
+html.night-switch body, html.night-switch body *, html.night-switch body *::before, html.night-switch body *::after { transition: none !important; }

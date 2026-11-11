@@ -531,11 +531,9 @@ document.addEventListener('touchstart', function () {}, { passive: true });
     var want = on ? ft < vh + 20 : ft < vh - 1;   /* on as the copyright line comes into view; off once it has left */
     if (want === on) return;
     on = want;
-    /* the whole screen changes as one: a cross-fade of the page as a single picture (view transition),
-       so lines, shades and words can't each go at their own pace; where that isn't supported, at once */
-    if (document.startViewTransition && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      document.startViewTransition(function () { root.classList.toggle('night', on); });
-    } else root.classList.toggle('night', on);
+    /* the colour tokens change together (css); elements' own transitions pause meanwhile */
+    root.classList.add('night-switch'); clearTimeout(t); t = setTimeout(function () { root.classList.remove('night-switch'); }, 380);
+    root.classList.toggle('night', on);
   }
   window.addEventListener('scroll', check, { passive: true }); window.addEventListener('resize', check); check();
 })();
