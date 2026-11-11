@@ -262,7 +262,7 @@
     /* down to the first thing under it: on phones the address line right under the mail (it runs the
        full width); on wider screens the copyright, which sits under the dial on the right */
     var bot = phone ? Math.min.apply(null, below.map(function (r) { return r.t; })) - 4
-                    : (below.length ? below[below.length - 1].t - 20 : mail.b);   /* tight: --s4 clear of the copyright */
+                    : foot.getBoundingClientRect().bottom - hr.top - 8;   /* wider: the right side is free down to the page's end (the words on the left are kept clear) */
     var colR = hr.width;
     /* the ceiling: names above the dial may rise to --s2 under the footer's top line and its shade */
     var ceil = (foot.querySelector('.foot-main') || foot).getBoundingClientRect().top - hr.top + 8 + 8;   /* the line, its shade, and --s2 */
@@ -323,7 +323,7 @@
     offs.forEach(function (off) {
       var A = Object.assign({}, A0, { cy: mid + off });
       var ok = function (D) { return day.every(function (gs) { return bestX(gs, D, A, phone) !== null; }); };
-      var lo = 40, hi = Math.floor(Math.min(A.bot - A.top, 240)), D = null;
+      var lo = 40, hi = Math.floor(Math.min(A.bot - A.top, 150)), D = null;
       if (ok(lo)) { D = lo; while (hi - lo > 1) { var md = (lo + hi) >> 1; if (ok(md)) { lo = md; D = md; } else hi = md; } if (ok(hi)) D = hi; }
       if (D !== null && (best.D === null || D > best.D)) best = { A: A, D: D };
     });
@@ -363,12 +363,16 @@
     /* the largest dial that suits this moment's names (at hours when they crowd less, it grows);
        never smaller than the size that suits the whole day */
     var D = null, res = null;
-    for (var d = Math.floor(Math.min(fit.A.bot - fit.A.top, 240)); d >= Math.max(40, fit.D || 40); d -= 2) {
+    for (var d = Math.floor(Math.min(fit.A.bot - fit.A.top, 150)); d >= Math.max(40, fit.D || 40); d -= 2) {
       var r0 = bestX(groups, d, fit.A, phone); if (r0) { D = d; res = r0; break; }
     }
     if (!res && fit.D) { D = fit.D; res = bestX(groups, D, fit.A, phone); }
     if (!res) for (D = Math.floor(fit.A.bot - fit.A.top); D >= 40 && !res; D -= 2) res = bestX(groups, D, fit.A, phone);
-    if (!res) { D = 40; res = { x: fit.A.colR - 20, placed: layout(groups, 40, true, phone) }; }
+    if (!res) {   /* nothing fits: the smallest dial, its rightmost name (not the circle) on the column's right */
+      D = 40; var pl = layout(groups, 40, true, phone);
+      var gR0 = Math.max.apply(null, pl.map(function (q) { return q.r - 20; }).concat([20]));
+      res = { x: fit.A.colR - gR0, placed: pl };
+    }
 
     box.style.width = box.style.height = D + 'px';
     box.style.left = (res.x - D / 2) + 'px'; box.style.top = ((res.cy !== undefined ? res.cy : fit.A.cy) - D / 2) + 'px';

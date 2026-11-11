@@ -75,8 +75,8 @@
   --s1: 0.25rem; --s2: 0.5rem; --s3: 0.875rem; --s4: 1.25rem;
   --s5: 1.75rem; --s6: 2.5rem; --s7: 3.5rem; --s8: 5rem;
 
-  --t-small: clamp(0.8rem, 0.76rem + 0.19vw, 0.92rem);
-  --t-body:  clamp(0.9375rem, 0.875rem + 0.3vw, 1.125rem);   /* 15 -> 18px (was 16 -> 19.2) */
+  --t-small: clamp(0.875rem, 0.76rem + 0.19vw, 0.92rem);
+  --t-body:  clamp(1.0625rem, 0.875rem + 0.3vw, 1.125rem);   /* 15 -> 18px (was 16 -> 19.2) */
   --t-title: clamp(1.18rem, 1.06rem + 0.62vw, 1.58rem);
   /* subject colours (Research bookshelf): filter buttons, cover tags and spines all use these */
   /* picked to stay far apart (CIEDE2000), all >= 4.8:1 with white; maths a mid green, the same weight as the others */
@@ -1564,3 +1564,9 @@ html.night-switch body, html.night-switch body *, html.night-switch body *::befo
 html.night-switch .night-veil { transition: opacity .3s ease !important; }
 /* the book tip, tight: 6px from its edge to the letters on every side (trimmed to capitals and baseline) */
 .spine-tip { padding: 6px; text-box-trim: trim-both; text-box-edge: cap alphabetic; }
+
+/* at every width the copyright opens the footer's last paragraph, above "Mechanical Engineering &
+   Physics": one paragraph -- copyright, then the address -- a paragraph gap under the mail */
+.foot-main .foot-copy { grid-column: 1; grid-row: 2; justify-self: start; align-self: start; line-height: 1.5; margin-top: var(--s4); }
+.foot-side > .foot-contact { grid-column: 1; grid-row: 3; margin-top: 0; }
+@media (min-width: 80rem) { .foot-main .foot-copy { margin-top: 0; } }   /* wide: the mail has gone to the corner; the paragraph is the footer's first */
