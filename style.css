@@ -1476,11 +1476,8 @@ html.night-ease, html.night-ease body, html.night-ease body * {
 /* wide screens (the sketch areas are roomy): the time, "Always open" and the mail leave the footer and
    stay in the left sketch area, at its foot, lined up with the outline above; the footer keeps one
    paragraph -- the copyright, then the address -- with the dial beside it */
-@media (min-width: 75rem) {
-  .site-foot .clock-main { position: fixed; z-index: 40; left: 2rem; bottom: var(--s5); width: max-content;   /* left and bottom set by site.js */
-    margin: 0; font-family: var(--serif); font-size: var(--t-body); line-height: 1.5; color: var(--stone);   /* as the address */
-    padding: var(--s3); border: 1px solid var(--line); background: var(--paper);   /* a tight box: 14px from the box to the letters on every side (capitals, baseline, ends) */
-    text-box-trim: trim-both; text-box-edge: cap alphabetic; }
+@media (min-width: 80rem) {
+  .site-foot .clock-main { display: none; }
   .foot-copy { grid-column: 1; grid-row: 2; justify-self: start; align-self: start; line-height: 1.5; }
   .foot-side > .foot-contact { grid-row: 3; margin-top: 0; }
   .clocks { margin-top: 0; }
@@ -1537,4 +1534,12 @@ section > .fact:last-child { padding-bottom: 0.068em; }   /* the sans list sits 
 .pre-foot { padding-bottom: 0; }
 .site-foot .wrap { padding-top: calc(1.5625rem - var(--s3)); }
 .foot-main { border-top: 1px solid var(--line); background: var(--shade-light) no-repeat; padding-top: calc(var(--s2) + 3.125rem); }
-@media (min-width: 75rem) { .foot-main { padding-top: calc(var(--s2) + 3.125rem - 0.28em); } }
+@media (min-width: 80rem) { .foot-main { padding-top: calc(var(--s2) + 3.125rem - 0.28em); } }
+
+/* wide screens: the rail the time and mail ride in the right sketch area (laid by site.js) */
+.time-rail { position: absolute; top: 0; z-index: 40; display: flex; flex-direction: column; justify-content: flex-end; pointer-events: none; }
+.time-rail[hidden] { display: none; }
+.time-rail .clock-main { position: sticky; bottom: var(--s5); pointer-events: auto; width: max-content;
+  margin: 0; font-family: var(--serif); font-size: var(--t-body); line-height: 1.5; color: var(--stone);
+  padding: var(--s3); border: 1px solid var(--line); background: var(--paper);
+  text-box-trim: trim-both; text-box-edge: cap alphabetic; }

@@ -234,7 +234,7 @@
       return { l: r.left - hr.left, r: r.right - hr.left, t: r.top - hr.top + c, b: r.bottom - hr.top - c };
     }
     var cm = host.querySelector('.clock-main');
-    if (cm && getComputedStyle(cm).position === 'fixed') {
+    if (!cm) {
       /* wide screens: the time and mail live in the left sketch area; the dial sits beside the one
          paragraph left in the footer (copyright, then the address), from its first line to its last */
       var lines = [].map.call(foot.querySelectorAll('.foot-copy, .foot-contact > *'), function (e) { return rel(e, 0.2); });
@@ -344,7 +344,7 @@
     var items = zones.map(function (z, k) {
       var t = hm(z.tz, now); point(cityHands[k], hourAng(t), R * 0.55); return { name: z.name, h: t.h };
     });
-    var dow = (host.querySelector('.clock-main .dow') || {}).textContent;
+    var dow = (document.querySelector('.clock-main .dow') || {}).textContent;
     var fkey = phone + '|' + Math.round(host.getBoundingClientRect().width) + '|' + dow;
     if (!fit || fit.key !== fkey) { fit = makeFit(now, phone); fit.key = fkey; lastKey = ''; }
     var groups = groupsAt(now, phone);
@@ -532,27 +532,30 @@ document.addEventListener('touchstart', function () {}, { passive: true });
 /* wide screens: where the left sketch area begins (the outline and the time/mail line up on it) */
 (function () {
   var main = document.querySelector('main.wrap'); if (!main) return;
+  var wide = window.matchMedia('(min-width: 80rem)');
+  var rail = document.createElement('div'); rail.className = 'time-rail'; rail.hidden = true; document.body.appendChild(rail);
   function set() {
     var m = main.getBoundingClientRect(), pad = parseFloat(getComputedStyle(main).paddingLeft) || 0;
     var rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
     document.documentElement.style.setProperty('--sketch-l', (m.left + pad - 56 - 9 * rem) + 'px');
-    var cm = document.querySelector('.site-foot .clock-main');   /* the time and mail: right edge --s6 off the text column */
-    if (cm && getComputedStyle(cm).position === 'fixed') {
-      cm.style.left = (m.left + pad - 56 - cm.offsetWidth) + 'px';   /* --s7 off the text column, as the outline */
-      /* its height: so that at the very bottom of the page its first line (the time) sits on the
-         footer's first line (the copyright) */
-      var last = document.querySelector('.foot-copy');
-      if (last) {
-        var bl = function (el) { var z = document.createElement('span'); z.style.cssText = 'display:inline-block;width:0;height:0'; el.appendChild(z); var y = z.getBoundingClientRect().top; z.remove(); return y; };
-        var docH = document.documentElement.scrollHeight, lastDocY = bl(last) + window.scrollY;
-        var fromBottom = docH - lastDocY;                       /* page bottom -> the copyright's baseline */
-        var first = cm.querySelector('.dow') || cm, cmR = cm.getBoundingClientRect();
-        var inBox = cmR.bottom - bl(first);                     /* the box's bottom -> its first baseline */
-        cm.style.bottom = (fromBottom - inBox) + 'px';
-      }
-    } else if (cm) { cm.style.left = ''; cm.style.bottom = ''; }
+    /* wide screens: the time and mail sit at the foot of the right sketch area (--s7 off the text
+       column), and are carried up by the page so they never touch the footer: they ride a rail that
+       ends 25px above the footer's line, stuck (css sticky) to the bottom of the screen until the
+       rail's end comes up */
+    var cm = document.querySelector('.clock-main'), home = document.querySelector('.site-foot .clocks');
+    if (!cm || !home) return;
+    if (wide.matches) {
+      if (!rail.contains(cm)) rail.appendChild(cm);
+      var line = document.querySelector('.foot-main') || document.querySelector('.site-foot');
+      rail.style.left = (m.right - pad + 56 + window.scrollX) + 'px';
+      rail.style.height = Math.max(0, line.getBoundingClientRect().top + window.scrollY - 25) + 'px';
+      rail.hidden = false;
+    } else {
+      if (rail.contains(cm)) home.insertBefore(cm, home.firstChild);
+      rail.hidden = true;
+    }
   }
   window.addEventListener('resize', set); set();
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(set);
-  setInterval(set, 60000);   /* the time's width changes */
+  if (window.ResizeObserver) new ResizeObserver(set).observe(document.body);   /* the page's height changes (more books, etc.) */
 })();
