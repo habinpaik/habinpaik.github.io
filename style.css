@@ -1444,13 +1444,12 @@ html:has(.snap-top) { scroll-snap-type: y mandatory; }
 /* Research: an outline of the page's sections in the left sketch area -- small grey sans on a 1px rail;
    the section being read in ink, marked by a 5px crimson bar that slides along the rail. Fixed under the
    menu bar, it fades in at the first section and out at the footer. Wide screens only. */
-.outline { position: fixed; z-index: 40; width: 9rem; font-family: var(--sans); font-size: var(--t-small); line-height: 1.4;
-  opacity: 0; visibility: hidden; transition: opacity .35s ease, visibility 0s linear .35s; }
-.outline.on { opacity: 1; visibility: visible; transition: opacity .35s ease; }
+.outline-rail { position: absolute; bottom: 0; width: 9rem; z-index: 1; pointer-events: none; }
+.outline { position: sticky; width: 9rem; font-family: var(--sans); font-size: var(--t-small); line-height: 1.4; pointer-events: auto; }
 .outline ol { list-style: none; margin: 0; padding: 0; position: relative; border-left: 1px solid var(--line); }
 .outline li + li { margin-top: var(--s2); }
 .outline a { display: block; padding: 2px 0 2px var(--s3); color: var(--stone); text-decoration: none; background: none; transition: color .3s ease; }
 .outline a:hover, .outline a.cur { color: var(--ink); }
 .outline .bar { position: absolute; left: -3px; width: 5px; background: var(--crimson); transition: top .35s cubic-bezier(.3,0,.2,1), height .35s cubic-bezier(.3,0,.2,1); }
-@media (max-width: 68.75rem) { .outline { display: none; } }
+@media (max-width: 68.75rem) { .outline-rail { display: none; } }
 h2.section-title { scroll-margin-top: calc(var(--head-h, 4rem) + var(--s5)); }

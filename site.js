@@ -460,21 +460,26 @@ document.addEventListener('touchstart', function () {}, { passive: true });
     });
     li.appendChild(a); ol.appendChild(li); return a;
   });
-  ol.appendChild(bar); nav.appendChild(ol); document.body.appendChild(nav);
-  var head = document.querySelector('.site-head'), foot = document.querySelector('.site-foot'), cur = -1;
+  /* the outline rides on a rail laid in the page beside the text, from the first section's title to the
+     end of the page's text, and sticks (css position: sticky) under the menu bar -- the browser moves it
+     with the scroll itself, so it never trails or shakes */
+  var rail = document.createElement('div'); rail.className = 'outline-rail';
+  ol.appendChild(bar); nav.appendChild(ol); rail.appendChild(nav); main.appendChild(rail);
+  if (getComputedStyle(main).position === 'static') main.style.position = 'relative';
+  var head = document.querySelector('.site-head'), cur = -1;
   var pinned = null, pinT = 0;
+  function baseline(el) { var z = document.createElement('span'); z.style.cssText = 'display:inline-block;width:0;height:0'; el.appendChild(z); var y = z.getBoundingClientRect().top; z.remove(); return y; }
+  function layoutRail() {
+    var pad = parseFloat(getComputedStyle(main).paddingLeft) || 0, m = main.getBoundingClientRect();
+    rail.style.left = (pad - 40 - nav.offsetWidth) + 'px';   /* --s6 left of the text column */
+    var hh = head ? head.offsetHeight : 0;
+    nav.style.top = (hh + 40) + 'px';
+    rail.style.top = '0px';
+    var itemOff = baseline(links[0]) - nav.getBoundingClientRect().top;   /* the first item's baseline, from the outline's top */
+    rail.style.top = (baseline(heads[0]) - m.top - itemOff) + 'px';    /* level with the first title's baseline */
+  }
   function place() {
-    var m = main.getBoundingClientRect(), pad = parseFloat(getComputedStyle(main).paddingLeft) || 0;
-    var hb = head ? head.getBoundingClientRect().bottom : 0;
-    nav.style.left = (m.left + pad - 40 - nav.offsetWidth) + 'px';   /* --s6 left of the text column */
-    /* it starts beside the first section's title (first items level), rides up with the page, and
-       stays put once it reaches its place under the menu bar */
-    function baseline(el) { var z = document.createElement('span'); z.style.cssText = 'display:inline-block;width:0;height:0'; el.appendChild(z); var y = z.getBoundingClientRect().top; z.remove(); return y; }
-    var beside = parseFloat(nav.style.top || 0) + (baseline(heads[0]) - baseline(links[0]));   /* first item on the title's baseline */
-    nav.style.top = Math.max(Math.max(hb, 0) + 40, beside) + 'px';
-    var vh = window.innerHeight;
-    var footTop = foot ? foot.getBoundingClientRect().top : 1e9, navB = nav.getBoundingClientRect().bottom;
-    nav.classList.toggle('on', footTop > navB + 40);
+    var hb = head ? head.getBoundingClientRect().bottom : 0, vh = window.innerHeight;
     /* the section being read: the last whose title has passed the reading line, just under the menu bar
        (where a click on the outline brings a title); at the page's very end, the last section */
     var line = Math.max(hb, 0) + 120, k = 0;
@@ -487,7 +492,9 @@ document.addEventListener('touchstart', function () {}, { passive: true });
     }
   }
   var raf = 0; function soon() { if (!raf) raf = requestAnimationFrame(function () { raf = 0; place(); }); }
-  window.addEventListener('scroll', soon, { passive: true }); window.addEventListener('resize', soon);
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
-  place();
+  window.addEventListener('scroll', soon, { passive: true });
+  window.addEventListener('resize', function () { layoutRail(); soon(); });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { layoutRail(); place(); });
+  if (window.ResizeObserver) new ResizeObserver(function () { layoutRail(); }).observe(main);
+  layoutRail(); place();
 })();
