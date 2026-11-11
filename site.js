@@ -514,18 +514,19 @@ document.addEventListener('touchstart', function () {}, { passive: true });
   layoutRail(); place();
 })();
 
-/* night at the end of the page (see html.night in the css) */
+/* night from the footer on: it turns as the footer comes into view (see html.night in the css) */
 (function () {
   var root = document.documentElement, on = false, t = 0;
   function check() {
-    var left = root.scrollHeight - (window.scrollY + window.innerHeight);
-    var want = on ? left < 80 : left < 3;   /* on at the very bottom; off once well away from it */
+    var foot = document.querySelector('.site-foot'); if (!foot) return;
+    var ft = foot.getBoundingClientRect().top, vh = window.innerHeight;
+    var want = on ? ft < vh + 20 : ft < vh - 1;   /* on as soon as the footer comes into view; off once it has left */
     if (want === on) return;
     on = want;
     root.classList.add('night-ease'); clearTimeout(t); t = setTimeout(function () { root.classList.remove('night-ease'); }, 320);
     root.classList.toggle('night', on);
   }
-  window.addEventListener('scroll', check, { passive: true }); window.addEventListener('resize', check);
+  window.addEventListener('scroll', check, { passive: true }); window.addEventListener('resize', check); check();
 })();
 
 /* wide screens: where the left sketch area begins (the outline and the time/mail line up on it) */
