@@ -454,11 +454,16 @@ document.addEventListener('touchstart', function () {}, { passive: true });
     if (!h.id) h.id = 'sec-' + h.textContent.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
     var li = document.createElement('li'), a = document.createElement('a');
     a.href = '#' + h.id; a.textContent = h.textContent.trim();
-    a.addEventListener('click', function (e) { e.preventDefault(); h.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+    a.addEventListener('click', function (e) {
+      e.preventDefault(); h.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      pinned = i; place();   /* the bar goes to what was clicked at once, and stays while the page glides there */
+      clearTimeout(pinT); pinT = setTimeout(function () { pinned = null; place(); }, 900);
+    });
     li.appendChild(a); ol.appendChild(li); return a;
   });
   ol.appendChild(bar); nav.appendChild(ol); document.body.appendChild(nav);
   var head = document.querySelector('.site-head'), foot = document.querySelector('.site-foot'), cur = -1;
+  var pinned = null, pinT = 0;
   function place() {
     var m = main.getBoundingClientRect(), pad = parseFloat(getComputedStyle(main).paddingLeft) || 0;
     var hb = head ? head.getBoundingClientRect().bottom : 0;
@@ -471,7 +476,12 @@ document.addEventListener('touchstart', function () {}, { passive: true });
     var vh = window.innerHeight;
     var footTop = foot ? foot.getBoundingClientRect().top : 1e9, navB = nav.getBoundingClientRect().bottom;
     nav.classList.toggle('on', footTop > navB + 40);
-    var k = 0; heads.forEach(function (h, i) { if (h.getBoundingClientRect().top < vh * 0.4) k = i; });
+    /* the section being read: the last whose title has passed the reading line, just under the menu bar
+       (where a click on the outline brings a title); at the page's very end, the last section */
+    var line = Math.max(hb, 0) + 120, k = 0;
+    heads.forEach(function (h, i) { if (h.getBoundingClientRect().top <= line) k = i; });
+    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2 && heads[heads.length - 1].getBoundingClientRect().top < vh) k = heads.length - 1;
+    if (pinned !== null) k = pinned;
     if (k !== cur) {
       cur = k; links.forEach(function (a, i) { a.classList.toggle('cur', i === k); });
       var li = links[k].parentNode; bar.style.top = li.offsetTop + 'px'; bar.style.height = li.offsetHeight + 'px';
