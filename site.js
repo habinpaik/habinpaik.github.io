@@ -486,7 +486,7 @@ document.addEventListener('touchstart', function () {}, { passive: true });
   function baseline(el) { var z = document.createElement('span'); z.style.cssText = 'display:inline-block;width:0;height:0'; el.appendChild(z); var y = z.getBoundingClientRect().top; z.remove(); return y; }
   function layoutRail() {
     var pad = parseFloat(getComputedStyle(main).paddingLeft) || 0, m = main.getBoundingClientRect();
-    rail.style.left = (pad - 40 - nav.offsetWidth) + 'px';   /* --s6 left of the text column */
+    rail.style.left = (pad - 56 - nav.offsetWidth) + 'px';   /* --s7 left of the text column */
     var hh = head ? head.offsetHeight : 0;
     nav.style.top = (hh + 40) + 'px';
     rail.style.top = '0px';
@@ -535,19 +535,19 @@ document.addEventListener('touchstart', function () {}, { passive: true });
   function set() {
     var m = main.getBoundingClientRect(), pad = parseFloat(getComputedStyle(main).paddingLeft) || 0;
     var rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
-    document.documentElement.style.setProperty('--sketch-l', (m.left + pad - 40 - 9 * rem) + 'px');
+    document.documentElement.style.setProperty('--sketch-l', (m.left + pad - 56 - 9 * rem) + 'px');
     var cm = document.querySelector('.site-foot .clock-main');   /* the time and mail: right edge --s6 off the text column */
     if (cm && getComputedStyle(cm).position === 'fixed') {
-      cm.style.left = (m.left + pad - 40 - cm.offsetWidth) + 'px';
-      /* its height: so that at the very bottom of the page its last line sits on the address's last
-         line, the two paragraphs side by side */
-      var addr = document.querySelector('.foot-contact'), last = addr && addr.lastElementChild;
+      cm.style.left = (m.left + pad - 56 - cm.offsetWidth) + 'px';   /* --s7 off the text column, as the outline */
+      /* its height: so that at the very bottom of the page its first line (the time) sits on the
+         footer's first line (the copyright) */
+      var last = document.querySelector('.foot-copy');
       if (last) {
         var bl = function (el) { var z = document.createElement('span'); z.style.cssText = 'display:inline-block;width:0;height:0'; el.appendChild(z); var y = z.getBoundingClientRect().top; z.remove(); return y; };
         var docH = document.documentElement.scrollHeight, lastDocY = bl(last) + window.scrollY;
-        var fromBottom = docH - lastDocY;                       /* page bottom -> the address's last baseline */
-        var mail = cm.querySelector('.foot-mail') || cm, cmR = cm.getBoundingClientRect();
-        var inBox = cmR.bottom - bl(mail);                      /* the box's bottom -> its last baseline */
+        var fromBottom = docH - lastDocY;                       /* page bottom -> the copyright's baseline */
+        var first = cm.querySelector('.dow') || cm, cmR = cm.getBoundingClientRect();
+        var inBox = cmR.bottom - bl(first);                     /* the box's bottom -> its first baseline */
         cm.style.bottom = (fromBottom - inBox) + 'px';
       }
     } else if (cm) { cm.style.left = ''; cm.style.bottom = ''; }
