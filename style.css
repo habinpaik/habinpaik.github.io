@@ -448,14 +448,17 @@ h2.section-title + * { margin-top: 0 !important; }   /* whatever follows a title
 main > p:first-child { margin-bottom: var(--sec-gap); }
 
 /* ---------- Home: bio beside ID photo ---------- */
-.bio-row { display: grid; grid-template-columns: 1fr auto; gap: var(--s5); align-items: start; margin-bottom: var(--sec-gap); }
+.bio-row { display: block; margin-bottom: var(--sec-gap); }
+.bio::after { content: ""; display: block; clear: both; }
+/* the photo floats at the right of the paragraphs, so the text runs beside it and then on under it;
+   its top on the first line's capitals */
+.bio .id-photo { float: right; margin: 0.17em 0 var(--s3) var(--s5); }
 .bio-row .bio { margin-bottom: 0; max-width: none; }
 .id-photo { width: 150px; }
 .id-photo img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; filter: grayscale(1); background: var(--line); display: block; }
 .home-top { display: block; }
 @media (max-width: 34rem) {
-  .bio-row { grid-template-columns: 1fr; }
-  .id-photo { order: -1; width: 140px; }
+  .bio .id-photo { float: none; margin: 0 0 var(--s4); width: 140px; }
 }
 
 /* facts */
