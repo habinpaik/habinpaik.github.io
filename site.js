@@ -565,15 +565,20 @@ document.addEventListener('touchstart', function () {}, { passive: true });
   var wide = window.matchMedia('(min-width: 80rem)');
   var rail = document.createElement('div'); rail.className = 'time-rail'; rail.hidden = true; document.body.appendChild(rail);
   /* in the rail the whole box is the mail button */
-  rail.addEventListener('click', function (e) {
-    var mail = rail.querySelector('.foot-mail'); if (!mail) return;
-    window.location.href = mail.href;
-  });
+  var href = '';
+  rail.addEventListener('click', function (e) { if (href) window.location.href = href; });
   rail.addEventListener('keydown', function (e) {
     if (e.key !== 'Enter' && e.key !== ' ') return;
-    var mail = rail.querySelector('.foot-mail'); if (!mail) return;
-    e.preventDefault(); window.location.href = mail.href;
+    if (href) { e.preventDefault(); window.location.href = href; }
   });
+  /* the address itself is never a link in the box -- plain words (a span); the box carries the mailto.
+     Back in the footer (narrower screens) it is a link again */
+  function swap(el, tag) {
+    if (!el || el.tagName.toLowerCase() === tag) return;
+    var n = document.createElement(tag); n.className = el.className; n.textContent = el.textContent;
+    if (tag === 'a') n.href = href;
+    el.parentNode.replaceChild(n, el);
+  }
   function set() {
     var m = main.getBoundingClientRect(), pad = parseFloat(getComputedStyle(main).paddingLeft) || 0;
     var rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
@@ -588,7 +593,9 @@ document.addEventListener('touchstart', function () {}, { passive: true });
       if (!rail.contains(cm)) {
         rail.appendChild(cm);
         cm.setAttribute('role', 'link'); cm.tabIndex = 0;   /* the box is the button (keyboard too) */
-        var a = cm.querySelector('.foot-mail'); if (a) a.tabIndex = -1;
+        var a = cm.querySelector('.foot-mail'); if (a && a.href) href = a.getAttribute('href');
+        swap(a, 'span');
+        cm.setAttribute('aria-label', 'Email ' + href.replace(/^mailto:/, ''));
       }
       var line = document.querySelector('.pre-foot') || document.querySelector('.foot-main') || document.querySelector('.site-foot');   /* stop before Explore More's line */
       rail.style.left = '0px'; rail.style.width = document.documentElement.clientWidth + 'px';   /* the box sits at the screen's right, --s5 in */
@@ -598,7 +605,8 @@ document.addEventListener('touchstart', function () {}, { passive: true });
       if (rail.contains(cm)) {
         home.insertBefore(cm, home.firstChild);
         cm.removeAttribute('role'); cm.removeAttribute('tabindex');
-        var a2 = cm.querySelector('.foot-mail'); if (a2) a2.removeAttribute('tabindex');
+        cm.removeAttribute('aria-label');
+        swap(cm.querySelector('.foot-mail'), 'a');
       }
       rail.hidden = true;
     }
