@@ -463,10 +463,14 @@ document.addEventListener('touchstart', function () {}, { passive: true });
     var m = main.getBoundingClientRect(), pad = parseFloat(getComputedStyle(main).paddingLeft) || 0;
     var hb = head ? head.getBoundingClientRect().bottom : 0;
     nav.style.left = (m.left + pad - 40 - nav.offsetWidth) + 'px';   /* --s6 left of the text column */
-    nav.style.top = (Math.max(hb, 0) + 40) + 'px';
-    var vh = window.innerHeight, first = heads[0].getBoundingClientRect().top;
+    /* it starts beside the first section's title (first items level), rides up with the page, and
+       stays put once it reaches its place under the menu bar */
+    function baseline(el) { var z = document.createElement('span'); z.style.cssText = 'display:inline-block;width:0;height:0'; el.appendChild(z); var y = z.getBoundingClientRect().top; z.remove(); return y; }
+    var beside = parseFloat(nav.style.top || 0) + (baseline(heads[0]) - baseline(links[0]));   /* first item on the title's baseline */
+    nav.style.top = Math.max(Math.max(hb, 0) + 40, beside) + 'px';
+    var vh = window.innerHeight;
     var footTop = foot ? foot.getBoundingClientRect().top : 1e9, navB = nav.getBoundingClientRect().bottom;
-    nav.classList.toggle('on', first < vh * 0.6 && footTop > navB + 40);
+    nav.classList.toggle('on', footTop > navB + 40);
     var k = 0; heads.forEach(function (h, i) { if (h.getBoundingClientRect().top < vh * 0.4) k = i; });
     if (k !== cur) {
       cur = k; links.forEach(function (a, i) { a.classList.toggle('cur', i === k); });
