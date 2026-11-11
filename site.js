@@ -536,8 +536,13 @@ document.addEventListener('touchstart', function () {}, { passive: true });
   var rail = document.createElement('div'); rail.className = 'time-rail'; rail.hidden = true; document.body.appendChild(rail);
   /* in the rail the whole box is the mail button */
   rail.addEventListener('click', function (e) {
-    var mail = rail.querySelector('.foot-mail'); if (!mail || e.target.closest('a')) return;
+    var mail = rail.querySelector('.foot-mail'); if (!mail) return;
     window.location.href = mail.href;
+  });
+  rail.addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    var mail = rail.querySelector('.foot-mail'); if (!mail) return;
+    e.preventDefault(); window.location.href = mail.href;
   });
   function set() {
     var m = main.getBoundingClientRect(), pad = parseFloat(getComputedStyle(main).paddingLeft) || 0;
@@ -550,13 +555,21 @@ document.addEventListener('touchstart', function () {}, { passive: true });
     var cm = document.querySelector('.clock-main'), home = document.querySelector('.site-foot .clocks');
     if (!cm || !home) return;
     if (wide.matches) {
-      if (!rail.contains(cm)) rail.appendChild(cm);
+      if (!rail.contains(cm)) {
+        rail.appendChild(cm);
+        cm.setAttribute('role', 'link'); cm.tabIndex = 0;   /* the box is the button (keyboard too) */
+        var a = cm.querySelector('.foot-mail'); if (a) a.tabIndex = -1;
+      }
       var line = document.querySelector('.foot-main') || document.querySelector('.site-foot');
       rail.style.left = '0px'; rail.style.width = document.documentElement.clientWidth + 'px';   /* the box sits at the screen's right, --s5 in */
       rail.style.height = Math.max(0, line.getBoundingClientRect().top + window.scrollY - 25) + 'px';
       rail.hidden = false;
     } else {
-      if (rail.contains(cm)) home.insertBefore(cm, home.firstChild);
+      if (rail.contains(cm)) {
+        home.insertBefore(cm, home.firstChild);
+        cm.removeAttribute('role'); cm.removeAttribute('tabindex');
+        var a2 = cm.querySelector('.foot-mail'); if (a2) a2.removeAttribute('tabindex');
+      }
       rail.hidden = true;
     }
   }
