@@ -1281,9 +1281,11 @@ main.shelf-end { padding-bottom: 0; }
    Korean headline (or a box's one label) gets the text links' crimson -- it rises from the bottom
    behind the letters, a hair wider than them, one box per line, and the letters turn white */
 .kh {
-  padding: 0.1em 0.12em 0.08em; margin: 0 -0.12em;   /* a hair past the letters on every side */
+  padding: 0 0.12em; margin: 0 -0.12em;   /* a hair past the letters at the sides */
   -webkit-box-decoration-break: clone; box-decoration-break: clone;
-  background: linear-gradient(var(--crimson), var(--crimson)) no-repeat 0 100% / 100% 0;
+  /* the fill is a band 1.22em tall from the bottom of each line's box -- never the full font box, which
+     in the Korean serif runs taller than the line and so reached up over the line above */
+  background: linear-gradient(to top, var(--crimson) 1.22em, transparent 1.22em) no-repeat 0 100% / 100% 0;
   transition: background-size .45s cubic-bezier(.45, 0, .25, 1), color .45s ease;
 }
 .feat-photo:hover .kh, .side-head:hover .kh, .tuck-story:hover .kh, .print-tab:hover .kh,
@@ -1438,3 +1440,17 @@ html:has(.snap-top) { scroll-snap-type: y mandatory; }
 .spine-nav button { transition: color .45s ease, background-color .45s ease, border-color .45s ease; }
 .spine-nav button:not(:disabled):active { background-color: var(--ink); border-color: var(--ink); color: #fff; transition-duration: .06s; }
 .spine-nav button:not(:disabled):active::before { opacity: 0; }
+
+/* Research: an outline of the page's sections in the left sketch area -- small grey sans on a 1px rail;
+   the section being read in ink, marked by a 5px crimson bar that slides along the rail. Fixed under the
+   menu bar, it fades in at the first section and out at the footer. Wide screens only. */
+.outline { position: fixed; z-index: 40; width: 9rem; font-family: var(--sans); font-size: var(--t-small); line-height: 1.4;
+  opacity: 0; visibility: hidden; transition: opacity .35s ease, visibility 0s linear .35s; }
+.outline.on { opacity: 1; visibility: visible; transition: opacity .35s ease; }
+.outline ol { list-style: none; margin: 0; padding: 0; position: relative; border-left: 1px solid var(--line); }
+.outline li + li { margin-top: var(--s2); }
+.outline a { display: block; padding: 2px 0 2px var(--s3); color: var(--stone); text-decoration: none; background: none; transition: color .3s ease; }
+.outline a:hover, .outline a.cur { color: var(--ink); }
+.outline .bar { position: absolute; left: -3px; width: 5px; background: var(--crimson); transition: top .35s cubic-bezier(.3,0,.2,1), height .35s cubic-bezier(.3,0,.2,1); }
+@media (max-width: 68.75rem) { .outline { display: none; } }
+h2.section-title { scroll-margin-top: calc(var(--head-h, 4rem) + var(--s5)); }

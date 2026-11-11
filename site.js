@@ -442,3 +442,39 @@ document.addEventListener('touchstart', function () {}, { passive: true });
   document.addEventListener('mouseover', function (e) { var a = e.target.closest && e.target.closest('a[href]'); if (a) set(a, true); });
   document.addEventListener('mouseout', function (e) { var a = e.target.closest && e.target.closest('a[href]'); if (a && !a.contains(e.relatedTarget)) set(a, false); });
 })();
+
+/* Research: the outline in the left sketch area (see .outline in the css) */
+(function () {
+  if (!/research\.html$|\/research\/?$/.test(location.pathname) && !document.querySelector('.spine-panel')) return;
+  var main = document.querySelector('main.wrap'), heads = [].slice.call(document.querySelectorAll('main h2.section-title'));
+  if (!main || heads.length < 2) return;
+  var nav = document.createElement('nav'); nav.className = 'outline'; nav.setAttribute('aria-label', 'On this page');
+  var ol = document.createElement('ol'), bar = document.createElement('span'); bar.className = 'bar';
+  var links = heads.map(function (h, i) {
+    if (!h.id) h.id = 'sec-' + h.textContent.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    var li = document.createElement('li'), a = document.createElement('a');
+    a.href = '#' + h.id; a.textContent = h.textContent.trim();
+    a.addEventListener('click', function (e) { e.preventDefault(); h.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+    li.appendChild(a); ol.appendChild(li); return a;
+  });
+  ol.appendChild(bar); nav.appendChild(ol); document.body.appendChild(nav);
+  var head = document.querySelector('.site-head'), foot = document.querySelector('.site-foot'), cur = -1;
+  function place() {
+    var m = main.getBoundingClientRect(), pad = parseFloat(getComputedStyle(main).paddingLeft) || 0;
+    var hb = head ? head.getBoundingClientRect().bottom : 0;
+    nav.style.left = (m.left + pad - 40 - nav.offsetWidth) + 'px';   /* --s6 left of the text column */
+    nav.style.top = (Math.max(hb, 0) + 40) + 'px';
+    var vh = window.innerHeight, first = heads[0].getBoundingClientRect().top;
+    var footTop = foot ? foot.getBoundingClientRect().top : 1e9, navB = nav.getBoundingClientRect().bottom;
+    nav.classList.toggle('on', first < vh * 0.6 && footTop > navB + 40);
+    var k = 0; heads.forEach(function (h, i) { if (h.getBoundingClientRect().top < vh * 0.4) k = i; });
+    if (k !== cur) {
+      cur = k; links.forEach(function (a, i) { a.classList.toggle('cur', i === k); });
+      var li = links[k].parentNode; bar.style.top = li.offsetTop + 'px'; bar.style.height = li.offsetHeight + 'px';
+    }
+  }
+  var raf = 0; function soon() { if (!raf) raf = requestAnimationFrame(function () { raf = 0; place(); }); }
+  window.addEventListener('scroll', soon, { passive: true }); window.addEventListener('resize', soon);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
+  place();
+})();
