@@ -532,7 +532,7 @@ document.addEventListener('touchstart', function () {}, { passive: true });
     if (want === on) return;
     on = want;
     /* the colour tokens change together (css); elements' own transitions pause meanwhile */
-    root.classList.add('night-switch'); clearTimeout(t); t = setTimeout(function () { root.classList.remove('night-switch'); }, 380);
+    root.classList.add('night-switch'); clearTimeout(t); t = setTimeout(function () { root.classList.remove('night-switch'); }, 700);   /* well past the .3s, so no element's own transition picks up the tail */
     root.classList.toggle('night', on);
   }
   window.addEventListener('scroll', check, { passive: true }); window.addEventListener('resize', check); check();
