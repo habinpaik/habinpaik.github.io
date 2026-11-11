@@ -1501,15 +1501,14 @@ html.night .aclock .face, html.night .aclock line { stroke-width: 1.5; }   /* a 
 html.night { --crimson-light: color-mix(in srgb, var(--crimson) 45%, var(--paper));
   --dial-fill: #8E2F3E; --dial-edge: color-mix(in srgb, #8E2F3E 40%, var(--paper)); }   /* the sweep a deep crimson at night, its edge fading into the dark */
 
-/* the buffer before the footer: the four pages, each a box -- a hairline, the light shade inside its
-   top, the page's name and a line on it; the page you are on marked by the 5px crimson bar along its
-   foot, as in the menu. Hover: the name fills crimson, as every link box. */
+/* the buffer before the footer: the text column split by three hairlines into four places, each just
+   a page's name, as large as the place allows; the page you are on in ink, the others grey. Hover: the
+   name fills crimson, as every link. */
 .pre-foot { border-top: 1px solid var(--line); background: var(--shade-light) no-repeat; }
-.pre-foot ul { list-style: none; margin: 0 auto; max-width: 46rem;   /* the text column */  padding-block: var(--s6); display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--s4); }
-.pre-foot a { position: relative; display: block; height: 100%; margin: 0; box-sizing: border-box; padding: var(--inset); border: 1px solid var(--line);
-  background: var(--shade-light) no-repeat; background-origin: padding-box; color: var(--ink); text-decoration: none; }
-.pre-foot .pf-name { font-family: var(--serif); font-size: var(--t-body); line-height: 1.3; text-box-trim: trim-both; text-box-edge: cap alphabetic; }
-.pre-foot .pf-sub { display: block; margin-top: var(--s2); font-family: var(--sans); font-size: var(--t-small); line-height: 1.4; color: var(--stone); }
-.pre-foot a[aria-current="page"]::after { content: ""; position: absolute; left: -1px; right: -1px; bottom: -1px; height: 5px; background: var(--crimson); }
+.pre-foot ul { list-style: none; margin: 0 auto; max-width: 46rem; padding-block: var(--s5); display: grid; grid-template-columns: repeat(4, 1fr); }
+.pre-foot li { container-type: inline-size; }
+.pre-foot li + li { border-left: 1px solid var(--line); }
+.pre-foot a { display: block; margin: 0; padding: var(--s3) 0; text-align: center; text-decoration: none; background: none; color: var(--stone); }
+.pre-foot a[aria-current="page"] { color: var(--ink); }
+.pre-foot .pf-name { font-family: var(--serif); font-size: 17cqi; line-height: 1; text-box-trim: trim-both; text-box-edge: cap alphabetic; }   /* "Journalism", the longest, all but fills its place */
 .pre-foot a:hover .kh { background-size: 100% 100%; color: #fff; }
-@media (max-width: 40rem) { .pre-foot ul { grid-template-columns: repeat(2, 1fr); gap: var(--s3); padding-block: var(--s5); } }
