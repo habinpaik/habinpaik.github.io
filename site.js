@@ -412,10 +412,12 @@
     try { u = decodeURI(u); } catch (e) {}
     return u;
   }
+  /* the box starts at the pointer's tip (the arrow's point, the finger's end) and opens up and to the
+     right; near the right edge it opens to the left, near the top downward */
   function place(e) {
-    var x = e.clientX + 14, y = e.clientY + 18, w = tip.offsetWidth, h = tip.offsetHeight;
-    if (x + w > window.innerWidth - 8) x = e.clientX - 14 - w;
-    if (y + h > window.innerHeight - 8) y = e.clientY - 10 - h;
+    var w = tip.offsetWidth, h = tip.offsetHeight, x = e.clientX, y = e.clientY - h;
+    if (x + w > window.innerWidth - 8) x = e.clientX - w;
+    if (y < 8) y = e.clientY;
     tip.style.transform = 'translate(' + Math.round(x) + 'px,' + Math.round(y) + 'px)';
   }
   function hide() { cur = null; tip.classList.remove('on'); }
@@ -601,6 +603,7 @@ document.addEventListener('touchstart', function () {}, { passive: true });
       rail.style.left = '0px'; rail.style.width = document.documentElement.clientWidth + 'px';   /* the box sits at the screen's right, --s5 in */
       rail.style.height = Math.max(0, line.getBoundingClientRect().top + window.scrollY - 25) + 'px';
       rail.hidden = false;
+      document.documentElement.style.setProperty('--tb-h', cm.offsetHeight + 'px');   /* for centring it on the screen's height */
     } else {
       if (rail.contains(cm)) {
         home.insertBefore(cm, home.firstChild);

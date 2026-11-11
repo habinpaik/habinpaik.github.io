@@ -632,9 +632,7 @@ main > p.dek:first-child + section { margin-top: 0; }   /* the opener is larger:
   opacity: 0; transition: opacity .12s ease;
 }
 .spine-tip.show { opacity: 1; }
-.spine-tip .tt-title { font-weight: 700; display: block; margin-bottom: 2px; }
-.spine-tip .tt-en { color: var(--on-dark); font-style: italic; }
-.spine-tip .tt-meta { color: var(--on-dark); }
+.spine-tip i { font-style: italic; }   /* one line of reference, one colour and weight; only a Latin-script title in italics */
 
 /* ---------- Cover shelf: books at their natural proportions on a shelf ----------
    Covers keep their own aspect ratio (only height is normalised), standing
@@ -965,9 +963,9 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 /* address that follows the pointer over a link (site.js) */
 .link-tip {
   position: fixed; left: 0; top: 0; z-index: 100; pointer-events: none;
-  font-family: var(--sans); font-size: 0.75rem; line-height: 1.3; letter-spacing: 0;
+  font-family: var(--sans); font-size: var(--t-small); line-height: 1.4;   /* the book tip's size and box, exactly */
   color: var(--on-fill); background: var(--crimson);
-  padding: 0.3rem 0.5rem; border-radius: 0;
+  padding: 6px; border-radius: 0; text-box-trim: trim-both; text-box-edge: cap alphabetic;
   white-space: nowrap; max-width: 60vw; overflow: hidden; text-overflow: ellipsis;
   opacity: 0; transition: opacity .12s ease;
 }
@@ -1554,7 +1552,7 @@ section > .fact:last-child { padding-bottom: 0.068em; }   /* the sans list sits 
 /* wide screens: the rail the time and mail ride in the right sketch area (laid by site.js) */
 .time-rail { position: absolute; top: 0; z-index: 40; display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-end; padding-right: var(--s5); box-sizing: border-box; pointer-events: none; }
 .time-rail[hidden] { display: none; }
-.time-rail .clock-main { position: sticky; bottom: var(--s5); pointer-events: auto; width: max-content;
+.time-rail .clock-main { position: sticky; bottom: calc(50vh - var(--tb-h, 0px) / 2);   /* the screen's vertical middle */ pointer-events: auto; width: max-content;
   margin: 0; font-family: var(--serif); font-size: var(--t-body); line-height: 1.5; color: var(--stone);
   padding: var(--s3); border: 1px solid var(--line); background: var(--paper);
   text-box-trim: trim-both; text-box-edge: cap alphabetic; }
@@ -1589,3 +1587,17 @@ html.night-switch .night-veil { transition: opacity .3s ease !important; }
 .foot-main .foot-copy { grid-column: 1; grid-row: 2; justify-self: start; align-self: start; line-height: 1.5; margin-top: var(--s4); }
 .foot-side > .foot-contact { grid-column: 1; grid-row: 3; margin-top: 0; }
 @media (min-width: 80rem) { .foot-main .foot-copy { margin-top: 0; } }   /* wide: the mail has gone to the corner; the paragraph is the footer's first */
+
+/* Journalism and Portfolio: every box with a shade inside its top deepens it (light -> strong) on hover,
+   as the time box and the research buttons do; the tucked boxes' shade starts where the box above ends */
+.tuck-story::before, .print-tab::before, .side-head::before, .ebox::before, .ebox.split .go::before, .card-txt::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 12px; background: var(--shade-strong);
+  opacity: 0; pointer-events: none; transition: opacity .45s ease;
+}
+.tuck-story::before, .print-tab::before { top: calc(var(--s2) - 1px); }
+.card-txt { position: relative; }
+@media (hover: hover) {
+  .tuck-story:hover::before, .print-tab:hover::before, .side-head:hover::before,
+  .ebox:not(.split):hover::before, .ebox.split:has(h3 a:hover)::before, .ebox.split .go:hover::before,
+  .card:hover .card-txt::before { opacity: 1; }
+}
