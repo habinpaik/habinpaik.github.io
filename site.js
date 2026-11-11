@@ -543,6 +543,10 @@ document.addEventListener('touchstart', function () {}, { passive: true });
        and the page keeps scrolling */
     var veil = document.createElement('div'); veil.className = 'night-veil';
     veil.style.background = getComputedStyle(document.body).backgroundColor;
+    /* only over the part that turns -- the page above Explore More's bar; below it is night already.
+       It rides with the page (absolute), so its edge stays on the bar while the page scrolls */
+    var bar = document.querySelector('.pre-foot') || document.querySelector('.site-foot');
+    if (bar) veil.style.height = (bar.getBoundingClientRect().top + window.scrollY) + 'px';
     document.body.appendChild(veil);
     root.classList.add('night-switch');
     root.classList.toggle('night', on);

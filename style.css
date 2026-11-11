@@ -1491,15 +1491,32 @@ html.night, html.night body { background-color: var(--paper); color: var(--ink);
    Seoul's hands a quiet grey that still shows, the city hands the lifted crimson, the pin off-white */
 /* at night the dial keeps to grey and pink: one grey for the rim, marks, Seoul's hands, the pin and
    the names; pink for the cities' hands and the sweep, under which the hands turn dark */
-html.night .aclock .face, html.night .aclock line { stroke-width: 1.5; }   /* a hair heavier at night, so the dial holds on the dark */
+html.night .aclock .face, html.night .aclock line, .site-foot .aclock .face, .site-foot .aclock line { stroke-width: 1.5; }   /* a hair heavier at night, so the dial holds on the dark */
 /* at night the sweep's light leading edge fades into the dark ground, not toward white (which read as cream) */
 html.night { --crimson-light: color-mix(in srgb, var(--crimson) 45%, var(--paper));
-  --dial-fill: #D9707F; --dial-edge: color-mix(in srgb, #D9707F 35%, var(--paper)); --dial-on: var(--paper); }   /* the sweep a clear pink at night, its edge fading into the dark; hands under it go dark */
+  --dial-fill: #D9707F; --dial-edge: color-mix(in srgb, #D9707F 35%, var(--paper)); --dial-on: var(--paper); }
+
+/* from the bar over Explore More down, the page is night all the time; only what lies above it turns.
+   The night colours are set again on these two, and every colour made from them is worked out again
+   here (a custom property is resolved where it is declared, so :root's would stay day's) */
+.pre-foot, .site-foot {
+  --paper: #1C1B19; --ink: #E6E3DD; --stone-mix: 70%; --line: #3A3834; --brand: #252421; --brand-deep: #C9C6BF;
+  --crimson: #C25466; --c-journalism: var(--crimson);
+  --sh-strong: rgba(255,255,255,.17); --sh-light: rgba(255,255,255,.10);
+  --stone: color-mix(in srgb, var(--ink) var(--stone-mix), var(--paper));
+  --shade-strong: linear-gradient(to bottom, var(--sh-strong), transparent 12px);
+  --shade-light:  linear-gradient(to bottom, var(--sh-light), transparent var(--s2));
+  --on-fill: var(--paper); --link-hover: var(--on-fill);
+  --crimson-light: color-mix(in srgb, var(--crimson) 45%, var(--paper));
+  --dial-rim: #A9A59D; --dial-home: #A9A59D; --dial-city: #E3808F; --dial-pin: #A9A59D; --dial-lab: #A9A59D;
+  --dial-fill: #D9707F; --dial-edge: color-mix(in srgb, #D9707F 35%, var(--paper)); --dial-on: var(--paper);
+  color-scheme: dark; background-color: var(--paper); color: var(--ink);
+}   /* the sweep a clear pink at night, its edge fading into the dark; hands under it go dark */
 
 /* the buffer before the footer, "Explore More": the four pages as four rows across the text column,
    split by three hairlines; each just the page's name. The page you are on in ink, the others grey.
    Hover: the whole row fills with crimson from the bottom and the name turns white. */
-.pre-foot { padding-bottom: calc(1.5625rem - var(--s3)); border-top: 1px solid var(--line); background: var(--shade-strong) no-repeat; }   /* its line runs edge to edge with the strong shade (where the page proper ends); the footer's line follows right under Portfolio, 25px below its baseline */
+.pre-foot { padding-bottom: calc(1.5625rem - var(--s3)); border-top: 1px solid var(--line); background: var(--shade-strong) no-repeat; background-color: var(--paper); }   /* its line runs edge to edge with the strong shade (where the page proper ends); the footer's line follows right under Portfolio, 25px below its baseline */
 .pre-foot .wrap { max-width: 46rem; }
 .pre-foot h2.section-title { margin-top: -1px; border-top-color: transparent; background: none; }   /* the title's own line gives way to the full-width one, at the same height */
 .pre-foot ul { list-style: none; margin: 0; padding: 0; }
@@ -1560,7 +1577,7 @@ section > .fact:last-child { padding-bottom: 0.068em; }   /* the sans list sits 
 .time-rail .clock-main { color: var(--ink); }   /* the box's words in the body's colour */
 
 /* day <-> night: the page changes at once under a veil of the old ground that fades out (site.js) */
-.night-veil { position: fixed; inset: 0; z-index: 9999; pointer-events: none; opacity: 1; transition: opacity .3s ease; }
+.night-veil { position: absolute; top: 0; left: 0; right: 0; z-index: 9999; pointer-events: none; opacity: 1; transition: opacity .3s ease; }
 .night-veil.go { opacity: 0; }
 html.night-switch body, html.night-switch body *, html.night-switch body *::before, html.night-switch body *::after { transition: none !important; }
 html.night-switch .night-veil { transition: opacity .3s ease !important; }
