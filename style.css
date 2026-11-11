@@ -1515,3 +1515,18 @@ html.night { --crimson-light: color-mix(in srgb, var(--crimson) 45%, var(--paper
 .pre-foot a[aria-current="page"] { color: var(--ink); }
 .pre-foot a:hover { background-size: 100% 100%; color: #fff; }
 .pre-foot .pf-name { display: block; font-family: var(--serif); font-size: var(--t-display); line-height: 1.2; text-box-trim: trim-both; text-box-edge: cap alphabetic; }
+
+/* the end of a page's text -> the Explore More line: the same 25px as before every section line
+   (the main's own bottom padding and the last block's margin give way to it) */
+main { padding-bottom: 0; }
+main > section:last-of-type, main > section:last-of-type > :last-child { margin-bottom: 0; }
+.shelf-panel { padding-bottom: 0; }   /* the note is the bookshelf's last line of text */
+/* a page that ends on a box (a rail of cards, its arrow buttons) keeps the box's edge 25px off the line, as the desk's arrows */
+/* a section that ends on boxes (a rail of cards, the election boxes) keeps the boxes' edge 25px off the next line */
+main > section:has(> .card-rail:last-child), main > section:has(> .election:last-child) { padding-bottom: calc(1.5625rem - var(--sec-gap)); }
+/* a section that ends on a photo: its caption's last line 25px off the next line, as text */
+main > section > figure:last-child { margin-bottom: 0; }
+main > section > figure:last-child figcaption { padding-bottom: calc((var(--t-body) - var(--t-small)) / 2); }
+.shelf-note { padding-bottom: calc((var(--t-body) - var(--t-small)) / 2); }   /* small type sits higher in its line: make up the difference to the 25px */
+.pre-foot { margin-top: var(--sec-gap); }
+section > .fact:last-child { padding-bottom: 0.068em; }   /* the sans list sits a hair higher in its line than the serif: level the 25px with every other section */
