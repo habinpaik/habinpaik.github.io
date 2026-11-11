@@ -543,8 +543,8 @@ document.addEventListener('touchstart', function () {}, { passive: true });
     var m = main.getBoundingClientRect(), pad = parseFloat(getComputedStyle(main).paddingLeft) || 0;
     var rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
     document.documentElement.style.setProperty('--sketch-l', (m.left + pad - 56 - 9 * rem) + 'px');
-    /* wide screens: the time and mail sit at the foot of the right sketch area (--s7 off the text
-       column), and are carried up by the page so they never touch the footer: they ride a rail that
+    /* wide screens: the time and mail sit at the bottom right of the screen (--s5 in from both
+       edges), and are carried up by the page so they never touch the footer: they ride a rail that
        ends 25px above the footer's line, stuck (css sticky) to the bottom of the screen until the
        rail's end comes up */
     var cm = document.querySelector('.clock-main'), home = document.querySelector('.site-foot .clocks');
@@ -552,7 +552,7 @@ document.addEventListener('touchstart', function () {}, { passive: true });
     if (wide.matches) {
       if (!rail.contains(cm)) rail.appendChild(cm);
       var line = document.querySelector('.foot-main') || document.querySelector('.site-foot');
-      rail.style.left = (m.right - pad + 56 + window.scrollX) + 'px';
+      rail.style.left = '0px'; rail.style.width = document.documentElement.clientWidth + 'px';   /* the box sits at the screen's right, --s5 in */
       rail.style.height = Math.max(0, line.getBoundingClientRect().top + window.scrollY - 25) + 'px';
       rail.hidden = false;
     } else {

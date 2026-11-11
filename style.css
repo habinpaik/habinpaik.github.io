@@ -1537,7 +1537,7 @@ section > .fact:last-child { padding-bottom: 0.068em; }   /* the sans list sits 
 @media (min-width: 80rem) { .foot-main { padding-top: calc(var(--s2) + 3.125rem - 0.28em); } }
 
 /* wide screens: the rail the time and mail ride in the right sketch area (laid by site.js) */
-.time-rail { position: absolute; top: 0; z-index: 40; display: flex; flex-direction: column; justify-content: flex-end; pointer-events: none; }
+.time-rail { position: absolute; top: 0; z-index: 40; display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-end; padding-right: var(--s5); box-sizing: border-box; pointer-events: none; }
 .time-rail[hidden] { display: none; }
 .time-rail .clock-main { position: sticky; bottom: var(--s5); pointer-events: auto; width: max-content;
   margin: 0; font-family: var(--serif); font-size: var(--t-body); line-height: 1.5; color: var(--stone);
