@@ -1504,9 +1504,9 @@ html.night { --crimson-light: color-mix(in srgb, var(--crimson) 45%, var(--paper
 /* the buffer before the footer, "Explore More": the four pages as four rows across the text column,
    split by three hairlines; each just the page's name. The page you are on in ink, the others grey.
    Hover: the whole row fills with crimson from the bottom and the name turns white. */
-.pre-foot { padding-bottom: var(--s6); }
+.pre-foot { padding-bottom: var(--s6); border-top: 1px solid var(--line); background: var(--shade-light) no-repeat; }   /* its line and shade run edge to edge, as the footer's */
 .pre-foot .wrap { max-width: 46rem; }
-.pre-foot h2.section-title { margin-top: 0; }
+.pre-foot h2.section-title { margin-top: -1px; border-top-color: transparent; background: none; }   /* the title's own line gives way to the full-width one, at the same height */
 .pre-foot ul { list-style: none; margin: 0; padding: 0; }
 .pre-foot li + li { border-top: 1px solid var(--line); }
 .pre-foot a { display: block; margin: 0 calc(-1 * var(--s3)); padding: var(--s3); text-decoration: none; color: var(--stone);
