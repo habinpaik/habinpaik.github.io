@@ -76,7 +76,7 @@
   var REST = 600, BAND = 45, cyc = null;
   function ease(x) { x = Math.max(0, Math.min(1, x)); return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; }
   function rel(a, from) { return ((a - from) % 360 + 360) % 360; }
-  function light(line, on) { line.style.stroke = on ? '#fff' : ''; }
+  function light(line, on) { line.style.stroke = on ? 'var(--dial-on, #fff)' : ''; }
   function readHands() {
     var now = new Date(), H = hm(home, now);
     homeA = hourAng(H) * 180 / Math.PI; minA = (H.m + H.s / 60) * 6;
@@ -125,7 +125,7 @@
       for (var t = r; t <= head; t += 360) if (t >= tail && t <= head - BAND / 2) lit = true;
       light(h, on && lit);
     });
-    pin.style.fill = (on && head - tail > 40) ? '#fff' : '';
+    pin.style.fill = (on && head - tail > 40) ? 'var(--dial-on, #fff)' : '';
     sweeping = requestAnimationFrame(wipe);
   }
   var canHover = !window.matchMedia || window.matchMedia('(hover: hover)').matches;   /* touch screens: no sweep (a tap would leave it stuck) */

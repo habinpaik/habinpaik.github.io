@@ -1488,18 +1488,19 @@ html.night-ease, html.night-ease body, html.night-ease body * {
 
 /* the dial, at night (where it mostly turns now): rim and marks a step lighter than the night's lines,
    Seoul's hands a quiet grey that still shows, the city hands the lifted crimson, the pin off-white */
-/* at night the dial keeps to two colours: one grey for everything (rim, marks, Seoul's hands, the pin,
-   the names) and the crimson for the cities' hands */
+/* at night the dial keeps to grey and white, no crimson: one grey for the rim, marks, Seoul's hands,
+   the pin and the names; white for the cities' hands. The sweep is a light grey, and what it covers
+   turns dark */
 html.night .aclock { --dial-grey: #A9A59D; }
 html.night .aclock .face, html.night .aclock .tick { stroke: var(--dial-grey); }
 html.night .aclock .hand.min, html.night .aclock .hand.home { stroke: var(--dial-grey) !important; }
-html.night .aclock .hand.city { stroke: #E3808F; }
+html.night .aclock .hand.city { stroke: var(--ink); }
 html.night .aclock .pin { fill: var(--dial-grey); }
 html.night .aclock .lab { color: var(--dial-grey); }
 html.night .aclock .face, html.night .aclock line { stroke-width: 1.5; }   /* a hair heavier at night, so the dial holds on the dark */
 /* at night the sweep's light leading edge fades into the dark ground, not toward white (which read as cream) */
 html.night { --crimson-light: color-mix(in srgb, var(--crimson) 45%, var(--paper));
-  --dial-fill: #8E2F3E; --dial-edge: color-mix(in srgb, #8E2F3E 40%, var(--paper)); }   /* the sweep a deep crimson at night, its edge fading into the dark */
+  --dial-fill: #CFCBC3; --dial-edge: color-mix(in srgb, #CFCBC3 35%, var(--paper)); --dial-on: var(--paper); }   /* the sweep a light grey at night, its edge fading into the dark; hands under it go dark */
 
 /* the buffer before the footer, "Explore More": the four pages as four rows across the text column,
    split by three hairlines; each just the page's name. The page you are on in ink, the others grey.
@@ -1508,7 +1509,6 @@ html.night { --crimson-light: color-mix(in srgb, var(--crimson) 45%, var(--paper
 .pre-foot .wrap { max-width: 46rem; }
 .pre-foot h2.section-title { margin-top: -1px; border-top-color: transparent; background: none; }   /* the title's own line gives way to the full-width one, at the same height */
 .pre-foot ul { list-style: none; margin: 0; padding: 0; }
-.pre-foot li + li { border-top: 1px solid var(--line); }
 .pre-foot a { display: block; margin: 0 calc(-1 * var(--s3)); padding: var(--s3); text-decoration: none; color: var(--stone);
   background: linear-gradient(var(--crimson), var(--crimson)) no-repeat 0 100% / 100% 0;
   transition: background-size .45s cubic-bezier(.45,0,.25,1), color .45s ease; }
