@@ -45,7 +45,8 @@
 :root {
   --paper: #FAF9F6;   /* a white with a little warmth: easier on the eye than pure white */
   --ink:   #1A1A1A;
-  --stone: #6B6B66;
+  --stone: color-mix(in srgb, var(--ink) var(--stone-mix), var(--paper));   /* grey = a fixed share of the words' colour over the paper, so in the day/night change it moves with the words */
+  --stone-mix: 63%;
   --line:  #E0DDD7;   /* NYT 광고 띠 경계선 */
   --brand:      #F3F1EC;   /* NYT 광고 띠 배경: 배너·표지책장 배경 */
   --brand-deep: #424245;   /* 같은 계열의 진한 회색: 본문 링크 */
@@ -1463,7 +1464,7 @@ h2.section-title { scroll-margin-top: calc(var(--head-h, 4rem) + var(--s5)); }
    (not pure black), the words to a soft off-white; subject colours and crimson lift so they still read.
    Scroll back up and it returns. The change eases over .7s. */
 html.night {
-  --paper: #1C1B19; --ink: #E6E3DD; --stone: #A9A59D; --line: #3A3834; --brand: #252421; --brand-deep: #C9C6BF;
+  --paper: #1C1B19; --ink: #E6E3DD; --stone-mix: 70%;   /* night grey: #A9A59D */ --line: #3A3834; --brand: #252421; --brand-deep: #C9C6BF;
   --crimson: #C25466;
   --c-meche: #D08B4A; --c-phys: #6FA6D0; --c-math: #4DB585; --c-gensci: #4FA893; --c-classics: #A3B84E;
   --sh-strong: rgba(255,255,255,.17); --sh-light: rgba(255,255,255,.10);   /* at night the shades are light: a glow under each edge, strong enough to read on the dark */
@@ -1561,7 +1562,7 @@ section > .fact:last-child { padding-bottom: 0.068em; }   /* the sans list sits 
    so lines, shades, words and the dial all move at one pace; nothing is frozen, the page scrolls on */
 @property --paper { syntax: '<color>'; inherits: true; initial-value: #FAF9F6; }
 @property --ink { syntax: '<color>'; inherits: true; initial-value: #1A1A1A; }
-@property --stone { syntax: '<color>'; inherits: true; initial-value: #6B6B66; }
+@property --stone-mix { syntax: '<percentage>'; inherits: true; initial-value: 63%; }
 @property --line { syntax: '<color>'; inherits: true; initial-value: #E0DDD7; }
 @property --brand { syntax: '<color>'; inherits: true; initial-value: #F3F1EC; }
 @property --brand-deep { syntax: '<color>'; inherits: true; initial-value: #424245; }
@@ -1578,7 +1579,7 @@ section > .fact:last-child { padding-bottom: 0.068em; }   /* the sans list sits 
 @property --dial-city { syntax: '<color>'; inherits: true; initial-value: #862633; }
 @property --dial-pin { syntax: '<color>'; inherits: true; initial-value: #1A1A1A; }
 @property --dial-lab { syntax: '<color>'; inherits: true; initial-value: #6B6B66; }
-html { transition: --paper .3s ease, --ink .3s ease, --stone .3s ease, --line .3s ease, --brand .3s ease, --brand-deep .3s ease,
+html { transition: --paper .3s ease, --ink .3s ease, --stone-mix .3s ease, --line .3s ease, --brand .3s ease, --brand-deep .3s ease,
   --crimson .3s ease, --c-meche .3s ease, --c-phys .3s ease, --c-math .3s ease, --c-gensci .3s ease, --c-classics .3s ease,
   --sh-strong .3s ease, --sh-light .3s ease, --dial-rim .3s ease, --dial-home .3s ease, --dial-city .3s ease, --dial-pin .3s ease, --dial-lab .3s ease; }
 html.night-switch body, html.night-switch body *, html.night-switch body *::before, html.night-switch body *::after { transition: none !important; }
