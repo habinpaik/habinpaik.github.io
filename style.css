@@ -1469,9 +1469,8 @@ html.night {
   color-scheme: dark;
 }
 html.night, html.night body { background-color: var(--paper); color: var(--ink); }
-html.night-ease, html.night-ease body, html.night-ease body * {
-  transition: background-color .25s ease, color .25s ease, border-color .25s ease, fill .25s ease, stroke .25s ease, text-decoration-color .25s ease !important;
-}
+/* day <-> night: the page cross-fades as one picture (site.js starts a view transition) */
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: .3s; animation-timing-function: ease; }
 
 /* wide screens (the sketch areas are roomy): the time, "Always open" and the mail leave the footer and
    stay in the left sketch area, at its foot, lined up with the outline above; the footer keeps one
@@ -1558,5 +1557,5 @@ section > .fact:last-child { padding-bottom: 0.068em; }   /* the sans list sits 
 .time-rail .clock-main .foot-mail { transition: color .45s ease, text-decoration-color .45s ease; }
 .time-rail .clock-main:active .foot-mail { transition-duration: .06s; }   /* turns white with the rest of the box, not after it */
 /* in the box the address is just words: no underline, no link of its own -- the box is the button */
-.time-rail .clock-main .foot-mail { text-decoration: none !important; pointer-events: none; color: inherit; background: none !important; }
+.time-rail .clock-main .foot-mail { text-decoration: none !important; pointer-events: none; color: inherit !important; background: none !important; }
 .time-rail .clock-main { color: var(--ink); }   /* the box's words in the body's colour */
