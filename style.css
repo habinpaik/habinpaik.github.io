@@ -1485,12 +1485,15 @@ html.night-ease, html.night-ease body, html.night-ease body * {
 
 /* the dial, at night (where it mostly turns now): rim and marks a step lighter than the night's lines,
    Seoul's hands a quiet grey that still shows, the city hands the lifted crimson, the pin off-white */
-html.night .aclock .face, html.night .aclock .tick { stroke: #8C8880; }
-html.night .aclock .hand.min, html.night .aclock .hand.home { stroke: #B5B1A9 !important; }
-html.night .aclock .hand.city { stroke: #EC8A99; }
-html.night .aclock .lab { color: #C9C5BD; }
+/* at night the dial keeps to two colours: one grey for everything (rim, marks, Seoul's hands, the pin,
+   the names) and the crimson for the cities' hands */
+html.night .aclock { --dial-grey: #A9A59D; }
+html.night .aclock .face, html.night .aclock .tick { stroke: var(--dial-grey); }
+html.night .aclock .hand.min, html.night .aclock .hand.home { stroke: var(--dial-grey) !important; }
+html.night .aclock .hand.city { stroke: #E3808F; }
+html.night .aclock .pin { fill: var(--dial-grey); }
+html.night .aclock .lab { color: var(--dial-grey); }
 html.night .aclock .face, html.night .aclock line { stroke-width: 1.5; }   /* a hair heavier at night, so the dial holds on the dark */
-html.night .aclock .pin { fill: var(--ink); }
 /* at night the sweep's light leading edge fades into the dark ground, not toward white (which read as cream) */
 html.night { --crimson-light: color-mix(in srgb, var(--crimson) 45%, var(--paper));
   --dial-fill: #8E2F3E; --dial-edge: color-mix(in srgb, #8E2F3E 40%, var(--paper)); }   /* the sweep a deep crimson at night, its edge fading into the dark */
