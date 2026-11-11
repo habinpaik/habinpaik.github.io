@@ -980,7 +980,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
    and the body's section gap for clocks -> address. The em offsets below remove each
    font's built-in space above/below its letters so the visible gaps come out equal. */
 .site-foot { --fg: var(--s6); }
-.site-foot .wrap { padding-block: var(--fg) calc(var(--fg) - 0.5em); }
+.site-foot .wrap { padding-block: var(--s5) calc(var(--s5) - 0.5em); }   /* tight above the time and under the copyright: 28px */
 /* clocks (with the mail), then the address with the copyright on its right */
 .foot-main { display: grid; grid-template-columns: auto 1fr; column-gap: var(--s6); row-gap: 0; }
 .foot-side { display: contents; }
@@ -1044,7 +1044,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 @media (max-width: 40rem) {
   .foot-main { grid-template-columns: 1fr; }
   .foot-copy { grid-column: 1; grid-row: 4; justify-self: start; margin-top: 0; line-height: 1.5; }   /* phones: straight on from the address, as one paragraph */
-  .site-foot .wrap { padding-bottom: calc(var(--fg) - 0.51em); }
+  .site-foot .wrap { padding-bottom: calc(var(--s5) - 0.51em); }
 }
 @media (prefers-reduced-motion: reduce) { a { animation: none !important; } }
 

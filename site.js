@@ -245,8 +245,8 @@
     var bot = phone ? Math.min.apply(null, below.map(function (r) { return r.t; })) - 4
                     : (below.length ? below[below.length - 1].t - 20 : mail.b);   /* tight: --s4 clear of the copyright */
     var colR = hr.width;
-    /* the ceiling: names above the dial may rise to --s4 under the footer's top line and its shade */
-    var ceil = foot.getBoundingClientRect().top - hr.top + 8 + 20;
+    /* the ceiling: names above the dial may rise to --s2 under the footer's top line and its shade */
+    var ceil = foot.getBoundingClientRect().top - hr.top + 8 + 8;   /* the line, its shade, and --s2 */
     return { keep: keep, top: top, bot: bot, ceil: ceil, cy: (top + bot) / 2, colR: colR,
              cx0: phone ? (mail.r + colR) / 2 : colR };   /* phones: middle of the room beside the mail; wider: as far right as it goes */
   }
@@ -443,9 +443,8 @@ document.addEventListener('touchstart', function () {}, { passive: true });
   document.addEventListener('mouseout', function (e) { var a = e.target.closest && e.target.closest('a[href]'); if (a && !a.contains(e.relatedTarget)) set(a, false); });
 })();
 
-/* Research: the outline in the left sketch area (see .outline in the css) */
+/* every tab: the outline of its sections in the left sketch area (see .outline in the css) */
 (function () {
-  if (!/research\.html$|\/research\/?$/.test(location.pathname) && !document.querySelector('.spine-panel')) return;
   var main = document.querySelector('main.wrap'), heads = [].slice.call(document.querySelectorAll('main h2.section-title'));
   if (!main || heads.length < 2) return;
   var nav = document.createElement('nav'); nav.className = 'outline'; nav.setAttribute('aria-label', 'On this page');
@@ -453,7 +452,7 @@ document.addEventListener('touchstart', function () {}, { passive: true });
   var links = heads.map(function (h, i) {
     if (!h.id) h.id = 'sec-' + h.textContent.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
     var li = document.createElement('li'), a = document.createElement('a');
-    a.href = '#' + h.id; a.textContent = h.textContent.trim();
+    a.href = '#' + h.id; a.textContent = h.textContent.trim().replace(/\s*\d{4}(\s*[–-]\s*(\d{4}|present))?$/, '');   /* the title, without a trailing year */
     a.addEventListener('click', function (e) {
       e.preventDefault(); h.scrollIntoView({ behavior: 'smooth', block: 'start' });
       pinned = i; place();   /* the bar goes to what was clicked at once, and stays while the page glides there */
