@@ -531,7 +531,10 @@ document.addEventListener('touchstart', function () {}, { passive: true });
   var root = document.documentElement, on = false, t = 0;
   function check() {
     var mark = document.querySelector('.foot-copy') || document.querySelector('.site-foot'); if (!mark) return;
-    var ft = mark.getBoundingClientRect().top, vh = document.documentElement.clientHeight;   /* the layout viewport: a pinch zoom doesn't move it (innerHeight follows the zoom on some phones) */
+    var ft = mark.getBoundingClientRect().top, vv = window.visualViewport;
+    /* the screen's real height in page px: on phones it grows as the address bar slides away (clientHeight
+       stays at the smaller size, so the switch came late), and a pinch zoom doesn't change it */
+    var vh = vv ? vv.height * vv.scale : window.innerHeight;
     var want = on ? ft < vh + 20 : ft < vh - 1;   /* on as the copyright line comes into view; off once it has left */
     if (want === on) return;
     on = want;
@@ -547,7 +550,9 @@ document.addEventListener('touchstart', function () {}, { passive: true });
     clearTimeout(t); t = setTimeout(function () { root.classList.remove('night-switch'); }, 50);
     setTimeout(function () { veil.remove(); }, 450);
   }
-  window.addEventListener('scroll', check, { passive: true }); window.addEventListener('resize', check); check();
+  window.addEventListener('scroll', check, { passive: true }); window.addEventListener('resize', check);
+  if (window.visualViewport) window.visualViewport.addEventListener('resize', check);
+  check();
 })();
 
 /* wide screens: where the left sketch area begins (the outline and the time/mail line up on it) */
