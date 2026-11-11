@@ -1583,3 +1583,5 @@ html { transition: --paper .3s ease, --ink .3s ease, --stone-mix .3s ease, --lin
   --crimson .3s ease, --c-meche .3s ease, --c-phys .3s ease, --c-math .3s ease, --c-gensci .3s ease, --c-classics .3s ease,
   --sh-strong .3s ease, --sh-light .3s ease, --dial-rim .3s ease, --dial-home .3s ease, --dial-city .3s ease, --dial-pin .3s ease, --dial-lab .3s ease; }
 html.night-switch body, html.night-switch body *, html.night-switch body *::before, html.night-switch body *::after { transition: none !important; }
+/* the book tip, tight: 6px from its edge to the letters on every side (trimmed to capitals and baseline) */
+.spine-tip { padding: 6px; text-box-trim: trim-both; text-box-edge: cap alphabetic; }
