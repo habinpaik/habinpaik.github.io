@@ -1438,3 +1438,10 @@ html:has(.snap-top) { scroll-snap-type: y mandatory; }
 .spine-nav button { transition: color .45s ease, background-color .45s ease, border-color .45s ease; }
 .spine-nav button:not(:disabled):active { background-color: var(--ink); border-color: var(--ink); color: #fff; transition-duration: .06s; }
 .spine-nav button:not(:disabled):active::before { opacity: 0; }
+
+/* Home: on screens wide enough, the ID photo leaves the column for the sketch area -- the empty margin
+   beside the text -- its top level with the first line's capitals; the bio then runs the full column */
+@media (min-width: 75rem) {
+  .bio-row { display: block; position: relative; }
+  .id-photo { position: absolute; left: calc(100% + var(--s6)); top: 0.17em; }   /* = the first line's cap top */
+}
