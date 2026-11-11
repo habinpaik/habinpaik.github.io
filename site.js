@@ -531,9 +531,17 @@ document.addEventListener('touchstart', function () {}, { passive: true });
     var want = on ? ft < vh + 20 : ft < vh - 1;   /* on as the copyright line comes into view; off once it has left */
     if (want === on) return;
     on = want;
-    /* the colour tokens change together (css); elements' own transitions pause meanwhile */
-    root.classList.add('night-switch'); clearTimeout(t); t = setTimeout(function () { root.classList.remove('night-switch'); }, 700);   /* well past the .3s, so no element's own transition picks up the tail */
+    /* the page switches at once underneath a veil of the old ground, which then fades away (.3s) --
+       one opacity fade on the compositor: every word, line and shade appears at the same pace, smooth,
+       and the page keeps scrolling */
+    var veil = document.createElement('div'); veil.className = 'night-veil';
+    veil.style.background = getComputedStyle(document.body).backgroundColor;
+    document.body.appendChild(veil);
+    root.classList.add('night-switch');
     root.classList.toggle('night', on);
+    requestAnimationFrame(function () { requestAnimationFrame(function () { veil.classList.add('go'); }); });
+    clearTimeout(t); t = setTimeout(function () { root.classList.remove('night-switch'); }, 50);
+    setTimeout(function () { veil.remove(); }, 450);
   }
   window.addEventListener('scroll', check, { passive: true }); window.addEventListener('resize', check); check();
 })();

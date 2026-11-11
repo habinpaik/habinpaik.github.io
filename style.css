@@ -1557,31 +1557,10 @@ section > .fact:last-child { padding-bottom: 0.068em; }   /* the sans list sits 
 .time-rail .clock-main .foot-mail { text-decoration: none !important; pointer-events: none; color: inherit !important; background: none !important; }
 .time-rail .clock-main { color: var(--ink); }   /* the box's words in the body's colour */
 
-/* day <-> night as one: every colour of the page is a registered colour token, and only the tokens
-   change -- together, over .3s -- while every element's own transitions are paused for that moment,
-   so lines, shades, words and the dial all move at one pace; nothing is frozen, the page scrolls on */
-@property --paper { syntax: '<color>'; inherits: true; initial-value: #FAF9F6; }
-@property --ink { syntax: '<color>'; inherits: true; initial-value: #1A1A1A; }
-@property --stone-mix { syntax: '<percentage>'; inherits: true; initial-value: 63%; }
-@property --line { syntax: '<color>'; inherits: true; initial-value: #E0DDD7; }
-@property --brand { syntax: '<color>'; inherits: true; initial-value: #F3F1EC; }
-@property --brand-deep { syntax: '<color>'; inherits: true; initial-value: #424245; }
-@property --crimson { syntax: '<color>'; inherits: true; initial-value: #862633; }
-@property --c-meche { syntax: '<color>'; inherits: true; initial-value: #a76118; }
-@property --c-phys { syntax: '<color>'; inherits: true; initial-value: #1d689c; }
-@property --c-math { syntax: '<color>'; inherits: true; initial-value: #00804c; }
-@property --c-gensci { syntax: '<color>'; inherits: true; initial-value: #004c3e; }
-@property --c-classics { syntax: '<color>'; inherits: true; initial-value: #637b0e; }
-@property --sh-strong { syntax: '<color>'; inherits: true; initial-value: rgba(0,0,0,.14); }
-@property --sh-light { syntax: '<color>'; inherits: true; initial-value: rgba(0,0,0,.07); }
-@property --dial-rim { syntax: '<color>'; inherits: true; initial-value: #E0DDD7; }
-@property --dial-home { syntax: '<color>'; inherits: true; initial-value: #E0DDD7; }
-@property --dial-city { syntax: '<color>'; inherits: true; initial-value: #862633; }
-@property --dial-pin { syntax: '<color>'; inherits: true; initial-value: #1A1A1A; }
-@property --dial-lab { syntax: '<color>'; inherits: true; initial-value: #6B6B66; }
-html { transition: --paper .3s ease, --ink .3s ease, --stone-mix .3s ease, --line .3s ease, --brand .3s ease, --brand-deep .3s ease,
-  --crimson .3s ease, --c-meche .3s ease, --c-phys .3s ease, --c-math .3s ease, --c-gensci .3s ease, --c-classics .3s ease,
-  --sh-strong .3s ease, --sh-light .3s ease, --dial-rim .3s ease, --dial-home .3s ease, --dial-city .3s ease, --dial-pin .3s ease, --dial-lab .3s ease; }
+/* day <-> night: the page changes at once under a veil of the old ground that fades out (site.js) */
+.night-veil { position: fixed; inset: 0; z-index: 9999; pointer-events: none; opacity: 1; transition: opacity .3s ease; }
+.night-veil.go { opacity: 0; }
 html.night-switch body, html.night-switch body *, html.night-switch body *::before, html.night-switch body *::after { transition: none !important; }
+html.night-switch .night-veil { transition: opacity .3s ease !important; }
 /* the book tip, tight: 6px from its edge to the letters on every side (trimmed to capitals and baseline) */
 .spine-tip { padding: 6px; text-box-trim: trim-both; text-box-edge: cap alphabetic; }
