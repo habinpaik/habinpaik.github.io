@@ -1464,8 +1464,8 @@ html.night {
   --paper: #1C1B19; --ink: #E6E3DD; --stone: #A19E96; --line: #3A3834; --brand: #252421; --brand-deep: #C9C6BF;
   --crimson: #C25466;
   --c-meche: #D08B4A; --c-phys: #6FA6D0; --c-math: #4DB585; --c-gensci: #4FA893; --c-classics: #A3B84E;
-  --shade-strong: linear-gradient(to bottom, rgba(255,255,255,.10), rgba(255,255,255,0) 12px);   /* at night the shades are light: a faint glow under each edge */
-  --shade-light:  linear-gradient(to bottom, rgba(255,255,255,.055), rgba(255,255,255,0) var(--s2));
+  --shade-strong: linear-gradient(to bottom, rgba(255,255,255,.17), rgba(255,255,255,0) 12px);   /* at night the shades are light: a glow under each edge, */
+  --shade-light:  linear-gradient(to bottom, rgba(255,255,255,.10), rgba(255,255,255,0) var(--s2));   /* strong enough to read on the dark */
   color-scheme: dark;
 }
 html.night, html.night body { background-color: var(--paper); color: var(--ink); }
@@ -1487,7 +1487,7 @@ html.night-ease, html.night-ease body, html.night-ease body * {
    Seoul's hands a quiet grey that still shows, the city hands the lifted crimson, the pin off-white */
 /* at night the dial keeps to grey and pink: one grey for the rim, marks, Seoul's hands, the pin and
    the names; pink for the cities' hands and the sweep, under which the hands turn dark */
-html.night .aclock { --dial-grey: #A9A59D; }
+html.night .aclock { --dial-grey: var(--stone); }   /* the same grey as the night's grey words */
 html.night .aclock .face, html.night .aclock .tick { stroke: var(--dial-grey); }
 html.night .aclock .hand.min, html.night .aclock .hand.home { stroke: var(--dial-grey) !important; }
 html.night .aclock .hand.city { stroke: #E3808F; }
