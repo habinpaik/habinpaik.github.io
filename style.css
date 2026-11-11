@@ -61,7 +61,7 @@
   --sec-gap: calc(1.5625rem - 0.5em);   /* above a section line: last baseline -> line = 25px (0.5em of the line sits under the baseline) */
   --inset: var(--s4);   /* box inset, edge -> letters on every side: the paragraph gap; a step less on phones */
   --crimson: #862633;   /* 고려대 교색 Crimson, PANTONE 202C */
-  --on-fill: #fff;   /* words on a crimson (or coloured) fill */
+  --on-fill: var(--paper);   /* words on a crimson (or coloured) fill: the page's own ground, day and night */
   --crimson-light: color-mix(in srgb, var(--crimson) 35%, #fff);   /* the same crimson lightened: hover on dark photos, hover bars */
   /* everything else is one of these two, so the page keeps a short palette; tooltips are crimson */
   --on-dark: rgba(255,255,255,.85);   /* second-rank words on photos and dark grounds (dates, English heads) */
@@ -1466,7 +1466,6 @@ h2.section-title { scroll-margin-top: calc(var(--head-h, 4rem) + var(--s5)); }
    (not pure black), the words to a soft off-white; subject colours and crimson lift so they still read.
    Scroll back up and it returns. The change eases over .7s. */
 html.night {
-  --on-fill: var(--paper);   /* words on a crimson (or coloured) fill: white by day, the dark ground at night */
   --paper: #1C1B19; --ink: #E6E3DD; --stone-mix: 70%;   /* night grey: #A9A59D */ --line: #3A3834; --brand: #252421; --brand-deep: #C9C6BF;
   --crimson: #C25466;
   --c-meche: #D08B4A; --c-phys: #6FA6D0; --c-math: #4DB585; --c-gensci: #4FA893; --c-classics: #A3B84E;
