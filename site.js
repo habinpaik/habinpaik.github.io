@@ -534,6 +534,11 @@ document.addEventListener('touchstart', function () {}, { passive: true });
   var main = document.querySelector('main.wrap'); if (!main) return;
   var wide = window.matchMedia('(min-width: 80rem)');
   var rail = document.createElement('div'); rail.className = 'time-rail'; rail.hidden = true; document.body.appendChild(rail);
+  /* in the rail the whole box is the mail button */
+  rail.addEventListener('click', function (e) {
+    var mail = rail.querySelector('.foot-mail'); if (!mail || e.target.closest('a')) return;
+    window.location.href = mail.href;
+  });
   function set() {
     var m = main.getBoundingClientRect(), pad = parseFloat(getComputedStyle(main).paddingLeft) || 0;
     var rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;

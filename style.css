@@ -1543,3 +1543,15 @@ section > .fact:last-child { padding-bottom: 0.068em; }   /* the sans list sits 
   margin: 0; font-family: var(--serif); font-size: var(--t-body); line-height: 1.5; color: var(--stone);
   padding: var(--s3); border: 1px solid var(--line); background: var(--paper);
   text-box-trim: trim-both; text-box-edge: cap alphabetic; }
+
+/* the time box is one button for the mail: the light shade inside its top; hovering deepens it; a press
+   fills the box crimson (words white) and opens the mail */
+.time-rail .clock-main { cursor: pointer; background: var(--paper) var(--shade-light) no-repeat; background-image: var(--shade-light);
+  transition: background-color .45s ease, color .45s ease, border-color .45s ease; }
+.time-rail .clock-main::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 12px; background: var(--shade-strong);
+  opacity: 0; pointer-events: none; transition: opacity .45s ease; }
+@media (hover: hover) { .time-rail .clock-main:hover::before { opacity: 1; } }
+.time-rail .clock-main:active { background-color: var(--crimson); border-color: var(--crimson); color: #fff; transition-duration: .06s; }
+.time-rail .clock-main:active::before { opacity: 0; }
+.time-rail .clock-main:active .foot-mail { color: #fff !important; text-decoration-color: #fff !important; background: none !important; }
+.time-rail .clock-main .foot-mail:hover { background: none; color: inherit; }   /* the box is the button: no separate hover on the address */
