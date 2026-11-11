@@ -1453,3 +1453,19 @@ html:has(.snap-top) { scroll-snap-type: y mandatory; }
 .outline .bar { position: absolute; left: -3px; width: 5px; background: var(--crimson); transition: top .35s cubic-bezier(.3,0,.2,1), height .35s cubic-bezier(.3,0,.2,1); }
 @media (max-width: 68.75rem) { .outline-rail { display: none; } }
 h2.section-title { scroll-margin-top: calc(var(--head-h, 4rem) + var(--s5)); }
+
+/* Night at the end: scroll to the very bottom of a page and the cream gives way to a soft warm black
+   (not pure black), the words to a soft off-white; subject colours and crimson lift so they still read.
+   Scroll back up and it returns. The change eases over .7s. */
+html.night {
+  --paper: #1C1B19; --ink: #E6E3DD; --stone: #A19E96; --line: #3A3834; --brand: #252421; --brand-deep: #C9C6BF;
+  --crimson: #C25466;
+  --c-meche: #D08B4A; --c-phys: #6FA6D0; --c-math: #4DB585; --c-gensci: #4FA893; --c-classics: #A3B84E;
+  --shade-strong: linear-gradient(to bottom, rgba(0,0,0,.45), rgba(0,0,0,0) 12px);
+  --shade-light:  linear-gradient(to bottom, rgba(0,0,0,.3), rgba(0,0,0,0) var(--s2));
+  color-scheme: dark;
+}
+html.night, html.night body { background-color: var(--paper); color: var(--ink); }
+html.night-ease, html.night-ease body, html.night-ease body * {
+  transition: background-color .7s ease, color .7s ease, border-color .7s ease, fill .7s ease, stroke .7s ease, text-decoration-color .7s ease !important;
+}

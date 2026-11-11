@@ -498,3 +498,17 @@ document.addEventListener('touchstart', function () {}, { passive: true });
   if (window.ResizeObserver) new ResizeObserver(function () { layoutRail(); }).observe(main);
   layoutRail(); place();
 })();
+
+/* night at the end of the page (see html.night in the css) */
+(function () {
+  var root = document.documentElement, on = false, t = 0;
+  function check() {
+    var left = root.scrollHeight - (window.scrollY + window.innerHeight);
+    var want = on ? left < 80 : left < 3;   /* on at the very bottom; off once well away from it */
+    if (want === on) return;
+    on = want;
+    root.classList.add('night-ease'); clearTimeout(t); t = setTimeout(function () { root.classList.remove('night-ease'); }, 800);
+    root.classList.toggle('night', on);
+  }
+  window.addEventListener('scroll', check, { passive: true }); window.addEventListener('resize', check);
+})();
