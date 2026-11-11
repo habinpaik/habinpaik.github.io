@@ -243,9 +243,11 @@
     /* down to the first thing under it: on phones the address line right under the mail (it runs the
        full width); on wider screens the copyright, which sits under the dial on the right */
     var bot = phone ? Math.min.apply(null, below.map(function (r) { return r.t; })) - 4
-                    : (below.length ? below[below.length - 1].t - 42 : mail.b);   /* the footer gap (--fg) clear of the copyright, as above the dial */
+                    : (below.length ? below[below.length - 1].t - 20 : mail.b);   /* tight: --s4 clear of the copyright */
     var colR = hr.width;
-    return { keep: keep, top: top, bot: bot, cy: (top + bot) / 2, colR: colR,
+    /* the ceiling: names above the dial may rise to --s4 under the footer's top line and its shade */
+    var ceil = foot.getBoundingClientRect().top - hr.top + 8 + 20;
+    return { keep: keep, top: top, bot: bot, ceil: ceil, cy: (top + bot) / 2, colR: colR,
              cx0: phone ? (mail.r + colR) / 2 : colR };   /* phones: middle of the room beside the mail; wider: as far right as it goes */
   }
   /* where the dial's centre can go for one moment's labels at size D: the allowed x nearest cx0, or null */
@@ -262,7 +264,7 @@
       var X = A.colR - gR, Y = A.top + half;
       var fits = rects.every(function (q) {
         var L = X + q.l, Rr = X + q.r, T = Y + q.t, B = Y + q.b;
-        if (L < 0 || B > A.bot || T < A.top - 28) return false;
+        if (L < 0 || B > A.bot || T < Math.min(A.top, A.ceil)) return false;
         return A.keep.every(function (w) { return !(L < w.r + 8 && w.l < Rr + 8 && T < w.b + 4 && w.t < B + 4); });
       });
       return fits ? { x: X, cy: Y, stackAll: stackAll, placed: placed } : null;
