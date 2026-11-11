@@ -522,13 +522,13 @@ document.addEventListener('touchstart', function () {}, { passive: true });
   layoutRail(); place();
 })();
 
-/* night from the footer on: it turns as the footer comes into view (see html.night in the css) */
+/* night from the copyright on: it turns as the copyright line comes into view (see html.night in the css) */
 (function () {
   var root = document.documentElement, on = false, t = 0;
   function check() {
-    var foot = document.querySelector('.site-foot'); if (!foot) return;
-    var ft = foot.getBoundingClientRect().top, vh = window.innerHeight;
-    var want = on ? ft < vh + 20 : ft < vh - 1;   /* on as soon as the footer comes into view; off once it has left */
+    var mark = document.querySelector('.foot-copy') || document.querySelector('.site-foot'); if (!mark) return;
+    var ft = mark.getBoundingClientRect().top, vh = window.innerHeight;
+    var want = on ? ft < vh + 20 : ft < vh - 1;   /* on as the copyright line comes into view; off once it has left */
     if (want === on) return;
     on = want;
     root.classList.add('night-ease'); clearTimeout(t); t = setTimeout(function () { root.classList.remove('night-ease'); }, 320);
