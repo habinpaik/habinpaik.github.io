@@ -89,7 +89,7 @@
   }
   /* crimson between tail and head (unwrapped angles from the hour hand); a light edge at the head */
   function arc(tail, head) {
-    var C1 = 'var(--crimson)', C2 = 'var(--crimson-light)';
+    var C1 = 'var(--dial-fill, var(--crimson))', C2 = 'var(--dial-edge, var(--crimson-light))';
     if (head - tail <= 0.2) return 'transparent';
     if (head - tail >= 359.9) return C1;
     var edge = Math.min(BAND, head - tail), eS = head - edge, pieces = [];
