@@ -210,9 +210,20 @@ f(); window.addEventListener('resize',f);})();
   if (!sheet || !document.querySelector('.hero')) return;
   var busy = 0, ty = 0, decided = false;
   function T() { return Math.ceil(window.scrollY + sheet.getBoundingClientRect().top) + 1; }
+  /* up to the photo: the browser's own smooth scroll. Down to the page: our own, slower glide (0.95s,
+     eased in and out) so the photo folds away calmly; snapping is paused while it runs. */
+  var tween = 0;
   function go(top) {
-    busy = Date.now();
-    window.scrollTo({ top: top, behavior: 'smooth' });
+    if (top === 0) { busy = Date.now(); window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+    var from = window.scrollY, dur = 950, t0 = performance.now(), root = document.documentElement;
+    busy = Date.now() + dur - 700;   /* the wheel lock lasts the whole glide */
+    cancelAnimationFrame(tween);
+    root.style.scrollSnapType = 'none';
+    (function step(now) {
+      var x = Math.min(1, (now - t0) / dur), e = x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+      window.scrollTo({ top: from + (top - from) * e, behavior: 'instant' });
+      if (x < 1) tween = requestAnimationFrame(step); else root.style.scrollSnapType = '';
+    })(t0);
   }
   /* the target for a move in direction d from where the page is, or null when it's free scrolling */
   function target(d) {
