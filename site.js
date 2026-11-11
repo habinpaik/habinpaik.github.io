@@ -233,6 +233,15 @@
       var r = e.getBoundingClientRect(), c = r.height * cut;
       return { l: r.left - hr.left, r: r.right - hr.left, t: r.top - hr.top + c, b: r.bottom - hr.top - c };
     }
+    var cm = host.querySelector('.clock-main');
+    if (cm && getComputedStyle(cm).position === 'fixed') {
+      /* wide screens: the time and mail live in the left sketch area; the dial sits beside the one
+         paragraph left in the footer (copyright, then the address), from its first line to its last */
+      var lines = [].map.call(foot.querySelectorAll('.foot-copy, .foot-contact > *'), function (e) { return rel(e, 0.2); });
+      var t0 = Math.min.apply(null, lines.map(function (r) { return r.t; })), b0 = Math.max.apply(null, lines.map(function (r) { return r.b; }));
+      var ceil0 = foot.getBoundingClientRect().top - hr.top + 8 + 8;
+      return { keep: lines, top: t0, bot: b0 + 0.2 * 0 , ceil: ceil0, cy: (t0 + b0) / 2, colR: hr.width, cx0: hr.width };
+    }
     var words = [].filter.call(host.querySelectorAll('.clock-main .hm, .clock-main .dow, .clock-main .city'), function (e) { return e.getClientRects().length; })
                   .map(function (e) { return rel(e, 0.2); });   /* only words actually shown */
     var mail = rel(host.querySelector('.foot-mail'), 0);
@@ -507,8 +516,23 @@ document.addEventListener('touchstart', function () {}, { passive: true });
     var want = on ? left < 80 : left < 3;   /* on at the very bottom; off once well away from it */
     if (want === on) return;
     on = want;
-    root.classList.add('night-ease'); clearTimeout(t); t = setTimeout(function () { root.classList.remove('night-ease'); }, 800);
+    root.classList.add('night-ease'); clearTimeout(t); t = setTimeout(function () { root.classList.remove('night-ease'); }, 320);
     root.classList.toggle('night', on);
   }
   window.addEventListener('scroll', check, { passive: true }); window.addEventListener('resize', check);
+})();
+
+/* wide screens: where the left sketch area begins (the outline and the time/mail line up on it) */
+(function () {
+  var main = document.querySelector('main.wrap'); if (!main) return;
+  function set() {
+    var m = main.getBoundingClientRect(), pad = parseFloat(getComputedStyle(main).paddingLeft) || 0;
+    var rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+    document.documentElement.style.setProperty('--sketch-l', (m.left + pad - 40 - 9 * rem) + 'px');
+    var cm = document.querySelector('.site-foot .clock-main');   /* the time and mail: right edge --s6 off the text column */
+    if (cm && getComputedStyle(cm).position === 'fixed') cm.style.left = (m.left + pad - 40 - cm.offsetWidth) + 'px'; else if (cm) cm.style.left = '';
+  }
+  window.addEventListener('resize', set); set();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(set);
+  setInterval(set, 60000);   /* the time's width changes */
 })();
