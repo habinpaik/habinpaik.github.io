@@ -1485,9 +1485,11 @@ html.night-ease, html.night-ease body, html.night-ease body * {
 
 /* the dial, at night (where it mostly turns now): rim and marks a step lighter than the night's lines,
    Seoul's hands a quiet grey that still shows, the city hands the lifted crimson, the pin off-white */
-html.night .aclock .face, html.night .aclock .tick { stroke: #55524D; }
-html.night .aclock .hand.min, html.night .aclock .hand.home { stroke: #77736C !important; }
-html.night .aclock .hand.city { stroke: #D9707F; }
+html.night .aclock .face, html.night .aclock .tick { stroke: #8C8880; }
+html.night .aclock .hand.min, html.night .aclock .hand.home { stroke: #B5B1A9 !important; }
+html.night .aclock .hand.city { stroke: #EC8A99; }
+html.night .aclock .lab { color: #C9C5BD; }
+html.night .aclock .face, html.night .aclock line { stroke-width: 1.5; }   /* a hair heavier at night, so the dial holds on the dark */
 html.night .aclock .pin { fill: var(--ink); }
 /* at night the sweep's light leading edge fades into the dark ground, not toward white (which read as cream) */
 html.night { --crimson-light: color-mix(in srgb, var(--crimson) 45%, var(--paper));
