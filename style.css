@@ -1348,7 +1348,8 @@ section:has(.spine-panel) + section > h2.section-title { background: none; borde
    scroll snapping carries it to the photo or to the page (menu bar at the top), with the scroll's own
    momentum, so it never waits and then glides. The page itself is taller than the screen, so inside it
    scrolling stays free. The photo is sticky, so a 1px marker at the very top stands in for it. */
-html:has(.snap-top) { scroll-snap-type: y mandatory; }
+/* no css scroll snap: under a pinch zoom (Android Chrome, Samsung Internet) mandatory snapping threw the
+   page back up to the menu bar; the magnet script in index.html does this work and stands aside while zoomed */
 .snap-top { position: absolute; top: 0; left: 0; width: 1px; height: 1px; scroll-snap-align: start; pointer-events: none; }
 .snap-top ~ .sheet { scroll-snap-align: start; scroll-snap-stop: always; scroll-margin-top: -1px; }   /* a fling up from the page stops here, not past it into the photo */   /* 1px past: the bar surely stuck */
 
@@ -1501,7 +1502,7 @@ html.night { --crimson-light: color-mix(in srgb, var(--crimson) 45%, var(--paper
 .pre-foot .wrap { max-width: 46rem; }
 .pre-foot h2.section-title { margin-top: -1px; border-top-color: transparent; background: none; }   /* the title's own line gives way to the full-width one, at the same height */
 .pre-foot ul { list-style: none; margin: 0; padding: 0; }
-.pre-foot a { display: block; margin: 0 calc(-1 * var(--s3)); padding: var(--s3); text-decoration: none; color: var(--stone);
+.pre-foot a { display: block; font-size: var(--t-body); margin: 0 0 0 -0.12em; padding: var(--s3) 0 var(--s3) 0.12em;   /* the fill spans the column, reaching left only the hair a text link's does (Hyunsong) */ text-decoration: none; color: var(--stone);
   background: linear-gradient(var(--crimson), var(--crimson)) no-repeat 0 100% / 100% 0;
   transition: background-size .45s cubic-bezier(.45,0,.25,1), color .45s ease; }
 .pre-foot a[aria-current="page"] { color: var(--ink); }

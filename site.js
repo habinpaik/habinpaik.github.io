@@ -531,7 +531,7 @@ document.addEventListener('touchstart', function () {}, { passive: true });
   var root = document.documentElement, on = false, t = 0;
   function check() {
     var mark = document.querySelector('.foot-copy') || document.querySelector('.site-foot'); if (!mark) return;
-    var ft = mark.getBoundingClientRect().top, vh = window.innerHeight;
+    var ft = mark.getBoundingClientRect().top, vh = document.documentElement.clientHeight;   /* the layout viewport: a pinch zoom doesn't move it (innerHeight follows the zoom on some phones) */
     var want = on ? ft < vh + 20 : ft < vh - 1;   /* on as the copyright line comes into view; off once it has left */
     if (want === on) return;
     on = want;

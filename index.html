@@ -9,7 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@400&family=Noto+Naskh+Arabic:wght@400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20261113f">
+<link rel="stylesheet" href="style.css?v=20261113g">
 </head>
 <body class="home hero-on">
 <script>
@@ -223,7 +223,9 @@ f(); window.addEventListener('resize',f);})();
 (function () {
   var sheet = document.querySelector('.sheet');
   if (!sheet || !document.querySelector('.hero')) return;
-  var busy = 0, ty = 0, decided = false;
+  var busy = 0, ty = 0, decided = false, gliding = false, touching = false, fromPage = false, lastY = window.scrollY, dir = 0;
+  /* pinch zoom: while the page is zoomed in (or a two-finger gesture is on) the magnet stands aside */
+  function zoomed() { return !!(window.visualViewport && window.visualViewport.scale > 1.01); }
   function T() { return Math.ceil(window.scrollY + sheet.getBoundingClientRect().top) + 1; }
   /* up to the photo: the browser's own smooth scroll. Down to the page: our own, slower glide (0.95s,
      eased in and out) so the photo folds away calmly; snapping is paused while it runs. */
@@ -233,11 +235,11 @@ f(); window.addEventListener('resize',f);})();
     var from = window.scrollY, dur = 950, t0 = performance.now(), root = document.documentElement;
     busy = Date.now() + dur - 700;   /* the wheel lock lasts the whole glide */
     cancelAnimationFrame(tween);
-    root.style.scrollSnapType = 'none';
+    gliding = true;
     (function step(now) {
       var x = Math.min(1, (now - t0) / dur), e = x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
       window.scrollTo({ top: from + (top - from) * e, behavior: 'instant' });
-      if (x < 1) tween = requestAnimationFrame(step); else root.style.scrollSnapType = '';
+      if (x < 1) tween = requestAnimationFrame(step); else gliding = false;
     })(t0);
   }
   /* the target for a move in direction d from where the page is, or null when it's free scrolling */
@@ -252,9 +254,10 @@ f(); window.addEventListener('resize',f);})();
      stops at the menu bar, its momentum spent there. */
   var lastWheel = 0, gestureFrom = 0;
   window.addEventListener('wheel', function (e) {
+    if (e.ctrlKey || zoomed()) return;   /* a trackpad pinch arrives as ctrl+wheel: it zooms, it doesn't scroll */
     if (Math.abs(e.deltaY) < Math.abs(e.deltaX)) return;
     var y = window.scrollY, t = T(), nowT = Date.now();
-    if (nowT - lastWheel > 250) gestureFrom = y;
+    if (nowT - lastWheel > 250) { gestureFrom = y; fromPage = y > t + 2; }
     lastWheel = nowT;
     if (e.deltaY < 0 && gestureFrom > t + 2) {   /* coming up from the page: halt at the menu bar */
       if (y - (-e.deltaY) <= t) { e.preventDefault(); if (y > t) window.scrollTo({ top: t, behavior: 'auto' }); }
@@ -269,8 +272,14 @@ f(); window.addEventListener('resize',f);})();
      glides the moment it lifts (a glide started under a finger is cut short by the browser) */
   var pend = null;
   var touchFrom = 0;
-  window.addEventListener('touchstart', function (e) { ty = e.touches[0].clientY; decided = false; pend = null; touchFrom = window.scrollY; }, { passive: true });
+  var multi = false;
+  window.addEventListener('touchstart', function (e) {
+    touching = true; multi = e.touches.length > 1 || zoomed();
+    if (multi) { pend = null; decided = true; return; }   /* two fingers (a pinch) or a zoomed page: hands off */
+    ty = e.touches[0].clientY; decided = false; pend = null; touchFrom = window.scrollY; fromPage = touchFrom > T() + 2;
+  }, { passive: true });
   window.addEventListener('touchmove', function (e) {
+    if (multi || e.touches.length > 1 || zoomed()) { multi = true; pend = null; return; }
     if (touchFrom > T() + 2) {   /* a drag that began in the page holds at the menu bar */
       if (window.scrollY <= T()) { e.preventDefault(); if (window.scrollY < T()) window.scrollTo({ top: T(), behavior: 'auto' }); }
       return;
@@ -282,7 +291,29 @@ f(); window.addEventListener('resize',f);})();
     pend = target(dy > 0 ? 1 : -1);
     if (pend !== null) e.preventDefault();
   }, { passive: false });
-  window.addEventListener('touchend', function () { if (pend !== null) { go(pend); pend = null; } }, { passive: true });
+  window.addEventListener('touchend', function (e) {
+    if (e.touches.length) return;   /* a finger is still down */
+    touching = false;
+    if (pend !== null && !multi) go(pend);
+    pend = null;
+  }, { passive: true });
+  window.addEventListener('touchcancel', function () { touching = false; pend = null; }, { passive: true });
+  /* what the css scroll snap used to do, without its trouble under zoom:
+     - a fling up from inside the page stops at the menu bar (its momentum doesn't carry into the photo);
+     - the page never comes to rest half way between the photo and the menu bar */
+  var rest = 0;
+  window.addEventListener('scroll', function () {
+    var y = window.scrollY; if (y !== lastY) dir = y > lastY ? 1 : -1; lastY = y;
+    if (gliding || zoomed()) return;
+    var t = T();
+    if (fromPage && !multi && dir < 0 && y < t - 1 && Date.now() - busy > 700) { window.scrollTo({ top: t, behavior: 'instant' }); return; }
+    clearTimeout(rest);
+    rest = setTimeout(function () {
+      var y2 = window.scrollY, t2 = T();
+      if (gliding || touching || multi || zoomed() || y2 <= 1 || y2 >= t2 - 1) return;   /* not after a pinch */
+      go(dir > 0 ? t2 : 0);
+    }, 160);
+  }, { passive: true });
 })();
 /* the big name's first line cycles through other forms of 백하빈 once a second;
    every third second is always the English one */
@@ -325,6 +356,6 @@ f(); window.addEventListener('resize',f);})();
   }, 1000);
 })();
 </script>
-<script src="site.js?v=20261113f"></script>
+<script src="site.js?v=20261113g"></script>
 </body>
 </html>
