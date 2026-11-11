@@ -550,7 +550,7 @@ document.addEventListener('touchstart', function () {}, { passive: true });
     document.documentElement.style.setProperty('--sketch-l', (m.left + pad - 56 - 9 * rem) + 'px');
     /* wide screens: the time and mail sit at the bottom right of the screen (--s5 in from both
        edges), and are carried up by the page so they never touch the footer: they ride a rail that
-       ends 25px above the footer's line, stuck (css sticky) to the bottom of the screen until the
+       ends 25px above Explore More's line, stuck (css sticky) to the bottom of the screen until the
        rail's end comes up */
     var cm = document.querySelector('.clock-main'), home = document.querySelector('.site-foot .clocks');
     if (!cm || !home) return;
@@ -560,7 +560,7 @@ document.addEventListener('touchstart', function () {}, { passive: true });
         cm.setAttribute('role', 'link'); cm.tabIndex = 0;   /* the box is the button (keyboard too) */
         var a = cm.querySelector('.foot-mail'); if (a) a.tabIndex = -1;
       }
-      var line = document.querySelector('.foot-main') || document.querySelector('.site-foot');
+      var line = document.querySelector('.pre-foot') || document.querySelector('.foot-main') || document.querySelector('.site-foot');   /* stop before Explore More's line */
       rail.style.left = '0px'; rail.style.width = document.documentElement.clientWidth + 'px';   /* the box sits at the screen's right, --s5 in */
       rail.style.height = Math.max(0, line.getBoundingClientRect().top + window.scrollY - 25) + 'px';
       rail.hidden = false;
