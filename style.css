@@ -1461,7 +1461,7 @@ h2.section-title { scroll-margin-top: calc(var(--head-h, 4rem) + var(--s5)); }
    (not pure black), the words to a soft off-white; subject colours and crimson lift so they still read.
    Scroll back up and it returns. The change eases over .7s. */
 html.night {
-  --paper: #1C1B19; --ink: #E6E3DD; --stone: #A19E96; --line: #3A3834; --brand: #252421; --brand-deep: #C9C6BF;
+  --paper: #1C1B19; --ink: #E6E3DD; --stone: #A9A59D; --line: #3A3834; --brand: #252421; --brand-deep: #C9C6BF;
   --crimson: #C25466;
   --c-meche: #D08B4A; --c-phys: #6FA6D0; --c-math: #4DB585; --c-gensci: #4FA893; --c-classics: #A3B84E;
   --shade-strong: linear-gradient(to bottom, rgba(255,255,255,.17), rgba(255,255,255,0) 12px);   /* at night the shades are light: a glow under each edge, */
