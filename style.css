@@ -1501,14 +1501,17 @@ html.night .aclock .face, html.night .aclock line { stroke-width: 1.5; }   /* a 
 html.night { --crimson-light: color-mix(in srgb, var(--crimson) 45%, var(--paper));
   --dial-fill: #8E2F3E; --dial-edge: color-mix(in srgb, #8E2F3E 40%, var(--paper)); }   /* the sweep a deep crimson at night, its edge fading into the dark */
 
-/* the buffer before the footer: the text column split by three hairlines into four places, each just
-   a page's name, as large as the place allows; the page you are on in ink, the others grey. Hover: the
-   name fills crimson, as every link. */
-.pre-foot { border-top: 1px solid var(--line); background: var(--shade-light) no-repeat; }
-.pre-foot ul { list-style: none; margin: 0 auto; max-width: 46rem; padding-block: var(--s5); display: grid; grid-template-columns: repeat(4, 1fr); }
-.pre-foot li { container-type: inline-size; }
-.pre-foot li + li { border-left: 1px solid var(--line); }
-.pre-foot a { display: block; margin: 0; padding: var(--s3) 0; text-align: center; text-decoration: none; background: none; color: var(--stone); }
+/* the buffer before the footer, "Explore More": the four pages as four rows across the text column,
+   split by three hairlines; each just the page's name. The page you are on in ink, the others grey.
+   Hover: the whole row fills with crimson from the bottom and the name turns white. */
+.pre-foot { padding-bottom: var(--s6); }
+.pre-foot .wrap { max-width: 46rem; }
+.pre-foot h2.section-title { margin-top: 0; }
+.pre-foot ul { list-style: none; margin: 0; padding: 0; }
+.pre-foot li + li { border-top: 1px solid var(--line); }
+.pre-foot a { display: block; margin: 0 calc(-1 * var(--s3)); padding: var(--s3); text-decoration: none; color: var(--stone);
+  background: linear-gradient(var(--crimson), var(--crimson)) no-repeat 0 100% / 100% 0;
+  transition: background-size .45s cubic-bezier(.45,0,.25,1), color .45s ease; }
 .pre-foot a[aria-current="page"] { color: var(--ink); }
-.pre-foot .pf-name { font-family: var(--serif); font-size: 17cqi; line-height: 1; text-box-trim: trim-both; text-box-edge: cap alphabetic; }   /* "Journalism", the longest, all but fills its place */
-.pre-foot a:hover .kh { background-size: 100% 100%; color: #fff; }
+.pre-foot a:hover { background-size: 100% 100%; color: #fff; }
+.pre-foot .pf-name { display: block; font-family: var(--serif); font-size: var(--t-display); line-height: 1.2; text-box-trim: trim-both; text-box-edge: cap alphabetic; }
