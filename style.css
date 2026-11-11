@@ -1482,3 +1482,10 @@ html.night-ease, html.night-ease body, html.night-ease body * {
   .foot-side > .foot-contact { grid-row: 3; margin-top: 0; }
   .clocks { margin-top: 0; }
 }
+
+/* the dial, at night (where it mostly turns now): rim and marks a step lighter than the night's lines,
+   Seoul's hands a quiet grey that still shows, the city hands the lifted crimson, the pin off-white */
+html.night .aclock .face, html.night .aclock .tick { stroke: #55524D; }
+html.night .aclock .hand.min, html.night .aclock .hand.home { stroke: #77736C !important; }
+html.night .aclock .hand.city { stroke: #D9707F; }
+html.night .aclock .pin { fill: var(--ink); }

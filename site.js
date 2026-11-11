@@ -239,8 +239,10 @@
          paragraph left in the footer (copyright, then the address), from its first line to its last */
       var lines = [].map.call(foot.querySelectorAll('.foot-copy, .foot-contact > *'), function (e) { return rel(e, 0.2); });
       var t0 = Math.min.apply(null, lines.map(function (r) { return r.t; })), b0 = Math.max.apply(null, lines.map(function (r) { return r.b; }));
-      var ceil0 = foot.getBoundingClientRect().top - hr.top + 8 + 8;
-      return { keep: lines, top: t0, bot: b0 + 0.2 * 0 , ceil: ceil0, cy: (t0 + b0) / 2, colR: hr.width, cx0: hr.width };
+      /* it may use the footer's padding too -- from --s2 under the top line's shade to --s2 above the
+         page's end -- without the footer growing */
+      var fr = foot.getBoundingClientRect(), ceil0 = fr.top - hr.top + 8 + 8, floor0 = fr.bottom - hr.top - 8;
+      return { keep: lines, top: ceil0, bot: floor0, ceil: ceil0, centre: true, cy: (ceil0 + floor0) / 2, colR: hr.width, cx0: hr.width };
     }
     var words = [].filter.call(host.querySelectorAll('.clock-main .hm, .clock-main .dow, .clock-main .city'), function (e) { return e.getClientRects().length; })
                   .map(function (e) { return rel(e, 0.2); });   /* only words actually shown */
@@ -271,6 +273,10 @@
          rightmost name, or the circle) on the column's right */
       var gR = Math.max.apply(null, rects.map(function (q) { return q.r; }));
       var X = A.colR - gR, Y = A.top + half;
+      if (A.centre) {   /* sketch layout: the whole group centred in the footer's height, its own padding included */
+        var gT = Math.min.apply(null, rects.map(function (q) { return q.t; })), gB = Math.max.apply(null, rects.map(function (q) { return q.b; }));
+        Y = (A.ceil + A.bot) / 2 - (gT + gB) / 2;
+      }
       var fits = rects.every(function (q) {
         var L = X + q.l, Rr = X + q.r, T = Y + q.t, B = Y + q.b;
         if (L < 0 || B > A.bot || T < Math.min(A.top, A.ceil)) return false;
