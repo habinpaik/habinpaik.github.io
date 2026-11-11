@@ -241,7 +241,7 @@
       var t0 = Math.min.apply(null, lines.map(function (r) { return r.t; })), b0 = Math.max.apply(null, lines.map(function (r) { return r.b; }));
       /* it may use the footer's padding too -- from --s2 under the top line's shade to --s2 above the
          page's end -- without the footer growing */
-      var fr = foot.getBoundingClientRect(), ceil0 = fr.top - hr.top + 8 + 8, floor0 = fr.bottom - hr.top - 8;
+      var fr = foot.getBoundingClientRect(), fl = (foot.querySelector('.foot-main') || foot).getBoundingClientRect(), ceil0 = fl.top - hr.top + 8 + 8, floor0 = fr.bottom - hr.top - 8;   /* from under the footer's line */
       return { keep: lines, top: ceil0, bot: floor0, ceil: ceil0, centre: true, cy: (ceil0 + floor0) / 2, colR: hr.width, cx0: hr.width };
     }
     var words = [].filter.call(host.querySelectorAll('.clock-main .hm, .clock-main .dow, .clock-main .city'), function (e) { return e.getClientRects().length; })
@@ -257,7 +257,7 @@
                     : (below.length ? below[below.length - 1].t - 20 : mail.b);   /* tight: --s4 clear of the copyright */
     var colR = hr.width;
     /* the ceiling: names above the dial may rise to --s2 under the footer's top line and its shade */
-    var ceil = foot.getBoundingClientRect().top - hr.top + 8 + 8;   /* the line, its shade, and --s2 */
+    var ceil = (foot.querySelector('.foot-main') || foot).getBoundingClientRect().top - hr.top + 8 + 8;   /* the line, its shade, and --s2 */
     return { keep: keep, top: top, bot: bot, ceil: ceil, cy: (top + bot) / 2, colR: colR,
              cx0: phone ? (mail.r + colR) / 2 : colR };   /* phones: middle of the room beside the mail; wider: as far right as it goes */
   }

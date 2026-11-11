@@ -1488,19 +1488,18 @@ html.night-ease, html.night-ease body, html.night-ease body * {
 
 /* the dial, at night (where it mostly turns now): rim and marks a step lighter than the night's lines,
    Seoul's hands a quiet grey that still shows, the city hands the lifted crimson, the pin off-white */
-/* at night the dial keeps to grey and white, no crimson: one grey for the rim, marks, Seoul's hands,
-   the pin and the names; white for the cities' hands. The sweep is a light grey, and what it covers
-   turns dark */
+/* at night the dial keeps to grey and pink: one grey for the rim, marks, Seoul's hands, the pin and
+   the names; pink for the cities' hands and the sweep, under which the hands turn dark */
 html.night .aclock { --dial-grey: #A9A59D; }
 html.night .aclock .face, html.night .aclock .tick { stroke: var(--dial-grey); }
 html.night .aclock .hand.min, html.night .aclock .hand.home { stroke: var(--dial-grey) !important; }
-html.night .aclock .hand.city { stroke: var(--ink); }
+html.night .aclock .hand.city { stroke: #E3808F; }
 html.night .aclock .pin { fill: var(--dial-grey); }
 html.night .aclock .lab { color: var(--dial-grey); }
 html.night .aclock .face, html.night .aclock line { stroke-width: 1.5; }   /* a hair heavier at night, so the dial holds on the dark */
 /* at night the sweep's light leading edge fades into the dark ground, not toward white (which read as cream) */
 html.night { --crimson-light: color-mix(in srgb, var(--crimson) 45%, var(--paper));
-  --dial-fill: #CFCBC3; --dial-edge: color-mix(in srgb, #CFCBC3 35%, var(--paper)); --dial-on: var(--paper); }   /* the sweep a light grey at night, its edge fading into the dark; hands under it go dark */
+  --dial-fill: #D9707F; --dial-edge: color-mix(in srgb, #D9707F 35%, var(--paper)); --dial-on: var(--paper); }   /* the sweep a clear pink at night, its edge fading into the dark; hands under it go dark */
 
 /* the buffer before the footer, "Explore More": the four pages as four rows across the text column,
    split by three hairlines; each just the page's name. The page you are on in ink, the others grey.
@@ -1533,5 +1532,9 @@ section > .fact:last-child { padding-bottom: 0.068em; }   /* the sans list sits 
 
 /* the footer's line (right under Explore More's last row) -> the footer's first letters: the same as a
    section line -> its title's capitals (the light shade, then 50px) */
-.site-foot .wrap { padding-top: calc(var(--s2) + 3.125rem); }
-@media (min-width: 75rem) { .site-foot .wrap { padding-top: calc(var(--s2) + 3.125rem - 0.28em); } }
+/* the footer's line is a section line: in the text column only, Portfolio's baseline 25px above it */
+.site-foot { border-top: 0; background-image: none; }
+.pre-foot { padding-bottom: 0; }
+.site-foot .wrap { padding-top: calc(1.5625rem - var(--s3)); }
+.foot-main { border-top: 1px solid var(--line); background: var(--shade-light) no-repeat; padding-top: calc(var(--s2) + 3.125rem); }
+@media (min-width: 75rem) { .foot-main { padding-top: calc(var(--s2) + 3.125rem - 0.28em); } }
