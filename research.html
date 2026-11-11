@@ -487,6 +487,8 @@ f(); window.addEventListener('resize',f);})();
       if (subj) meta.push(subj);
       if (meta.length) html += '<span class="tt-meta">' + meta.join(' · ') + '</span>';
       tip.innerHTML = html;
+      var cat = getComputedStyle(a).getPropertyValue('--cat').trim();   /* the tip in the book's subject colour */
+      tip.style.background = cat || '';
     }
     function move(e) {
       var pad = 14, tw = tip.offsetWidth, th = tip.offsetHeight;
