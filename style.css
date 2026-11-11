@@ -1474,8 +1474,10 @@ html.night-ease, html.night-ease body, html.night-ease body * {
    stay in the left sketch area, at its foot, lined up with the outline above; the footer keeps one
    paragraph -- the copyright, then the address -- with the dial beside it */
 @media (min-width: 75rem) {
-  .site-foot .clock-main { position: fixed; z-index: 40; left: 2rem; bottom: var(--s5); width: max-content;   /* left set by site.js: right edge --s6 off the text column */
-    margin: 0; font-size: var(--t-small); line-height: 1.5; }
+  .site-foot .clock-main { position: fixed; z-index: 40; left: 2rem; bottom: var(--s5); width: max-content;   /* left and bottom set by site.js */
+    margin: 0; font-family: var(--serif); font-size: var(--t-body); line-height: 1.5; color: var(--stone);   /* as the address */
+    padding: var(--s3); border: 1px solid var(--line); background: var(--paper);   /* a tight box: 14px from the box to the letters on every side (capitals, baseline, ends) */
+    text-box-trim: trim-both; text-box-edge: cap alphabetic; }
   .foot-copy { grid-column: 1; grid-row: 2; justify-self: start; align-self: start; line-height: 1.5; }
   .foot-side > .foot-contact { grid-row: 3; margin-top: 0; }
   .clocks { margin-top: 0; }

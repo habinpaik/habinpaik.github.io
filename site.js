@@ -530,7 +530,20 @@ document.addEventListener('touchstart', function () {}, { passive: true });
     var rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
     document.documentElement.style.setProperty('--sketch-l', (m.left + pad - 40 - 9 * rem) + 'px');
     var cm = document.querySelector('.site-foot .clock-main');   /* the time and mail: right edge --s6 off the text column */
-    if (cm && getComputedStyle(cm).position === 'fixed') cm.style.left = (m.left + pad - 40 - cm.offsetWidth) + 'px'; else if (cm) cm.style.left = '';
+    if (cm && getComputedStyle(cm).position === 'fixed') {
+      cm.style.left = (m.left + pad - 40 - cm.offsetWidth) + 'px';
+      /* its height: so that at the very bottom of the page its last line sits on the address's last
+         line, the two paragraphs side by side */
+      var addr = document.querySelector('.foot-contact'), last = addr && addr.lastElementChild;
+      if (last) {
+        var bl = function (el) { var z = document.createElement('span'); z.style.cssText = 'display:inline-block;width:0;height:0'; el.appendChild(z); var y = z.getBoundingClientRect().top; z.remove(); return y; };
+        var docH = document.documentElement.scrollHeight, lastDocY = bl(last) + window.scrollY;
+        var fromBottom = docH - lastDocY;                       /* page bottom -> the address's last baseline */
+        var mail = cm.querySelector('.foot-mail') || cm, cmR = cm.getBoundingClientRect();
+        var inBox = cmR.bottom - bl(mail);                      /* the box's bottom -> its last baseline */
+        cm.style.bottom = (fromBottom - inBox) + 'px';
+      }
+    } else if (cm) { cm.style.left = ''; cm.style.bottom = ''; }
   }
   window.addEventListener('resize', set); set();
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(set);
