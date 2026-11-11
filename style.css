@@ -1559,3 +1559,4 @@ section > .fact:last-child { padding-bottom: 0.068em; }   /* the sans list sits 
 .time-rail .clock-main:active .foot-mail { transition-duration: .06s; }   /* turns white with the rest of the box, not after it */
 /* in the box the address is just words: no underline, no link of its own -- the box is the button */
 .time-rail .clock-main .foot-mail { text-decoration: none !important; pointer-events: none; color: inherit; background: none !important; }
+.time-rail .clock-main { color: var(--ink); }   /* the box's words in the body's colour */
