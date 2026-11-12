@@ -640,7 +640,12 @@ document.addEventListener('touchstart', function () {}, { passive: true });
 /* the line under the menu bar: hidden at the very top of a page, shown as soon as the page moves */
 (function () {
   var head = document.querySelector('.site-head'); if (!head) return;
-  function on() { head.classList.toggle('scrolled', window.scrollY > 0); }
+  /* Home's top is where the page meets the menu bar after the photo (its resting place), not 0 */
+  var sheet = document.querySelector('.snap-top ~ .sheet') || document.querySelector('.home .sheet');
+  function on() {
+    var top = sheet ? sheet.getBoundingClientRect().top + window.scrollY : 0;
+    head.classList.toggle('scrolled', window.scrollY > top + 1);
+  }
   on(); window.addEventListener('scroll', on, { passive: true });
 })();
 
