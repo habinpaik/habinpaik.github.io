@@ -266,7 +266,8 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
 .jc-labels span { transition: color .3s ease; }
 .jc-labels span.on { color: var(--ink); }
 .j-cover.folded .jc-labels { opacity: 1; }
-.jc-dek { position: relative; z-index: 2; pointer-events: none; will-change: transform; }   /* held over the stage by jcover.js */
+.jc-dek { position: relative; z-index: 2; pointer-events: none; }   /* held over the stage by jcover.js; its room is kept by .jc-dekslot */
+.jc-dekslot + p { margin-top: 0; }
 .jc-ring, .jc-board { top: calc(var(--res, 0px) + (100% - var(--res, 0px)) / 2 - 14px); }   /* centred in the room under the opener */
 .jc-labels { top: calc(var(--res, 0px) + (100% - var(--res, 0px)) / 2 - 14px + var(--bh) / 2 + 2rem); }
 /* off the cover, the bar is the solid ground as on every page */

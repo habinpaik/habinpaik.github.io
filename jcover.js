@@ -53,7 +53,7 @@
     var portrait = H > W * 1.1;
     RES = 0;
     if (dek) {
-      var pad = parseFloat(getComputedStyle(dek.parentNode).paddingTop) || 0;
+      var pad = parseFloat(getComputedStyle(dek.closest('main')).paddingTop) || 0;
       RES = pad + dek.offsetHeight + (portrait ? 16 : 28);
     }
     stage.style.setProperty('--res', RES + 'px');
@@ -247,20 +247,32 @@
   measure(); placeRing(0, 0);
 
   /* the opener stays put at the top of the stage while the photos scroll away, and once the text
-     beneath it comes up to it, it goes up with the text */
+     beneath it comes up to it, it goes up with the text. Held with position: fixed (not moved frame
+     by frame, which shook): a slot keeps its room in the page, and the moment the slot reaches the
+     held place the opener drops back into it -- the two places coincide then, so nothing jumps */
   if (dek) {
-    var dekY = function () {
-      dek.style.transform = '';
-      var head = document.querySelector('.site-head'), hb = head ? head.getBoundingClientRect().bottom : 0;
-      var pad = parseFloat(getComputedStyle(dek.parentNode).paddingTop) || 0;
-      var nat = dek.getBoundingClientRect().top;
-      var want = Math.min(nat, hb + pad);   /* where it would sit with no photos: under the bar, after main's own top space -- held there on screen */
-      dek.style.transform = 'translateY(' + (want - nat) + 'px)';
+    var slot = document.createElement('div'); slot.className = 'jc-dekslot';
+    dek.parentNode.insertBefore(slot, dek); slot.appendChild(dek);
+    var held = false, at = 0;
+    var size = function () {
+      dek.style.position = ''; dek.style.top = ''; dek.style.left = ''; dek.style.width = '';
+      slot.style.height = ''; held = false;
+      var cs = getComputedStyle(dek);
+      slot.style.height = (dek.offsetHeight + parseFloat(cs.marginBottom)) + 'px';
+      var head = document.querySelector('.site-head');
+      at = (head ? head.offsetHeight : 0) + (parseFloat(getComputedStyle(slot.parentNode).paddingTop) || 0);
+      place();
+    };
+    var place = function () {
+      var r = slot.getBoundingClientRect(), hold = r.top > at;
+      if (hold === held) return;
+      held = hold;
+      if (hold) { dek.style.position = 'fixed'; dek.style.top = at + 'px'; dek.style.left = r.left + 'px'; dek.style.width = r.width + 'px'; }
+      else { dek.style.position = ''; dek.style.top = ''; dek.style.left = ''; dek.style.width = ''; }
     };
     dek.classList.add('jc-dek');
-    dekY(); window.addEventListener('scroll', dekY, { passive: true }); window.addEventListener('resize', dekY);
-    window.addEventListener('load', dekY);   /* the page settles (fonts, the bar) after the first go */
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(dekY);
-    if (window.ResizeObserver) new ResizeObserver(dekY).observe(document.body);
+    size(); window.addEventListener('scroll', place, { passive: true }); window.addEventListener('resize', size);
+    window.addEventListener('load', size);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(size);
   }
 })();
