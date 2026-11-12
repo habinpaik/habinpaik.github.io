@@ -41,12 +41,23 @@
   var labA = document.createElement('span'), labB = document.createElement('span');
   labels.appendChild(labA); labels.appendChild(labB); stage.appendChild(labels);
 
-  var faces = [], N = 0, F = 0, BW = 0, BH = 0, ratios = {};
+  var faces = [], N = 0, F = 0, BW = 0, BH = 0, ratios = {}, RES = 0;
+  var PERSP = 1700, MAX = THETA - 3;   /* the stage's perspective; the furthest the board turns (just short of edge-on) */
   /* the size of everything, from the stage */
   var W = 0, H = 0, CW = 0, R = 0, LIFTZ = 0;
+  /* the opener ("Covering the campus...") sits over the top of the stage, where it would be without
+     the photos; the ring and the board take the room under it */
+  var dek = document.querySelector('main > p.dek');
   function measure() {
     W = stage.clientWidth; H = stage.clientHeight;
     var portrait = H > W * 1.1;
+    RES = 0;
+    if (dek) {
+      var pad = parseFloat(getComputedStyle(dek.parentNode).paddingTop) || 0;
+      RES = pad + dek.offsetHeight + (portrait ? 16 : 28);
+    }
+    stage.style.setProperty('--res', RES + 'px');
+    H = H - RES;
     BW = Math.min(W * (portrait ? 0.84 : 0.62), (H - 96) * 4 / 3, 760);   /* the folded board, 4:3 */
     BH = BW * 3 / 4;
     N = BW >= 560 ? 20 : BW >= 380 ? 14 : 10;                          /* folds */
@@ -58,23 +69,44 @@
     stage.style.setProperty('--bh', BH + 'px'); stage.style.setProperty('--bw', BW + 'px');
   }
 
-  /* each face shows its strip of the photo: the photo covers the faces' full run (N faces side by
-     side, as it reads when you look straight at them), cropped to fill, centred */
-  function strip(face, name, i) {
+  /* Each face shows its strip of the photo, the photo cropped to fill the faces' full run, centred.
+     The strips are not equal slices: seen from the far end of its turn (the board at +-MAX), the board's
+     far side is further from you and shrinks in perspective, so a photo cut evenly would look squeezed
+     toward that side. Each face gets the share of the photo that its width takes on screen at that
+     angle -- the far faces show less of the picture, stretched -- so from there it reads as the photo.
+     (Exact at the end of the turn; in between, the stripes of the two photos mix anyway.) */
+  function screenX(x, z, phi) {   /* a point of the board (x, z), the board turned by phi: its place on screen */
+    var c = Math.cos(phi), sn = Math.sin(phi), X = x * c + z * sn, Z = -x * sn + z * c;
+    return X * PERSP / (PERSP - Z);
+  }
+  function shares(k) {   /* k 0: the left-turned faces at +MAX; 1: the right-turned ones at -MAX */
+    var t = THETA * Math.PI / 180, p = 2 * F * Math.cos(t), d = F * Math.sin(t), w = N * p;
+    var phi = (k ? -MAX : MAX) * Math.PI / 180, ed = [];
+    for (var i = 0; i < N; i++) {
+      var x = i * p - w / 2;
+      if (!k) ed.push([screenX(x, -d / 2, phi), screenX(x + F * Math.cos(t), d / 2, phi)]);
+      else ed.push([screenX(x + p / 2, d / 2, phi), screenX(x + p / 2 + F * Math.cos(t), -d / 2, phi)]);
+    }
+    var a = ed[0][0], b = ed[N - 1][1];
+    return ed.map(function (e) { return [(e[0] - a) / (b - a), (e[1] - a) / (b - a)]; });
+  }
+  var SH = [[], []];
+  function strip(face, name, i, k) {
     var run = N * F, r = ratios[name] || 4 / 3, sw, sh, x0, y0;
     if (r > run / BH) { sh = BH; sw = BH * r; x0 = (sw - run) / 2; y0 = 0; }
     else { sw = run; sh = run / r; x0 = 0; y0 = (sh - BH) / 2; }
+    var u = SH[k][i], kx = F / ((u[1] - u[0]) * run);   /* this face's share, stretched across its width */
     face.style.backgroundImage = 'url(' + FULL + name + '.webp), url(' + DIR + 'grid/' + name + '.webp)';
-    face.style.backgroundSize = sw + 'px ' + sh + 'px';
-    face.style.backgroundPosition = (-(x0 + i * F)) + 'px ' + (-y0) + 'px';
+    face.style.backgroundSize = (sw * kx) + 'px ' + sh + 'px';
+    face.style.backgroundPosition = (-(x0 + u[0] * run) * kx) + 'px ' + (-y0) + 'px';
   }
   function build() {
-    board.textContent = ''; faces = [];
+    board.textContent = ''; faces = []; SH = [shares(0), shares(1)];
     for (var i = 0; i < N; i++) {
       ['a', 'b'].forEach(function (s, k) {
         var f = document.createElement('div'); f.className = 'jc-face ' + s;
         f.style.width = F + 'px'; f.style.height = BH + 'px';
-        strip(f, pair[k], i);
+        strip(f, pair[k], i, k);
         board.appendChild(f); faces.push(f);
       });
     }
@@ -157,24 +189,29 @@
       if (phi !== target) raf = requestAnimationFrame(f);
     });
   }
-  var MAX = THETA - 3;   /* stop just short of edge-on, so the board never turns into a sliver */
   function aim(x) {
     var o = stage.getBoundingClientRect();
     target = clamp(((x - o.left) / o.width * 2 - 1) * MAX * 1.25, -MAX, MAX);
   }
   var dragX = null, dragged = false;
-  stage.addEventListener('pointermove', function (e) {
-    if (mode !== 'live' && !stage.classList.contains('folded')) return;
-    if (e.pointerType === 'mouse') { user = true; if (mode !== 'live') return; aim(e.clientX); follow(); }
-    else if (dragX != null) {
+  /* the mouse is followed over the whole stage, also where the opener or the time box lie on it */
+  var inside = false;
+  window.addEventListener('pointermove', function (e) {
+    if (e.pointerType === 'mouse') {
+      var o = stage.getBoundingClientRect();
+      var now = e.clientX >= o.left && e.clientX <= o.right && e.clientY >= o.top && e.clientY <= o.bottom;
+      if (!now) { if (inside && mode === 'live') { target = 0; follow(); } inside = false; return; }
+      inside = true; user = true;
+      if (mode !== 'live') return;
+      aim(e.clientX); follow();
+    } else if (dragX != null) {
       if (Math.abs(e.clientX - dragX) > 4) dragged = true;
-      user = true; if (mode !== 'live') return;
+      user = true; if (mode !== 'live') { dragX = e.clientX; return; }
       target = clamp(target + (e.clientX - dragX) * 0.35, -MAX, MAX); dragX = e.clientX; follow();
     }
-  });
+  }, { passive: true });
   stage.addEventListener('pointerdown', function (e) { if (e.pointerType !== 'mouse') { dragX = e.clientX; dragged = false; } });
   window.addEventListener('pointerup', function () { dragX = null; });
-  stage.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse' && mode === 'live') { target = 0; follow(); } });
 
   /* a click on the board: another pair */
   board.addEventListener('click', function () {
@@ -208,4 +245,22 @@
     if (im.complete && im.naturalWidth) done(); else { im.addEventListener('load', done); im.addEventListener('error', done); }
   });
   measure(); placeRing(0, 0);
+
+  /* the opener stays put at the top of the stage while the photos scroll away, and once the text
+     beneath it comes up to it, it goes up with the text */
+  if (dek) {
+    var dekY = function () {
+      dek.style.transform = '';
+      var head = document.querySelector('.site-head'), hb = head ? head.getBoundingClientRect().bottom : 0;
+      var pad = parseFloat(getComputedStyle(dek.parentNode).paddingTop) || 0;
+      var nat = dek.getBoundingClientRect().top;
+      var want = Math.min(nat, hb + pad);   /* where it would sit with no photos: under the bar, after main's own top space -- held there on screen */
+      dek.style.transform = 'translateY(' + (want - nat) + 'px)';
+    };
+    dek.classList.add('jc-dek');
+    dekY(); window.addEventListener('scroll', dekY, { passive: true }); window.addEventListener('resize', dekY);
+    window.addEventListener('load', dekY);   /* the page settles (fonts, the bar) after the first go */
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(dekY);
+    if (window.ResizeObserver) new ResizeObserver(dekY).observe(document.body);
+  }
 })();
