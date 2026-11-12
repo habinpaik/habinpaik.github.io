@@ -175,25 +175,24 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
 .nav { display: flex; gap: var(--s4); font-size: var(--t-body); }
 .nav a { position: relative; color: var(--stone); text-decoration: none; font-weight: 400; font-size: var(--t-body); transition: color .15s ease; }
 .nav a[aria-current="page"] { color: var(--ink); }
-/* thick bar sitting on the header's bottom edge (not an underline under the text) */
+/* the current page and the hovered item: no bar under the word -- a shade inside the top of the menu
+   bar, over the word's width, from the bar's top edge down (--up: word top to that edge, set by site.js).
+   Current page (was the dark bar) -> the strong shade; hover (was the grey bar) -> the light shade */
 .nav a[aria-current="page"]::after,
 .wordmark[aria-current="page"]::after {
-  content: ""; position: absolute; left: 0; right: 0;
-  bottom: calc(-1 * var(--s1) - 1px);   /* sit exactly on the header's bottom edge: the bar's bottom padding + its 1px line */
-  height: 5px; background: var(--crimson);
+  content: ""; position: absolute; left: 0; right: 0; top: calc(-1 * var(--up, var(--s2)));
+  height: 12px; background: var(--shade-strong); pointer-events: none;
 }
-/* hover (not the current page): the text stays as it is; the same bar, same place, in grey */
 @media (hover: hover) {
   .nav a:not([aria-current="page"]):hover::after,
   .wordmark:not([aria-current="page"]):hover::after {
-    content: ""; position: absolute; left: 0; right: 0;
-    bottom: calc(-1 * var(--s1) - 1px);
-    height: 5px; background: var(--crimson-light);   /* same bar as the current page, in light crimson */
+    content: ""; position: absolute; left: 0; right: 0; top: calc(-1 * var(--up, var(--s2)));
+    height: var(--s2); background: var(--shade-light); pointer-events: none;
   }
   .hero-on .nav a:not([aria-current="page"]):hover::after,
   .hero-on .wordmark:not([aria-current="page"]):hover::after,
   .j-page.cover-on .nav a:not([aria-current="page"]):hover::after,
-  .j-page.cover-on .wordmark:not([aria-current="page"]):hover::after { background: var(--on-dark); }
+  .j-page.cover-on .wordmark:not([aria-current="page"]):hover::after { top: auto; bottom: calc(-1 * var(--s1) - 1px); height: 5px; background: var(--on-dark); }
 }
 
 /* ---------- Hero (HOME ONLY) ----------
@@ -366,7 +365,7 @@ p.dek.jc-dek { opacity: 0; transition: opacity 2.3s cubic-bezier(.37,0,.63,1), c
 .j-page.cover-on .wordmark,
 .j-page.cover-on .nav a { color: var(--on-dark); }
 .j-page.cover-on .nav a[aria-current="page"] { color: #fff; }
-.j-page.cover-on .nav a[aria-current="page"]::after { background: #fff; }
+.j-page.cover-on .nav a[aria-current="page"]::after { top: auto; bottom: calc(-1 * var(--s1) - 1px); height: 5px; background: #fff; }   /* on the photo: the white bar stays (a shade can't show there) */
 
 /* the page: its first --head-h is see-through (the menu bar sits there over the photo) */
 .sheet {
@@ -401,7 +400,7 @@ p.dek.jc-dek { opacity: 0; transition: opacity 2.3s cubic-bezier(.37,0,.63,1), c
 .hero-on .wordmark[aria-current="page"]::after { background: #fff; }
 .hero-on .nav a { color: var(--on-dark); }
 .hero-on .nav a[aria-current="page"] { color: #fff; }
-.hero-on .nav a[aria-current="page"]::after { background: #fff; }
+.hero-on .nav a[aria-current="page"]::after { top: auto; bottom: calc(-1 * var(--s1) - 1px); height: 5px; background: #fff; }
 
 /* the leading top block (home) shares the plain <p> rule */
 .lead { padding-top: calc(var(--s6) + 1px); padding-bottom: var(--s7); }   /* the same top gap as the other pages' main column (+1px: the bar stops 1px into the page) */

@@ -619,3 +619,21 @@ document.addEventListener('touchstart', function () {}, { passive: true });
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(set);
   if (window.ResizeObserver) new ResizeObserver(set).observe(document.body);   /* the page's height changes (more books, etc.) */
 })();
+
+/* menu shades: each item's distance from its own top up to the top edge of its row in the menu bar
+   (the bar's top; on phones the menu row's top, just under the name row) */
+(function () {
+  var head = document.querySelector('.site-head'); if (!head) return;
+  function set() {
+    var ht = head.getBoundingClientRect().top, brand = head.querySelector('.brand'), nav = head.querySelector('.nav');
+    var two = brand && nav && nav.getBoundingClientRect().top >= brand.getBoundingClientRect().bottom - 1;   /* stacked rows */
+    head.querySelectorAll('.nav a, .wordmark').forEach(function (a) {
+      var top = ht;
+      if (two && nav.contains(a)) top = brand.getBoundingClientRect().bottom;
+      a.style.setProperty('--up', (a.getBoundingClientRect().top - top) + 'px');
+    });
+  }
+  set(); window.addEventListener('resize', set);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(set);
+})();
+
