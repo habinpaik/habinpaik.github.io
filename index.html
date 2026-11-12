@@ -214,7 +214,7 @@ f(); window.addEventListener('resize',f);})();
 (function () {
   var sheet = document.querySelector('.sheet');
   if (!sheet || !document.querySelector('.hero')) return;
-  var busy = 0, gliding = false, touching = false, fromPage = false, lastY = window.scrollY, dir = 0;
+  var busy = 0, gliding = false, touching = false, lastY = window.scrollY, dir = 0;
   /* pinch zoom: while the page is zoomed in (or a two-finger gesture is on) the magnet stands aside */
   function zoomed() { return !!(window.visualViewport && window.visualViewport.scale > 1.05); }
   function T() { return Math.ceil(window.scrollY + sheet.getBoundingClientRect().top) + 1; }
@@ -230,7 +230,7 @@ f(); window.addEventListener('resize',f);})();
     (function step(now) {
       var x = Math.min(1, (now - t0) / dur), e = x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
       window.scrollTo({ top: from + (top - from) * e, behavior: 'instant' });
-      if (x < 1) tween = requestAnimationFrame(step); else gliding = false;
+      if (x < 1) tween = requestAnimationFrame(step); else { gliding = false; watchRest(); }
     })(t0);
   }
   /* the target for a move in direction d from where the page is, or null when it's free scrolling */
@@ -248,9 +248,9 @@ f(); window.addEventListener('resize',f);})();
     if (e.ctrlKey || zoomed()) return;   /* a trackpad pinch arrives as ctrl+wheel: it zooms, it doesn't scroll */
     if (Math.abs(e.deltaY) < Math.abs(e.deltaX)) return;
     var y = window.scrollY, t = T(), nowT = Date.now();
-    if (nowT - lastWheel > 250) { gestureFrom = y; fromPage = y > t + 2; }
+    if (nowT - lastWheel > 250) { gestureFrom = y; arm(); }
     lastWheel = nowT;
-    if (e.deltaY < 0 && gestureFrom > t + 2) {   /* coming up from the page: halt at the menu bar */
+    if (e.deltaY < 0 && !armed) {   /* not begun at rest at the menu bar: halt there */
       if (y - (-e.deltaY) <= t) { e.preventDefault(); if (y > t) window.scrollTo({ top: t, behavior: 'auto' }); }
       return;
     }
@@ -272,7 +272,7 @@ f(); window.addEventListener('resize',f);})();
   window.addEventListener('touchstart', function (e) {
     touching = true; lastTouch = Date.now(); multi = e.touches.length > 1 || zoomed();
     halt();
-    if (!multi) fromPage = window.scrollY > T() + 2;
+    if (!multi) arm();
   }, { passive: true });
   window.addEventListener('touchmove', function (e) {
     if (e.touches.length > 1 || zoomed()) multi = true;   /* a pinch: hands off */
@@ -280,8 +280,8 @@ f(); window.addEventListener('resize',f);})();
   function lift(e) {
     if (e && e.touches && e.touches.length) return;   /* a finger is still down */
     touching = false; lastTouch = Date.now();
-    if (held) { held = false; document.documentElement.style.overflow = ''; fromPage = false; }
-    later();
+    if (held) { held = false; document.documentElement.style.overflow = ''; }
+    later(); watchRest();
   }
   window.addEventListener('touchend', lift, { passive: true });
   window.addEventListener('touchcancel', lift, { passive: true });
@@ -289,13 +289,27 @@ f(); window.addEventListener('resize',f);})();
   function stopAt(t) {
     var r = document.documentElement;
     if (touching) { r.style.overflow = 'hidden'; held = true; }   /* the finger still dragging up: the page stays at the bar until it lifts */
-    else if (Date.now() - lastTouch < 4000) {   /* a touch fling: cut it */
+    else if (Date.now() - lastTouch < 4000 && !held) {   /* a touch fling: cut it */
       r.style.overflow = 'hidden';
       requestAnimationFrame(function () { requestAnimationFrame(function () { r.style.overflow = ''; }); });
     }
     window.scrollTo({ top: t, behavior: 'instant' });
-    if (!touching) fromPage = false;
   }
+  /* The photo opens only from a page standing still at the very top (the menu bar on top): a
+     gesture is "armed" only if it begins with the page at rest there (still for a quarter second,
+     no finger on it) -- or begins inside the photo. Anything else -- coming up from the page,
+     a fling, a second push while the page still moves -- stops at the menu bar. */
+  var armed = true, still = false, stillT = 0;
+  function arm() { var y = window.scrollY; armed = y < T() - 1 || still; }
+  function watchRest() {
+    still = false; clearTimeout(stillT);
+    stillT = setTimeout(function () {
+      var y = window.scrollY, t = T();
+      still = !touching && !gliding && Math.abs(y - t) <= 1;
+    }, 250);
+  }
+  watchRest();
+  window.addEventListener('load', watchRest);
   /* the page never comes to rest between the photo and the menu bar */
   var rest = 0;
   function settle() {
@@ -309,8 +323,8 @@ f(); window.addEventListener('resize',f);})();
     var y = window.scrollY; if (y !== lastY) dir = y > lastY ? 1 : -1; lastY = y;
     if (gliding || zoomed()) return;
     var t = T();
-    if (fromPage && !multi && dir < 0 && y < t - 1 && Date.now() - busy > 700) { stopAt(t); return; }
-    later();
+    if (!armed && !multi && dir < 0 && y < t - 1 && Date.now() - busy > 700) { stopAt(t); return; }
+    later(); watchRest();
   }, { passive: true });
 })();
 /* the big name's first line cycles through other forms of 백하빈 once a second;
