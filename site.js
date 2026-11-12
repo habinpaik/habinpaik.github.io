@@ -408,6 +408,7 @@
     if (/^mailto:/i.test(h)) return h.replace(/^mailto:/i, '').split('?')[0];
     if (/^tel:/i.test(h)) return h.replace(/^tel:/i, '');
     if (a.protocol === 'file:') return '';   /* local preview: no long file paths */
+    if (a.hostname === location.hostname || /(^|\.)habinpaik\.github\.io$/i.test(a.hostname)) return '';   /* within this site (the other tabs, its own files): no tip */
     var u = a.href.replace(/^https?:\/\//i, '').replace(/^www\./i, '').replace(/\/$/, '');
     try { u = decodeURI(u); } catch (e) {}
     return u;
