@@ -192,7 +192,7 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
   .hero-on .nav a:not([aria-current="page"]):hover::after,
   .hero-on .wordmark:not([aria-current="page"]):hover::after,
   .j-page.cover-on .nav a:not([aria-current="page"]):hover::after,
-  .j-page.cover-on .wordmark:not([aria-current="page"]):hover::after { top: auto; bottom: calc(-1 * var(--s1) - 1px); height: 5px; background: var(--on-dark); }
+  .j-page.cover-on .wordmark:not([aria-current="page"]):hover::after { background: linear-gradient(to bottom, rgba(255,255,255,.10), transparent var(--s2)); }
 }
 
 /* ---------- Hero (HOME ONLY) ----------
@@ -365,7 +365,7 @@ p.dek.jc-dek { opacity: 0; transition: opacity 2.3s cubic-bezier(.37,0,.63,1), c
 .j-page.cover-on .wordmark,
 .j-page.cover-on .nav a { color: var(--on-dark); }
 .j-page.cover-on .nav a[aria-current="page"] { color: #fff; }
-.j-page.cover-on .nav a[aria-current="page"]::after { top: auto; bottom: calc(-1 * var(--s1) - 1px); height: 5px; background: #fff; }   /* on the photo: the white bar stays (a shade can't show there) */
+.j-page.cover-on .nav a[aria-current="page"]::after { background: linear-gradient(to bottom, rgba(255,255,255,.17), transparent 12px); }   /* on the photo: the same shades, light (as at night) */
 
 /* the page: its first --head-h is see-through (the menu bar sits there over the photo) */
 .sheet {
@@ -397,10 +397,10 @@ p.dek.jc-dek { opacity: 0; transition: opacity 2.3s cubic-bezier(.37,0,.63,1), c
 .hero-on:not(.named) .wordmark { opacity: 0; visibility: hidden; }
 .hero-on .wordmark { color: var(--on-dark); }
 .hero-on .wordmark[aria-current="page"] { color: #fff; }
-.hero-on .wordmark[aria-current="page"]::after { background: #fff; }
+.hero-on .wordmark[aria-current="page"]::after { background: linear-gradient(to bottom, rgba(255,255,255,.17), transparent 12px); }   /* on the photo: the shade, light (as at night) */
 .hero-on .nav a { color: var(--on-dark); }
 .hero-on .nav a[aria-current="page"] { color: #fff; }
-.hero-on .nav a[aria-current="page"]::after { top: auto; bottom: calc(-1 * var(--s1) - 1px); height: 5px; background: #fff; }
+.hero-on .nav a[aria-current="page"]::after { background: linear-gradient(to bottom, rgba(255,255,255,.17), transparent 12px); }
 
 /* the leading top block (home) shares the plain <p> rule */
 .lead { padding-top: calc(var(--s6) + 1px); padding-bottom: var(--s7); }   /* the same top gap as the other pages' main column (+1px: the bar stops 1px into the page) */
