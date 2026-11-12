@@ -150,14 +150,10 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
   position: sticky; top: 0; z-index: 50;
   background: var(--paper);
   border-bottom: 1px solid var(--line);
-  transition: background .25s ease, border-color .25s ease, backdrop-filter .25s ease;
+  transition: background .25s ease, border-color .25s ease;
 }
-/* once the page is scrolled a little, become translucent + blurred; the line under the bar stays */
-.site-head.scrolled {
-  background: color-mix(in srgb, var(--paper) 72%, transparent);
-  backdrop-filter: saturate(1.15) blur(10px);
-  -webkit-backdrop-filter: saturate(1.15) blur(10px);
-}
+/* scrolled or not, the bar is the page's own solid ground (no see-through blur); the line under it stays */
+.site-head.scrolled { background: var(--paper); }
 .site-head .bar {
   display: flex; align-items: baseline; justify-content: space-between;
   gap: var(--s4); padding-top: var(--s2); padding-bottom: var(--s1);   /* a slim bar: about the same small gap above the letters and below them */
@@ -353,17 +349,15 @@ p.dek.jc-dek { opacity: 0; transition: opacity 2.3s cubic-bezier(.37,0,.63,1), c
 .jc-cap b { font-weight: 600; color: #fff; }
 .j-cover.open .jc-cap { opacity: 1; }   /* the arrow (64px, 12px off the bottom) plus 12px above it */
 @media (prefers-reduced-motion: reduce) { .jc-grid::after, .jc-line { transition: none; } }
-/* the bar is always the blurred see-through one here, so the photo shows through it from the start */
+/* off the cover, the bar is the solid ground as on every page */
 .j-page .site-head,
 .j-page .site-head.scrolled {
-  background: color-mix(in srgb, var(--paper) 72%, transparent);
+  background: var(--paper);
   border-bottom-color: var(--line);   /* the line always under the bar, once off the cover */
-  backdrop-filter: saturate(1.15) blur(10px);
-  -webkit-backdrop-filter: saturate(1.15) blur(10px);
 }
 /* while the cover is in view: no bar at all, white text straight on the picture.
    Once the page has filled the screen, the bar turns into the usual blurred one. */
-.j-page .site-head { transition: background .15s ease, backdrop-filter .15s ease, border-color .15s ease; }
+.j-page .site-head { transition: background .15s ease, border-color .15s ease; }
 .j-page.cover-on .site-head,
 .j-page.cover-on .site-head.scrolled {
   background: transparent; border-bottom-color: transparent;
@@ -393,7 +387,7 @@ p.dek.jc-dek { opacity: 0; transition: opacity 2.3s cubic-bezier(.37,0,.63,1), c
 .home:not(.hero-on) .sheet::before { opacity: 1; }
 
 /* menu bar on Home: the line shows the moment the bar leaves the photo (no fade) */
-.home .site-head { transition: background .15s ease, backdrop-filter .15s ease; }
+.home .site-head { transition: background .15s ease; }
 .hero-on .site-head,
 .hero-on .site-head.scrolled {
   background: transparent;
