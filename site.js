@@ -624,7 +624,19 @@ document.addEventListener('touchstart', function () {}, { passive: true });
    (the bar's top; on phones the menu row's top, just under the name row) */
 (function () {
   var head = document.querySelector('.site-head'); if (!head) return;
+  /* one row if the name and the menu fit; else the menu in the small sans; else two rows */
+  function fit() {
+    var bar = head.querySelector('.bar'), brand = head.querySelector('.brand'), nav = head.querySelector('.nav');
+    if (!bar || !brand || !nav) return;
+    head.classList.remove('nav-small', 'two-row');
+    function over() {
+      var cs = getComputedStyle(bar), room = bar.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+      return brand.getBoundingClientRect().width + (parseFloat(cs.columnGap) || 0) + nav.getBoundingClientRect().width > room + 0.5;
+    }
+    if (over()) { head.classList.add('nav-small'); if (over()) { head.classList.remove('nav-small'); head.classList.add('two-row'); } }   /* two rows have room again: the usual letters */
+  }
   function set() {
+    fit();
     var ht = head.getBoundingClientRect().top, brand = head.querySelector('.brand'), nav = head.querySelector('.nav');
     var two = brand && nav && nav.getBoundingClientRect().top >= brand.getBoundingClientRect().bottom - 1;   /* stacked rows */
     head.querySelectorAll('.nav a, .wordmark').forEach(function (a) {

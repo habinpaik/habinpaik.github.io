@@ -971,15 +971,21 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 @media (max-width: 40rem) {
   figure.ph.left, figure.ph.right,
   figure.ph.small.left, figure.ph.small.right { float: none; width: 100%; margin: var(--s5) 0; }
-  .site-head .bar { flex-direction: column; gap: var(--s1); align-items: flex-start; padding-top: calc(var(--s2) - 0.8px); }   /* two rows: the space between them already holds the name's room below and the menu's room above, so no gap -- above, between and below then read the same */
-  .site-head .bar .nav { align-self: center; }   /* the menu row is centred */
-  .site-head .bar .brand { align-self: center; }  /* so is the name row: "Habin Paik 백하빈" itself is centred, */
-  .wordmark .back-ico {                            /* and the back arrow hangs to its left */
-    position: absolute; right: 100%; top: 50%; margin-right: 0.3em; transform: translateY(-50%);
-  }
-  /* two-row header on phones: the name sits on its own row, so no current-page bar under it */
-  .wordmark[aria-current="page"]::after { display: none; }
 }
+/* the menu bar stays one row at every width. When the name and the menu don't fit side by side,
+   the menu turns to the small sans (site.js decides, by measuring: .nav-small); only if even that
+   doesn't fit does it go to two rows (.two-row) */
+.site-head .brand, .site-head .nav { flex-shrink: 0; } .wordmark, .nav a { white-space: nowrap; }   /* never squeezed into extra lines: it fits, or the next step is taken */
+.site-head.nav-small .nav { gap: var(--s3); }
+.site-head.nav-small .bar { column-gap: var(--s2); }   /* the least room between name and menu; space-between gives the rest */
+.site-head.nav-small .nav a, .site-head.nav-small .wordmark { font-family: var(--sans); font-size: var(--t-small); }   /* every word of the bar, name included */
+.site-head.two-row .bar { flex-direction: column; gap: var(--s1); align-items: flex-start; padding-top: calc(var(--s2) - 0.8px); }   /* two rows: the space between them already holds the name's room below and the menu's room above, so no gap -- above, between and below then read the same */
+.site-head.two-row .bar .nav { align-self: center; }   /* the menu row is centred */
+.site-head.two-row .bar .brand { align-self: center; }  /* so is the name row: "Habin Paik 백하빈" itself is centred, */
+.site-head.two-row .wordmark .back-ico {                 /* and the back arrow hangs to its left */
+  position: absolute; right: 100%; top: 50%; margin-right: 0.3em; transform: translateY(-50%);
+}
+.site-head.two-row .wordmark[aria-current="page"]::after { display: none; }   /* the name on its own row: no current-page shade */
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 a:focus-visible { outline: 2px solid var(--crimson); outline-offset: 3px; }
 
