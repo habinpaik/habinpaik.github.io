@@ -149,18 +149,11 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
 .site-head {
   position: sticky; top: 0; z-index: 50;
   background: var(--paper);
-  border-bottom: 1px solid transparent;   /* no line under the bar (the 1px kept, so nothing moves) */
-  transition: background .25s ease;
+  border-bottom: 1px solid var(--line);
+  transition: background .25s ease, border-color .25s ease;
 }
-/* scrolled or not, the bar is the page's own solid ground (no see-through blur). In place of a line
-   under it, the light shade falls from its edge onto the page below (a grey line -> the light shade) */
+/* scrolled or not, the bar is the page's own solid ground (no see-through blur); the line under it stays */
 .site-head.scrolled { background: var(--paper); }
-.site-head::after {
-  content: ""; position: absolute; left: 0; right: 0; top: 100%; height: var(--s2);
-  background: var(--shade-light); pointer-events: none;
-}
-.hero-on .site-head::after, .j-page.cover-on .site-head::after { display: none; }
-html.night .site-head::after { height: 12px; background: var(--shade-strong); }   /* at night the line was the dark one -> the strong shade */   /* over a photo: no bar, no shade */
 .site-head .bar {
   display: flex; align-items: baseline; justify-content: space-between;
   gap: var(--s4); padding-top: var(--s2); padding-bottom: var(--s1);   /* a slim bar: about the same small gap above the letters and below them */
@@ -360,11 +353,11 @@ p.dek.jc-dek { opacity: 0; transition: opacity 2.3s cubic-bezier(.37,0,.63,1), c
 .j-page .site-head,
 .j-page .site-head.scrolled {
   background: var(--paper);
-  border-bottom-color: transparent;
+  border-bottom-color: var(--line);   /* the line always under the bar, once off the cover */
 }
 /* while the cover is in view: no bar at all, white text straight on the picture.
    Once the page has filled the screen, the bar turns into the usual blurred one. */
-.j-page .site-head { transition: background .15s ease; }
+.j-page .site-head { transition: background .15s ease, border-color .15s ease; }
 .j-page.cover-on .site-head,
 .j-page.cover-on .site-head.scrolled {
   background: transparent; border-bottom-color: transparent;
