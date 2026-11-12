@@ -637,3 +637,10 @@ document.addEventListener('touchstart', function () {}, { passive: true });
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(set);
 })();
 
+/* the line under the menu bar: hidden at the very top of a page, shown as soon as the page moves */
+(function () {
+  var head = document.querySelector('.site-head'); if (!head) return;
+  function on() { head.classList.toggle('scrolled', window.scrollY > 0); }
+  on(); window.addEventListener('scroll', on, { passive: true });
+})();
+

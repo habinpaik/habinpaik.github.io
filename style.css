@@ -134,24 +134,18 @@ p { margin: 0 0 var(--s4); }   /* paragraph -> paragraph = section title -> its 
 p:last-child { margin-bottom: 0; }
 a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1px; }
 
+.home .lead, body:not(.home) > main.wrap { position: relative; }   /* holds the outline rail */
 
-/* the strong shade along the top edge of every page, the full width of the screen: on Home where
-   the page meets the photo (over "Engineer, Physician, Journalist."), elsewhere at the top of the
-   page's main column -- under the menu, or under Journalism's cover */
-.home .lead, body:not(.home) > main.wrap { position: relative; }
-.home .lead::before, body:not(.home) > main.wrap::before {
-  content: ""; position: absolute; top: 0; height: 12px; pointer-events: none;
-  left: calc(50% - (100vw - var(--sbw, 0px)) / 2); width: calc(100vw - var(--sbw, 0px));
-  background: var(--shade-strong);
-}
+
 
 /* ---------- Header (sticky; state changes on scroll) ---------- */
 .site-head {
   position: sticky; top: 0; z-index: 50;
   background: var(--paper);
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid transparent;   /* at the very top of a page: no line under the bar */
   transition: background .25s ease, border-color .25s ease;
 }
+.site-head.scrolled { border-bottom-color: var(--line); }   /* the page has moved: the line shows */
 /* scrolled or not, the bar is the page's own solid ground (no see-through blur); the line under it stays */
 .site-head.scrolled { background: var(--paper); }
 .site-head .bar {
@@ -309,13 +303,8 @@ p.dek.jc-dek { opacity: 0; transition: opacity 2.3s cubic-bezier(.37,0,.63,1), c
 .jc-dek::after { transition: opacity .4s ease; }
 .jc-dek-wrap.on-cover .jc-dek { color: #fff; text-shadow: 0 0 .5em var(--veil), 0 0 .1em var(--veil); }
 .jc-hold + main { padding-top: 0; }
-.jc-hold + main::before { display: none; }   /* the cover's own edge carries the strong shade instead: */
 .jc-edge { position: relative; height: 0; }
-.jc-edge::before {
-  content: ""; position: absolute; top: 0; height: 12px; pointer-events: none;
-  left: calc(50% - (100vw - var(--sbw, 0px)) / 2); width: calc(100vw - var(--sbw, 0px));
-  background: var(--shade-strong);
-}
+
 .jc-dek-wrap { max-width: 46rem; }   /* the text column, as main */
 /* arrow at the bottom of the cover, appears with the line */
 .jc-down {
@@ -352,7 +341,7 @@ p.dek.jc-dek { opacity: 0; transition: opacity 2.3s cubic-bezier(.37,0,.63,1), c
 .j-page .site-head,
 .j-page .site-head.scrolled {
   background: var(--paper);
-  border-bottom-color: var(--line);   /* the line always under the bar, once off the cover */
+
 }
 /* while the cover is in view: no bar at all, white text straight on the picture.
    Once the page has filled the screen, the bar turns into the usual blurred one. */

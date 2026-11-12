@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
-<link rel="stylesheet" href="style.css?v=20261113q">
+<link rel="stylesheet" href="style.css?v=20261113r">
 <script>
 /* Journalism cover, decided before anything else loads: which pair to show, and which size of
    photo this screen needs -- so those downloads start first, at the top of the page. */
@@ -391,15 +391,6 @@ f(); window.addEventListener('resize',f);})();
 </footer>
 
 <script>
-(function () {
-  var head = document.querySelector('.site-head');
-  function onScroll() {
-    if (window.scrollY > 8) head.classList.add('scrolled');
-    else head.classList.remove('scrolled');
-  }
-  onScroll();
-  window.addEventListener('scroll', onScroll, { passive: true });
-})();
 
 /* once the photo has scrolled away, keep the line under the menu until the first line of text
    goes under it -- so the page then looks exactly as it does without the photo */
@@ -768,7 +759,7 @@ f(); window.addEventListener('resize',f);})();
   });
 })();
 </script>
-<script src="site.js?v=20261113m"></script>
+<script src="site.js?v=20261113n"></script>
 <script>
 /* the opener: centred on the screen while it rides the cover (sticky, bottom offset set from its own
    height), white over the photos and ink once it is over the page */
