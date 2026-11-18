@@ -1153,7 +1153,6 @@ main.shelf-end { padding-bottom: 0; }
   font-family: var(--sans); font-size: var(--t-small); line-height: 1.5; color: var(--on-dark);
 }
 .blur-card .cap .en .date, .blur-card .cap .en .dash { color: var(--on-dark); }   /* date leads the English line */
-.blur-card.no-img .cap::before { display: none; }   /* no photo: plain deep grey */
 
 /* Local election desking: the three headlines in boxes stacked down the left, each overlapping the
    one above a little and stepping right; the one description flows to their right and on below.
@@ -1237,6 +1236,7 @@ main.shelf-end { padding-bottom: 0; }
 
 /* Messy Desk: no line or shade where it closes */
 section:has(.spine-panel) + section > h2.section-title { background: none; border-top-color: transparent; }   /* line and shade both gone; the spacing stays */
+section:has(> .card-rail.blur-rail:last-child) + section > h2.section-title { background: none; border-top-color: transparent; }   /* after a card rail, its scroll bar already closes the section: no second bar */
 
 /* "A prime more": the print-edition box -- hairline, light shade inside its top, the box inset on every
    side of the words (trimmed to capitals and baseline), small grey sans; on hover only the words fill */
@@ -1561,3 +1561,14 @@ html.night-switch .night-veil { transition: opacity .3s ease !important; }
    white words on a dark ground */
 .feat-head .en, .blur-card .cap .en, .blur-card .cap .en :is(.date, .dash),
 .overlay-card .cap .meta, .overlay-card .cap .meta :is(.date, .dash) { color: #A9A59D; }
+
+/* every headline laid on a photo sits on the same frosted band as the card news: the photo blurred
+   and a little darkened under the words, fading out upward (no plain black gradient any more) */
+figure.ph.overlay figcaption, .overlay-card .cap { background: none; z-index: 1; }
+figure.ph.overlay figcaption::before, .overlay-card .cap::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  background: linear-gradient(to top, var(--veil), rgba(0,0,0,.14));
+  -webkit-mask-image: linear-gradient(to top, #000 55%, transparent);
+          mask-image: linear-gradient(to top, #000 55%, transparent);
+}
