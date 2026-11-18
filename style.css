@@ -1533,3 +1533,8 @@ html.night-switch .night-veil { transition: opacity .3s ease !important; }
   :is(.feat-photo, .blur-card, .overlay-card):hover :is(.kh, .en, .meta, .date, .dash),
   .feat-photo.zoom :is(.kh, .en, .date, .dash) { color: #A9A59D; }   /* on a photo -- white words on a dark ground -- the grey is the one of white words on the dark ground: the night grey */
 }
+
+/* the English line of every story is grey: on paper the day grey (already), on a photo the grey of
+   white words on a dark ground */
+.feat-head .en, .blur-card .cap .en, .blur-card .cap .en :is(.date, .dash),
+.overlay-card .cap .meta, .overlay-card .cap .meta :is(.date, .dash) { color: #A9A59D; }
