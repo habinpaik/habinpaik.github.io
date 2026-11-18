@@ -166,7 +166,7 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
   display: inline-block; width: 0.8em; height: 0.8em; margin-right: 0.3em; vertical-align: -0.04em;
   fill: none; stroke: currentColor; stroke-width: 2px; vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round;   /* every icon line 2px on screen */
 }
-.nav { display: flex; gap: var(--s4); font-size: var(--t-body); }
+.nav { --nav-gap: var(--s4); display: flex; gap: var(--nav-gap); font-size: var(--t-body); }
 .nav a { position: relative; color: var(--stone); text-decoration: none; font-weight: 400; font-size: var(--t-body); transition: color .15s ease; }
 .nav a[aria-current="page"] { color: var(--ink); }
 /* the current page and the hovered item: no bar under the word -- a shade inside the top of the menu
@@ -984,7 +984,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
    two rows (.two-row) */
 .site-head .brand, .site-head .nav { flex-shrink: 0; } .wordmark, .nav a { white-space: nowrap; }   /* never squeezed into extra lines: it fits, or the next step is taken */
 .site-head.name-stack .bar { column-gap: var(--s2); }   /* the least room between name and menu; space-between gives the rest */
-.site-head.name-stack .nav { gap: 10px; }
+.site-head.name-stack .nav { --nav-gap: 10px; }
 .site-head.name-stack .wordmark { font-size: var(--t-small); }   /* still the serif, smaller */
 /* ...and shows only Habin Paik */
 .site-head.name-stack .wordmark .ko { display: none; }
@@ -1584,3 +1584,9 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 .pre-foot li:has(a[aria-current="page"]) { background: #D9707F; }
 .pre-foot li:has(a[aria-current="page"])::before { background: linear-gradient(to bottom, rgba(0,0,0,.14), transparent 12px); }
 .pre-foot a[aria-current="page"] { color: #1C1B19; }
+
+/* a small, light upright between the menu's words, in the middle of the gap */
+.nav a + a::before {
+  content: ""; position: absolute; left: calc(var(--nav-gap) / -2); top: 50%; width: 1px; height: 0.7em;
+  transform: translate(-50%, -62%); background: var(--line); pointer-events: none;   /* centred on the capitals, not on the line box */
+}
