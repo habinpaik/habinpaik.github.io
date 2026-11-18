@@ -978,13 +978,16 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   figure.ph.left, figure.ph.right,
   figure.ph.small.left, figure.ph.small.right { float: none; width: 100%; margin: var(--s5) 0; }
 }
-/* the menu bar stays one row at every width. When the name and the menu don't fit side by side,
-   the menu turns to the small sans (site.js decides, by measuring: .nav-small); only if even that
-   doesn't fit does it go to two rows (.two-row) */
+/* the menu bar stays one row at every width. When the name and the menu don't fit side by side, the
+   name goes small (the sans) and onto two lines -- Habin Paik / 백하빈 -- while the menu keeps its own
+   letters (site.js decides, by measuring: .name-stack); only if even that doesn't fit does the bar go to
+   two rows (.two-row) */
 .site-head .brand, .site-head .nav { flex-shrink: 0; } .wordmark, .nav a { white-space: nowrap; }   /* never squeezed into extra lines: it fits, or the next step is taken */
-.site-head.nav-small .nav { gap: var(--s3); }
-.site-head.nav-small .bar { column-gap: var(--s2); }   /* the least room between name and menu; space-between gives the rest */
-.site-head.nav-small .nav a, .site-head.nav-small .wordmark { font-family: var(--sans); font-size: var(--t-small); }   /* every word of the bar, name included */
+.site-head.name-stack .bar { column-gap: var(--s2); align-items: center; }   /* the least room between name and menu; space-between gives the rest */
+.site-head.name-stack .nav { gap: 12px; }
+.site-head.name-stack .wordmark { font-family: var(--sans); font-size: var(--t-small); line-height: 1.2; display: inline-flex; align-items: center; }
+.site-head.name-stack .wordmark .nm { display: inline-block; }
+.site-head.name-stack .wordmark .ko { display: block; }
 .site-head.two-row .bar { flex-direction: column; gap: var(--s1); align-items: flex-start; padding-top: calc(var(--s2) - 0.8px); }   /* two rows: the space between them already holds the name's room below and the menu's room above, so no gap -- above, between and below then read the same */
 .site-head.two-row .bar .nav { align-self: center; }   /* the menu row is centred */
 .site-head.two-row .bar .brand { align-self: center; }  /* so is the name row: "Habin Paik 백하빈" itself is centred, */

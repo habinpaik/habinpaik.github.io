@@ -631,12 +631,12 @@ document.addEventListener('touchstart', function () {}, { passive: true });
   function fit() {
     var bar = head.querySelector('.bar'), brand = head.querySelector('.brand'), nav = head.querySelector('.nav');
     if (!bar || !brand || !nav) return;
-    head.classList.remove('nav-small', 'two-row');
+    head.classList.remove('name-stack', 'two-row');
     function over() {
       var cs = getComputedStyle(bar), room = bar.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
       return brand.getBoundingClientRect().width + (parseFloat(cs.columnGap) || 0) + nav.getBoundingClientRect().width > room + 0.5;
     }
-    if (over()) { head.classList.add('nav-small'); if (over()) { head.classList.remove('nav-small'); head.classList.add('two-row'); } }   /* two rows have room again: the usual letters */
+    if (over()) { head.classList.add('name-stack'); if (over()) { head.classList.remove('name-stack'); head.classList.add('two-row'); } }   /* two rows have room again: the usual letters */
   }
   function set() {
     fit();
