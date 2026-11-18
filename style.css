@@ -1449,7 +1449,7 @@ html.night { --crimson-light: color-mix(in srgb, var(--crimson) 45%, var(--paper
 .pre-foot h2.section-title { margin-top: -1px; border-top-color: transparent; background: none; }   /* the title's own line gives way to the full-width one, at the same height */
 .pre-foot ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr; }   /* 4 x 1: one page a row */
 .pre-foot li { position: relative; min-width: 0; }
-.pre-foot li + li { border-top: 1px solid var(--line); }       /* a line between the rows */
+/* no lines between the rows: each row's shade marks where it starts */
 .pre-foot a {
   position: relative; display: block; overflow: hidden;
   padding: var(--s4) var(--s3) var(--s5) 0; text-decoration: none; color: var(--stone);
@@ -1488,7 +1488,7 @@ section > .fact:last-child { padding-bottom: 0.068em; }   /* the sans list sits 
 .site-foot { border-top: 0; background-image: none; }
 .pre-foot { padding-bottom: 0; }
 .site-foot .wrap { padding-top: 0; }   /* the footer's line meets the bottom of the Explore More grid: the cross's upright stands on it */
-.foot-main { border-top: 1px solid var(--line); background: none;   /* no shade under Explore More's last row */ padding-top: calc(var(--s2) + 3.125rem); }
+.foot-main { border-top: 0; background: none;   /* no line under Explore More's last row */   /* no shade under Explore More's last row */ padding-top: calc(var(--s2) + 3.125rem); }
 @media (min-width: 80rem) { .foot-main { padding-top: calc(var(--s2) + 3.125rem - 0.28em); } }
 
 /* wide screens: the rail the time and mail ride in the right sketch area (laid by site.js) */
