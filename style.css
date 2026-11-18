@@ -1524,8 +1524,8 @@ html.night-switch .night-veil { transition: opacity .3s ease !important; }
 }
 
 /* ...and on the same hover, the words of that story (headline, English line, kicker, date) turn grey
-   (on a photo, where they are white: a dimmer white) */
-.kh, .en, .meta, .ekick, .card-foot { transition: color .45s ease; }
+   (on a photo, where they are white: a dimmer white), at once */
+.kh, .en, .meta, .ekick, .card-foot { transition: none; }   /* at once, no fade */
 @media (hover: hover) {
   :is(.side-head, .tuck-story, .print-tab, .ebox:not(.split), .ebox.split .go, .card):hover :is(.kh, .en, .meta, .ekick, .card-foot),
   .ebox.split .eup:has(h3 a:hover) :is(.kh, .en, .meta, .ekick),
