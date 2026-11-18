@@ -631,12 +631,23 @@ document.addEventListener('touchstart', function () {}, { passive: true });
   function fit() {
     var bar = head.querySelector('.bar'), brand = head.querySelector('.brand'), nav = head.querySelector('.nav');
     if (!bar || !brand || !nav) return;
-    head.classList.remove('name-stack', 'two-row');
+    head.classList.remove('name-stack', 'two-row', 'down');   /* measured with the longer name */
     function over() {
       var cs = getComputedStyle(bar), room = bar.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
       return brand.getBoundingClientRect().width + (parseFloat(cs.columnGap) || 0) + nav.getBoundingClientRect().width > room + 0.5;
     }
-    if (over()) { head.classList.add('name-stack'); if (over()) { head.classList.remove('name-stack'); head.classList.add('two-row'); } }   /* two rows have room again: the usual letters */
+    bar.style.minHeight = ''; nav.style.transform = ''; brand.style.transform = '';
+    var h0 = bar.getBoundingClientRect().height, n0 = nav.getBoundingClientRect().top;   /* the bar as it is with the full name */
+    if (over()) { head.classList.add('name-stack');
+      /* the smaller name must not make the bar shorter or move the menu: keep the bar's height, and
+         nudge the menu back to where it stood */
+      bar.style.minHeight = h0 + 'px';
+      if (over()) { head.classList.remove('name-stack'); head.classList.add('two-row'); bar.style.minHeight = ''; }   /* two rows have room again: the usual letters */
+      else {   /* both, so the small name still sits on the menu's baseline */
+        var dn = n0 - nav.getBoundingClientRect().top;
+        if (Math.abs(dn) > 0.2) nav.style.transform = brand.style.transform = 'translateY(' + dn + 'px)';
+      }
+    }
   }
   function set() {
     fit();
@@ -662,5 +673,19 @@ document.addEventListener('touchstart', function () {}, { passive: true });
     head.classList.toggle('scrolled', window.scrollY > top + 1);
   }
   on(); window.addEventListener('scroll', on, { passive: true });
+})();
+
+/* the bar's name, when it is short of room: 백하빈 while the page goes down, Habin Paik while it comes
+   up (and at the top). A few pixels of travel decide, so a tremor doesn't flip it */
+(function () {
+  var head = document.querySelector('.site-head'); if (!head) return;
+  var last = window.scrollY, acc = 0;
+  window.addEventListener('scroll', function () {
+    var y = window.scrollY, d = y - last; last = y;
+    if (y <= 0) { head.classList.remove('down'); acc = 0; return; }
+    if ((d > 0) !== (acc > 0)) acc = 0;
+    acc += d;
+    if (acc > 6) head.classList.add('down'); else if (acc < -6) head.classList.remove('down');
+  }, { passive: true });
 })();
 
