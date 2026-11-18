@@ -1531,5 +1531,5 @@ html.night-switch .night-veil { transition: opacity .3s ease !important; }
   .ebox.split .eup:has(h3 a:hover) :is(.kh, .en, .meta, .ekick),
   :is(.side-head, .tuck-story, .print-tab).deep :is(.kh, .en) { color: var(--stone); }
   :is(.feat-photo, .blur-card, .overlay-card):hover :is(.kh, .en, .meta, .date, .dash),
-  .feat-photo.zoom :is(.kh, .en, .date, .dash) { color: var(--stone); }   /* on a photo too: the one grey */
+  .feat-photo.zoom :is(.kh, .en, .date, .dash) { color: #A9A59D; }   /* on a photo -- white words on a dark ground -- the grey is the one of white words on the dark ground: the night grey */
 }
