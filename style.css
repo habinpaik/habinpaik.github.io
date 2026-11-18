@@ -1523,11 +1523,13 @@ html.night-switch .night-veil { transition: opacity .3s ease !important; }
   .tuck-story.deep::before, .print-tab.deep::before, .side-head.deep::before { opacity: 1; }   /* .deep: a photo of the same story is hovered (site.js) */
 }
 
-/* ...and on the same hover, the words of that story (headline, English line, kicker, date) blur */
-.kh, .en, .meta, .ekick, .card-foot { transition: filter .45s ease; }
+/* ...and on the same hover, the words of that story (headline, English line, kicker, date) turn grey
+   (on a photo, where they are white: a dimmer white) */
+.kh, .en, .meta, .ekick, .card-foot { transition: color .45s ease; }
 @media (hover: hover) {
-  :is(.feat-photo, .side-head, .tuck-story, .print-tab, .ebox:not(.split), .ebox.split .go, .blur-card, .overlay-card, .card):hover :is(.kh, .en, .meta, .ekick, .card-foot),
+  :is(.side-head, .tuck-story, .print-tab, .ebox:not(.split), .ebox.split .go, .card):hover :is(.kh, .en, .meta, .ekick, .card-foot),
   .ebox.split .eup:has(h3 a:hover) :is(.kh, .en, .meta, .ekick),
-  :is(.side-head, .tuck-story, .print-tab).deep :is(.kh, .en),
-  .feat-photo.zoom :is(.kh, .en) { filter: blur(2px); }
+  :is(.side-head, .tuck-story, .print-tab).deep :is(.kh, .en) { color: var(--stone); }
+  :is(.feat-photo, .blur-card, .overlay-card):hover :is(.kh, .en, .meta),
+  .feat-photo.zoom :is(.kh, .en) { color: rgba(255,255,255,.6); }   /* on a photo */
 }
