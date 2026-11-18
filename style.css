@@ -1444,7 +1444,8 @@ html.night { --crimson-light: color-mix(in srgb, var(--crimson) 45%, var(--paper
    name written downward from the column's top-left. Each column carries the light shade along its top;
    the page you are on, and a hovered column, the strong shade. The page you
    are on in ink, the others grey; no crimson fill. */
-.pre-foot { padding-bottom: 0; border-top: 1px solid var(--line); background: var(--shade-strong) no-repeat; background-color: var(--paper); }   /* its line runs edge to edge with the strong shade (where the page proper ends) */
+.pre-foot { padding-bottom: 0; border-top: 0; background: none; background-color: var(--paper); }   /* the page runs straight into the pink: no line, no shade */
+html.night .pre-foot { background: var(--shade-light) no-repeat; background-color: var(--paper); }   /* once the page above has gone dark: the light shade along the pink's top */
 .pre-foot .wrap { max-width: 46rem; }
 .pre-foot h2.section-title { margin-top: -1px; border-top-color: transparent; background: none; }   /* the title's own line gives way to the full-width one, at the same height */
 .pre-foot ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); }   /* 4 x 1: the four pages side by side */
@@ -1579,15 +1580,8 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 .side-row:hover .side-head::before { opacity: 1; }
 .side-row:hover .side-head .kh { text-decoration-color: var(--stone); }
 
-/* Explore More stands on a plain pink: the clock's sweep pink. Its words dark, as on any fill (the
-   page you are on in the dark ground's colour, the others in the grey between that and the pink);
-   on a light-enough ground the shades are the dark ones of the day again */
-.pre-foot {
-  --paper: #D9707F; --ink: #1C1B19;
-  --stone: color-mix(in srgb, #1C1B19 63%, #D9707F);
-  --line: color-mix(in srgb, #1C1B19 18%, #D9707F);
-  --sh-strong: rgba(0,0,0,.14); --sh-light: rgba(0,0,0,.07);
-  --shade-strong: linear-gradient(to bottom, var(--sh-strong), transparent 12px);
-  --shade-light:  linear-gradient(to bottom, var(--sh-light), transparent var(--s2));
-  color-scheme: light;
-}
+/* Explore More: the page you are on is the one pink cell -- the clock's sweep pink, plain; its name in
+   the dark ground's colour (words on a fill), the strong shade along its top as on any chosen cell */
+.pre-foot li:has(a[aria-current="page"]) { background: #D9707F; }
+.pre-foot li:has(a[aria-current="page"])::before { background: linear-gradient(to bottom, rgba(0,0,0,.14), transparent 12px); }
+.pre-foot a[aria-current="page"] { color: #1C1B19; }
