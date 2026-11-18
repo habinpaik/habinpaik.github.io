@@ -1440,19 +1440,34 @@ html.night { --crimson-light: color-mix(in srgb, var(--crimson) 45%, var(--paper
   color-scheme: dark; background-color: var(--paper); color: var(--ink);
 }   /* the sweep a clear pink at night, its edge fading into the dark; hands under it go dark */
 
-/* the buffer before the footer, "Explore More": the four pages as four rows across the text column,
-   split by three hairlines; each just the page's name. The page you are on in ink, the others grey.
-   Hover: the whole row fills with crimson from the bottom and the name turns white. */
-.pre-foot { padding-bottom: calc(1.5625rem - var(--s3)); border-top: 1px solid var(--line); background: var(--shade-strong) no-repeat; background-color: var(--paper); }   /* its line runs edge to edge with the strong shade (where the page proper ends); the footer's line follows right under Portfolio, 25px below its baseline */
+/* the buffer before the footer, "Explore More": the four pages in a 2 x 2 grid, split by a cross of
+   hairlines, each cell the page's name at its top-left with room under it. The site's shades do the
+   rest: the light shade falls from the cross's lines into the cells (down from the middle line, to the
+   right from the upright one), and a hovered cell takes the strong shade along its top. The page you
+   are on in ink, the others grey; no crimson fill. */
+.pre-foot { padding-bottom: 0; border-top: 1px solid var(--line); background: var(--shade-strong) no-repeat; background-color: var(--paper); }   /* its line runs edge to edge with the strong shade (where the page proper ends) */
 .pre-foot .wrap { max-width: 46rem; }
 .pre-foot h2.section-title { margin-top: -1px; border-top-color: transparent; background: none; }   /* the title's own line gives way to the full-width one, at the same height */
-.pre-foot ul { list-style: none; margin: 0; padding: 0; }
-.pre-foot a { display: block; font-size: var(--t-body); margin: 0 0 0 -0.12em; padding: var(--s3) 0 var(--s3) 0.12em;   /* the fill spans the column, reaching left only the hair a text link's does (Hyunsong) */ text-decoration: none; color: var(--stone);
-  background: linear-gradient(var(--crimson), var(--crimson)) no-repeat 0 100% / 100% 0;
-  transition: background-size .45s cubic-bezier(.45,0,.25,1), color .45s ease; }
+.pre-foot ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; }
+.pre-foot li { position: relative; min-width: 0; }
+.pre-foot li:nth-child(2n) { border-left: 1px solid var(--line); }       /* the upright of the cross */
+.pre-foot li:nth-child(n+3) { border-top: 1px solid var(--line); }       /* its crossbar */
+.pre-foot a {
+  position: relative; display: block; overflow: hidden;
+  padding: var(--s4) var(--s3) var(--s7) 0; text-decoration: none; color: var(--stone);
+  background: none;   /* not a text link: no crimson line */
+}
+.pre-foot li:nth-child(2n) a { padding-left: var(--s4); }
+.pre-foot li:nth-child(n+3) a { background: var(--shade-light) no-repeat; }                                            /* down from the crossbar */
+.pre-foot li:nth-child(2n) a { background: linear-gradient(to right, var(--sh-light), transparent var(--s2)) no-repeat; }  /* right of the upright */
+.pre-foot li:nth-child(4) a { background: var(--shade-light) no-repeat, linear-gradient(to right, var(--sh-light), transparent var(--s2)) no-repeat; }
+.pre-foot a::after {   /* hover: the strong shade along the cell's top */
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 12px; background: var(--shade-strong);
+  opacity: 0; transition: opacity .45s ease; pointer-events: none;
+}
+@media (hover: hover) { .pre-foot a:hover::after { opacity: 1; } }
 .pre-foot a[aria-current="page"] { color: var(--ink); }
-.pre-foot a:hover { background-size: 100% 100%; color: var(--on-fill); }
-.pre-foot .pf-name { display: block; font-family: var(--serif); font-size: var(--t-display); line-height: 1.2; text-box-trim: trim-both; text-box-edge: cap alphabetic; }
+.pre-foot .pf-name { display: block; font-family: var(--serif); font-size: var(--t-display); line-height: 1.2; text-box-trim: trim-both; text-box-edge: cap alphabetic; overflow-wrap: anywhere; }
 
 /* the end of a page's text -> the Explore More line: the same 25px as before every section line
    (the main's own bottom padding and the last block's margin give way to it) */
@@ -1474,7 +1489,7 @@ section > .fact:last-child { padding-bottom: 0.068em; }   /* the sans list sits 
 /* the footer's line is a section line: in the text column only, Portfolio's baseline 25px above it */
 .site-foot { border-top: 0; background-image: none; }
 .pre-foot { padding-bottom: 0; }
-.site-foot .wrap { padding-top: calc(1.5625rem - var(--s3)); }
+.site-foot .wrap { padding-top: 0; }   /* the footer's line meets the bottom of the Explore More grid: the cross's upright stands on it */
 .foot-main { border-top: 1px solid var(--line); background: var(--shade-light) no-repeat; padding-top: calc(var(--s2) + 3.125rem); }
 @media (min-width: 80rem) { .foot-main { padding-top: calc(var(--s2) + 3.125rem - 0.28em); } }
 
