@@ -461,13 +461,16 @@
 /* lets :active (the press shade) show on iOS */
 document.addEventListener('touchstart', function () {}, { passive: true });
 
-/* Journalism: a story's photo enlarges while any link to the same story is hovered */
+/* Journalism: one story, several links (its photo, its headline box): hovering any of them answers on
+   all -- the photo enlarges, the headline box's shade deepens */
 (function () {
   var photos = [].slice.call(document.querySelectorAll('.feat-photo[href], .side-photo[href]'));
+  var boxes = [].slice.call(document.querySelectorAll('.side-head[href], .tuck-story[href], .print-tab[href]'));
   if (!photos.length) return;
   function set(a, on) {
     var href = a.getAttribute('href');
     photos.forEach(function (p) { if (p.getAttribute('href') === href) p.classList.toggle('zoom', on); });
+    boxes.forEach(function (b) { if (b !== a && b.getAttribute('href') === href) b.classList.toggle('deep', on); });
   }
   document.addEventListener('mouseover', function (e) { var a = e.target.closest && e.target.closest('a[href]'); if (a) set(a, true); });
   document.addEventListener('mouseout', function (e) { var a = e.target.closest && e.target.closest('a[href]'); if (a && !a.contains(e.relatedTarget)) set(a, false); });

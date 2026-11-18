@@ -1214,9 +1214,8 @@ main.shelf-end { padding-bottom: 0; }
   background: linear-gradient(to top, var(--crimson) 1.22em, transparent 1.22em) no-repeat 0 100% / 100% 0;
   transition: background-size .45s cubic-bezier(.45, 0, .25, 1), color .45s ease;
 }
-.feat-photo:hover .kh, .side-head:hover .kh, .tuck-story:hover .kh, .print-tab:hover .kh,
-.ebox:not(.split):hover .kh, .eup:hover .kh, .ebox .go:hover .kh, .shelf-more button:hover .kh,
-.overlay-card:hover .kh, .blur-card:hover .kh, .card:hover .kh { background-size: 100% 100%; color: var(--on-fill); }
+/* every story box and photo story already answers a hover -- its shade deepens or its photo enlarges --
+   so the headline itself stays as it is: no crimson fill there (it is kept for plain text links) */
 /* a whole box is the link, not just its words */
 .ebox:not(.split) h3 a::after, .eup h3 a::after { content: ""; position: absolute; inset: 0; }
 
@@ -1520,5 +1519,15 @@ html.night-switch .night-veil { transition: opacity .3s ease !important; }
 @media (hover: hover) {
   .tuck-story:hover::before, .print-tab:hover::before, .side-head:hover::before,
   .ebox:not(.split):hover::before, .ebox.split:has(h3 a:hover)::before, .ebox.split .go:hover::before,
-  .card:hover .card-txt::before { opacity: 1; }
+  .card:hover .card-txt::before,
+  .tuck-story.deep::before, .print-tab.deep::before, .side-head.deep::before { opacity: 1; }   /* .deep: a photo of the same story is hovered (site.js) */
+}
+
+/* ...and on the same hover, the words of that story (headline, English line, kicker, date) blur */
+.kh, .en, .meta, .ekick, .card-foot { transition: filter .45s ease; }
+@media (hover: hover) {
+  :is(.feat-photo, .side-head, .tuck-story, .print-tab, .ebox:not(.split), .ebox.split .go, .blur-card, .overlay-card, .card):hover :is(.kh, .en, .meta, .ekick, .card-foot),
+  .ebox.split .eup:has(h3 a:hover) :is(.kh, .en, .meta, .ekick),
+  :is(.side-head, .tuck-story, .print-tab).deep :is(.kh, .en),
+  .feat-photo.zoom :is(.kh, .en) { filter: blur(2px); }
 }
