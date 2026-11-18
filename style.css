@@ -1440,25 +1440,25 @@ html.night { --crimson-light: color-mix(in srgb, var(--crimson) 45%, var(--paper
   color-scheme: dark; background-color: var(--paper); color: var(--ink);
 }   /* the sweep a clear pink at night, its edge fading into the dark; hands under it go dark */
 
-/* the buffer before the footer, "Explore More": the four pages in a 2 x 2 grid, the rows split by a
-   hairline, each cell the page's name at its top-left with room under it. Each row carries the light
-   shade along its top; a hovered cell takes the strong shade there. The page you
+/* the buffer before the footer, "Explore More": the four pages one under another, split by hairlines,
+   each row the page's name at its left with room under it. Each row carries the light shade along its
+   top; the page you are on, and a hovered row, the strong shade. The page you
    are on in ink, the others grey; no crimson fill. */
 .pre-foot { padding-bottom: 0; border-top: 1px solid var(--line); background: var(--shade-strong) no-repeat; background-color: var(--paper); }   /* its line runs edge to edge with the strong shade (where the page proper ends) */
 .pre-foot .wrap { max-width: 46rem; }
 .pre-foot h2.section-title { margin-top: -1px; border-top-color: transparent; background: none; }   /* the title's own line gives way to the full-width one, at the same height */
-.pre-foot ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; }
+.pre-foot ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr; }   /* 4 x 1: one page a row */
 .pre-foot li { position: relative; min-width: 0; }
-.pre-foot li:nth-child(n+3) { border-top: 1px solid var(--line); }       /* the line between the two rows */
+.pre-foot li + li { border-top: 1px solid var(--line); }       /* a line between the rows */
 .pre-foot a {
   position: relative; display: block; overflow: hidden;
-  padding: var(--s4) var(--s3) var(--s7) 0; text-decoration: none; color: var(--stone);
+  padding: var(--s4) var(--s3) var(--s5) 0; text-decoration: none; color: var(--stone);
   background: none; margin: 0;   /* not a text link: no crimson line, no reach past the column */
 }
-.pre-foot li:nth-child(2n) a { padding-left: var(--s4); }
-.pre-foot li:nth-child(odd)::before {   /* the light shade along the top of each row, drawn once across the whole row (no seam between its two cells) */
-  content: ""; position: absolute; left: 0; top: 0; width: 200%; height: var(--s2); background: var(--shade-light); pointer-events: none; z-index: 1;
+.pre-foot li::before {   /* the light shade along the top of each row */
+  content: ""; position: absolute; left: 0; top: 0; width: 100%; height: var(--s2); background: var(--shade-light); pointer-events: none; z-index: 1;
 }
+.pre-foot li:has(a[aria-current="page"])::before { height: 12px; background: var(--shade-strong); }   /* the page you are on: the strong shade, as well as the white words */
 .pre-foot a::after {   /* hover: the strong shade along the cell's top */
   content: ""; position: absolute; left: 0; right: 0; top: 0; height: 12px; background: var(--shade-strong);
   opacity: 0; transition: opacity .45s ease; pointer-events: none;
