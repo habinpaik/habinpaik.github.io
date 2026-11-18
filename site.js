@@ -631,7 +631,7 @@ document.addEventListener('touchstart', function () {}, { passive: true });
   function fit() {
     var bar = head.querySelector('.bar'), brand = head.querySelector('.brand'), nav = head.querySelector('.nav');
     if (!bar || !brand || !nav) return;
-    head.classList.remove('name-stack', 'two-row', 'down');   /* measured with the longer name */
+    head.classList.remove('name-stack', 'two-row');
     function over() {
       var cs = getComputedStyle(bar), room = bar.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
       return brand.getBoundingClientRect().width + (parseFloat(cs.columnGap) || 0) + nav.getBoundingClientRect().width > room + 0.5;
@@ -674,18 +674,3 @@ document.addEventListener('touchstart', function () {}, { passive: true });
   }
   on(); window.addEventListener('scroll', on, { passive: true });
 })();
-
-/* the bar's name, when it is short of room: 백하빈 while the page goes down, Habin Paik while it comes
-   up (and at the top). A few pixels of travel decide, so a tremor doesn't flip it */
-(function () {
-  var head = document.querySelector('.site-head'); if (!head) return;
-  var last = window.scrollY, acc = 0;
-  window.addEventListener('scroll', function () {
-    var y = window.scrollY, d = y - last; last = y;
-    if (y <= 0) { head.classList.remove('down'); acc = 0; return; }
-    if ((d > 0) !== (acc > 0)) acc = 0;
-    acc += d;
-    if (acc > 6) head.classList.add('down'); else if (acc < -6) head.classList.remove('down');
-  }, { passive: true });
-})();
-

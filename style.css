@@ -979,18 +979,15 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   figure.ph.small.left, figure.ph.small.right { float: none; width: 100%; margin: var(--s5) 0; }
 }
 /* the menu bar stays one row at every width. When the name and the menu don't fit side by side, the
-   name goes small (the sans) and only one of its two forms shows, while the menu keeps its own
+   name goes small and only Habin Paik shows, while the menu keeps its own
    letters (site.js decides, by measuring: .name-stack); only if even that doesn't fit does the bar go to
    two rows (.two-row) */
 .site-head .brand, .site-head .nav { flex-shrink: 0; } .wordmark, .nav a { white-space: nowrap; }   /* never squeezed into extra lines: it fits, or the next step is taken */
 .site-head.name-stack .bar { column-gap: var(--s2); }   /* the least room between name and menu; space-between gives the rest */
-.site-head.name-stack .nav { gap: 12px; }
-.site-head.name-stack .wordmark { font-family: var(--sans); font-size: var(--t-small); }
-/* ...and shows one name at a time: Habin Paik, and 백하빈 while the page is being scrolled down
-   (.down, set by site.js) -- switched at once, as a newspaper's bar swaps its contents */
+.site-head.name-stack .nav { gap: 10px; }
+.site-head.name-stack .wordmark { font-size: var(--t-small); }   /* still the serif, smaller */
+/* ...and shows only Habin Paik */
 .site-head.name-stack .wordmark .ko { display: none; }
-.site-head.name-stack.down .wordmark .enm { display: none; }
-.site-head.name-stack.down .wordmark .ko { display: inline; }
 .site-head.two-row .bar { flex-direction: column; gap: var(--s1); align-items: flex-start; padding-top: calc(var(--s2) - 0.8px); }   /* two rows: the space between them already holds the name's room below and the menu's room above, so no gap -- above, between and below then read the same */
 .site-head.two-row .bar .nav { align-self: center; }   /* the menu row is centred */
 .site-head.two-row .bar .brand { align-self: center; }  /* so is the name row: "Habin Paik 백하빈" itself is centred, */
@@ -1538,12 +1535,13 @@ html.night-switch .night-veil { transition: opacity .3s ease !important; }
 /* ...and on the same hover, the headline of that story is underlined (a hairline, as text links are);
    its colours stay as they are -- at once, no fade */
 .kh, .en, .meta, .ekick, .card-foot { transition: none; }
-.kh { text-decoration: underline; text-decoration-color: transparent; text-decoration-thickness: 1px; text-underline-offset: 3px; }   /* as the text links */
+.kh { text-decoration: underline; text-decoration-color: transparent; text-decoration-thickness: 1px; text-underline-offset: 0.25em; text-decoration-skip-ink: none; }   /* a quarter of the letter size below: clear of the headline */
 @media (hover: hover) {
   :is(.side-head, .tuck-story, .print-tab, .ebox:not(.split), .ebox.split .go, .card, .feat-photo, .blur-card, .overlay-card):hover .kh,
   .ebox.split .eup:has(h3 a:hover) .kh,
   :is(.side-head, .tuck-story, .print-tab).deep .kh,
-  .feat-photo.zoom .kh { text-decoration-color: currentColor; }
+  .feat-photo.zoom .kh { text-decoration-color: var(--stone); }   /* the grey */
+  :is(.feat-photo, .blur-card, .overlay-card):hover .kh, .feat-photo.zoom .kh { text-decoration-color: #A9A59D; }   /* on a photo: the dark-ground grey */
 }
 
 /* the English line of every story is grey: on paper the day grey (already), on a photo the grey of
