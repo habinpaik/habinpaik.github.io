@@ -57,14 +57,14 @@
   --sh-strong: rgba(0,0,0,.14); --sh-light: rgba(0,0,0,.07);   /* the two shades' colours (day: dark; night: light) */
   --shade-strong: linear-gradient(to bottom, var(--sh-strong), transparent 12px);
   --shade-light:  linear-gradient(to bottom, var(--sh-light), transparent var(--s2));   /* a short fade, 8px */
-  --dial-rim: #E0DDD7; --dial-home: #E0DDD7; --dial-city: #862633; --dial-pin: #1A1A1A; --dial-lab: #6B6B66;   /* the dial's colours, by day */
+  --dial-rim: #E0DDD7; --dial-home: #E0DDD7; --dial-city: #862633; --dial-pin: #1A1A1A; --dial-lab: var(--stone);   /* the dial's colours, by day */
   --sec-gap: calc(1.5625rem - 0.5em);   /* above a section line: last baseline -> line = 25px (0.5em of the line sits under the baseline) */
   --inset: var(--s4);   /* box inset, edge -> letters on every side: the paragraph gap; a step less on phones */
   --crimson: #862633;   /* 고려대 교색 Crimson, PANTONE 202C */
   --on-fill: var(--paper);   /* words on a crimson (or coloured) fill: the page's own ground, day and night */
   --crimson-light: color-mix(in srgb, var(--crimson) 35%, #fff);   /* the same crimson lightened: hover on dark photos, hover bars */
   /* everything else is one of these two, so the page keeps a short palette; tooltips are crimson */
-  --on-dark: rgba(255,255,255,.85);   /* second-rank words on photos and dark grounds (dates, English heads) */
+  --on-dark: #fff;   /* words on photos and dark grounds: plain white, all of them (no second, see-through white) */
   --veil:    rgba(0,0,0,.55);         /* darkening behind words on photos; halos */
   --link:  inherit;   /* text links take the colour of the words around them, with a hairline underline; crimson only on hover */
   --hero-bg: var(--brand-deep);   /* Home 상단 이름 영역 + 그때의 메뉴 배경 */
@@ -1384,7 +1384,7 @@ h2.section-title { scroll-margin-top: calc(var(--head-h, 4rem) + var(--s5)); }
    (not pure black), the words to a soft off-white; subject colours and crimson lift so they still read.
    Scroll back up and it returns. The change eases over .7s. */
 html.night {
-  --paper: #1C1B19; --ink: #E6E3DD; --stone-mix: 70%;   /* night grey: #A9A59D */ --line: #3A3834; --brand: #252421; --brand-deep: #C9C6BF;
+  --paper: #1C1B19; --ink: #E6E3DD; --stone: #A9A59D;   /* the night grey, exactly (the day's is mixed from ink and paper) */ --line: #3A3834; --brand: #252421; --brand-deep: #C9C6BF;
   --crimson: #C25466;
   --c-meche: #D08B4A; --c-phys: #6FA6D0; --c-math: #4DB585; --c-gensci: #4FA893; --c-classics: #A3B84E;
   --sh-strong: rgba(255,255,255,.17); --sh-light: rgba(255,255,255,.10);   /* at night the shades are light: a glow under each edge, strong enough to read on the dark */
@@ -1418,10 +1418,10 @@ html.night { --crimson-light: color-mix(in srgb, var(--crimson) 45%, var(--paper
    The night colours are set again on these two, and every colour made from them is worked out again
    here (a custom property is resolved where it is declared, so :root's would stay day's) */
 .pre-foot, .site-foot {
-  --paper: #1C1B19; --ink: #E6E3DD; --stone-mix: 70%; --line: #3A3834; --brand: #252421; --brand-deep: #C9C6BF;
+  --paper: #1C1B19; --ink: #E6E3DD; --line: #3A3834; --brand: #252421; --brand-deep: #C9C6BF;
   --crimson: #C25466; --c-journalism: var(--crimson);
   --sh-strong: rgba(255,255,255,.17); --sh-light: rgba(255,255,255,.10);
-  --stone: color-mix(in srgb, var(--ink) var(--stone-mix), var(--paper));
+  --stone: #A9A59D;
   --shade-strong: linear-gradient(to bottom, var(--sh-strong), transparent 12px);
   --shade-light:  linear-gradient(to bottom, var(--sh-light), transparent var(--s2));
   --on-fill: var(--paper); --link-hover: var(--on-fill);
@@ -1524,12 +1524,12 @@ html.night-switch .night-veil { transition: opacity .3s ease !important; }
 }
 
 /* ...and on the same hover, the words of that story (headline, English line, kicker, date) turn grey
-   (on a photo, where they are white: a dimmer white), at once */
+   -- the one grey of the site, on a photo too -- at once */
 .kh, .en, .meta, .ekick, .card-foot { transition: none; }   /* at once, no fade */
 @media (hover: hover) {
   :is(.side-head, .tuck-story, .print-tab, .ebox:not(.split), .ebox.split .go, .card):hover :is(.kh, .en, .meta, .ekick, .card-foot),
   .ebox.split .eup:has(h3 a:hover) :is(.kh, .en, .meta, .ekick),
   :is(.side-head, .tuck-story, .print-tab).deep :is(.kh, .en) { color: var(--stone); }
-  :is(.feat-photo, .blur-card, .overlay-card):hover :is(.kh, .en, .meta),
-  .feat-photo.zoom :is(.kh, .en) { color: rgba(255,255,255,.6); }   /* on a photo */
+  :is(.feat-photo, .blur-card, .overlay-card):hover :is(.kh, .en, .meta, .date, .dash),
+  .feat-photo.zoom :is(.kh, .en, .date, .dash) { color: var(--stone); }   /* on a photo too: the one grey */
 }
