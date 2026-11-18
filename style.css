@@ -1578,3 +1578,16 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 .side-row:hover .side-photo img { transform: scale(1.04); }
 .side-row:hover .side-head::before { opacity: 1; }
 .side-row:hover .side-head .kh { text-decoration-color: var(--stone); }
+
+/* Explore More stands on a plain pink: the clock's sweep pink. Its words dark, as on any fill (the
+   page you are on in the dark ground's colour, the others in the grey between that and the pink);
+   on a light-enough ground the shades are the dark ones of the day again */
+.pre-foot {
+  --paper: #D9707F; --ink: #1C1B19;
+  --stone: color-mix(in srgb, #1C1B19 63%, #D9707F);
+  --line: color-mix(in srgb, #1C1B19 18%, #D9707F);
+  --sh-strong: rgba(0,0,0,.14); --sh-light: rgba(0,0,0,.07);
+  --shade-strong: linear-gradient(to bottom, var(--sh-strong), transparent 12px);
+  --shade-light:  linear-gradient(to bottom, var(--sh-light), transparent var(--s2));
+  color-scheme: light;
+}
