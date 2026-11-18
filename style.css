@@ -1440,22 +1440,22 @@ html.night { --crimson-light: color-mix(in srgb, var(--crimson) 45%, var(--paper
   color-scheme: dark; background-color: var(--paper); color: var(--ink);
 }   /* the sweep a clear pink at night, its edge fading into the dark; hands under it go dark */
 
-/* the buffer before the footer, "Explore More": the four pages one under another, split by hairlines,
-   each row the page's name at its left with room under it. Each row carries the light shade along its
-   top; the page you are on, and a hovered row, the strong shade. The page you
+/* the buffer before the footer, "Explore More": the four pages side by side in four columns, each
+   name written downward from the column's top-left. Each column carries the light shade along its top;
+   the page you are on, and a hovered column, the strong shade. The page you
    are on in ink, the others grey; no crimson fill. */
 .pre-foot { padding-bottom: 0; border-top: 1px solid var(--line); background: var(--shade-strong) no-repeat; background-color: var(--paper); }   /* its line runs edge to edge with the strong shade (where the page proper ends) */
 .pre-foot .wrap { max-width: 46rem; }
 .pre-foot h2.section-title { margin-top: -1px; border-top-color: transparent; background: none; }   /* the title's own line gives way to the full-width one, at the same height */
-.pre-foot ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr; }   /* 4 x 1: one page a row */
+.pre-foot ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); }   /* 4 x 1: the four pages side by side */
 .pre-foot li { position: relative; min-width: 0; }
-/* no lines between the rows: each row's shade marks where it starts */
+/* no lines between the columns: the shades mark them */
 .pre-foot a {
   position: relative; display: block; overflow: hidden;
-  padding: var(--s4) var(--s3) var(--s5) 0; text-decoration: none; color: var(--stone);
+  height: 100%; padding: var(--s4) var(--s3) var(--s5) 0; text-decoration: none; color: var(--stone);
   background: none; margin: 0;   /* not a text link: no crimson line, no reach past the column */
 }
-.pre-foot li::before {   /* the light shade along the top of each row */
+.pre-foot li::before {   /* the light shade along the top of each column */
   content: ""; position: absolute; left: 0; top: 0; width: 100%; height: var(--s2); background: var(--shade-light); pointer-events: none; z-index: 1;
 }
 .pre-foot li:has(a[aria-current="page"])::before { height: 12px; background: var(--shade-strong); }   /* the page you are on: the strong shade, as well as the white words */
@@ -1465,7 +1465,7 @@ html.night { --crimson-light: color-mix(in srgb, var(--crimson) 45%, var(--paper
 }
 @media (hover: hover) { .pre-foot a:hover::after { opacity: 1; } }
 .pre-foot a[aria-current="page"] { color: var(--ink); }
-.pre-foot .pf-name { display: block; font-family: var(--serif); font-size: var(--t-display); line-height: 1.2; text-box-trim: trim-both; text-box-edge: cap alphabetic; overflow-wrap: anywhere; }
+.pre-foot .pf-name { display: block; font-family: var(--serif); font-size: var(--t-display); line-height: 1.2; writing-mode: vertical-rl; white-space: nowrap; }   /* written top to bottom, each name in its own column */
 
 /* the end of a page's text -> the Explore More line: the same 25px as before every section line
    (the main's own bottom padding and the last block's margin give way to it) */
