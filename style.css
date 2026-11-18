@@ -1572,3 +1572,9 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
   -webkit-mask-image: linear-gradient(to top, #000 55%, transparent);
           mask-image: linear-gradient(to top, #000 55%, transparent);
 }
+
+/* a side story is one thing -- its headline box and its photo together: hover anywhere on the pair
+   and both answer at once (the photo enlarges, the box's shade deepens, the headline is underlined) */
+.side-row:hover .side-photo img { transform: scale(1.04); }
+.side-row:hover .side-head::before { opacity: 1; }
+.side-row:hover .side-head .kh { text-decoration-color: var(--stone); }
