@@ -448,17 +448,42 @@
     var track = rail.querySelector('.rail-track'), thumb = rail.querySelector('.rail-thumb'),
         prev = rail.querySelector('.rail-btn.prev'), next = rail.querySelector('.rail-btn.next');
     function step() { var c = track.querySelector('.card, .blur-card'); return c ? c.getBoundingClientRect().width + parseFloat(getComputedStyle(track).columnGap || 0) : 300; }
+    var map = rail.querySelector('.rail-map'), drag = false;
+    function drawMap() {   /* the whole row in miniature, a frame round the part in view (as the desk's) */
+      if (!map || !map.offsetParent) return;
+      var W = map.clientWidth, H = map.clientHeight - 1, k = W / track.scrollWidth;
+      var E = parseFloat(getComputedStyle(track).paddingLeft) || 0, x0 = track.getBoundingClientRect().left - track.scrollLeft;
+      var html = '<span class="floor"></span>';
+      [].forEach.call(track.querySelectorAll('.card, .blur-card'), function (c) {
+        var r = c.getBoundingClientRect();
+        html += '<span class="mp" style="left:' + ((r.left - x0) * k).toFixed(1) + 'px;width:' + Math.max(1, r.width * k).toFixed(1) + 'px;height:' + (H - 3) + 'px"></span>';
+      });
+      html += '<span class="view" style="left:' + ((track.scrollLeft + E) * k).toFixed(1) + 'px;width:' + ((track.clientWidth - 2 * E) * k).toFixed(1) + 'px"></span>';
+      map.innerHTML = html;
+    }
+    if (map) {
+      var seek = function (e) {
+        var r = map.getBoundingClientRect(), f = (e.clientX - r.left) / r.width;
+        var E = parseFloat(getComputedStyle(track).paddingLeft) || 0, col = track.clientWidth - 2 * E;
+        track.style.scrollBehavior = drag === 2 ? 'auto' : ''; track.style.scrollSnapType = drag === 2 ? 'none' : '';
+        track.scrollLeft = f * track.scrollWidth - E - col / 2;
+      };
+      map.addEventListener('pointerdown', function (e) { drag = 1; map.setPointerCapture(e.pointerId); seek(e); });
+      map.addEventListener('pointermove', function (e) { if (drag) { drag = 2; seek(e); } });
+      map.addEventListener('pointerup', function () { drag = false; track.style.scrollBehavior = ''; track.style.scrollSnapType = ''; });
+    }
     function update() {
-      var max = track.scrollWidth - track.clientWidth, w = track.clientWidth / track.scrollWidth;
-      thumb.style.width = (Math.min(1, w) * 100) + '%';
-      thumb.style.left = (max > 0 ? (track.scrollLeft / max) * (1 - w) * 100 : 0) + '%';
+      var max = track.scrollWidth - track.clientWidth;
+      if (thumb) { var w = track.clientWidth / track.scrollWidth; thumb.style.width = (Math.min(1, w) * 100) + '%'; thumb.style.left = (max > 0 ? (track.scrollLeft / max) * (1 - w) * 100 : 0) + '%'; }
       if (prev) prev.disabled = track.scrollLeft <= 1;
       if (next) next.disabled = track.scrollLeft >= max - 1;
+      drawMap();
     }
     if (prev) prev.addEventListener('click', function () { track.scrollBy({ left: -step(), behavior: 'smooth' }); });
     if (next) next.addEventListener('click', function () { track.scrollBy({ left: step(), behavior: 'smooth' }); });
     track.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', update);
+    window.addEventListener('resize', update); window.addEventListener('load', update);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(update);
     update();
   });
 })();
@@ -684,6 +709,7 @@ document.addEventListener('touchstart', function () {}, { passive: true });
    Explore More's) is pulled up so that its line's place is the bar's top -- the usual line -> title
    distance, instead of a whole extra section gap */
 (function () {
+  return;   /* the card news no longer end on a scroll bar: the next title keeps its own line */
   var rails = [].slice.call(document.querySelectorAll('main > section > .card-rail.blur-rail:last-child'));
   if (!rails.length) return;
   function set() {

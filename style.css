@@ -1230,7 +1230,6 @@ main.shelf-end { padding-bottom: 0; }
 
 /* Messy Desk: no line or shade where it closes */
 section:has(.spine-panel) + section > h2.section-title { background: none; border-top-color: transparent; }   /* line and shade both gone; the spacing stays */
-section:has(> .card-rail.blur-rail:last-child) + section > h2.section-title { background: none; border-top-color: transparent; }   /* after a card rail, its scroll bar already closes the section: no second bar */
 
 /* "A prime more": the print-edition box -- hairline, light shade inside its top, the box inset on every
    side of the words (trimmed to capitals and baseline), small grey sans; on hover only the words fill */
@@ -1359,7 +1358,6 @@ section:has(> .card-rail.blur-rail:last-child) + section > h2.section-title { ba
   -webkit-mask-image: linear-gradient(to right, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent);
           mask-image: linear-gradient(to right, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent);
 }
-@media (max-width: 40rem) { .desk-map { display: none !important; } }   /* phones: the tag row has no room for the minimap */
 
 /* subject tags: hovering only deepens the shade inside the top (to the strong one); the border never changes */
 .filter-btn::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 12px; background: var(--shade-strong); opacity: 0; pointer-events: none; transition: opacity .45s ease; }
@@ -1441,7 +1439,6 @@ html.night { --crimson-light: color-mix(in srgb, var(--crimson) 45%, var(--paper
 .pre-foot { padding-bottom: 0; border-top: 0; background: none; background-color: var(--paper); }   /* the page runs straight into Explore More: no line, no shade, day or night */
 .pre-foot .wrap { max-width: 46rem; }
 .pre-foot h2.section-title { margin-top: -1px; }   /* Explore More opens like any section: its title's line and the light shade under it */
-body:has(main > section:last-of-type > .card-rail.blur-rail:last-child) .pre-foot h2.section-title { border-top-color: transparent; background: none; }   /* after a card-news rail its scroll bar already divides */
 .pre-foot ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; }   /* 2 x 2 */
 .pre-foot li { position: relative; min-width: 0; }
 /* no lines between the columns: the shades mark them */
@@ -1613,4 +1610,24 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 
 /* Journalism card news: the cards closer together -- 14px apart (10 on phones), the tab's inset */
 .blur-rail .rail-track { gap: var(--inset); }
+@media (max-width: 40rem) { .blur-card { flex-basis: calc((100vw - var(--sbw, 0px) - 2 * var(--gutter) - var(--inset)) / 2); } }
+
+/* the minimap sits between the two arrows, as tall as they are -- on the desk and under the card news alike */
+.spine-nav .desk-map, .rail-map { position: relative; right: auto; bottom: auto; flex: 0 0 7.5rem; height: auto; align-self: stretch; }
+.spine-nav { align-items: stretch; }
+
+/* Journalism card news: the same as the Research desk -- the row runs on into the margins beyond the
+   column (at most 5rem) and fades in and out there (1.5rem on phones); under it, centred, the two
+   arrow buttons with the minimap between them (no scroll bar) */
+.card-rail.blur-rail { margin-right: 0; }
+.blur-rail .rail-track {
+  --ext: max(var(--gutter), min((100vw - var(--sbw, 0px) - 46rem) / 2 + var(--gutter), var(--gutter) + 5rem));
+  --fade: max(1.5rem, var(--ext) - var(--gutter));
+  margin-inline: calc(var(--gutter) - var(--ext)); padding-inline: calc(var(--ext) - var(--gutter));
+  scroll-padding-inline: calc(var(--ext) - var(--gutter));
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent);
+          mask-image: linear-gradient(to right, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent);
+}
+.blur-rail .rail-foot { justify-content: center; align-items: stretch; padding-right: 0; gap: var(--s2); }
+.blur-rail .rail-btn { display: flex; }   /* on phones too, as the desk's */
 @media (max-width: 40rem) { .blur-card { flex-basis: calc((100vw - var(--sbw, 0px) - 2 * var(--gutter) - var(--inset)) / 2); } }

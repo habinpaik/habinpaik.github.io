@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
-<link rel="stylesheet" href="style.css?v=20261119x">
+<link rel="stylesheet" href="style.css?v=20261119y">
 </head>
 <body>
 <script>
@@ -456,11 +456,12 @@ f(); window.addEventListener('resize',f);})();
     }
     spineShelf.addEventListener('scroll', edgesUpdate, { passive: true });
     window.addEventListener('resize', edgesUpdate);
-    /* minimap at the right end of the desk's tag row */
+    /* minimap (an editor's overview) between the desk's two arrows */
     var filterRow = document.querySelector('.filter-spines'), mapBox = null, mapView = null;
     if (filterRow) {
       mapBox = document.createElement('div'); mapBox.className = 'desk-map'; mapBox.setAttribute('aria-hidden', 'true');
-      filterRow.parentNode.appendChild(mapBox);
+      var navBtns = document.querySelectorAll('.spine-nav button');   /* between the two arrows */
+      if (navBtns.length > 1) navBtns[0].parentNode.insertBefore(mapBox, navBtns[1]); else filterRow.parentNode.appendChild(mapBox);
       var drag = false;
       function seek(e) {
         var r = mapBox.getBoundingClientRect(), f = (e.clientX - r.left) / r.width;
@@ -474,10 +475,7 @@ f(); window.addEventListener('resize',f);})();
     }
     function mapUpdate() {
       if (!mapBox) return;
-      var tags = filterRow.querySelectorAll('.filter-btn'), lastTag = tags[tags.length - 1];
-      var room = !lastTag || lastTag.getBoundingClientRect().right < mapBox.parentNode.getBoundingClientRect().right - mapBox.offsetWidth - 16
-                 && lastTag.getBoundingClientRect().top === tags[0].getBoundingClientRect().top;
-      mapBox.hidden = !room || spineShelf.scrollWidth <= spineShelf.clientWidth + 2;
+      mapBox.hidden = spineShelf.scrollWidth <= spineShelf.clientWidth + 2;
       if (mapBox.hidden) return;
       var W = mapBox.clientWidth, H = mapBox.clientHeight - 1, total = spineShelf.scrollWidth, k = W / total;
       var tr = spineShelf.getBoundingClientRect(), x0 = tr.left - spineShelf.scrollLeft, maxH = 0;
@@ -662,6 +660,6 @@ f(); window.addEventListener('resize',f);})();
   drawBoards();
 })();
 </script>
-<script src="site.js?v=20261119g"></script>
+<script src="site.js?v=20261119h"></script>
 </body>
 </html>
