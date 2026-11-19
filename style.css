@@ -502,7 +502,7 @@ main > p.dek:first-child + section { margin-top: 0; }   /* the opener is larger:
   border: 1px solid var(--cat);       /* ... the subject only in its outline */
   border-radius: 0;
   margin-top: -1px;               /* 위아래 책 테두리가 한 줄로 겹침 (두 겹으로 두꺼워지지 않게) */
-  padding: 0 10px;
+  padding: 0 6px;   /* letters 6px from the side lines, as in the book tip */
   transition: transform .15s ease;
 }
 .spine:hover { transform: translateX(6px); z-index: 2; }   /* 살짝 빼내는 느낌 */
