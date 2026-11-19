@@ -1687,3 +1687,7 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 .card-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .card-foot { justify-content: flex-end; }
 @media (max-width: 40rem) { .card-txt { padding-top: var(--s4); } }   /* phones: the band no taller than it needs */
+
+/* thumbnail titles: up to two lines, then … */
+.card-title { white-space: normal; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; }
+.card-title { text-wrap: balance; }   /* two even lines, not one long and a word */
