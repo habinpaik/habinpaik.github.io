@@ -1679,3 +1679,11 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 @media (max-width: 40rem) { .card-txt { min-height: 0; } }
 .card:hover .card-img img { transform: scale(1.05); }
 @media (hover: hover) { .card:hover .kh.kh.kh { text-decoration-color: #A9A59D; } }   /* on a photo: the dark-ground grey */
+
+/* Portfolio cards as video thumbnails: a wide photo (16:9), a short title and its date at the lower
+   right, right-aligned, one line each */
+.card-img { aspect-ratio: 16 / 9; }
+.card-txt { text-align: right; padding-top: var(--s6); }
+.card-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card-foot { justify-content: flex-end; }
+@media (max-width: 40rem) { .card-txt { padding-top: var(--s4); } }   /* phones: the band no taller than it needs */
