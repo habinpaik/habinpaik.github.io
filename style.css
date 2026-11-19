@@ -1580,9 +1580,9 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 .side-row:hover .side-head::before { opacity: 1; }
 .side-row:hover .side-head .kh { text-decoration-color: var(--stone); }
 
-/* Explore More: the page you are on is the one pink cell -- the clock's sweep pink, plain; its name in
+/* Explore More: the page you are on is the one pink cell -- the night crimson, plain; its name in
    the dark ground's colour (words on a fill), the strong shade along its top as on any chosen cell */
-.pre-foot li:has(a[aria-current="page"]) { background: #D9707F; }
+.pre-foot li:has(a[aria-current="page"]) { background: var(--crimson); }   /* the crimson of its mode -- here, on the night ground, the night one (as a link's hover fill) */
 .pre-foot li:has(a[aria-current="page"])::before { background: linear-gradient(to right, rgba(0,0,0,.14), transparent); }
 .pre-foot a[aria-current="page"] { color: #1C1B19; }
 

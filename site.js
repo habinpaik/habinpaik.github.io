@@ -679,3 +679,26 @@ document.addEventListener('touchstart', function () {}, { passive: true });
   }
   on(); window.addEventListener('scroll', on, { passive: true });
 })();
+
+/* after a card-news rail, its scroll bar stands in for the next section's line: the next title (or
+   Explore More's) is pulled up so that its line's place is the bar's top -- the usual line -> title
+   distance, instead of a whole extra section gap */
+(function () {
+  var rails = [].slice.call(document.querySelectorAll('main > section > .card-rail.blur-rail:last-child'));
+  if (!rails.length) return;
+  function set() {
+    rails.forEach(function (r) {
+      var sec = r.parentNode, next = sec.nextElementSibling;
+      var h = next && next.querySelector(':scope > h2.section-title');
+      if (!h && sec === document.querySelector('main > section:last-of-type')) h = document.querySelector('.pre-foot h2.section-title');
+      var bar = r.querySelector('.rail-bar');
+      if (!h || !bar || !bar.offsetParent) return;
+      h.style.marginTop = '';
+      var d = h.getBoundingClientRect().top - bar.getBoundingClientRect().top;
+      var m0 = parseFloat(getComputedStyle(h).marginTop) || 0;
+      h.style.marginTop = (m0 - d) + 'px';
+    });
+  }
+  set(); window.addEventListener('resize', set); window.addEventListener('load', set);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(set);
+})();
