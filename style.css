@@ -1798,3 +1798,10 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
    space above a line, the line's shade and the space under it, as between any two sections */
 .site-foot .wrap { padding-bottom: calc(var(--sec-above) + var(--s2) + var(--sec-below)); }
 .site-foot .wrap { padding-bottom: calc(var(--sec-above) + var(--s2) + var(--sec-below) + var(--foot-over, 0px)); }
+/* ...and in that room, where a section line would come (36px under the last ink), the light shade --
+   then the rest of the gap below it, as under any section line */
+.site-foot .wrap { position: relative; }
+.site-foot .wrap::after {
+  content: ""; position: absolute; left: var(--gutter); right: var(--gutter); bottom: var(--sec-below); height: var(--s2);
+  background: var(--shade-light); pointer-events: none;
+}
