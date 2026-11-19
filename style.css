@@ -1610,3 +1610,7 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 .pre-foot { --inset: 14px; }
 @media (max-width: 34rem) { .pre-foot { --inset: 10px; } }
 .pre-foot a { padding: var(--inset); }
+
+/* Journalism card news: the cards closer together -- 14px apart (10 on phones), the tab's inset */
+.blur-rail .rail-track { gap: var(--inset); }
+@media (max-width: 40rem) { .blur-card { flex-basis: calc((100vw - var(--sbw, 0px) - 2 * var(--gutter) - var(--inset)) / 2); } }
