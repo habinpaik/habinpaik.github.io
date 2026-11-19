@@ -1885,3 +1885,8 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
   -webkit-mask-image: linear-gradient(to right, #000 25%, transparent 55%); mask-image: linear-gradient(to right, #000 25%, transparent 55%);
 }
 @media (max-width: 34rem) { .side-photo::after { -webkit-mask-image: none; mask-image: none; } }
+/* Explore More hover: no zoom -- the cell widens a little to the right instead (the current one stays as it is) */
+@media (hover: hover) {
+  .pre-foot a:hover::before { transform: none; }
+  .pre-foot li:hover:not(:has(a[aria-current="page"])) { margin-right: calc(-1 * var(--s4)); }
+}
