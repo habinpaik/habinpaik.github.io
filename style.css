@@ -1763,3 +1763,10 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 .spine-nav button, .spine-nav button:hover, .spine-nav button:disabled, .spine-nav button:disabled:hover,
 .rail-btn, .rail-btn:hover, .rail-btn:disabled, .rail-btn:disabled:hover { border-color: color-mix(in srgb, var(--stone) 65%, var(--paper)); }
 .spine-nav button, .rail-btn { padding-inline: 10px; }   /* narrower arrow buttons */
+/* the overview's floor is its own bottom edge, and the pieces stand right on it (no separately placed
+   line that can round apart from them); the arrow buttons end on that same edge */
+.desk-map .floor { display: none; }
+.spine-nav .desk-map, .rail-map { box-sizing: border-box; border-bottom: 1px solid var(--line); }
+.desk-map .mp { bottom: 0; }
+.desk-map .view { bottom: -1px; }
+.spine-nav .desk-map, .rail-map { border-bottom-color: transparent; }   /* no floor line */
