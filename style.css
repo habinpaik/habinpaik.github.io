@@ -1750,3 +1750,5 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
   .card-img { aspect-ratio: 1 / 1; }
   .card-txt::after { background: linear-gradient(to top, rgba(0,0,0,.42), rgba(0,0,0,.08)); }
 }
+/* Explore More: the chosen cell is plain crimson -- no shade on it */
+.pre-foot li:has(a[aria-current="page"])::before, .pre-foot a[aria-current="page"]::after { display: none; }
