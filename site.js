@@ -518,9 +518,9 @@ document.addEventListener('touchstart', function () {}, { passive: true });
   }
   function place() {
     var hb = head ? head.getBoundingClientRect().bottom : 0, vh = window.innerHeight;
-    /* the section being read: the last whose title has passed the reading line, just under the menu bar
-       (where a click on the outline brings a title); at the page's very end, the last section */
-    var line = Math.max(hb, 0) + 120, k = 0;
+    /* the section being read: the last whose title has passed the screen's middle (a click on the
+       outline brings a title to the top, above it); at the page's very end, the last section */
+    var line = vh / 2, k = 0;   /* the reading line: the screen's middle, where the outline sits */
     heads.forEach(function (h, i) { if (h.getBoundingClientRect().top <= line) k = i; });
     if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2 && heads[heads.length - 1].getBoundingClientRect().top < vh) k = heads.length - 1;
     if (pinned !== null) k = pinned;

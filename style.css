@@ -1161,7 +1161,7 @@ main.shelf-end { padding-bottom: 0; }
   /* an empty box of the same size just behind, a few pixels down and to the right -- a small stack */
   box-shadow: 5px 5px 0 -1px var(--paper), 5px 5px 0 0 var(--line);
 }
-.ebox + .ebox { margin-top: calc(-1 * var(--s3)); }   /* overlaps the box above */
+.ebox + .ebox { margin-top: calc(-1 * var(--s2)); }   /* overlaps the box above -- by 8px, so the "Pledge analysis" line above stays clear */
 .ebox:nth-child(2) { margin-left: var(--s4); z-index: 1; }
 .ebox:nth-child(3) { margin-left: calc(2 * var(--s4)); z-index: 2; }
 .ebox .ekick { display: block; margin-bottom: var(--s1); font-family: var(--sans); font-size: var(--t-small); color: var(--crimson); transition: color .45s ease; }   /* which race, small, above the headline */
