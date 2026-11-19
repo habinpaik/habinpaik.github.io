@@ -189,7 +189,7 @@
     cancelAnimationFrame(raf); last = 0;
     raf = requestAnimationFrame(function f(now) {
       var dt = last ? now - last : 16; last = now;
-      phi += (target - phi) * (1 - Math.exp(-dt / 110));
+      phi += (target - phi) * (1 - Math.exp(-dt / 60));   /* catches up quicker */
       if (Math.abs(target - phi) < 0.05) phi = target;
       fold(THETA, phi);
       if (phi !== target) raf = requestAnimationFrame(f);
@@ -197,7 +197,7 @@
   }
   function aim(x) {
     var o = stage.getBoundingClientRect();
-    target = clamp(((x - o.left) / o.width * 2 - 1) * MAX * 1.25, -MAX, MAX);
+    target = clamp(((x - o.left) / o.width * 2 - 1) * MAX * 2, -MAX, MAX);   /* the full turn halfway to the stage's edge */
   }
   var dragX = null, dragged = false;
   /* the mouse is followed over the whole stage, also where the opener or the time box lie on it */
