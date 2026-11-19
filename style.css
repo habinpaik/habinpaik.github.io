@@ -1789,3 +1789,7 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 /* Journalism cover: the board's centre where jcover.js puts it -- the opener and the board centred as one */
 .jc-ring, .jc-board { top: var(--bcy, calc(var(--res, 0px) + (100% - var(--res, 0px)) / 2 - 14px)); }
 .jc-labels { top: calc(var(--bcy, 50%) + var(--bh) / 2 + 2rem); }
+
+/* phones: "Tilt your phone" between the two names under the board, until the phone is tilted */
+.jc-hint { color: var(--stone); transition: opacity .6s ease; }
+.jc-hint.gone { opacity: 0; }

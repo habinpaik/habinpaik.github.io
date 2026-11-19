@@ -58,7 +58,8 @@
     }
     stage.style.setProperty('--res', RES + 'px');
     H = H - RES;
-    BW = Math.min(W * (portrait ? 0.84 : 0.62), (H - 96) * 4 / 3, 760);   /* the folded board, 4:3 */
+    var Hs0 = H + RES;   /* the whole stage: the board is centred in it, so it must clear the opener above and its names below */
+    BW = Math.min(W * (portrait ? 0.84 : 0.62), (H - 96) * 4 / 3, (Hs0 - 2 * RES - 16) * 4 / 3, (Hs0 - 112) * 4 / 3, 760);   /* the folded board, 4:3 */
     BH = BW * 3 / 4;
     N = BW >= 560 ? 20 : BW >= 380 ? 14 : 10;                          /* folds */
     F = BW / (N * 2 * Math.cos(THETA * Math.PI / 180));                   /* one face's width */
@@ -67,15 +68,12 @@
     stage.style.setProperty('--cw', CW + 'px');
     LIFTZ = Math.max(0, Math.min(1200, 1700 * (1 - CW / (0.5 * BW))));   /* each card then half the board's width */
     stage.style.setProperty('--bh', BH + 'px'); stage.style.setProperty('--bw', BW + 'px');
-    /* the opener and the board together, as one group, centred in the screen under the menu bar (not
-       the board alone in the room left under the opener) */
-    if (dek) {
-      var gap = portrait ? 16 : 28, dh = dek.offsetHeight, pad0 = parseFloat(getComputedStyle(dek.closest('main')).paddingTop) || 0;
-      DEKTOP = Math.max(pad0, (stage.clientHeight - (dh + gap + BH)) / 2);
-      stage.style.setProperty('--bcy', (DEKTOP + dh + gap + BH / 2) + 'px');
-    }
+    /* the board in the middle of the screen under the menu bar, as if the opener weren't there (the
+       opener stays at the top); only if they would touch is the board let down, never past its names */
+    var Hs = stage.clientHeight, c = Hs / 2;
+    c = Math.max(c, RES + BH / 2); c = Math.min(c, Hs - BH / 2 - 56);
+    stage.style.setProperty('--bcy', c + 'px');
   }
-  var DEKTOP = 0;
 
   /* Each face shows its strip of the photo, the photo cropped to fill the faces' full run, centred.
      The strips are not equal slices: seen from the far end of its turn (the board at +-MAX), the board's
@@ -230,9 +228,14 @@
     var ang = (screen.orientation && screen.orientation.angle) || window.orientation || 0;
     var g = ang === 90 ? e.beta : ang === -90 || ang === 270 ? -e.beta : ang === 180 ? -e.gamma : e.gamma;   /* left-right tilt, whichever way the phone is held */
     target = clamp(g * 1.6, -MAX, MAX); user = true;
+    if (hint && Math.abs(g) > 8) { hint.classList.add('gone'); hint = null; }   /* tried it: the hint goes */
     if (performance.now() - tiltAt > 30) { tiltAt = performance.now(); follow(); }
   }
+  var hint = null;
   if (window.DeviceOrientationEvent && matchMedia('(pointer: coarse)').matches) {
+    /* phones: a word between the two names, saying what to do */
+    hint = document.createElement('span'); hint.className = 'jc-hint'; hint.textContent = 'Tilt your phone';
+    labels.insertBefore(hint, labB);
     window.addEventListener('deviceorientation', onTilt);   /* where no leave is needed (Android), this is all */
     if (typeof DeviceOrientationEvent.requestPermission === 'function') {   /* where it is (iOS), asked on the first touch */
       stage.addEventListener('pointerdown', function ask() {
@@ -290,7 +293,7 @@
       var cs = getComputedStyle(dek);
       slot.style.height = (dek.offsetHeight + parseFloat(cs.marginBottom)) + 'px';
       var head = document.querySelector('.site-head');
-      measure(); at = (head ? head.offsetHeight : 0) + DEKTOP;   /* the top of the centred group */
+      at = (head ? head.offsetHeight : 0) + (parseFloat(getComputedStyle(slot.parentNode).paddingTop) || 0);
       place();
     };
     var place = function () {
