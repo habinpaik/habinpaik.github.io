@@ -774,3 +774,29 @@ document.addEventListener('touchstart', function () {}, { passive: true });
   var p = location.pathname, q = p.replace(/\/index\.html$/, '/').replace(/\.html$/, '');
   if (q !== p && history.replaceState) history.replaceState(history.state, '', q + location.search + location.hash);
 })();
+
+/* the last update, at the far right of the menu bar (wide screens only): when this page was last
+   published -- the server's Last-Modified for it, in Seoul time */
+(function () {
+  var head = document.querySelector('.site-head'), nav = head && head.querySelector('.nav');
+  if (!head || !nav || !window.fetch) return;
+  var el = document.createElement('span'); el.className = 'updated'; el.setAttribute('aria-label', 'Last updated');
+  head.appendChild(el);
+  function base(n) { var z = document.createElement('span'); z.style.cssText = 'display:inline-block;width:0;height:0;vertical-align:baseline'; n.appendChild(z); var y = z.getBoundingClientRect().top; z.remove(); return y; }
+  function align() {   /* on the menu's baseline */
+    if (!el.textContent || !el.offsetParent) return;
+    el.style.transform = '';
+    var a = nav.querySelector('a'); if (!a) return;
+    el.style.transform = 'translateY(' + (base(a) - base(el)) + 'px)';
+  }
+  fetch(location.pathname, { method: 'HEAD', cache: 'no-store' }).then(function (r) {
+    var lm = r.headers.get('last-modified'); if (!lm) return;
+    var d = new Date(lm); if (isNaN(d)) return;
+    var f = function (o) { return new Intl.DateTimeFormat('en-US', Object.assign({ timeZone: 'Asia/Seoul' }, o)).format(d); };
+    el.textContent = 'Updated ' + f({ month: 'short', day: 'numeric', year: 'numeric' }) + ', ' + f({ hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
+    el.title = 'Seoul time';
+    align();
+  }).catch(function () {});
+  window.addEventListener('resize', align);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(align);
+})();

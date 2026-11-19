@@ -1805,3 +1805,11 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
   content: ""; position: absolute; left: var(--gutter); right: var(--gutter); bottom: var(--sec-below); height: var(--s2);
   background: var(--shade-light); pointer-events: none;
 }
+
+/* the last update, at the far right of the menu bar: small sans, grey; only where the margin beside
+   the column has room for it */
+.site-head .updated {
+  position: absolute; right: var(--s5); top: var(--s2); display: none;
+  font-family: var(--sans); font-size: var(--t-small); line-height: 1.5; color: var(--stone); white-space: nowrap;
+}
+@media (min-width: 76rem) { .site-head .updated { display: block; } }
