@@ -1605,3 +1605,8 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
    to letters (10px on phones) instead of the site's 20 (14) */
 .j-page { --inset: 14px; }
 @media (max-width: 34rem) { .j-page { --inset: 10px; } }
+
+/* Explore More: the tighter inset as on Journalism -- 14px from each cell's edge to its name (10 on phones) */
+.pre-foot { --inset: 14px; }
+@media (max-width: 34rem) { .pre-foot { --inset: 10px; } }
+.pre-foot a { padding: var(--inset); }

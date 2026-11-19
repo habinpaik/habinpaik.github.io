@@ -483,7 +483,7 @@ document.addEventListener('touchstart', function () {}, { passive: true });
 
 /* every tab: the outline of its sections in the left sketch area (see .outline in the css) */
 (function () {
-  var main = document.querySelector('main.wrap'), heads = [].slice.call(document.querySelectorAll('main h2.section-title'));
+  var main = document.querySelector('main.wrap'), heads = [].slice.call(document.querySelectorAll('main h2.section-title, .pre-foot h2.section-title'));   /* Explore More too */
   if (!main || heads.length < 2) return;
   var nav = document.createElement('nav'); nav.className = 'outline'; nav.setAttribute('aria-label', 'On this page');
   var ol = document.createElement('ol'), bar = document.createElement('span'); bar.className = 'bar';
