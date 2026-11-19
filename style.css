@@ -1440,33 +1440,33 @@ html.night { --crimson-light: color-mix(in srgb, var(--crimson) 45%, var(--paper
   color-scheme: dark; background-color: var(--paper); color: var(--ink);
 }   /* the sweep a clear pink at night, its edge fading into the dark; hands under it go dark */
 
-/* the buffer before the footer, "Explore More": the four pages side by side in four columns, each
-   name written downward from the column's top-left. Each column carries the light shade along its top;
-   the page you are on, and a hovered column, the strong shade. The page you
+/* the buffer before the footer, "Explore More": the four pages in a 2 x 2 grid, each name at its
+   cell's top-left. Each cell carries the light shade on its left side only; the page you are on, and
+   a hovered cell, the strong shade there. The page you
    are on in ink, the others grey; no crimson fill. */
 .pre-foot { padding-bottom: 0; border-top: 0; background: none; background-color: var(--paper); }   /* the page runs straight into Explore More: no line, no shade, day or night */
 .pre-foot .wrap { max-width: 46rem; }
 .pre-foot h2.section-title { margin-top: -1px; }   /* Explore More opens like any section: its title's line and the light shade under it */
 body:has(main > section:last-of-type > .card-rail.blur-rail:last-child) .pre-foot h2.section-title { border-top-color: transparent; background: none; }   /* after a card-news rail its scroll bar already divides */
-.pre-foot ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); }   /* 4 x 1: the four pages side by side */
+.pre-foot ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; }   /* 2 x 2 */
 .pre-foot li { position: relative; min-width: 0; }
 /* no lines between the columns: the shades mark them */
 .pre-foot a {
   position: relative; display: block; overflow: hidden;
-  height: 100%; padding: var(--s4) var(--s3) var(--s5) 0; text-decoration: none; color: var(--stone);
+  height: 100%; padding: var(--s4) var(--s3) var(--s5) var(--s4); text-decoration: none; color: var(--stone);
   background: none; margin: 0;   /* not a text link: no crimson line, no reach past the column */
 }
-.pre-foot li::before {   /* the light shade along the top of each column */
-  content: ""; position: absolute; left: 0; top: 0; width: 100%; height: var(--s2); background: var(--shade-light); pointer-events: none; z-index: 1;
+.pre-foot li::before {   /* the light shade along the left side of each cell only */
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: var(--s2); background: linear-gradient(to right, var(--sh-light), transparent); pointer-events: none; z-index: 1;
 }
-.pre-foot li:has(a[aria-current="page"])::before { height: 12px; background: var(--shade-strong); }   /* the page you are on: the strong shade, as well as the white words */
+.pre-foot li:has(a[aria-current="page"])::before { width: 12px; background: linear-gradient(to right, var(--sh-strong), transparent); }   /* the page you are on: the strong shade, as well as its words */
 .pre-foot a::after {   /* hover: the strong shade along the cell's top */
-  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 12px; background: var(--shade-strong);
-  opacity: 0; transition: opacity .45s ease; pointer-events: none;
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 12px; background: linear-gradient(to right, var(--sh-strong), transparent);
+  opacity: 0; transition: opacity .45s ease; pointer-events: none;   /* hover: the strong shade on the left side */
 }
 @media (hover: hover) { .pre-foot a:hover::after { opacity: 1; } }
 .pre-foot a[aria-current="page"] { color: var(--ink); }
-.pre-foot .pf-name { display: block; font-family: var(--serif); font-size: var(--t-display); line-height: 1.2; writing-mode: vertical-rl; white-space: nowrap; }   /* written top to bottom, each name in its own column */
+.pre-foot .pf-name { display: block; font-family: var(--serif); font-size: var(--t-display); line-height: 1.2; text-box-trim: trim-both; text-box-edge: cap alphabetic; overflow-wrap: anywhere; }
 
 /* the end of a page's text -> the Explore More line: the same 25px as before every section line
    (the main's own bottom padding and the last block's margin give way to it) */
@@ -1583,7 +1583,7 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 /* Explore More: the page you are on is the one pink cell -- the clock's sweep pink, plain; its name in
    the dark ground's colour (words on a fill), the strong shade along its top as on any chosen cell */
 .pre-foot li:has(a[aria-current="page"]) { background: #D9707F; }
-.pre-foot li:has(a[aria-current="page"])::before { background: linear-gradient(to bottom, rgba(0,0,0,.14), transparent 12px); }
+.pre-foot li:has(a[aria-current="page"])::before { background: linear-gradient(to right, rgba(0,0,0,.14), transparent); }
 .pre-foot a[aria-current="page"] { color: #1C1B19; }
 
 /* a small, light upright between the menu's words, in the middle of the gap */
