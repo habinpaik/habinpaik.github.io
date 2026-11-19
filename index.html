@@ -179,7 +179,7 @@ f(); window.addEventListener('resize',f);})();
     if (campus && (!hero.classList.contains('campus') || edge > campusH)) { campusH = edge; root.style.setProperty('--campus-h', edge + 'px'); }
     hero.classList.toggle('campus', campus);
   }
-  /* Arriving from the name link on another page (index.html#closed):
+  /* Arriving from the name link on another page (/#closed):
      open with the photo area already closed -- menu bar at the top -- and drop the #closed. */
   if (location.hash === '#closed') {
     /* The bar must end up exactly at the top (blurred state), on every device.
