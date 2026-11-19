@@ -149,7 +149,8 @@
   }
   function hourAng(t) { return ((t.h % 12) + t.m / 60) * Math.PI / 6; }
   function isPhone() {   /* phones -- and any width where the time and mail share the half beside Explore More with the dial: it goes right of them or under them */
-    return !!(window.matchMedia && window.matchMedia('(max-width: 40rem)').matches) || !!(host.closest('.pre-foot') && host.querySelector('.clock-main'));
+    var cmv = host.querySelector('.clock-main'); if (cmv && !cmv.getClientRects().length) return false;   /* no time and mail beside it: placed as on wide screens */
+    return !!(window.matchMedia && window.matchMedia('(max-width: 40rem)').matches) || !!(host.closest('.pre-foot') && cmv);
   }
 
   /* the labels for a moment: one per hour hand (Seoul's left out on phones); hands pointing
@@ -236,6 +237,7 @@
       return { l: r.left - hr.left, r: r.right - hr.left, t: r.top - hr.top + c, b: r.bottom - hr.top - c };
     }
     var cm = host.querySelector('.clock-main');
+    if (cm && !cm.getClientRects().length) cm = null;   /* hidden (phones): the dial sits beside the copyright, as on wide screens */
     if (host.closest('.pre-foot')) {
       /* beside Explore More's four cells: the whole half beside them is the dial's; the time and the
          mail (phones) are kept clear, and the dial goes right of them or under them */
@@ -247,7 +249,11 @@
     if (!cm) {
       /* wide screens: the time and mail live in the left sketch area; the dial sits beside the one
          paragraph left in the footer (copyright, then the address), from its first line to its last */
-      var lines = [].map.call(foot.querySelectorAll('.foot-copy, .foot-contact > *'), function (e) { return rel(e, 0.2); });
+      var relText = function (e, cut) {   /* the words' own extent (a block line is as wide as the column) */
+        var g = document.createRange(); g.selectNodeContents(e); var r = g.getBoundingClientRect(), c = r.height * cut;
+        return { l: r.left - hr.left, r: r.right - hr.left, t: r.top - hr.top + c, b: r.bottom - hr.top - c };
+      };
+      var lines = [].map.call(foot.querySelectorAll('.foot-copy, .foot-contact > *'), function (e) { return relText(e, 0.2); });
       var t0 = Math.min.apply(null, lines.map(function (r) { return r.t; })), b0 = Math.max.apply(null, lines.map(function (r) { return r.b; }));
       /* it may use the footer's padding too -- from --s2 under the top line's shade to --s2 above the
          page's end -- without the footer growing */
@@ -260,6 +266,12 @@
       cctx.font = ccs.fontWeight + ' ' + ccs.fontSize + ' ' + ccs.fontFamily;
       var capTop = bl0(copy) - cctx.measureText('H').actualBoundingBoxAscent;
       var ceil0 = capTop - (fr.bottom - bl0(addrLast)) - hr.top;
+      if (window.matchMedia('(max-width: 40rem)').matches) {
+        /* phones: the address's long last line runs nearly across -- the dial stays above it, beside the
+           shorter lines, and may rise into the room over the copyright */
+        floor0 = relText(addrLast, 0).t - 4;
+        ceil0 = Math.min(ceil0, rel(copy, 0).t - 60);
+      }
       return { keep: lines, top: ceil0, bot: floor0, ceil: ceil0, centre: true, cy: (ceil0 + floor0) / 2, colR: hr.width, cx0: hr.width };
     }
     var words = [].filter.call(host.querySelectorAll('.clock-main .hm, .clock-main .dow, .clock-main .city'), function (e) { return e.getClientRects().length; })

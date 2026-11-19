@@ -1892,4 +1892,10 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 }
 .pre-foot li { transition: margin-right .25s ease; }   /* the widening eases out, and back */
 /* phones: no "Always open" line under the time */
-@media (max-width: 40rem) { .clock-main br + .city, .clock-main br + .city + br { display: none; } }
+@media (max-width: 40rem) { .site-foot .clock-main { display: none; } }   /* phones: no time line and no mail -- the dial alone, beside the copyright */
+@media (max-width: 40rem) {   /* phones: the copyright, then the address, the dial beside them (as on wide screens) */
+  .foot-copy { grid-column: 1; grid-row: 2; justify-self: start; align-self: start; line-height: 1.5; margin-top: 0; }
+  .foot-main .foot-copy { margin-top: 0; }
+  .foot-side > .foot-contact { grid-row: 3; margin-top: 0; }
+  .clocks { margin-top: 0; }
+}
