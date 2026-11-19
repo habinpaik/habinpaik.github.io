@@ -1705,3 +1705,5 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
   .card-title { margin-bottom: 0; }
   .card-foot { align-self: flex-end; }
 }
+/* thumbnails: a lighter dark under the words -- the blur does most of the work */
+.card-txt::after { background: linear-gradient(to top, rgba(0,0,0,.32), rgba(0,0,0,.06)); }
