@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
-<link rel="stylesheet" href="style.css?v=20261120u">
+<link rel="stylesheet" href="style.css?v=20261120v">
 </head>
 <body>
 <script>
@@ -487,7 +487,7 @@ f(); window.addEventListener('resize',f);})();
       var html = '<span class="floor"></span>';
       piles.forEach(function (p) {
         var r = p.getBoundingClientRect();
-        html += '<span class="mp" style="left:' + ((r.left - x0) * k).toFixed(1) + 'px;width:' + Math.max(1, r.width * k).toFixed(1) + 'px;height:calc(100% * ' + (r.height / maxH).toFixed(4) + ')"></span>';   /* in %, so the tallest is exactly as tall as the arrow buttons */
+        html += '<span class="mp" style="left:' + ((r.left - x0) * k).toFixed(1) + 'px;width:' + Math.max(1, r.width * k).toFixed(1) + 'px;height:calc((100% - 3px) * ' + (r.height / maxH).toFixed(4) + ')"></span>';   /* in %, so the tallest is exactly as tall as the arrow buttons */
       });
       html += '<span class="view"></span>';
       mapBox.innerHTML = html; mapView = mapBox.lastChild;
@@ -663,6 +663,6 @@ f(); window.addEventListener('resize',f);})();
   drawBoards();
 })();
 </script>
-<script src="site.js?v=20261120d"></script>
+<script src="site.js?v=20261120e"></script>
 </body>
 </html>

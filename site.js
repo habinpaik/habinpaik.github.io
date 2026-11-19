@@ -467,7 +467,7 @@
       var html = '<span class="floor"></span>';
       [].forEach.call(track.querySelectorAll('.card, .blur-card'), function (c) {
         var r = c.getBoundingClientRect();
-        html += '<span class="mp" style="left:' + ((r.left - x0) * k).toFixed(1) + 'px;width:' + Math.max(1, r.width * k).toFixed(1) + 'px;top:0"></span>';   /* full height: exactly the arrow buttons' height */
+        html += '<span class="mp" style="left:' + ((r.left - x0) * k).toFixed(1) + 'px;width:' + Math.max(1, r.width * k).toFixed(1) + 'px;top:3px"></span>';   /* from 3px under the frame's top to the bottom: exactly the arrow buttons' height */
       });
       html += '<span class="view" style="left:' + ((track.scrollLeft + E) * k).toFixed(1) + 'px;width:' + ((track.clientWidth - 2 * E) * k).toFixed(1) + 'px"></span>';
       map.innerHTML = html;

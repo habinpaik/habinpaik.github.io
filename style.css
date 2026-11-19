@@ -1776,3 +1776,6 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 .spine-nav .desk-map, .rail-map { border-bottom: 0; }
 .desk-map .view { top: 0; bottom: 0; box-sizing: border-box; }
 .desk-map .mp { bottom: 0; }
+/* bottoms only: the buttons, the frame and the pieces end on one line; the frame still rises 3px above
+   the buttons and the pieces */
+.spine-nav button, .blur-rail .rail-btn { margin-block: 3px 0; }
