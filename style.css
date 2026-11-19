@@ -1756,3 +1756,6 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 /* the arrow buttons as tall as the overview's filled pieces (not its frame): they stand on the same
    floor and reach as high as the tallest piece */
 .spine-nav button, .blur-rail .rail-btn { margin-block: 3px 1px; }
+/* the overview's frame: a dark grey, not near-black; pointing at it takes it to the words' grey */
+.desk-map .view { border-color: color-mix(in srgb, var(--stone) 65%, var(--paper)); }
+.desk-map:hover .view { border-color: var(--stone); }
