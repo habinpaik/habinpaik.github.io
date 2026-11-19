@@ -1651,3 +1651,31 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 .spine-wrap, .spine-shelf, .spine-wrap .spine-board, .blur-rail .rail-track { --fade-in: 2rem; }
 @media (max-width: 40rem) { .spine-wrap, .spine-shelf, .spine-wrap .spine-board, .blur-rail .rail-track { --fade-in: 1rem; } }
 .spine-wrap, .blur-rail .rail-track { --fade: calc(var(--ext) - var(--gutter) + var(--fade-in)); }
+
+/* Portfolio cards: the words go inside the photo, at its lower left, on the card news' frosted band --
+   the title white, the date in the dark-ground grey; cards 14px apart (10 on phones), as on Journalism,
+   and the words that far from the photo's edges */
+.card-rail:not(.blur-rail) { --inset: 14px; }
+@media (max-width: 40rem) { .card-rail:not(.blur-rail) { --inset: 10px; } }
+.card-rail:not(.blur-rail) .rail-track { gap: var(--inset); }
+@media (max-width: 40rem) { .card-rail:not(.blur-rail) .rail-track { gap: var(--inset); } }
+.card { position: relative; overflow: hidden; border: 0; background: var(--brand-deep); }
+.card-img { aspect-ratio: 4 / 5; }
+.card-txt {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 1; min-height: 0; flex: none;
+  padding: var(--s7) var(--inset) var(--inset); background: none; color: #fff; text-align: left;
+}
+.card-txt::before { display: none !important; }   /* no shade strip: the band is the ground */
+.card-txt::after {   /* the frosted band of the card news: blur + a little dark, fading out upward */
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  background: linear-gradient(to top, var(--veil), rgba(0,0,0,.14));
+  -webkit-mask-image: linear-gradient(to top, #000 55%, transparent);
+          mask-image: linear-gradient(to top, #000 55%, transparent);
+}
+.card-title { color: #fff; }
+.card-foot { padding-top: var(--s2); margin-top: 0; }
+.card .card-date { color: #A9A59D; }
+@media (max-width: 40rem) { .card-txt { min-height: 0; } }
+.card:hover .card-img img { transform: scale(1.05); }
+@media (hover: hover) { .card:hover .kh.kh.kh { text-decoration-color: #A9A59D; } }   /* on a photo: the dark-ground grey */
