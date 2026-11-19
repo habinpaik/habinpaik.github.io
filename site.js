@@ -353,7 +353,11 @@
       var t = hm(z.tz, now); point(cityHands[k], hourAng(t), R * 0.55); return { name: z.name, h: t.h };
     });
     var dow = (document.querySelector('.clock-main .dow') || {}).textContent;
-    var fkey = phone + '|' + Math.round(host.getBoundingClientRect().width) + '|' + dow;
+    /* the room is measured again every second: anything that moved it (a restored window, a font
+       arriving late, the time box leaving or joining the footer) brings a fresh fit */
+    var A1 = area(phone);
+    var fkey = phone + '|' + Math.round(host.getBoundingClientRect().width) + '|' + dow + '|' +
+      [A1.top, A1.bot, A1.colR, A1.cx, A1.cy].map(function (v) { return Math.round(v || 0); }).join(',');
     if (!fit || fit.key !== fkey) { fit = makeFit(now, phone); fit.key = fkey; lastKey = ''; }
     var groups = groupsAt(now, phone);
     var key = groups.map(function (g) { return g.names.join() + Math.round((g.a0 + g.a1) * 20); }).join('|');
@@ -388,6 +392,7 @@
   box.setAttribute('role', 'img');
   draw(); setInterval(draw, 1000);
   window.addEventListener('resize', function () { fit = null; sizes = {}; draw(); });
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) { fit = null; sizes = {}; lastKey = ''; draw(); } });   /* back from a minimised window */
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { fit = null; sizes = {}; draw(); });
 })();
 
