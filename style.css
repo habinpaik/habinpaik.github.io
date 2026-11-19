@@ -1846,22 +1846,9 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 
 /* ==== Explore More + clock, then the copyright and the address, and the page ends ====
    Explore More: the four cells one above another (1 x 4), each as wide as before (half the column),
-   the card news' gap between them; beside them, in the other half, the clock. Under both, the same
-   room as before, then the copyright and the address as one paragraph -- and nothing after it. */
+   the card news' gap between them. */
 .pf-row { display: grid; grid-template-columns: 1fr 1fr; column-gap: var(--card-gap); align-items: stretch; }
 .pre-foot .pf-row ul { grid-template-columns: 1fr; row-gap: var(--card-gap); }
-.pf-row .clocks { min-width: 0; margin-top: 0; }
-.pf-row .clocks p { overflow-wrap: anywhere; }
-.foot-main { display: block; padding-top: calc(var(--s2) + var(--sec-below)); }
-@media (min-width: 80rem) { .foot-main { padding-top: calc(var(--s2) + var(--sec-below)); } }
-.foot-side { display: block; }
-.foot-copy, .foot-side > .foot-contact { margin: 0; line-height: 1.5; white-space: normal; }
-.foot-copy { text-box-trim: trim-start; text-box-edge: cap alphabetic; }   /* the room above is measured to its capitals */
-.site-foot .wrap, .site-foot .wrap:is(*) { padding-top: 0; padding-bottom: 0; }
-@media (max-width: 40rem) { .site-foot .wrap { padding-bottom: 0; } }
-.site-foot .wrap::after { display: none; }   /* no shade at the end */
-.foot-contact > :last-child { text-box-trim: trim-end; text-box-edge: cap alphabetic; }   /* the page ends on the address's last baseline */
-
 /* the cells' photos: no darkening; at each cell's left a soft blur, fading out to the right, under the name */
 .pre-foot a::before { background: var(--pf-img) center / cover no-repeat; }
 .pre-foot li.tall a:is([href="/portfolio"], [href="/journalism"])::before { background-position: right center; }
@@ -1871,12 +1858,8 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
   -webkit-mask-image: linear-gradient(to right, #000 30%, transparent); mask-image: linear-gradient(to right, #000 30%, transparent);
 }
 .pre-foot li { overflow: hidden; }
-.foot-main .foot-copy, .foot-main .foot-copy:is(*) { margin: 0; }
 /* phones: the clock's words a size down, so the time and the mail fit the half beside the cells */
 @media (max-width: 40rem) { .pf-row .clocks p { font-size: var(--t-small); } .pf-row .foot-mail { white-space: nowrap; } }
-.foot-contact { text-box-trim: trim-end; text-box-edge: cap alphabetic; }   /* the page ends on its last baseline */
-.foot-main, .foot-side, .site-foot { padding-bottom: 0; margin-bottom: 0; }
-.site-foot { overflow: clip; overflow-clip-margin: 0.25em; }   /* nothing after the address: the page stops just under its descenders */
 /* the mail beside the cells is a plain link, not one of the cells */
 .pre-foot .clocks a.foot-mail { display: inline; position: static; overflow: visible; height: auto; padding: 0; margin: 0; color: var(--stone); background: none; }
 .pre-foot .clocks a.foot-mail::before, .pre-foot .clocks a.foot-mail::after { content: none; display: none; }
@@ -1884,3 +1867,21 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 /* the page you are on: plain crimson, no photo, no blur */
 .pre-foot a[aria-current="page"]::before, .pre-foot li.tall a[aria-current="page"]::before { background: var(--crimson); transform: none; }
 .pre-foot li:has(a[aria-current="page"])::after { display: none; }
+
+/* the footer as before (the dial beside the copyright and the address), and a little room under it:
+   --s5 from the last baseline to the page's end */
+.site-foot .wrap { padding-bottom: calc(var(--s5) - 0.51em + var(--foot-over, 0px)); }
+.site-foot .wrap::after { display: none; }
+
+/* the page you are on: its crimson runs out further to the right than the other cells, so it shows */
+.pre-foot li:has(a[aria-current="page"]) { margin-right: calc(-1 * var(--s6)); }
+
+/* the side stories' photos: blurred on phones (the box sits in the middle of them); on wider screens
+   only their left part, under the box, blurs, fading out to the right */
+.side-photo { position: relative; }
+.side-photo::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  -webkit-mask-image: linear-gradient(to right, #000 25%, transparent 55%); mask-image: linear-gradient(to right, #000 25%, transparent 55%);
+}
+@media (max-width: 34rem) { .side-photo::after { -webkit-mask-image: none; mask-image: none; } }
