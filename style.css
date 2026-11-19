@@ -1752,3 +1752,4 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 }
 /* Explore More: the chosen cell is plain crimson -- no shade on it */
 .pre-foot li:has(a[aria-current="page"])::before, .pre-foot a[aria-current="page"]::after { display: none; }
+@media (max-width: 40rem) { .card-img { aspect-ratio: 2 / 3; } }   /* portfolio thumbnails on phones: 2:3 */
