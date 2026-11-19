@@ -1890,3 +1890,6 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
   .pre-foot a:hover::before { transform: none; }
   .pre-foot li:hover:not(:has(a[aria-current="page"])) { margin-right: calc(-1 * var(--s4)); }
 }
+.pre-foot li { transition: margin-right .25s ease; }   /* the widening eases out, and back */
+/* phones: no "Always open" line under the time */
+@media (max-width: 40rem) { .clock-main br + .city, .clock-main br + .city + br { display: none; } }
