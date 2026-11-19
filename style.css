@@ -1762,3 +1762,4 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 /* the arrow buttons framed in the same dark grey as the overview's frame */
 .spine-nav button, .spine-nav button:hover, .spine-nav button:disabled, .spine-nav button:disabled:hover,
 .rail-btn, .rail-btn:hover, .rail-btn:disabled, .rail-btn:disabled:hover { border-color: color-mix(in srgb, var(--stone) 65%, var(--paper)); }
+.spine-nav button, .rail-btn { padding-inline: 10px; }   /* narrower arrow buttons */
