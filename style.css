@@ -1353,7 +1353,7 @@ section:has(.spine-panel) + section > h2.section-title { background: none; borde
    across the margins beyond the column -- no blur, no cut. On phones, where there is no margin, over
    the last 1.5rem. */
 .desk-edge { display: none !important; }
-.spine-wrap { --fade: max(1.5rem, var(--ext) - var(--gutter)); }
+.spine-wrap { --fade: max(3rem, var(--ext) - var(--gutter) + 2rem); }
 .spine-shelf, .spine-wrap .spine-board {
   -webkit-mask-image: linear-gradient(to right, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent);
           mask-image: linear-gradient(to right, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent);
@@ -1622,7 +1622,7 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 .card-rail.blur-rail { margin-right: 0; }
 .blur-rail .rail-track {
   --ext: max(var(--gutter), min((100vw - var(--sbw, 0px) - 46rem) / 2 + var(--gutter), var(--gutter) + 5rem));
-  --fade: max(1.5rem, var(--ext) - var(--gutter));
+  --fade: max(3rem, var(--ext) - var(--gutter) + 2rem);
   margin-inline: calc(var(--gutter) - var(--ext)); padding-inline: calc(var(--ext) - var(--gutter));
   scroll-padding-inline: calc(var(--ext) - var(--gutter));
   -webkit-mask-image: linear-gradient(to right, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent);
@@ -1631,3 +1631,23 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 .blur-rail .rail-foot { justify-content: center; align-items: stretch; padding-right: 0; gap: var(--s2); }
 .blur-rail .rail-btn { display: flex; }   /* on phones too, as the desk's */
 @media (max-width: 40rem) { .blur-card { flex-basis: calc((100vw - var(--sbw, 0px) - 2 * var(--gutter) - var(--inset)) / 2); } }
+
+/* the fades only where there is more to see: at the start of a row its left edge stays sharp, at the
+   end its right edge (site.js / research.html set .at-start / .at-end); they ease in and out */
+@property --fl { syntax: '<length>'; inherits: false; initial-value: 0px; }
+@property --fr { syntax: '<length>'; inherits: false; initial-value: 0px; }
+.spine-shelf, .spine-wrap .spine-board, .blur-rail .rail-track {
+  --fl: var(--fade); --fr: var(--fade); transition: --fl .3s ease, --fr .3s ease;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 var(--fl), #000 calc(100% - var(--fr)), transparent);
+          mask-image: linear-gradient(to right, transparent, #000 var(--fl), #000 calc(100% - var(--fr)), transparent);
+}
+.spine-shelf.at-start, .spine-wrap.at-start .spine-board, .blur-rail .rail-track.at-start { --fl: 0px; }
+.spine-shelf.at-end, .spine-wrap.at-end .spine-board, .blur-rail .rail-track.at-end { --fr: 0px; }
+
+/* the rows run out to the screen's edge wherever the margin is narrow (phones included): the desk and
+   the card news both use the whole margin beyond the column, up to 5rem; the fade covers that margin
+   and runs 2rem into the column (1rem on phones) -- and only on a side with more to see */
+.spine-wrap, .blur-rail .rail-track { --ext: calc(var(--gutter) + min(5rem, max(var(--gutter), (100vw - var(--sbw, 0px) - 46rem) / 2 + var(--gutter)))); }
+.spine-wrap, .spine-shelf, .spine-wrap .spine-board, .blur-rail .rail-track { --fade-in: 2rem; }
+@media (max-width: 40rem) { .spine-wrap, .spine-shelf, .spine-wrap .spine-board, .blur-rail .rail-track { --fade-in: 1rem; } }
+.spine-wrap, .blur-rail .rail-track { --fade: calc(var(--ext) - var(--gutter) + var(--fade-in)); }

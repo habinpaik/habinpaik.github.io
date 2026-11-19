@@ -477,6 +477,7 @@
       if (thumb) { var w = track.clientWidth / track.scrollWidth; thumb.style.width = (Math.min(1, w) * 100) + '%'; thumb.style.left = (max > 0 ? (track.scrollLeft / max) * (1 - w) * 100 : 0) + '%'; }
       if (prev) prev.disabled = track.scrollLeft <= 1;
       if (next) next.disabled = track.scrollLeft >= max - 1;
+      track.classList.toggle('at-start', track.scrollLeft <= 1); track.classList.toggle('at-end', track.scrollLeft >= max - 1);
       drawMap();
     }
     if (prev) prev.addEventListener('click', function () { track.scrollBy({ left: -step(), behavior: 'smooth' }); });
