@@ -1596,3 +1596,8 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 .feat { --inset: 16px; }
 @media (max-width: 34rem) { .feat { --inset: 12px; } }
 .feat .feat-head { bottom: var(--inset); }   /* the photo's headline as close to its foot as the boxes below keep their letters */
+/* a touch tighter still, and the boxes under the photo two thirds, then one third, of its width */
+.feat { --inset: 14px; }
+@media (max-width: 34rem) { .feat { --inset: 10px; } }
+.feat .tuck-story, .feat .print-tab { width: calc(100% * 2 / 3); }
+.feat .tuck-story + .print-tab { width: calc(100% / 3); }
