@@ -1779,3 +1779,5 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 /* bottoms only: the buttons, the frame and the pieces end on one line; the frame still rises 3px above
    the buttons and the pieces */
 .spine-nav button, .blur-rail .rail-btn { margin-block: 3px 0; }
+/* the arrows in the frames' dark grey (a spent arrow stays faint) */
+.spine-nav button:not(:disabled), .spine-nav button:not(:disabled):hover, .rail-btn:not(:disabled), .rail-btn:not(:disabled):hover { color: color-mix(in srgb, var(--stone) 65%, var(--paper)); }
