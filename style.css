@@ -1590,3 +1590,9 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 .rail-btn { display: none; margin: 0; }
 @media (hover: hover) and (pointer: fine) { .rail-btn { display: flex; } }
 .rail-btn:disabled { cursor: default; }
+
+/* the three stacked boxes of a featured story (photo, companion story, print PDF): a little tighter
+   than the site's box inset -- 16px from edge to letters (12px on phones) instead of 20 (14) */
+.feat { --inset: 16px; }
+@media (max-width: 34rem) { .feat { --inset: 12px; } }
+.feat .feat-head { bottom: var(--inset); }   /* the photo's headline as close to its foot as the boxes below keep their letters */
