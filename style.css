@@ -1691,3 +1691,17 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 /* thumbnail titles: up to two lines, then … */
 .card-title { white-space: normal; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; }
 .card-title { text-wrap: balance; }   /* two even lines, not one long and a word */
+
+/* thumbnail words: the title (two lines) at the lower left, the date at the lower right, on one foot */
+.card-txt { display: flex; flex-direction: row; align-items: flex-end; justify-content: space-between; gap: var(--s4); text-align: left; }
+.card-title { flex: 1 1 auto; min-width: 0; text-box-trim: trim-both; text-box-edge: cap alphabetic; }
+.card-foot { flex: 0 0 auto; padding-top: 0; margin: 0; }
+/* the title's last line and the date share one baseline, --inset above the photo's foot; the title
+   keeps its whole line box (no trimming), so the clamp never cuts its descenders */
+.card-txt { align-items: last baseline; }
+.card-title { text-box-trim: none; margin-bottom: -0.5em; padding-bottom: 0; }
+@media (max-width: 40rem) {   /* phones: too narrow for both on one foot -- the title over the date */
+  .card-txt { flex-direction: column; align-items: stretch; gap: var(--s2); }
+  .card-title { margin-bottom: 0; }
+  .card-foot { align-self: flex-end; }
+}
