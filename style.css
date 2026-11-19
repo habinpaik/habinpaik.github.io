@@ -1753,3 +1753,22 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 /* Explore More: the chosen cell is plain crimson -- no shade on it */
 .pre-foot li:has(a[aria-current="page"])::before, .pre-foot a[aria-current="page"]::after { display: none; }
 @media (max-width: 40rem) { .card-img { aspect-ratio: 2 / 3; } }   /* portfolio thumbnails on phones: 2:3 */
+
+/* ---- the row switch (the desk's and the card news'): one object, not three boxes -- a single strip
+   with the light shade along its top, the two arrows at its ends and the overview between them, all
+   without lines. Pointing at an arrow lays the strong shade over it (at once); pressing darkens the
+   arrow. In the overview the pieces are a faint tone, and the part in view is marked by the strong
+   shade and a little more tone, not a frame ---- */
+.spine-nav, .blur-rail .rail-foot { position: relative; gap: 0; width: fit-content; margin-inline: auto; }
+.spine-nav::before, .blur-rail .rail-foot::before { content: ""; position: absolute; inset: 0 0 auto 0; height: var(--s2); background: var(--shade-light); pointer-events: none; z-index: 1; }
+.spine-nav button, .spine-nav button:hover, .spine-nav button:disabled, .rail-btn, .rail-btn:hover, .rail-btn:disabled,
+.spine-nav button:not(:disabled):active, .rail-btn:not(:disabled):active { border-color: transparent; background: none; }
+.spine-nav button::after, .rail-btn::after { display: none; }
+.spine-nav button::before, .rail-btn::before { transition: none; }
+.spine-nav button:not(:disabled):active, .rail-btn:not(:disabled):active { color: var(--ink); }
+.spine-nav button:not(:disabled):active::before, .rail-btn:not(:disabled):active::before { opacity: 1; }
+.spine-nav .desk-map, .rail-map { flex-basis: 9rem; }
+.desk-map .floor { display: none; }
+.desk-map .mp { bottom: 0; background: color-mix(in srgb, var(--ink) 11%, transparent); }
+.desk-map .view, .desk-map:hover .view { border: 0; background: var(--shade-strong), color-mix(in srgb, var(--ink) 6%, transparent); transition: none; }
+.desk-map:hover .view { background: var(--shade-strong), color-mix(in srgb, var(--ink) 10%, transparent); }
