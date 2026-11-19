@@ -448,6 +448,17 @@
     var track = rail.querySelector('.rail-track'), thumb = rail.querySelector('.rail-thumb'),
         prev = rail.querySelector('.rail-btn.prev'), next = rail.querySelector('.rail-btn.next');
     function step() { var c = track.querySelector('.card, .blur-card'); return c ? c.getBoundingClientRect().width + parseFloat(getComputedStyle(track).columnGap || 0) : 300; }
+    /* blurred, fading edges where more of the row lies that way (as the desk's) */
+    var edges = rail.classList.contains('blur-rail') ? ['l', 'r'].map(function (k) {
+      var d = document.createElement('div'); d.className = 'desk-edge ' + k; d.setAttribute('aria-hidden', 'true');
+      d.innerHTML = '<span></span><span></span><span></span>'; rail.appendChild(d); return d;
+    }) : [];
+    function edgesUpdate() {
+      if (!edges.length) return;
+      var x = track.scrollLeft, max = track.scrollWidth - track.clientWidth;
+      edges[0].classList.toggle('on', x > 2); edges[1].classList.toggle('on', x < max - 2);
+      edges.forEach(function (d) { d.style.top = track.offsetTop + 'px'; d.style.height = track.clientHeight + 'px'; d.style.bottom = 'auto'; });
+    }
     var map = rail.querySelector('.rail-map'), drag = false;
     function drawMap() {   /* the whole row in miniature, a frame round the part in view (as the desk's) */
       if (!map || !map.offsetParent) return;
@@ -478,7 +489,7 @@
       if (prev) prev.disabled = track.scrollLeft <= 1;
       if (next) next.disabled = track.scrollLeft >= max - 1;
       track.classList.toggle('at-start', track.scrollLeft <= 1); track.classList.toggle('at-end', track.scrollLeft >= max - 1);
-      drawMap();
+      drawMap(); edgesUpdate();
     }
     if (prev) prev.addEventListener('click', function () { track.scrollBy({ left: -step(), behavior: 'smooth' }); });
     if (next) next.addEventListener('click', function () { track.scrollBy({ left: step(), behavior: 'smooth' }); });
@@ -667,14 +678,23 @@ document.addEventListener('touchstart', function () {}, { passive: true });
       var cs = getComputedStyle(bar), room = bar.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
       return brand.getBoundingClientRect().width + (parseFloat(cs.columnGap) || 0) + nav.getBoundingClientRect().width > room + 0.5;
     }
-    bar.style.minHeight = ''; nav.style.transform = ''; brand.style.transform = '';
+    bar.style.minHeight = ''; nav.style.transform = ''; brand.style.transform = ''; nav.style.removeProperty('--nav-gap');
     var h0 = bar.getBoundingClientRect().height, n0 = nav.getBoundingClientRect().top;   /* the bar as it is with the full name */
     if (over()) { head.classList.add('name-stack');
       /* the smaller name must not make the bar shorter or move the menu: keep the bar's height, and
          nudge the menu back to where it stood */
       bar.style.minHeight = h0 + 'px';
       if (over()) { head.classList.remove('name-stack'); head.classList.add('two-row'); bar.style.minHeight = ''; }   /* two rows have room again: the usual letters */
-      else {   /* both, so the small name still sits on the menu's baseline */
+      else {
+        /* the menu's items get back as much of their usual gap as the room allows (not just 10px),
+           keeping at least the bar's least gap between name and menu */
+        var cs = getComputedStyle(bar), room = bar.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+        var n = nav.querySelectorAll('a').length, g0 = parseFloat(getComputedStyle(nav).columnGap) || 10;
+        var slack = room - brand.getBoundingClientRect().width - nav.getBoundingClientRect().width - 2 * (parseFloat(cs.columnGap) || 0);
+        var full = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--s4')) * 16 || 20;
+        if (n > 1 && slack > 0) nav.style.setProperty('--nav-gap', Math.min(full, g0 + slack / (n - 1)).toFixed(1) + 'px');
+      }
+      if (!head.classList.contains('two-row')) {   /* both, so the small name still sits on the menu's baseline */
         var dn = n0 - nav.getBoundingClientRect().top;
         if (Math.abs(dn) > 0.2) nav.style.transform = brand.style.transform = 'translateY(' + dn + 'px)';
       }

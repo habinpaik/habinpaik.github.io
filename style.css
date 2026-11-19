@@ -1707,3 +1707,46 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 }
 /* thumbnails: a lighter dark under the words -- the blur does most of the work */
 .card-txt::after { background: linear-gradient(to top, rgba(0,0,0,.32), rgba(0,0,0,.06)); }
+
+/* ---- one gap between cards, everywhere: 10px (6px on phones) -- card news, the photo pairs, the
+   portfolio thumbnails ---- */
+:root { --card-gap: 10px; }
+@media (max-width: 40rem) { :root { --card-gap: 6px; } }
+.blur-rail .rail-track, .card-rail:not(.blur-rail) .rail-track, .overlay-duo, .overlay-duo.tall { gap: var(--card-gap); }
+@media (max-width: 40rem) { .blur-card { flex-basis: calc((100vw - var(--sbw, 0px) - 2 * var(--gutter) - var(--card-gap)) / 2); } }
+
+/* ---- the boxes under a featured photo take the width their words need (no set fraction): the
+   companion story at most the photo's width less a step each side, the PDF tab just its label ---- */
+.tuck-story, .feat .tuck-story { width: fit-content; max-width: calc(100% - 2 * var(--s5)); }
+.print-tab, .feat .print-tab, .tuck-story + .print-tab, .feat .tuck-story + .print-tab { width: fit-content; max-width: 100%; white-space: nowrap; }
+@media (max-width: 34rem) { .tuck-story, .feat .tuck-story { width: fit-content; max-width: calc(100% - 2 * var(--s4)); } .tuck-story + .print-tab { width: fit-content; } }
+.tuck-story :is(.kh, .en, .meta, p) { text-wrap: balance; }
+
+/* ---- phones: the election boxes narrower, so the stack reads as a stack ---- */
+@media (max-width: 40rem) { .ebox { width: calc(72% - 2 * var(--inset)); } }
+
+/* ---- side-scrolling rows (the desk, the card news): at a side with more to see, the row blurs away
+   progressively and fades to the ground -- three blur layers stronger toward the edge, and a wash of
+   paper; on phones only over the margin ---- */
+.spine-wrap, .spine-shelf, .spine-wrap .spine-board, .blur-rail .rail-track { --fade-in: 2rem; }
+@media (max-width: 40rem) { .spine-wrap, .spine-shelf, .spine-wrap .spine-board, .blur-rail .rail-track, .card-rail.blur-rail { --fade-in: 0rem; } }
+.card-rail.blur-rail { position: relative;
+  --ext: calc(var(--gutter) + min(5rem, max(var(--gutter), (100vw - var(--sbw, 0px) - 46rem) / 2 + var(--gutter))));
+  --fade: calc(var(--ext) - var(--gutter) + var(--fade-in)); }
+@media (min-width: 40.01rem) { .card-rail.blur-rail { --fade-in: 2rem; } }
+.spine-shelf, .blur-rail .rail-track { -webkit-mask-image: none; mask-image: none; }   /* the edges do it now */
+.desk-edge { display: block !important; top: 0; width: var(--fade); }
+.desk-edge.r { left: auto; right: calc(2 * var(--gutter) - var(--ext)); transform: none; }
+.desk-edge.l { right: auto; left: calc(2 * var(--gutter) - var(--ext)); transform: scaleX(-1); }
+.blur-rail > .desk-edge.r { right: calc(var(--gutter) - var(--ext)); }
+.blur-rail > .desk-edge.l { left: calc(var(--gutter) - var(--ext)); }
+.desk-edge span:nth-child(1) { backdrop-filter: blur(1.5px); -webkit-backdrop-filter: blur(1.5px); }
+.desk-edge span:nth-child(2) { backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+.desk-edge span:nth-child(3) { backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+.desk-edge::after { background: linear-gradient(to right, transparent, color-mix(in srgb, var(--paper) 55%, transparent) 60%, var(--paper)); }
+
+/* ---- portfolio thumbnails on phones: taller, and a little more dark under the words ---- */
+@media (max-width: 40rem) {
+  .card-img { aspect-ratio: 1 / 1; }
+  .card-txt::after { background: linear-gradient(to top, rgba(0,0,0,.42), rgba(0,0,0,.08)); }
+}
