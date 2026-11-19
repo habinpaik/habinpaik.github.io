@@ -1770,3 +1770,9 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 .desk-map .mp { bottom: 0; }
 .desk-map .view { bottom: -1px; }
 .spine-nav .desk-map, .rail-map { border-bottom-color: transparent; }   /* no floor line */
+/* the overview exactly as tall as the arrow buttons, and everything in it on the same two edges: its
+   frame, its tallest piece and the buttons share top and bottom -- one row, no stray pixel */
+.spine-nav button, .blur-rail .rail-btn { margin-block: 0; }
+.spine-nav .desk-map, .rail-map { border-bottom: 0; }
+.desk-map .view { top: 0; bottom: 0; box-sizing: border-box; }
+.desk-map .mp { bottom: 0; }
