@@ -1813,3 +1813,28 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
   font-family: var(--sans); font-size: var(--t-small); line-height: 1.5; color: var(--stone); white-space: nowrap;
 }
 @media (min-width: 76rem) { .site-head .updated { display: block; } }
+
+/* ---- Explore More: each cell on its own photo, darkened under white names; the page you are on keeps
+   its crimson, laid over its photo. Pointing at a cell enlarges its photo (as the stories do) and the
+   strong shade comes along its top. Where a cell is taller than wide, the two photos with the name in
+   them are cropped to their right-hand part ---- */
+.pre-foot a[href="/"]           { --pf-img: url("images/explore/home.jpg"); }
+.pre-foot a[href="/research"]   { --pf-img: url("images/explore/research.jpg"); }
+.pre-foot a[href="/journalism"] { --pf-img: url("images/explore/journalism.jpg"); }
+.pre-foot a[href="/portfolio"]  { --pf-img: url("images/explore/portfolio.jpg"); }
+.pre-foot a { color: #fff; }
+.pre-foot a::before {
+  content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background: linear-gradient(rgba(0,0,0,.48), rgba(0,0,0,.48)), var(--pf-img) center / cover no-repeat;
+  transition: transform .4s ease;
+}
+.pre-foot li.tall a:is([href="/portfolio"], [href="/journalism"])::before { background-position: center, right center; }
+@media (hover: hover) { .pre-foot a:hover::before { transform: scale(1.05); } }
+.pre-foot .pf-name { position: relative; z-index: 2; }
+.pre-foot li:has(a[aria-current="page"]) { background: none; }
+.pre-foot a[aria-current="page"]::before {
+  background: linear-gradient(color-mix(in srgb, var(--crimson) 84%, transparent), color-mix(in srgb, var(--crimson) 84%, transparent)), var(--pf-img) center / cover no-repeat;
+}
+.pre-foot li.tall a[aria-current="page"]:is([href="/portfolio"], [href="/journalism"])::before { background-position: center, right center; }
+.pre-foot a::after { z-index: 1; }
+.pre-foot li::before { z-index: 1; }

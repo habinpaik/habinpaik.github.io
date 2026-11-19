@@ -800,3 +800,11 @@ document.addEventListener('touchstart', function () {}, { passive: true });
   window.addEventListener('resize', align);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(align);
 })();
+
+/* Explore More: mark the cells that stand taller than wide (their photos crop differently) */
+(function () {
+  var lis = document.querySelectorAll('.pre-foot li'); if (!lis.length) return;
+  function set() { [].forEach.call(lis, function (li) { li.classList.toggle('tall', li.offsetHeight > li.offsetWidth); }); }
+  set(); window.addEventListener('resize', set); window.addEventListener('load', set);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(set);
+})();
