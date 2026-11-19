@@ -58,7 +58,11 @@
   --shade-strong: linear-gradient(to bottom, var(--sh-strong), transparent 12px);
   --shade-light:  linear-gradient(to bottom, var(--sh-light), transparent var(--s2));   /* a short fade, 8px */
   --dial-rim: #E0DDD7; --dial-home: #E0DDD7; --dial-city: #862633; --dial-pin: #1A1A1A; --dial-lab: var(--stone);   /* the dial's colours, by day */
-  --sec-gap: calc(1.5625rem - 0.5em);   /* above a section line: last baseline -> line = 25px (0.5em of the line sits under the baseline) */
+  /* the section rhythm, in two numbers: the last line of text -> a section line (--sec-above), and the
+     line's shade -> the next title's capitals (--sec-below, twice that) */
+  --sec-above: 2.25rem;   /* 36px (was 25) */
+  --sec-below: 4.5rem;    /* 72px (was 50) */
+  --sec-gap: calc(var(--sec-above) - 0.5em);   /* above a section line: last baseline -> line = --sec-above (0.5em of the line sits under the baseline) */
   --inset: var(--s4);   /* box inset, edge -> letters on every side: the paragraph gap; a step less on phones */
   --crimson: #862633;   /* 고려대 교색 Crimson, PANTONE 202C */
   --on-fill: var(--paper);   /* words on a crimson (or coloured) fill: the page's own ground, day and night */
@@ -342,7 +346,7 @@ p.dek {
   position: relative;
   padding-bottom: var(--sec-gap); border-bottom: 1px solid var(--line);
 }
-p.dek, main > p.dek:first-child { margin: 0 0 calc(var(--s2) + 3.125rem - 0.265 * var(--t-body)); }
+p.dek, main > p.dek:first-child { margin: 0 0 calc(var(--s2) + var(--sec-below) - 0.265 * var(--t-body)); }
 p.dek::after { content: ""; position: absolute; left: 0; right: 0; top: calc(100% + 1px);   /* under the line, not over it */ height: var(--s2); background: var(--shade-light); pointer-events: none; }
 
 
@@ -356,7 +360,7 @@ h2.section-title {
   /* every section opens with a hairline across the text column, with a short shade under it.
      Text above -> line = 25px (--sec-gap); from the shade's end (--s2) down to the title's capitals is
      twice that, 50px; 0.37em is the space above the capitals in the title's line */
-  padding-top: calc(var(--s2) + 3.125rem - 0.37em);
+  padding-top: calc(var(--s2) + var(--sec-below) - 0.37em);
   border-top: 1px solid var(--line);
   background: var(--shade-light) no-repeat;
 }
@@ -1014,7 +1018,7 @@ a:focus-visible { outline: 2px solid var(--crimson); outline-offset: 3px; }
 /* Research: the bookshelf box runs straight into the dark footer -- no white strip between */
 main.shelf-end { padding-bottom: 0; }
 .shelf-box [hidden] { display: none !important; }
-.shelf-box:has(.spine-panel) { padding-bottom: calc(1.5625rem - var(--sec-gap)); }   /* the desk closes like text: arrow buttons -> section line 25px */
+.shelf-box:has(.spine-panel) { padding-bottom: calc(var(--sec-above) - var(--sec-gap)); }   /* the desk closes like text: arrow buttons -> section line 25px */
 .shelf-box.no-covers .spine-panel { padding-bottom: 20px; }
 .shelf-box.no-spines .shelf-panel { padding-top: 20px; }   /* 가로책장이 숨으면 박스 위→표지 첫 줄도 20px */   /* 표지책장이 숨으면 바닥 막대 아래 여백 8px */
 .shelf-filter { margin-top: var(--s3); }   /* 각주 아래, 회색 박스 밖 */
@@ -1466,7 +1470,7 @@ main > section:last-of-type, main > section:last-of-type > :last-child { margin-
 .shelf-panel { padding-bottom: 0; }   /* the note is the bookshelf's last line of text */
 /* a page that ends on a box (a rail of cards, its arrow buttons) keeps the box's edge 25px off the line, as the desk's arrows */
 /* a section that ends on boxes (a rail of cards, the election boxes) keeps the boxes' edge 25px off the next line */
-main > section:has(> .card-rail:last-child), main > section:has(> .election:last-child) { padding-bottom: calc(1.5625rem - var(--sec-gap)); }
+main > section:has(> .card-rail:last-child), main > section:has(> .election:last-child) { padding-bottom: calc(var(--sec-above) - var(--sec-gap)); }
 /* a section that ends on a photo: its caption's last line 25px off the next line, as text */
 main > section > figure:last-child { margin-bottom: 0; }
 main > section > figure:last-child figcaption { padding-bottom: calc((var(--t-body) - var(--t-small)) / 2); }
@@ -1480,8 +1484,8 @@ section > .fact:last-child { padding-bottom: 0.068em; }   /* the sans list sits 
 .site-foot { border-top: 0; background-image: none; }
 .pre-foot { padding-bottom: 0; }
 .site-foot .wrap { padding-top: 0; }   /* the footer's line meets the bottom of the Explore More grid: the cross's upright stands on it */
-.foot-main { border-top: 0; background: none;   /* no line under Explore More's last row */   /* no shade under Explore More's last row */ padding-top: calc(var(--s2) + 3.125rem); }
-@media (min-width: 80rem) { .foot-main { padding-top: calc(var(--s2) + 3.125rem - 0.28em); } }
+.foot-main { border-top: 0; background: none;   /* no line under Explore More's last row */   /* no shade under Explore More's last row */ padding-top: calc(var(--s2) + var(--sec-below)); }
+@media (min-width: 80rem) { .foot-main { padding-top: calc(var(--s2) + var(--sec-below) - 0.28em); } }
 
 /* wide screens: the rail the time and mail ride in the right sketch area (laid by site.js) */
 .time-rail { position: absolute; top: 0; z-index: 40; display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-end; padding-right: var(--s5); box-sizing: border-box; pointer-events: none; }
