@@ -1793,3 +1793,8 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 /* phones: "Tilt your phone" between the two names under the board, until the phone is tilted */
 .jc-hint { color: var(--stone); transition: opacity .6s ease; }
 .jc-hint.gone { opacity: 0; }
+
+/* under the footer (the address and the clocks), the page ends with a section's whole gap of room: the
+   space above a line, the line's shade and the space under it, as between any two sections */
+.site-foot .wrap { padding-bottom: calc(var(--sec-above) + var(--s2) + var(--sec-below)); }
+.site-foot .wrap { padding-bottom: calc(var(--sec-above) + var(--s2) + var(--sec-below) + var(--foot-over, 0px)); }

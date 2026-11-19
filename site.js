@@ -752,3 +752,18 @@ document.addEventListener('touchstart', function () {}, { passive: true });
   set(); window.addEventListener('resize', set); window.addEventListener('load', set);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(set);
 })();
+
+/* the footer's last ink (on wide screens the dial's city names hang below the footer's box) keeps the
+   whole section gap under it: the overhang is added to the room below */
+(function () {
+  var fm = document.querySelector('.foot-main'), wrap = document.querySelector('.site-foot .wrap');
+  if (!fm || !wrap) return;
+  function set() {
+    var low = fm.getBoundingClientRect().bottom;
+    [].forEach.call(fm.querySelectorAll('.aclock .lab, .aclock'), function (e) { if (e.getClientRects().length) low = Math.max(low, e.getBoundingClientRect().bottom); });
+    wrap.style.setProperty('--foot-over', Math.max(0, low - fm.getBoundingClientRect().bottom) + 'px');
+  }
+  set(); window.addEventListener('resize', set); window.addEventListener('load', set);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(set);
+  setTimeout(set, 1500);
+})();
