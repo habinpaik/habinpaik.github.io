@@ -767,3 +767,10 @@ document.addEventListener('touchstart', function () {}, { passive: true });
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(set);
   setTimeout(set, 1500);
 })();
+
+/* clean addresses: /research, not /research.html (and / for the home page) -- an old link still
+   works, and the address bar is tidied without reloading */
+(function () {
+  var p = location.pathname, q = p.replace(/\/index\.html$/, '/').replace(/\.html$/, '');
+  if (q !== p && history.replaceState) history.replaceState(history.state, '', q + location.search + location.hash);
+})();
