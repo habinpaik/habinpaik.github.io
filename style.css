@@ -1601,3 +1601,7 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 @media (max-width: 34rem) { .feat { --inset: 10px; } }
 .feat .tuck-story, .feat .print-tab { width: calc(100% * 2 / 3); }
 .feat .tuck-story + .print-tab { width: calc(100% / 3); }
+/* Journalism: every story box and button keeps the featured story's tighter inset -- 14px from edge
+   to letters (10px on phones) instead of the site's 20 (14) */
+.j-page { --inset: 14px; }
+@media (max-width: 34rem) { .j-page { --inset: 10px; } }

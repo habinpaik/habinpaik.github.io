@@ -511,7 +511,7 @@ document.addEventListener('touchstart', function () {}, { passive: true });
     var pad = parseFloat(getComputedStyle(main).paddingLeft) || 0, m = main.getBoundingClientRect();
     rail.style.left = (pad - 56 - nav.offsetWidth) + 'px';   /* --s7 left of the text column */
     var hh = head ? head.offsetHeight : 0;
-    nav.style.top = (hh + 40) + 'px';
+    nav.style.top = 'calc(50vh - ' + (nav.offsetHeight / 2) + 'px)';   /* it sticks in the screen's vertical middle */
     rail.style.top = '0px';
     var itemOff = baseline(links[0]) - nav.getBoundingClientRect().top;   /* the first item's baseline, from the outline's top */
     rail.style.top = (baseline(heads[0]) - m.top - itemOff) + 'px';    /* level with the first title's baseline */
