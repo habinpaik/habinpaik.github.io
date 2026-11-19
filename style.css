@@ -1785,3 +1785,7 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 .spine-nav button, .blur-rail .rail-btn { margin-block: 3px 0; }
 /* the arrows in the frames' dark grey (a spent arrow stays faint) */
 .spine-nav button:not(:disabled), .spine-nav button:not(:disabled):hover, .rail-btn:not(:disabled), .rail-btn:not(:disabled):hover { color: color-mix(in srgb, var(--stone) 65%, var(--paper)); }
+
+/* Journalism cover: the board's centre where jcover.js puts it -- the opener and the board centred as one */
+.jc-ring, .jc-board { top: var(--bcy, calc(var(--res, 0px) + (100% - var(--res, 0px)) / 2 - 14px)); }
+.jc-labels { top: calc(var(--bcy, 50%) + var(--bh) / 2 + 2rem); }

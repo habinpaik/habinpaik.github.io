@@ -67,7 +67,15 @@
     stage.style.setProperty('--cw', CW + 'px');
     LIFTZ = Math.max(0, Math.min(1200, 1700 * (1 - CW / (0.5 * BW))));   /* each card then half the board's width */
     stage.style.setProperty('--bh', BH + 'px'); stage.style.setProperty('--bw', BW + 'px');
+    /* the opener and the board together, as one group, centred in the screen under the menu bar (not
+       the board alone in the room left under the opener) */
+    if (dek) {
+      var gap = portrait ? 16 : 28, dh = dek.offsetHeight, pad0 = parseFloat(getComputedStyle(dek.closest('main')).paddingTop) || 0;
+      DEKTOP = Math.max(pad0, (stage.clientHeight - (dh + gap + BH)) / 2);
+      stage.style.setProperty('--bcy', (DEKTOP + dh + gap + BH / 2) + 'px');
+    }
   }
+  var DEKTOP = 0;
 
   /* Each face shows its strip of the photo, the photo cropped to fill the faces' full run, centred.
      The strips are not equal slices: seen from the far end of its turn (the board at +-MAX), the board's
@@ -213,6 +221,28 @@
   stage.addEventListener('pointerdown', function (e) { if (e.pointerType !== 'mouse') { dragX = e.clientX; dragged = false; } });
   window.addEventListener('pointerup', function () { dragX = null; });
 
+  /* phones: the board follows the phone's tilt -- tipping it left or right turns the board that way,
+     as moving the mouse does (iOS asks for leave first, on the first touch of the cover) */
+  var tiltAt = 0, dragAt = 0;
+  function onTilt(e) {
+    if (e.gamma == null || mode !== 'live' || dragX != null || performance.now() - dragAt < 1500) return;
+    var o = stage.getBoundingClientRect(); if (o.bottom < 0 || o.top > innerHeight) return;   /* only while the cover is on screen */
+    var ang = (screen.orientation && screen.orientation.angle) || window.orientation || 0;
+    var g = ang === 90 ? e.beta : ang === -90 || ang === 270 ? -e.beta : ang === 180 ? -e.gamma : e.gamma;   /* left-right tilt, whichever way the phone is held */
+    target = clamp(g * 1.6, -MAX, MAX); user = true;
+    if (performance.now() - tiltAt > 30) { tiltAt = performance.now(); follow(); }
+  }
+  if (window.DeviceOrientationEvent && matchMedia('(pointer: coarse)').matches) {
+    window.addEventListener('deviceorientation', onTilt);   /* where no leave is needed (Android), this is all */
+    if (typeof DeviceOrientationEvent.requestPermission === 'function') {   /* where it is (iOS), asked on the first touch */
+      stage.addEventListener('pointerdown', function ask() {
+        stage.removeEventListener('pointerdown', ask);
+        DeviceOrientationEvent.requestPermission().catch(function () {});
+      });
+    }
+  }
+  window.addEventListener('pointerup', function () { if (dragged) dragAt = performance.now(); });
+
   /* a click on the board: another pair */
   board.addEventListener('click', function () {
     if (mode !== 'live' || dragged) { dragged = false; return; }
@@ -260,7 +290,7 @@
       var cs = getComputedStyle(dek);
       slot.style.height = (dek.offsetHeight + parseFloat(cs.marginBottom)) + 'px';
       var head = document.querySelector('.site-head');
-      at = (head ? head.offsetHeight : 0) + (parseFloat(getComputedStyle(slot.parentNode).paddingTop) || 0);
+      measure(); at = (head ? head.offsetHeight : 0) + DEKTOP;   /* the top of the centred group */
       place();
     };
     var place = function () {
