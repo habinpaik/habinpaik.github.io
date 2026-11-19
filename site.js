@@ -148,7 +148,9 @@
     line.setAttribute('x2', C + Math.sin(ang) * len); line.setAttribute('y2', C - Math.cos(ang) * len);
   }
   function hourAng(t) { return ((t.h % 12) + t.m / 60) * Math.PI / 6; }
-  function isPhone() { return !!(window.matchMedia && window.matchMedia('(max-width: 40rem)').matches); }
+  function isPhone() {   /* phones -- and any width where the time and mail share the half beside Explore More with the dial: it goes right of them or under them */
+    return !!(window.matchMedia && window.matchMedia('(max-width: 40rem)').matches) || !!(host.closest('.pre-foot') && host.querySelector('.clock-main'));
+  }
 
   /* the labels for a moment: one per hour hand (Seoul's left out on phones); hands pointing
      (nearly) the same way share one label */
@@ -234,6 +236,14 @@
       return { l: r.left - hr.left, r: r.right - hr.left, t: r.top - hr.top + c, b: r.bottom - hr.top - c };
     }
     var cm = host.querySelector('.clock-main');
+    if (host.closest('.pre-foot')) {
+      /* beside Explore More's four cells: the whole half beside them is the dial's; the time and the
+         mail (phones) are kept clear, and the dial goes right of them or under them */
+      var kw = cm ? [].filter.call(host.querySelectorAll('.clock-main .hm, .clock-main .dow, .clock-main .city, .foot-mail'), function (e) { return e.getClientRects().length; })
+                    .map(function (e) { return rel(e, 0.2); }) : [];
+      var H0 = hr.height, top0 = kw.length ? Math.min.apply(null, kw.map(function (r) { return r.t; })) : 0;
+      return { keep: kw, top: top0, bot: H0, ceil: 0, centre: !cm, cy: H0 / 2, colR: hr.width, cx0: hr.width };
+    }
     if (!cm) {
       /* wide screens: the time and mail live in the left sketch area; the dial sits beside the one
          paragraph left in the footer (copyright, then the address), from its first line to its last */
@@ -578,7 +588,7 @@ document.addEventListener('touchstart', function () {}, { passive: true });
 (function () {
   var root = document.documentElement, on = false, t = 0;
   function check() {
-    var mark = document.querySelector('.foot-copy') || document.querySelector('.site-foot'); if (!mark) return;
+    var mark = document.querySelector('.pre-foot li:last-child') || document.querySelector('.foot-copy') || document.querySelector('.site-foot'); if (!mark) return;   /* night as the last cell (Portfolio) comes into view */
     var ft = mark.getBoundingClientRect().top, vv = window.visualViewport;
     /* the screen's real height in page px: on phones it grows as the address bar slides away (clientHeight
        stays at the smaller size, so the switch came late), and a pinch zoom doesn't change it */
@@ -635,7 +645,7 @@ document.addEventListener('touchstart', function () {}, { passive: true });
        edges), and are carried up by the page so they never touch the footer: they ride a rail that
        ends --sec-above above Explore More's line, stuck (css sticky) to the bottom of the screen until the
        rail's end comes up */
-    var cm = document.querySelector('.clock-main'), home = document.querySelector('.site-foot .clocks');
+    var cm = document.querySelector('.clock-main'), home = document.querySelector('.clocks');
     if (!cm || !home) return;
     if (wide.matches) {
       if (!rail.contains(cm)) {
