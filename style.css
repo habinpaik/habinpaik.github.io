@@ -526,16 +526,16 @@ main > p.dek:first-child + section { margin-top: 0; }   /* the opener is larger:
 /* left/right scroll arrows — bottom-right, translucent */
 /* left/right: two square buttons under the shelf, as the "more" button under the covers */
 .spine-nav { display: flex; justify-content: center; gap: var(--s2); margin-top: var(--s4); }
-.spine-nav button {
+.spine-nav button, .rail-btn {
   display: flex; align-items: center; justify-content: center;
   padding: var(--s2) var(--s4); border: 1px solid var(--line); border-radius: 0;
   color: var(--ink); cursor: pointer; line-height: 1;
   background: linear-gradient(var(--crimson), var(--crimson)) no-repeat 0 100% / 100% 0;
   transition: background-size .45s cubic-bezier(.45, 0, .25, 1), color .45s ease, border-color .45s ease;
 }
-.spine-nav button:hover { background-size: 100% 100%; color: var(--on-fill); border-color: var(--crimson); }
-.spine-nav button { font-size: var(--t-small); }
-.spine-nav svg { display: block; width: 1.75rem; height: 1.23em; padding-block: calc((1.23em - 0.75rem) / 2); box-sizing: border-box;   /* as tall as the "more" button's line */ fill: none; stroke: currentColor; stroke-width: 0.125em; vector-effect: non-scaling-stroke; stroke-linecap: butt; stroke-linejoin: miter; }   /* a long thin arrow, a 1px line */
+.spine-nav button:hover, .rail-btn:hover { background-size: 100% 100%; color: var(--on-fill); border-color: var(--crimson); }
+.spine-nav button, .rail-btn { font-size: var(--t-small); }
+.spine-nav svg, .rail-btn svg { display: block; width: 1.75rem; height: 1.23em; padding-block: calc((1.23em - 0.75rem) / 2); box-sizing: border-box;   /* as tall as the "more" button's line */ fill: none; stroke: currentColor; stroke-width: 0.125em; vector-effect: non-scaling-stroke; stroke-linecap: butt; stroke-linejoin: miter; }   /* a long thin arrow, a 1px line */
 .spine-nav button:disabled { color: var(--line); cursor: default; background-size: 100% 0; border-color: var(--line); }
 
 /* hover tooltip near cursor */
@@ -1077,13 +1077,7 @@ main.shelf-end { padding-bottom: 0; }
 .rail-foot { display: flex; align-items: center; gap: var(--s2); margin-top: var(--s4); padding-right: var(--gutter); }
 .rail-bar { position: relative; flex: 1; height: 12px; background: var(--shade-light) no-repeat; }   /* the track: the light shade (no line) */
 .rail-thumb { position: absolute; left: 0; top: 0; height: 12px; width: 20%; background: var(--shade-strong); }   /* where you are: the strong shade */
-.rail-btn {
-  width: 32px; height: 32px; padding: 7px; margin: 0; border: 0; background: none; cursor: pointer;
-  color: var(--ink); display: none;
-}
-.rail-btn svg { display: block; width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 2px; vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-linejoin: round; }
-.rail-btn[disabled] { color: var(--line); cursor: default; }
-@media (hover: hover) and (pointer: fine) { .rail-btn { display: block; } }   /* phones swipe instead */
+
 
 /* Portfolio: the cards no longer scroll sideways -- they fill the text column in rows and the
    page simply carries on down (Journalism's blur-card rails keep scrolling) */
@@ -1228,8 +1222,8 @@ main.shelf-end { padding-bottom: 0; }
 .ebox:not(.split) h3 a::after, .eup h3 a::after { content: ""; position: absolute; inset: 0; }
 
 /* Research buttons: the light shade just inside the top edge, as if set into the page */
-.filter-btn, .spine-nav button { position: relative; }
-.filter-btn::after, .spine-nav button::after {
+.filter-btn, .spine-nav button, .rail-btn { position: relative; }
+.filter-btn::after, .spine-nav button::after, .rail-btn::after {
   content: ""; position: absolute; left: 0; right: 0; top: 0; height: var(--s2);
   background: var(--shade-light); pointer-events: none;
 }
@@ -1250,23 +1244,23 @@ section:has(> .card-rail.blur-rail:last-child) + section > h2.section-title { ba
 
 /* Research buttons, one height: every button's words trimmed to capitals and baseline, with --s3 above
    and below them (the arrows drawn as tall as the capitals) -- tags, arrows and "more" all alike */
-.filter-btn, .spine-nav button, .shelf-panel .shelf-more button, .shelf-more button {
+.filter-btn, .spine-nav button, .shelf-panel .shelf-more button, .shelf-more button, .rail-btn {
   padding-block: var(--s2); line-height: 1.5; text-box-trim: trim-both; text-box-edge: cap alphabetic;
 }
-.spine-nav svg { height: 1cap; padding-block: 0.14px; box-sizing: content-box; }   /* +0.28px: the font's trimmed capitals run a hair taller than 1cap */
+.spine-nav svg, .rail-btn svg { height: 1cap; padding-block: 0.14px; box-sizing: content-box; }   /* +0.28px: the font's trimmed capitals run a hair taller than 1cap */
 
 /* In-page buttons (they act here, they don't lead to another page): the desk's arrows and "A prime more".
    No crimson: pressing one only deepens the shade inside its top (to the strong one), which then fades back. */
 .spine-nav button, .shelf-more button { position: relative; }
-.spine-nav button, .spine-nav button:hover { background-size: 100% 0; color: var(--stone); border-color: var(--line); }   /* arrows grey */
+.spine-nav button, .spine-nav button:hover, .rail-btn, .rail-btn:hover { background-size: 100% 0; color: var(--stone); border-color: var(--line); }   /* arrows grey */
 .shelf-panel .shelf-more button:hover, .shelf-more button:hover { background-size: auto; color: var(--stone); border-color: var(--line); }
 .shelf-more button:hover .kh { background-size: 100% 0; color: inherit; }
-.spine-nav button:disabled, .spine-nav button:disabled:hover { color: var(--line); }
-.spine-nav button::before, .shelf-more button::before {
+.spine-nav button:disabled, .spine-nav button:disabled:hover, .rail-btn:disabled, .rail-btn:disabled:hover { color: var(--line); }
+.spine-nav button::before, .shelf-more button::before, .rail-btn::before {
   content: ""; position: absolute; left: 0; right: 0; top: 0; height: 12px; background: var(--shade-strong);
   opacity: 0; pointer-events: none; transition: opacity .45s ease;
 }
-.spine-nav button:active::before, .shelf-more button:active::before { opacity: 1; transition-duration: .06s; }
+.spine-nav button:active::before, .shelf-more button:active::before, .rail-btn:active::before { opacity: 1; transition-duration: .06s; }
 
 /* "Pledge analysis" strips: the light shade under their top line, as every top edge */
 .ebox.split .go { position: relative; }
@@ -1284,10 +1278,10 @@ section:has(> .card-rail.blur-rail:last-child) + section > h2.section-title { ba
 /* arrows and "A prime more": hovering deepens the shade inside the top (pointer screens only);
    a press turns the words/arrow black for a moment, then they ease back to grey */
 @media (hover: hover) {
-  .spine-nav button:not(:disabled):hover::before, .shelf-more button:hover::before { opacity: 1; }
+  .spine-nav button:not(:disabled):hover::before, .shelf-more button:hover::before, .rail-btn:not(:disabled):hover::before { opacity: 1; }
 }
-.spine-nav button, .shelf-more button { transition: color .45s ease; }
-.spine-nav button:not(:disabled):active, .shelf-panel .shelf-more button:active, .shelf-more button:active { color: var(--ink); transition-duration: .06s; }
+.spine-nav button, .shelf-more button, .rail-btn { transition: color .45s ease; }
+.spine-nav button:not(:disabled):active, .shelf-panel .shelf-more button:active, .shelf-more button:active, .rail-btn:not(:disabled):active { color: var(--ink); transition-duration: .06s; }
 
 /* "A prime more" pressed: it swells downward into a crimson block with a big "+n" (white), the shelf
    opens beneath the covers carrying it down, the new books fade in; then it settles back */
@@ -1373,8 +1367,8 @@ section:has(> .card-rail.blur-rail:last-child) + section > h2.section-title { ba
 
 /* arrows pressed: like the other buttons when on -- a dark ground and a white arrow for a moment, then back */
 .spine-nav button { transition: color .45s ease, background-color .45s ease, border-color .45s ease; }
-.spine-nav button:not(:disabled):active { background-color: var(--ink); border-color: var(--ink); color: var(--on-fill); transition-duration: .06s; }
-.spine-nav button:not(:disabled):active::before { opacity: 0; }
+.spine-nav button:not(:disabled):active, .rail-btn:not(:disabled):active { background-color: var(--ink); border-color: var(--ink); color: var(--on-fill); transition-duration: .06s; }
+.spine-nav button:not(:disabled):active::before, .rail-btn:not(:disabled):active::before { opacity: 0; }
 
 /* Research: an outline of the page's sections in the left sketch area -- small grey sans on a 1px rail;
    the section being read in ink, marked by a 5px crimson bar that slides along the rail. Fixed under the
@@ -1591,3 +1585,8 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
   content: ""; position: absolute; left: calc(var(--nav-gap) / -2); top: 50%; width: 1px; height: 0.7em;
   transform: translate(-50%, -62%); background: var(--line); pointer-events: none;   /* centred on the capitals, not on the line box */
 }
+
+/* card-news rails: the same arrow buttons as the Research desk's; phones swipe instead */
+.rail-btn { display: none; margin: 0; }
+@media (hover: hover) and (pointer: fine) { .rail-btn { display: flex; } }
+.rail-btn:disabled { cursor: default; }

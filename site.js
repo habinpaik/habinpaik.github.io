@@ -694,7 +694,9 @@ document.addEventListener('touchstart', function () {}, { passive: true });
       var bar = r.querySelector('.rail-bar');
       if (!h || !bar || !bar.offsetParent) return;
       h.style.marginTop = '';
-      var d = h.getBoundingClientRect().top - bar.getBoundingClientRect().top;
+      // the dark Explore More must not cover the bar and its arrows: it starts right under them
+      var edge = h.closest('.pre-foot') ? r.querySelector('.rail-foot').getBoundingClientRect().bottom : bar.getBoundingClientRect().top;
+      var d = h.getBoundingClientRect().top - edge;
       var m0 = parseFloat(getComputedStyle(h).marginTop) || 0;
       h.style.marginTop = (m0 - d) + 'px';
     });
