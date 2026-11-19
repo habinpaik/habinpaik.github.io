@@ -1549,7 +1549,7 @@ html.night-switch .night-veil { transition: opacity .3s ease !important; }
   .ebox.split .eup:has(h3 a:hover) .kh,
   :is(.side-head, .tuck-story, .print-tab).deep .kh,
   .feat-photo.zoom .kh { text-decoration-color: var(--stone); }   /* the grey */
-  :is(.feat-photo, .blur-card, .overlay-card):hover .kh, .feat-photo.zoom .kh { text-decoration-color: #A9A59D; }   /* on a photo: the dark-ground grey */
+  :is(.feat-photo, .blur-card, .overlay-card):is(:hover, .zoom) .kh.kh.kh { text-decoration-color: #A9A59D; }   /* on a photo: the dark-ground grey (.kh thrice: outranks the list above, whose :is() counts as its weightiest member) */
 }
 
 /* the English line of every story is grey: on paper the day grey (already), on a photo the grey of
