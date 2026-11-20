@@ -2066,3 +2066,8 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 }
 .outline a.cur, .outline a.cur:hover { color: var(--on-fill); }
 .outline .bar { left: 0; right: 0; width: auto; z-index: 0; }
+/* the outline without its left line; the crimson box fits the current item's words */
+.outline ol { border-left: 0; }
+.outline .bar { display: none; }
+.outline a, .outline a:hover, .outline a.cur { width: fit-content; padding: 2px var(--s2); }
+.outline a.cur, .outline a.cur:hover { background: var(--crimson); }
