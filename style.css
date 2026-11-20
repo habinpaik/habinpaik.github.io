@@ -2088,3 +2088,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 .time-rail .clock-main:hover::before { opacity: 0 !important; }
 .time-rail .clock-main:active { background-color: var(--paper); border-color: var(--line); color: var(--ink); }
 .time-rail .clock-main:active .foot-mail { color: inherit !important; }
+/* as the PDF tab: grey words -- the outline's items and the time box (the current item stays on its crimson) */
+.outline a, .outline a:hover { color: var(--stone); }
+.outline a.cur, .outline a.cur:hover { color: var(--on-fill); }
+.time-rail .clock-main, .time-rail .clock-main:active { color: var(--stone); }
