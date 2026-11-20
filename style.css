@@ -1390,11 +1390,11 @@ h2.section-title { scroll-margin-top: calc(var(--head-h, 4rem) + var(--s5)); }
    (not pure black), the words to a soft off-white; subject colours and crimson lift so they still read.
    Scroll back up and it returns. The change eases over .7s. */
 html.night {
-  --paper: #1C1B19; --ink: #E6E3DD; --stone: #A9A59D;   /* the night grey, exactly (the day's is mixed from ink and paper) */ --line: #3A3834; --brand: #252421; --brand-deep: #C9C6BF;
+  --paper: #1C1B19; --ink: #E6E3DD; --stone: #E0DDD7;   /* the night grey, exactly (the day's is mixed from ink and paper) */ --line: #3A3834; --brand: #252421; --brand-deep: #C9C6BF;
   --crimson: #C25466;
   --c-meche: #D08B4A; --c-phys: #6FA6D0; --c-math: #4DB585; --c-gensci: #4FA893; --c-classics: #A3B84E;
   --sh-strong: #3A3834; --sh-light: #3A3834;   /* at night: the night's line grey */
-  --dial-rim: #A9A59D; --dial-home: #A9A59D; --dial-city: #E3808F; --dial-pin: #A9A59D; --dial-lab: #A9A59D;   /* the dial at night: one grey (the words' grey) and pink */
+  --dial-rim: #E0DDD7; --dial-home: #E0DDD7; --dial-city: #E3808F; --dial-pin: #E0DDD7; --dial-lab: #E0DDD7;   /* the dial at night: one grey (the words' grey) and pink */
   color-scheme: dark;
 }
 html.night, html.night body { background-color: var(--paper); color: var(--ink); }
@@ -1427,12 +1427,12 @@ html.night { --crimson-light: color-mix(in srgb, var(--crimson) 45%, var(--paper
   --paper: #1C1B19; --ink: #E6E3DD; --line: #3A3834; --brand: #252421; --brand-deep: #C9C6BF;
   --crimson: #C25466; --c-journalism: var(--crimson);
   --sh-strong: #3A3834; --sh-light: #3A3834;
-  --stone: #A9A59D;
+  --stone: #E0DDD7;
   --shade-strong: linear-gradient(to bottom, var(--sh-strong), transparent 20px);
   --shade-light:  linear-gradient(to bottom, var(--sh-light), transparent var(--s2));
   --on-fill: var(--paper); --link-hover: var(--on-fill);
   --crimson-light: color-mix(in srgb, var(--crimson) 45%, var(--paper));
-  --dial-rim: #A9A59D; --dial-home: #A9A59D; --dial-city: #E3808F; --dial-pin: #A9A59D; --dial-lab: #A9A59D;
+  --dial-rim: #E0DDD7; --dial-home: #E0DDD7; --dial-city: #E3808F; --dial-pin: #E0DDD7; --dial-lab: #E0DDD7;
   --dial-fill: #D9707F; --dial-edge: color-mix(in srgb, #D9707F 35%, var(--paper)); --dial-on: var(--paper);
   color-scheme: dark; background-color: var(--paper); color: var(--ink);
 }   /* the sweep a clear pink at night, its edge fading into the dark; hands under it go dark */
@@ -1557,7 +1557,7 @@ html.night-switch .night-veil { transition: opacity .3s ease !important; }
 /* the English line of every story is grey: on paper the day grey (already), on a photo the grey of
    white words on a dark ground */
 .feat-head .en, .blur-card .cap .en, .blur-card .cap .en :is(.date, .dash),
-.overlay-card .cap .meta, .overlay-card .cap .meta :is(.date, .dash) { color: #A9A59D; }
+.overlay-card .cap .meta, .overlay-card .cap .meta :is(.date, .dash) { color: #E0DDD7; }
 
 /* every headline laid on a photo sits on the same frosted band as the card news: the photo blurred
    and a little darkened under the words, fading out upward (no plain black gradient any more) */
@@ -1680,7 +1680,7 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 }
 .card-title { color: #fff; }
 .card-foot { padding-top: var(--s2); margin-top: 0; }
-.card .card-date { color: #A9A59D; }
+.card .card-date { color: #E0DDD7; }
 @media (max-width: 40rem) { .card-txt { min-height: 0; } }
 .card:hover .card-img img { transform: scale(1.05); }
 @media (hover: hover) { .card:hover .kh.kh.kh { text-decoration-color: var(--hl-photo); } }   /* on a photo: the dark-ground grey */
@@ -1934,7 +1934,7 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 
 /* underlines become a highlighter: a light grey stroke behind the lower half of the words -- links at
    rest, and headlines when pointed at (on photos a light stroke of the dark-ground grey) */
-:root { --hl: color-mix(in srgb, var(--stone) 26%, transparent); --hl-photo: color-mix(in srgb, #A9A59D 45%, transparent); }
+:root { --hl: color-mix(in srgb, var(--stone) 26%, transparent); --hl-photo: color-mix(in srgb, #E0DDD7 45%, transparent); }
 .kh, .kh:is(*) { text-decoration-thickness: 0.5em; text-underline-offset: -0.32em; text-decoration-skip-ink: none; }
 
 /* pressing an arrow: its colours swap -- the frame's dark grey fills the box, the arrow turns white */
