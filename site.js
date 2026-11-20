@@ -269,6 +269,9 @@
          address's last baseline (phones: to just above that long last line, which runs nearly across) */
       var ceil0 = capTop - hr.top;
       floor0 = window.matchMedia('(max-width: 40rem)').matches ? relText(addrLast, 0).t - 4 : bl0(addrLast) - hr.top;
+      /* the circle itself a little taller than the paragraph; the city names may stand above and below it */
+      var room = window.__dialRoom || 22;
+      if (!window.matchMedia('(max-width: 40rem)').matches) { ceil0 -= room; floor0 += room; }
       return { keep: lines, top: ceil0, bot: floor0, ceil: ceil0, centre: true, cy: (ceil0 + floor0) / 2, colR: hr.width, cx0: hr.width };
     }
     var words = [].filter.call(host.querySelectorAll('.clock-main .hm, .clock-main .dow, .clock-main .city'), function (e) { return e.getClientRects().length; })
@@ -291,6 +294,7 @@
       var pcs = getComputedStyle(pc), pctx = document.createElement('canvas').getContext('2d');
       pctx.font = pcs.fontWeight + ' ' + pcs.fontSize + ' ' + pcs.fontFamily;
       var pT = bm(pc) - pctx.measureText('H').actualBoundingBoxAscent - hr.top, pB = bm(pl) - hr.top;
+      var room2 = window.__dialRoom || 22; pT -= room2; pB += room2;   /* the circle a little taller than the paragraph, names above and below it */
       return { keep: keep, top: pT, bot: pB, ceil: pT, centre: true, cy: (pT + pB) / 2, colR: colR, cx0: colR };
     }
     /* the ceiling: names above the dial may rise to --s2 under the footer's top line and its shade */
