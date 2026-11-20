@@ -2023,3 +2023,11 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 @media (min-width: 80rem), (max-width: 40rem) { .foot-side > .foot-contact, .foot-side > .foot-contact:is(*) { margin-top: 0; } }
 /* the links' underline is a line: the lines' grey (#E0DDD7), like every other line */
 a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))) { --hl: var(--line); }
+/* text links at rest: no underline -- the letters themselves outlined in the lines' grey (a halo drawn
+   under the black, so the words keep their weight); pointed at: the outline goes, the highlighter comes */
+a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))) {
+  background-size: 100% 0, 0 0; -webkit-text-stroke: 3px var(--line); paint-order: stroke fill;
+}
+a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))):hover {
+  -webkit-text-stroke: 0; background-size: 100% 0, calc(100% - 0.24em) 0.5em;
+}
