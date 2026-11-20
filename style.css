@@ -1953,3 +1953,9 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 @media (max-width: 40rem) { .pre-foot li:has(a[aria-current="page"]) { margin-right: calc(-1 * var(--yah, 5rem)); } }
 /* the headlines' highlighter fades in and out, as the link's address does */
 .kh, .kh:is(*) { transition: text-decoration-color .2s ease; }
+
+/* pointing at a highlighted link: the words turn crimson and the highlighter black -- no crimson fill */
+a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a)):hover {
+  color: var(--crimson); --hl: var(--ink);
+  background-size: 100% 0, calc(100% - 0.24em) 0.5em;
+}
