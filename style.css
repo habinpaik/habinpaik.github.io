@@ -1971,3 +1971,11 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   background-position: 0 calc(var(--s2) - 1px), 0 var(--s2);
 }
 .tuck-story::before { top: var(--s2); }
+
+/* the shades are opaque grey now: they lie over a box's ground but under its words (each box its own
+   stacking context, the shade at -1 in it) */
+.filter-btn, .spine-nav button, .shelf-more button, .rail-btn, .time-rail .clock-main, .tuck-story, .print-tab,
+.side-head, .ebox, .ebox.split .go, .nav a, .wordmark { isolation: isolate; }
+.filter-btn::before, .spine-nav button::before, .shelf-more button::before, .rail-btn::before, .time-rail .clock-main::before,
+.tuck-story::before, .print-tab::before, .side-head::before, .ebox::before, .ebox.split .go::before, .ebox.split .go::after,
+.nav a::after, .wordmark::after { z-index: -1; }
