@@ -1107,7 +1107,7 @@ main.shelf-end { padding-bottom: 0; }
 /* small label above a headline (e.g. "세종시장 후보 인터뷰") */
 .entry .kicker { margin: 0 0 var(--s1); font-family: var(--sans); font-size: var(--t-small); color: var(--stone); }
 .entry .desc a { color: inherit; }
-.entry .desc a:hover { color: var(--on-fill); }   /* the crimson fill turns these white too */
+.entry .desc a:hover { color: var(--ink); }   /* black on the highlighter, as every text link pointed at */
 
 /* ---------- Journalism: blur cards, in a sideways-scrolling rail (same rail as Portfolio) ----------
    Same family as the overlay cards above (grey photo, title on the picture, square corners);
@@ -1991,4 +1991,13 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 /* ...and a 2px crimson underline on the highlighter's bottom edge */
 a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))):hover {
   --hl: var(--crimson); background-size: 100% 0, calc(100% - 0.24em) 2px;
+}
+
+/* text links, the other way round: at rest crimson words on a 2px crimson underline (at the
+   highlighter's bottom edge); pointed at, the words go black on the light grey highlighter */
+a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))) {
+  color: var(--crimson); --hl: var(--crimson); background-size: 100% 0, calc(100% - 0.24em) 2px;
+}
+a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))):hover {
+  color: var(--ink); --hl: var(--line); background-size: 100% 0, calc(100% - 0.24em) 0.5em;
 }
