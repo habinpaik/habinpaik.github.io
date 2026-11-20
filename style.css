@@ -2052,3 +2052,17 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   color: var(--crimson); text-decoration-color: var(--crimson); background-size: 100% 0, 0 0;
 }
 .entry .desc a:hover { color: var(--crimson); }
+
+/* a filled (chosen or pressed) box has no shade: the filled tag buttons, a pressed arrow */
+.filter-btn[aria-pressed="true"]::before, .filter-btn[aria-pressed="true"]::after,
+.spine-nav button:active::before, .rail-btn:active::before { display: none !important; }
+
+/* the section outline on the left: every item black, always (no grey, no change on pointing); the
+   section being read sits in a crimson box, its words in the ground's colour -- the box glides
+   between items as the bar did */
+.outline a, .outline a:hover, .outline a.cur {
+  color: var(--ink); text-decoration: none; background: none; box-shadow: none; padding-right: var(--s2);
+  position: relative; z-index: 1; transition: none;
+}
+.outline a.cur, .outline a.cur:hover { color: var(--on-fill); }
+.outline .bar { left: 0; right: 0; width: auto; z-index: 0; }
