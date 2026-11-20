@@ -583,8 +583,8 @@ document.addEventListener('touchstart', function () {}, { passive: true });
     var hh = head ? head.offsetHeight : 0;
     nav.style.top = 'calc(50vh - ' + (nav.offsetHeight / 2) + 'px)';   /* it sticks in the screen's vertical middle */
     rail.style.top = '0px';
-    var itemOff = baseline(links[0]) - nav.getBoundingClientRect().top;   /* the first item's baseline, from the outline's top */
-    rail.style.top = (baseline(heads[0]) - m.top - itemOff) + 'px';    /* level with the first title's baseline */
+    /* always afloat: the rail runs from the page's top, so the outline sits in the screen's middle from
+       the first moment, not only once the first title arrives */
   }
   function place() {
     var hb = head ? head.getBoundingClientRect().bottom : 0, vh = window.innerHeight;
@@ -603,7 +603,7 @@ document.addEventListener('touchstart', function () {}, { passive: true });
   window.addEventListener('scroll', soon, { passive: true });
   window.addEventListener('resize', function () { layoutRail(); soon(); });
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { layoutRail(); place(); });
-  if (window.ResizeObserver) new ResizeObserver(function () { layoutRail(); }).observe(main);
+  if (window.ResizeObserver) { var ro = new ResizeObserver(function () { layoutRail(); }); ro.observe(main); ro.observe(nav); }   /* the outline grows when the time joins it */
   layoutRail(); place();
 })();
 
@@ -670,6 +670,21 @@ document.addEventListener('touchstart', function () {}, { passive: true });
        rail's end comes up */
     var cm = document.querySelector('.clock-main'), home = document.querySelector('.clocks');
     if (!cm || !home) return;
+    /* where the section outline floats on the left, the time and mail go into it, under its last line */
+    var ol = document.querySelector('.outline'), olOn = ol && ol.offsetParent !== null;
+    if (olOn) {
+      if (!ol.contains(cm)) {
+        var a0 = cm.querySelector('.foot-mail'); if (a0 && a0.href) href = a0.getAttribute('href');
+        ol.appendChild(cm);
+        cm.setAttribute('role', 'link'); cm.tabIndex = 0; swap(a0, 'span');
+        cm.setAttribute('aria-label', 'Email ' + href.replace(/^mailto:/, ''));
+      }
+      rail.hidden = true; return;
+    }
+    if (ol && ol.contains(cm)) {   /* the outline gone (narrower screen): back to the footer, then as below */
+      home.insertBefore(cm, home.firstChild); cm.removeAttribute('role'); cm.removeAttribute('tabindex'); cm.removeAttribute('aria-label');
+      swap(cm.querySelector('.foot-mail'), 'a');
+    }
     if (wide.matches) {
       if (!rail.contains(cm)) {
         rail.appendChild(cm);
