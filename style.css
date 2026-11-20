@@ -2106,3 +2106,6 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 /* a photo's headline ends on its last baseline, --inset above the photo's foot (as the photo cards) */
 .feat-head { text-box-trim: trim-both; text-box-edge: cap alphabetic; }
 .feat-head .en { text-box-trim: trim-end; text-box-edge: cap alphabetic; }
+
+/* a spent arrow: arrow and box both in the light grey */
+.spine-nav button:disabled, .spine-nav button:disabled:hover, .rail-btn:disabled, .rail-btn:disabled:hover { color: var(--line); border-color: var(--line); }

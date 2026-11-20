@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
-<link rel="stylesheet" href="style.css?v=20261125q">
+<link rel="stylesheet" href="style.css?v=20261125r">
   <link rel="icon" href="/favicon.svg?v=5" type="image/svg+xml">
   <link rel="icon" href="/favicon-32.png?v=5" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=5">
@@ -486,6 +486,9 @@ f(); window.addEventListener('resize',f);})();
       mapBox.addEventListener('pointerup', function () { drag = false; spineShelf.style.scrollBehavior = ''; });
     }
     function mapUpdate() {
+      /* an arrow with nowhere left to go is spent: light grey, box and all */
+      var nb = document.querySelectorAll('.spine-nav button'), smx = spineShelf.scrollWidth - spineShelf.clientWidth;
+      if (nb.length > 1) { nb[0].disabled = spineShelf.scrollLeft <= 1; nb[1].disabled = spineShelf.scrollLeft >= smx - 1; }
       var smax = spineShelf.scrollWidth - spineShelf.clientWidth, sw = spineShelf.closest('.spine-wrap');
       spineShelf.classList.toggle('at-start', spineShelf.scrollLeft <= 1); spineShelf.classList.toggle('at-end', spineShelf.scrollLeft >= smax - 1);
       if (sw) { sw.classList.toggle('at-start', spineShelf.scrollLeft <= 1); sw.classList.toggle('at-end', spineShelf.scrollLeft >= smax - 1); }
