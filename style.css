@@ -874,7 +874,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   -webkit-box-decoration-break: clone; box-decoration-break: clone;   /* a link over two lines gets a box on each */
   background-image: linear-gradient(var(--crimson), var(--crimson)), linear-gradient(var(--crimson), var(--crimson));   /* the fill, and a crimson hairline underline */
   background-repeat: no-repeat;
-  background-position: 0 100%, 0.12em calc(100% - (1lh - 1.0556em) / 4);   /* the underline a little under the descenders: halfway to the line's foot */
+  background-position: 0 100%, 0.12em calc(100% - (1lh - 1.0556em) / 8);   /* the underline a little under the descenders: halfway to the line's foot */
   background-size: 100% 0, calc(100% - 0.24em) 3px;   /* the underline 3px */
   transition: background-size .45s cubic-bezier(.45, 0, .25, 1), color .45s ease;   /* rises from the underline, unhurried */
 }
@@ -1906,3 +1906,4 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 
 /* the headlines' hover underline as thick as the links' */
 .kh, .pre-foot .clocks a.foot-mail:hover { text-decoration-thickness: 3px; }
+.kh { text-underline-offset: 0.3em; }   /* a hair lower, as the links' */
