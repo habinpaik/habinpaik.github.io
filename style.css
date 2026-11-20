@@ -2118,3 +2118,13 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   .feat-photo:hover::before, .feat-photo.zoom::before, .side-photo:hover::before, .side-photo.zoom::before, .side-row:hover .side-photo::before,
   .overlay-card:hover::before, .blur-card:hover::before, .card:hover .card-img::before { background-size: 100% 0, 100% 100%; }
 }
+
+/* Explore More: every cell (the pink current one too) carries the light shade down its left side;
+   pointing at a cell deepens it to the strong shade */
+.pre-foot ul li a::after {
+  content: "" !important; display: block !important; position: absolute; left: 0; top: 0; bottom: 0; right: auto; width: 20px; z-index: 1; pointer-events: none;
+  opacity: 1 !important; transform: none !important;
+  background: linear-gradient(to right, var(--sh-light), transparent var(--s2)), linear-gradient(to right, var(--sh-strong), transparent 20px) !important;
+  background-repeat: no-repeat !important; background-size: 100% 100%, 0 100% !important;
+}
+@media (hover: hover) { .pre-foot ul li a:hover::after { background-size: 0 100%, 100% 100% !important; } }
