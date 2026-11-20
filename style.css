@@ -874,14 +874,13 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   -webkit-box-decoration-break: clone; box-decoration-break: clone;   /* a link over two lines gets a box on each */
   background-image: linear-gradient(var(--crimson), var(--crimson)), linear-gradient(var(--hl), var(--hl));   /* the fill, and a light grey highlighter stroke */
   background-repeat: no-repeat;
-  background-position: 0 0, 0 0;   /* the grey and the crimson cover the same box */   /* the underline a little under the descenders: halfway to the line's foot */
-  background-size: 100% 0, 100% 100%;   /* the highlighter: the very box the crimson fills, in light grey */
+  background-position: 0 100%, 0.12em calc(100% - (1lh - 1.0556em) / 2 - 0.14em);   /* the stroke from just under the baseline up through the lower half of the letters */   /* the underline a little under the descenders: halfway to the line's foot */
+  background-size: 100% 0, calc(100% - 0.24em) 0.5em;   /* the highlighter: the lower half of the letters */
   transition: background-size .45s cubic-bezier(.45, 0, .25, 1), color .45s ease;   /* rises from the underline, unhurried */
 }
 a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story)):hover {
   color: var(--link-hover);
-  background-size: 100% 100%, 100% 100%;
-  transition: none;   /* the crimson at once, not rising */
+  background-size: 100% 100%, calc(100% - 0.24em) 0.5em;
 }
 .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a { background-size: 100% 0, 0 1px; }
 .entry h3 a:hover, .table .cell .th a:hover, .work .th a:hover, .foot-contact a:hover { background-size: 100% 100%, 0 1px; }
@@ -1945,6 +1944,7 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 }
 .spine-nav button:not(:disabled):active::before, .rail-btn:not(:disabled):active::before,
 .spine-nav button:not(:disabled):active::after, .rail-btn:not(:disabled):active::after { opacity: 0; }
+<<<<<<< HEAD
 a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story)) { transition: none; }
 .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a { background-size: 100% 0, 0 0; }   /* links with no mark at rest keep none */
 .entry h3 a:hover, .table .cell .th a:hover, .work .th a:hover, .foot-contact a:hover { background-size: 100% 100%, 0 0; }
@@ -1953,3 +1953,5 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 .pre-foot li:has(a[aria-current="page"]) { margin-right: calc(-1 * var(--yah, 5rem)); }
 .pre-foot li:has(a[aria-current="page"])::after { left: calc(100% - var(--yah, 5rem) - var(--yah-ink, 0px)); right: auto; }
 @media (max-width: 40rem) { .pre-foot li:has(a[aria-current="page"]) { margin-right: calc(-1 * var(--yah, 5rem)); } }
+=======
+>>>>>>> parent of b1e3800 (Link highlighter: the very box the crimson fills; the crimson comes at once)
