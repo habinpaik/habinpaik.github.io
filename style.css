@@ -875,12 +875,12 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   background-image: linear-gradient(var(--crimson), var(--crimson)), linear-gradient(var(--crimson), var(--crimson));   /* the fill, and a crimson hairline underline */
   background-repeat: no-repeat;
   background-position: 0 100%, 0.12em calc(100% - (1lh - 1.0556em) / 4);   /* the underline a little under the descenders: halfway to the line's foot */
-  background-size: 100% 0, calc(100% - 0.24em) 1px;
+  background-size: 100% 0, calc(100% - 0.24em) 2px;   /* the underline 2px */
   transition: background-size .45s cubic-bezier(.45, 0, .25, 1), color .45s ease;   /* rises from the underline, unhurried */
 }
 a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story)):hover {
   color: var(--link-hover);
-  background-size: 100% 100%, calc(100% - 0.24em) 1px;
+  background-size: 100% 100%, calc(100% - 0.24em) 2px;
 }
 .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a { background-size: 100% 0, 0 1px; }
 .entry h3 a:hover, .table .cell .th a:hover, .work .th a:hover, .foot-contact a:hover { background-size: 100% 100%, 0 1px; }
