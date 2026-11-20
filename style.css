@@ -1961,3 +1961,5 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 }
 /* the headlines' highlighter keeps its own grey (never the black of a pointed link around it) */
 :root { --hl-k: color-mix(in srgb, var(--stone) 26%, transparent); }
+/* the highlighter is the lines' grey: one light grey for lines and highlights */
+:root, html.night, .pre-foot, .site-foot { --hl: var(--line); --hl-k: var(--line); }
