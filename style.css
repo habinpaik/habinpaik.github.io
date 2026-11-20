@@ -881,6 +881,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story)):hover {
   color: var(--link-hover);
   background-size: 100% 100%, calc(100% - 0.24em) 0.5em;
+  transition: none;   /* the crimson at once, not rising */
 }
 .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a { background-size: 100% 0, 0 1px; }
 .entry h3 a:hover, .table .cell .th a:hover, .work .th a:hover, .foot-contact a:hover { background-size: 100% 100%, 0 1px; }
@@ -1944,14 +1945,9 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 }
 .spine-nav button:not(:disabled):active::before, .rail-btn:not(:disabled):active::before,
 .spine-nav button:not(:disabled):active::after, .rail-btn:not(:disabled):active::after { opacity: 0; }
-<<<<<<< HEAD
 a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story)) { transition: none; }
-.entry h3 a, .table .cell .th a, .work .th a, .foot-contact a { background-size: 100% 0, 0 0; }   /* links with no mark at rest keep none */
-.entry h3 a:hover, .table .cell .th a:hover, .work .th a:hover, .foot-contact a:hover { background-size: 100% 100%, 0 0; }
 /* "You are here" starts exactly where the other cells end; the current cell runs on past it by the
    label's own width and the cell's inset (site.js measures the label) */
 .pre-foot li:has(a[aria-current="page"]) { margin-right: calc(-1 * var(--yah, 5rem)); }
 .pre-foot li:has(a[aria-current="page"])::after { left: calc(100% - var(--yah, 5rem) - var(--yah-ink, 0px)); right: auto; }
 @media (max-width: 40rem) { .pre-foot li:has(a[aria-current="page"]) { margin-right: calc(-1 * var(--yah, 5rem)); } }
-=======
->>>>>>> parent of b1e3800 (Link highlighter: the very box the crimson fills; the crimson comes at once)
