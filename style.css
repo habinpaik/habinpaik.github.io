@@ -1106,7 +1106,7 @@ main.shelf-end { padding-bottom: 0; }
 
 /* small label above a headline (e.g. "세종시장 후보 인터뷰") */
 .entry .kicker { margin: 0 0 var(--s1); font-family: var(--sans); font-size: var(--t-small); color: var(--stone); }
-.entry .desc a { color: inherit; }
+.entry .desc a { color: var(--crimson); }   /* crimson at rest, as every text link */
 .entry .desc a:hover { color: var(--ink); }   /* black on the highlighter, as every text link pointed at */
 
 /* ---------- Journalism: blur cards, in a sideways-scrolling rail (same rail as Portfolio) ----------
