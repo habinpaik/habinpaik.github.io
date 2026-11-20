@@ -870,11 +870,11 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   text-decoration: none;
   /* the box reaches a hair past the letters on every side -- above the capitals, below the
      descenders -- so the fill rises from under the whole word to over it; the text doesn't move */
-  padding: 0.1em 0.12em 0.08em; margin: 0 -0.12em;
+  padding: 0 0.12em; margin: 0 -0.12em;   /* top and bottom: exactly the selection's band (the font's own ascent and descent) */
   -webkit-box-decoration-break: clone; box-decoration-break: clone;   /* a link over two lines gets a box on each */
   background-image: linear-gradient(var(--crimson), var(--crimson)), linear-gradient(var(--crimson), var(--crimson));   /* the fill, and a crimson hairline underline */
   background-repeat: no-repeat;
-  background-position: 0 100%, 0.12em calc(100% - 0.08em);   /* the underline stays where it was */
+  background-position: 0 100%, 0.12em 100%;   /* the underline on the band's bottom edge, where the fill's own bottom is */
   background-size: 100% 0, calc(100% - 0.24em) 1px;
   transition: background-size .45s cubic-bezier(.45, 0, .25, 1), color .45s ease;   /* rises from the underline, unhurried */
 }
@@ -1899,3 +1899,4 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
   .foot-side > .foot-contact { grid-row: 3; margin-top: 0; }
   .clocks { margin-top: 0; }
 }
+.link-tip { font-size: var(--t-body); }   /* the link's address at the body text's size */
