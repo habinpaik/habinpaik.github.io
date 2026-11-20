@@ -587,7 +587,7 @@ document.addEventListener('touchstart', function () {}, { passive: true });
        the first moment, not only once the first title arrives */
   }
   /* fixed in the screen's vertical middle; once the footer comes up, it is pushed up ahead of it */
-  var foot = document.querySelector('.site-foot');
+  var foot = document.querySelector('.site-foot'), hero = document.querySelector('.hero');
   /* where the screen is too narrow for the box beside the centred text (tablets), the page moves over to
      the right of it: the box on the left, the text on the right; wider again, the text returns to the middle */
   var words = 0, shift = 0, root = document.documentElement;
@@ -599,9 +599,13 @@ document.addEventListener('touchstart', function () {}, { passive: true });
     if (nav.getClientRects().length && words) {
       var vw = document.documentElement.clientWidth, rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
       var need = Math.min(3 * rem, Math.max(1.25 * rem, 0.04 * vw)) + words + 28;   /* the gutter, the words, and a gap */
-      for (var i = 0; i < 5; i++) {
-        var gap = need - textLeft(); if (gap <= 0.5) break;
-        shift += gap; root.style.setProperty('--shift', shift + 'px');
+      if (textLeft() < need) {   /* no room beside the centred text: the text goes to the screen's right edge */
+        shift = Math.max(0, root.clientWidth - main.getBoundingClientRect().width);
+        if (shift) root.style.setProperty('--shift', shift + 'px');
+        for (var i = 0; i < 5; i++) {   /* and if it still meets the box, it narrows from the left */
+          var gap = need - textLeft(); if (gap <= 0.5) break;
+          shift += gap; root.style.setProperty('--shift', shift + 'px');
+        }
       }
       shift = Math.round(shift * 10) / 10; if (shift) root.style.setProperty('--shift', shift + 'px'); else root.style.removeProperty('--shift');
     }
@@ -609,6 +613,7 @@ document.addEventListener('touchstart', function () {}, { passive: true });
   }
   function lift() {
     var h = nav.offsetHeight, t = (window.innerHeight - h) / 2;
+    if (hero) t = Math.max(t, hero.getBoundingClientRect().bottom + 40);   /* below Home's photo, never over it */
     if (foot) t = Math.min(t, foot.getBoundingClientRect().top - 40 - h);
     nav.style.top = t + 'px';
   }

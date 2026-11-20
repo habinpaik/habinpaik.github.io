@@ -2197,3 +2197,4 @@ html:has(.outline) .site-head .updated { display: none !important; }
    the other rows; the mail stays in the rows' own weight */
 .outline .updated, .outline .clock-main time, .outline .clock-main .city { font-weight: 400; color: var(--stone); }
 body { padding-left: var(--shift, 0px); }   /* the page moved over beside the outline box (tablets; site.js) */
+.hero { margin-left: calc(-1 * var(--shift, 0px)); padding-left: var(--shift, 0px); }   /* Home's photo fills the whole width; its words stay over the text column */
