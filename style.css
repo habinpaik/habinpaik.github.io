@@ -2031,3 +2031,9 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))):hover {
   -webkit-text-stroke: 0; background-size: 100% 0, calc(100% - 0.24em) 0.5em;
 }
+/* text links at rest: a rectangle round them in the lines' grey (the band the highlighter fills), no
+   outlined letters; pointed at: the rectangle goes, the highlighter comes */
+a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))) {
+  -webkit-text-stroke: 0; box-shadow: inset 0 0 0 1px var(--line);
+}
+a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))):hover { box-shadow: none; }
