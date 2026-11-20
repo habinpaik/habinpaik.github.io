@@ -1900,3 +1900,6 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
   .clocks { margin-top: 0; }
 }
 .link-tip { font-size: var(--t-body); }   /* the link's address at the body text's size */
+
+/* selected text: the mode's crimson, the words in the ground's colour (as a link's fill) */
+::selection { background: var(--crimson); color: var(--on-fill); }
