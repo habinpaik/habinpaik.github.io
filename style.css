@@ -1550,7 +1550,7 @@ html.night-switch .night-veil { transition: opacity .3s ease !important; }
   :is(.side-head, .tuck-story, .print-tab, .ebox:not(.split), .ebox.split .go, .card, .feat-photo, .blur-card, .overlay-card):hover .kh,
   .ebox.split .eup:has(h3 a:hover) .kh,
   :is(.side-head, .tuck-story, .print-tab).deep .kh,
-  .feat-photo.zoom .kh { text-decoration-color: var(--hl); }   /* the grey */
+  .feat-photo.zoom .kh { text-decoration-color: var(--hl-k); }   /* the grey */
   :is(.feat-photo, .blur-card, .overlay-card):is(:hover, .zoom) .kh.kh.kh { text-decoration-color: var(--hl-photo); }   /* on a photo: the dark-ground grey (.kh thrice: outranks the list above, whose :is() counts as its weightiest member) */
 }
 
@@ -1574,7 +1574,7 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
    and both answer at once (the photo enlarges, the box's shade deepens, the headline is underlined) */
 .side-row:hover .side-photo img { transform: scale(1.04); }
 .side-row:hover .side-head::before { opacity: 1; }
-.side-row:hover .side-head .kh { text-decoration-color: var(--hl); }
+.side-row:hover .side-head .kh { text-decoration-color: var(--hl-k); }
 
 /* Explore More: the page you are on is the one pink cell -- the night crimson, plain; its name in
    the dark ground's colour (words on a fill), the strong shade along its top as on any chosen cell */
@@ -1955,7 +1955,9 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 .kh, .kh:is(*) { transition: text-decoration-color .2s ease; }
 
 /* pointing at a highlighted link: the words turn crimson and the highlighter black -- no crimson fill */
-a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a)):hover {
+a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))):hover {
   color: var(--crimson); --hl: var(--ink);
   background-size: 100% 0, calc(100% - 0.24em) 0.5em;
 }
+/* the headlines' highlighter keeps its own grey (never the black of a pointed link around it) */
+:root { --hl-k: color-mix(in srgb, var(--stone) 26%, transparent); }
