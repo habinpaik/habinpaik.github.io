@@ -1908,3 +1908,4 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 .kh, .pre-foot .clocks a.foot-mail:hover { text-decoration-thickness: 2px; }
 .kh { text-underline-offset: 0.3em; }   /* a hair lower, as the links' */
 .side-photo::after { backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); }   /* side-story photos: only a touch of blur */
+@media (max-width: 40rem) { .pf-row { grid-template-columns: 3fr 2fr; } }   /* phones: Explore More's cells 60% of the column wide */
