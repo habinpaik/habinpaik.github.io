@@ -1909,3 +1909,10 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 .kh { text-underline-offset: 0.3em; }   /* a hair lower, as the links' */
 .side-photo::after { backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); }   /* side-story photos: only a touch of blur */
 @media (max-width: 40rem) { .pf-row { grid-template-columns: 3fr 2fr; } }   /* phones: Explore More's cells 60% of the column wide */
+/* Explore More hover: no widening -- the cell turns crimson (the night's pink) with black words, as the current one */
+@media (hover: hover) {
+  .pre-foot li:hover:not(:has(a[aria-current="page"])) { margin-right: 0; }
+  .pre-foot li:hover a::before { background: var(--crimson); transform: none; }
+  .pre-foot li:hover::after { display: none; }
+  .pre-foot li:hover a { color: #1C1B19; }
+}
