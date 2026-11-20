@@ -2103,3 +2103,6 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 .en .date { font-weight: 400; }
 :is(.feat-head, .side-head, .tuck-story, .blur-card, .ebox, .overlay-card, .cap, figcaption) .en { font-weight: 600; }
 :is(.feat-head, .side-head, .tuck-story, .blur-card, .ebox, .overlay-card, .cap, figcaption) .en .date { font-weight: 400; }
+/* a photo's headline ends on its last baseline, --inset above the photo's foot (as the photo cards) */
+.feat-head { text-box-trim: trim-both; text-box-edge: cap alphabetic; }
+.feat-head .en { text-box-trim: trim-end; text-box-edge: cap alphabetic; }
