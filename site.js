@@ -253,7 +253,7 @@
         var g = document.createRange(); g.selectNodeContents(e); var r = g.getBoundingClientRect(), c = r.height * cut;
         return { l: r.left - hr.left, r: r.right - hr.left, t: r.top - hr.top + c, b: r.bottom - hr.top - c };
       };
-      var lines = [].map.call(foot.querySelectorAll('.foot-copy, .foot-contact > *'), function (e) { return relText(e, 0.2); });
+      var lines = [].map.call(foot.querySelectorAll('.foot-contact > span'), function (e) { return relText(e, 0.2); });
       var t0 = Math.min.apply(null, lines.map(function (r) { return r.t; })), b0 = Math.max.apply(null, lines.map(function (r) { return r.b; }));
       /* it may use the footer's padding too -- from --s2 under the top line's shade to --s2 above the
          page's end -- without the footer growing */
@@ -265,20 +265,17 @@
       var ccs = getComputedStyle(copy), cctx = document.createElement('canvas').getContext('2d');
       cctx.font = ccs.fontWeight + ' ' + ccs.fontSize + ' ' + ccs.fontFamily;
       var capTop = bl0(copy) - cctx.measureText('H').actualBoundingBoxAscent;
-      var ceil0 = capTop - (fr.bottom - bl0(addrLast)) - hr.top;
-      if (window.matchMedia('(max-width: 40rem)').matches) {
-        /* phones: the address's long last line runs nearly across -- the dial stays above it, beside the
-           shorter lines, and may rise into the room over the copyright */
-        floor0 = relText(addrLast, 0).t - 4;
-        ceil0 = Math.min(ceil0, rel(copy, 0).t - 60);
-      }
+      /* the dial and its names keep within the paragraph: from the copyright's capitals to the
+         address's last baseline (phones: to just above that long last line, which runs nearly across) */
+      var ceil0 = capTop - hr.top;
+      floor0 = window.matchMedia('(max-width: 40rem)').matches ? relText(addrLast, 0).t - 4 : bl0(addrLast) - hr.top;
       return { keep: lines, top: ceil0, bot: floor0, ceil: ceil0, centre: true, cy: (ceil0 + floor0) / 2, colR: hr.width, cx0: hr.width };
     }
     var words = [].filter.call(host.querySelectorAll('.clock-main .hm, .clock-main .dow, .clock-main .city'), function (e) { return e.getClientRects().length; })
                   .map(function (e) { return rel(e, 0.2); });   /* only words actually shown */
     var mail = rel(host.querySelector('.foot-mail'), 0);
     /* below: the address (and, on wider screens, the copyright on the right) -- the dial stays clear of them */
-    var below = [].map.call(foot.querySelectorAll('.foot-contact > *, .foot-copy'), function (e) { return rel(e, 0.2); });
+    var below = [].map.call(foot.querySelectorAll('.foot-contact > span'), function (e) { return rel(e, 0.2); });
     var keep = words.concat([mail], below);
     var top = Math.min.apply(null, words.map(function (r) { return r.t; }));
     /* down to the first thing under it: on phones the address line right under the mail (it runs the
@@ -286,6 +283,16 @@
     var bot = phone ? Math.min.apply(null, below.map(function (r) { return r.t; })) - 4
                     : foot.getBoundingClientRect().bottom - hr.top - 8;   /* wider: the right side is free down to the page's end (the words on the left are kept clear) */
     var colR = hr.width;
+    if (!phone) {
+      /* between phones and wide screens too: the dial and its names keep within the paragraph (the
+         copyright's capitals to the address's last baseline), beside it on the right */
+      var pc = foot.querySelector('.foot-copy'), pl = foot.querySelector('.foot-contact > :last-child');
+      var bm = function (el) { var z = document.createElement('span'); z.style.cssText = 'display:inline-block;width:0;height:0'; el.appendChild(z); var y = z.getBoundingClientRect().top; z.remove(); return y; };
+      var pcs = getComputedStyle(pc), pctx = document.createElement('canvas').getContext('2d');
+      pctx.font = pcs.fontWeight + ' ' + pcs.fontSize + ' ' + pcs.fontFamily;
+      var pT = bm(pc) - pctx.measureText('H').actualBoundingBoxAscent - hr.top, pB = bm(pl) - hr.top;
+      return { keep: keep, top: pT, bot: pB, ceil: pT, centre: true, cy: (pT + pB) / 2, colR: colR, cx0: colR };
+    }
     /* the ceiling: names above the dial may rise to --s2 under the footer's top line and its shade */
     var ceil = (foot.querySelector('.foot-main') || foot).getBoundingClientRect().top - hr.top + 8 + 8;   /* the line, its shade, and --s2 */
     return { keep: keep, top: top, bot: bot, ceil: ceil, cy: (top + bot) / 2, colR: colR,

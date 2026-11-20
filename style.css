@@ -2015,3 +2015,11 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 /* text links stay black when pointed at too (only the underline turns into the highlighter) */
 a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))):hover { color: var(--ink); }
 .entry .desc a:hover { color: var(--ink); }
+
+/* the copyright and the address are one paragraph (one element, lines broken by <br>): it stands where
+   the copyright stood -- first in the footer on wide screens and phones, under the time and mail between */
+.foot-contact > span { display: inline; }
+.foot-side > .foot-contact, .foot-side > .foot-contact:is(*) { grid-column: 1; grid-row: 2; margin-top: var(--s4); align-self: start; }
+@media (min-width: 80rem), (max-width: 40rem) { .foot-side > .foot-contact, .foot-side > .foot-contact:is(*) { margin-top: 0; } }
+/* the links' underline is a line: the lines' grey (#E0DDD7), like every other line */
+a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))) { --hl: var(--line); }
