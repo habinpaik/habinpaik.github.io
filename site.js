@@ -581,12 +581,20 @@ document.addEventListener('touchstart', function () {}, { passive: true });
     var pad = parseFloat(getComputedStyle(main).paddingLeft) || 0, m = main.getBoundingClientRect();
     rail.style.left = (pad - 56 - nav.offsetWidth) + 'px';   /* --s7 left of the text column */
     var hh = head ? head.offsetHeight : 0;
-    nav.style.top = 'calc(50vh - ' + (nav.offsetHeight / 2) + 'px)';   /* it sticks in the screen's vertical middle */
+    lift();
     rail.style.top = '0px';
     /* always afloat: the rail runs from the page's top, so the outline sits in the screen's middle from
        the first moment, not only once the first title arrives */
   }
+  /* fixed in the screen's vertical middle; once the footer comes up, it is pushed up ahead of it */
+  var foot = document.querySelector('.site-foot');
+  function lift() {
+    var h = nav.offsetHeight, t = (window.innerHeight - h) / 2;
+    if (foot) t = Math.min(t, foot.getBoundingClientRect().top - 40 - h);
+    nav.style.top = t + 'px';
+  }
   function place() {
+    lift();
     var hb = head ? head.getBoundingClientRect().bottom : 0, vh = window.innerHeight;
     /* the section being read: the last whose title has passed the screen's middle (a click on the
        outline brings a title to the top, above it); at the page's very end, the last section */
@@ -600,7 +608,7 @@ document.addEventListener('touchstart', function () {}, { passive: true });
     }
   }
   var raf = 0; function soon() { if (!raf) raf = requestAnimationFrame(function () { raf = 0; place(); }); }
-  window.addEventListener('scroll', soon, { passive: true });
+  window.addEventListener('scroll', function () { lift(); soon(); }, { passive: true });   /* at once, so it rides up with the footer */
   window.addEventListener('resize', function () { layoutRail(); soon(); });
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { layoutRail(); place(); });
   if (window.ResizeObserver) { var ro = new ResizeObserver(function () { layoutRail(); }); ro.observe(main); ro.observe(nav); }   /* the outline grows when the time joins it */
@@ -671,7 +679,7 @@ document.addEventListener('touchstart', function () {}, { passive: true });
     var cm = document.querySelector('.clock-main'), home = document.querySelector('.clocks');
     if (!cm || !home) return;
     /* where the section outline floats on the left, the time and mail go into it, under its last line */
-    var ol = document.querySelector('.outline'), olOn = ol && ol.offsetParent !== null;
+    var ol = document.querySelector('.outline'), olOn = ol && ol.getClientRects().length > 0;
     if (olOn) {
       if (!ol.contains(cm)) {
         var a0 = cm.querySelector('.foot-mail'); if (a0 && a0.href) href = a0.getAttribute('href');
@@ -844,6 +852,8 @@ document.addEventListener('touchstart', function () {}, { passive: true });
     el.textContent = 'Updated ' + f({ month: 'short', day: 'numeric', year: 'numeric' }) + ', ' + f({ hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
     el.title = 'Seoul time';
     align();
+    var ol = document.querySelector('.outline');   /* where the outline is, the update heads it instead */
+    if (ol && !ol.querySelector('.updated')) { var u = document.createElement('p'); u.className = 'updated'; u.textContent = el.textContent; u.title = el.title; ol.insertBefore(u, ol.firstChild); }
   }).catch(function () {});
   window.addEventListener('resize', align);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(align);
