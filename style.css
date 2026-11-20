@@ -872,15 +872,15 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
      descenders -- so the fill rises from under the whole word to over it; the text doesn't move */
   padding: calc((1lh - 1.0556em) / 2) 0.12em; margin: 0 -0.12em;   /* top and bottom: the selection's band -- the whole line (the font's ascent + descent is 1.0556em; the rest of the line height shared above and below) */
   -webkit-box-decoration-break: clone; box-decoration-break: clone;   /* a link over two lines gets a box on each */
-  background-image: linear-gradient(var(--crimson), var(--crimson)), linear-gradient(var(--crimson), var(--crimson));   /* the fill, and a crimson hairline underline */
+  background-image: linear-gradient(var(--crimson), var(--crimson)), linear-gradient(var(--hl), var(--hl));   /* the fill, and a light grey highlighter stroke */
   background-repeat: no-repeat;
-  background-position: 0 100%, 0.12em calc(100% - (1lh - 1.0556em) / 8);   /* the underline a little under the descenders: halfway to the line's foot */
-  background-size: 100% 0, calc(100% - 0.24em) 2px;   /* the underline 2px */
+  background-position: 0 100%, 0.12em calc(100% - (1lh - 1.0556em) / 2 - 0.14em);   /* the stroke from just under the baseline up through the lower half of the letters */   /* the underline a little under the descenders: halfway to the line's foot */
+  background-size: 100% 0, calc(100% - 0.24em) 0.5em;   /* the highlighter: the lower half of the letters */
   transition: background-size .45s cubic-bezier(.45, 0, .25, 1), color .45s ease;   /* rises from the underline, unhurried */
 }
 a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story)):hover {
   color: var(--link-hover);
-  background-size: 100% 100%, calc(100% - 0.24em) 2px;
+  background-size: 100% 100%, calc(100% - 0.24em) 0.5em;
 }
 .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a { background-size: 100% 0, 0 1px; }
 .entry h3 a:hover, .table .cell .th a:hover, .work .th a:hover, .foot-contact a:hover { background-size: 100% 100%, 0 1px; }
@@ -1549,8 +1549,8 @@ html.night-switch .night-veil { transition: opacity .3s ease !important; }
   :is(.side-head, .tuck-story, .print-tab, .ebox:not(.split), .ebox.split .go, .card, .feat-photo, .blur-card, .overlay-card):hover .kh,
   .ebox.split .eup:has(h3 a:hover) .kh,
   :is(.side-head, .tuck-story, .print-tab).deep .kh,
-  .feat-photo.zoom .kh { text-decoration-color: var(--stone); }   /* the grey */
-  :is(.feat-photo, .blur-card, .overlay-card):is(:hover, .zoom) .kh.kh.kh { text-decoration-color: #A9A59D; }   /* on a photo: the dark-ground grey (.kh thrice: outranks the list above, whose :is() counts as its weightiest member) */
+  .feat-photo.zoom .kh { text-decoration-color: var(--hl); }   /* the grey */
+  :is(.feat-photo, .blur-card, .overlay-card):is(:hover, .zoom) .kh.kh.kh { text-decoration-color: var(--hl-photo); }   /* on a photo: the dark-ground grey (.kh thrice: outranks the list above, whose :is() counts as its weightiest member) */
 }
 
 /* the English line of every story is grey: on paper the day grey (already), on a photo the grey of
@@ -1573,7 +1573,7 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
    and both answer at once (the photo enlarges, the box's shade deepens, the headline is underlined) */
 .side-row:hover .side-photo img { transform: scale(1.04); }
 .side-row:hover .side-head::before { opacity: 1; }
-.side-row:hover .side-head .kh { text-decoration-color: var(--stone); }
+.side-row:hover .side-head .kh { text-decoration-color: var(--hl); }
 
 /* Explore More: the page you are on is the one pink cell -- the night crimson, plain; its name in
    the dark ground's colour (words on a fill), the strong shade along its top as on any chosen cell */
@@ -1682,7 +1682,7 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 .card .card-date { color: #A9A59D; }
 @media (max-width: 40rem) { .card-txt { min-height: 0; } }
 .card:hover .card-img img { transform: scale(1.05); }
-@media (hover: hover) { .card:hover .kh.kh.kh { text-decoration-color: #A9A59D; } }   /* on a photo: the dark-ground grey */
+@media (hover: hover) { .card:hover .kh.kh.kh { text-decoration-color: var(--hl-photo); } }   /* on a photo: the dark-ground grey */
 
 /* Portfolio cards as video thumbnails: a wide photo (16:9), a short title and its date at the lower
    right, right-aligned, one line each */
@@ -1930,3 +1930,8 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
   .pre-foot { --inset: 14px; }
   .pre-foot li:has(a[aria-current="page"]) { margin-right: -5.4rem; }   /* out to near the column's edge */
 }
+
+/* underlines become a highlighter: a light grey stroke behind the lower half of the words -- links at
+   rest, and headlines when pointed at (on photos a light stroke of the dark-ground grey) */
+:root { --hl: color-mix(in srgb, var(--stone) 26%, transparent); --hl-photo: color-mix(in srgb, #A9A59D 45%, transparent); }
+.kh, .kh:is(*) { text-decoration-thickness: 0.5em; text-underline-offset: -0.32em; text-decoration-skip-ink: none; }
