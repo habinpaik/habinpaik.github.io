@@ -2111,3 +2111,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 .spine-nav button:disabled, .spine-nav button:disabled:hover, .rail-btn:disabled, .rail-btn:disabled:hover { color: var(--line); border-color: var(--line); }
 /* the arrow buttons' box line always the light grey (only the arrow itself darkens) */
 .spine-nav button, .spine-nav button:hover, .spine-nav button:disabled, .rail-btn, .rail-btn:hover, .rail-btn:disabled { border-color: var(--line); }
+
+/* Journalism: the English head now stands where the Korean one stood (the serif -- Newsreader, which
+   the page already has), and the Korean head goes in the small line under it, where the English was */
+:is(.feat-head, .side-head, .tuck-story, .blur-card, .overlay-card, .cap, .ebox) .kh { font-family: var(--serif); letter-spacing: 0; }
