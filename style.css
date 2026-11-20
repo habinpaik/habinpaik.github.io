@@ -1907,3 +1907,4 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 /* the headlines' hover underline as thick as the links' */
 .kh, .pre-foot .clocks a.foot-mail:hover { text-decoration-thickness: 3px; }
 .kh { text-underline-offset: 0.3em; }   /* a hair lower, as the links' */
+.side-photo::after { backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); }   /* side-story photos: only a touch of blur */
