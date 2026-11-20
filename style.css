@@ -387,7 +387,7 @@ main > p:first-child { margin-bottom: var(--sec-gap); }
 /* facts */
 .fact { line-height: 1.6; margin: 0 0 var(--s2); font-family: var(--sans); }   /* a list, not prose: in the sans */
 .fact:last-child { margin-bottom: 0; }
-.fact .primary { font-weight: 600; }
+.fact .primary { font-weight: 400; }   /* the facts in the body weight, not bold */
 .fact .sep { color: var(--stone); }
 .fact .years { color: var(--stone); font-size: var(--t-small); }
 .fact .nowrap { white-space: nowrap; }   /* a Korean name and its years stay together on one line */
