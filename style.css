@@ -2092,3 +2092,5 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 .outline a, .outline a:hover { color: var(--stone); }
 .outline a.cur, .outline a.cur:hover { color: var(--on-fill); }
 .time-rail .clock-main, .time-rail .clock-main:active { color: var(--stone); }
+/* the outline: no crimson box -- the section being read is simply black, the others grey */
+.outline a.cur, .outline a.cur:hover { background: none; color: var(--ink); }
