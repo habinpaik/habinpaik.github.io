@@ -2180,10 +2180,13 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 }
 html:has(.outline) .site-head .updated { display: none !important; }
 .outline li a, .outline li a:hover, .outline li a.cur { margin: 0; }   /* not a text link's reach past its words: every line starts on the gutter */
-@media (max-width: 80rem) { .outline-rail { display: none; } }   /* only where the box clears the text column */
+/* the words' inset from the screen's edge: the gutter, narrowed by site.js where the screen is tight so the
+   box always ends --s5 short of the text column; where even a small inset won't do, the box hides */
+.outline li, .outline .updated, .outline .clock-main { margin-left: var(--ol-in, var(--gutter)); }
+.outline-rail.no-room { display: none; }
 /* the lines between the rows run from the words' first letter to the box's right end (the end of the
    widest line, the mail); only the box's top and bottom lines reach the screen's edge */
-.outline li, .outline .updated, .outline .clock-main { margin-left: var(--gutter); }
+.outline li, .outline .updated, .outline .clock-main { margin-left: var(--ol-in, var(--gutter)); }
 .outline li a, .outline li a:hover, .outline li a.cur, .outline .updated, .outline .clock-main { padding-left: 0; padding-right: 0; }
 @media (hover: hover) {
   .outline li a:hover, .outline li a.cur:hover, .outline .clock-main:hover { background-image: var(--shade-light); background-repeat: no-repeat; background-position: 0 0; background-size: 100% var(--s2); }

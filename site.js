@@ -581,13 +581,24 @@ document.addEventListener('touchstart', function () {}, { passive: true });
     var pad = parseFloat(getComputedStyle(main).paddingLeft) || 0, m = main.getBoundingClientRect();
     rail.style.left = (pad - 56 - nav.offsetWidth) + 'px';   /* --s7 left of the text column */
     var hh = head ? head.offsetHeight : 0;
-    lift();
+    room(); lift();
     rail.style.top = '0px';
     /* always afloat: the rail runs from the page's top, so the outline sits in the screen's middle from
        the first moment, not only once the first title arrives */
   }
   /* fixed in the screen's vertical middle; once the footer comes up, it is pushed up ahead of it */
   var foot = document.querySelector('.site-foot');
+  var words = 0;
+  function room() {   /* the inset: at most the gutter, at least --s2, and the box ends --s5 before the text */
+    var vw = document.documentElement.clientWidth, rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+    var gutter = Math.min(3 * rem, Math.max(1.25 * rem, 0.04 * vw));   /* = --gutter */
+    if (nav.getClientRects().length) { var li = nav.querySelector('li'); if (li) words = nav.getBoundingClientRect().right - li.getBoundingClientRect().left; }
+    var textLeft = main.getBoundingClientRect().left + (parseFloat(getComputedStyle(main).paddingLeft) || 0);
+    var ins = Math.min(gutter, textLeft - 28 - words), none = ins < 8;
+    if (rail.classList.contains('no-room') !== none) rail.classList.toggle('no-room', none);
+    var v = none ? '' : ins.toFixed(1) + 'px';
+    if (nav.style.getPropertyValue('--ol-in') !== v) nav.style.setProperty('--ol-in', v);
+  }
   function lift() {
     var h = nav.offsetHeight, t = (window.innerHeight - h) / 2;
     if (foot) t = Math.min(t, foot.getBoundingClientRect().top - 40 - h);
