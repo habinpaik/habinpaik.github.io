@@ -2128,3 +2128,8 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 .blur-card .cap .en .date, .overlay-card .cap .en .date, .overlay-duo .cap .en .date { font-style: normal; font-weight: 400; }
 .en .date, :is(.feat-head, .side-head, .tuck-story, .blur-card, .ebox, .overlay-card, .cap, figcaption) .en .date { font-family: var(--serif); }
 .en .date { white-space: nowrap; }   /* "(Mar 2026)" never splits
+/* the date as it was: the small sans, regular, upright -- after the head, in parentheses */
+.en .date, :is(.feat-head, .side-head, .tuck-story, .blur-card, .ebox, .overlay-card, .cap, figcaption) .en .date,
+.blur-card .cap .en .date, .overlay-card .cap .en .date, .overlay-duo .cap .en .date {
+  font-family: var(--sans); font-size: var(--t-small); font-style: normal; font-weight: 400; letter-spacing: 0;
+}
