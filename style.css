@@ -2012,3 +2012,6 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 }
 .entry .desc a { color: var(--ink); }
 .entry .desc a:hover { color: var(--crimson); }
+/* text links stay black when pointed at too (only the underline turns into the highlighter) */
+a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))):hover { color: var(--ink); }
+.entry .desc a:hover { color: var(--ink); }
