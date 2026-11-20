@@ -2135,3 +2135,12 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   .pre-foot li:hover:not(:has(a[aria-current="page"]))::after { display: block; }
   .pre-foot li:hover:not(:has(a[aria-current="page"])) a { color: #fff; }
 }
+
+/* no shades on photos */
+.feat-photo::before, .side-photo::before, .overlay-card::before, .blur-card::before, .card-img::before { display: none; }
+
+/* Explore More hover: the cell's name is underlined (breaking at descenders), the left shade stays light */
+@media (hover: hover) {
+  .pre-foot ul li a:hover::after { background-size: 100% 100%, 0 100% !important; }
+  .pre-foot ul li a:hover .pf-name { text-decoration: underline; text-decoration-color: currentColor; text-decoration-thickness: 2px; text-underline-offset: 0.12em; text-decoration-skip-ink: auto; }
+}
