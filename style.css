@@ -2071,3 +2071,20 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 .outline .bar { display: none; }
 .outline a, .outline a:hover, .outline a.cur { width: fit-content; padding: 2px var(--s2); }
 .outline a.cur, .outline a.cur:hover { background: var(--crimson); }
+
+/* the section outline in the PDF tab's weight */
+.outline { font-weight: 600; }
+
+/* the floating time box in the outline's letter: small sans, the same weight and line height */
+.time-rail .clock-main { font-family: var(--sans); font-size: var(--t-small); font-weight: 600; line-height: 1.4; }
+/* pointing at it: a light grey highlight sweeps across it from the left; pressing it no longer turns it crimson */
+.time-rail .clock-main {
+  background-color: var(--paper);
+  background-image: var(--shade-light), linear-gradient(var(--line), var(--line));
+  background-repeat: no-repeat; background-position: 0 0, 0 0; background-size: 100% 8px, 0% 100%;
+  transition: background-size .35s cubic-bezier(.3, 0, .2, 1);
+}
+@media (hover: hover) { .time-rail .clock-main:hover { background-size: 100% 8px, 100% 100%; } }
+.time-rail .clock-main:hover::before { opacity: 0 !important; }
+.time-rail .clock-main:active { background-color: var(--paper); border-color: var(--line); color: var(--ink); }
+.time-rail .clock-main:active .foot-mail { color: inherit !important; }
