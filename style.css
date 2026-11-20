@@ -1916,3 +1916,17 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
   .pre-foot li:hover::after { display: none; }
   .pre-foot li:hover a { color: #1C1B19; }
 }
+/* the current page's cell runs out further, and says so at its right end */
+.pre-foot li:has(a[aria-current="page"]) { margin-right: -5rem; }
+.pre-foot li:has(a[aria-current="page"])::after {
+  display: block; content: "You are here"; position: absolute; left: auto; right: var(--inset); top: 50%; bottom: auto; width: auto;
+  transform: translateY(-50%); z-index: 2; pointer-events: none;
+  backdrop-filter: none; -webkit-backdrop-filter: none; -webkit-mask-image: none; mask-image: none;
+  font-family: var(--sans); font-size: var(--t-small); line-height: 1; color: #1C1B19; white-space: nowrap;
+}
+/* phones: Explore More larger all round -- the cells 75% of the column wide, and a little taller */
+@media (max-width: 40rem) {
+  .pf-row { grid-template-columns: 3fr 1fr; }
+  .pre-foot { --inset: 14px; }
+  .pre-foot li:has(a[aria-current="page"]) { margin-right: -5.4rem; }   /* out to near the column's edge */
+}
