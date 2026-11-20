@@ -1935,3 +1935,12 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
    rest, and headlines when pointed at (on photos a light stroke of the dark-ground grey) */
 :root { --hl: color-mix(in srgb, var(--stone) 26%, transparent); --hl-photo: color-mix(in srgb, #A9A59D 45%, transparent); }
 .kh, .kh:is(*) { text-decoration-thickness: 0.5em; text-underline-offset: -0.32em; text-decoration-skip-ink: none; }
+
+/* pressing an arrow: its colours swap -- the frame's dark grey fills the box, the arrow turns white */
+.spine-nav button:not(:disabled):active, .rail-btn:not(:disabled):active,
+.spine-nav button:not(:disabled):active:hover, .rail-btn:not(:disabled):active:hover {
+  background: color-mix(in srgb, var(--stone) 65%, var(--paper)); background-size: 100% 100%;
+  color: var(--paper); border-color: color-mix(in srgb, var(--stone) 65%, var(--paper));
+}
+.spine-nav button:not(:disabled):active::before, .rail-btn:not(:disabled):active::before,
+.spine-nav button:not(:disabled):active::after, .rail-btn:not(:disabled):active::after { opacity: 0; }
