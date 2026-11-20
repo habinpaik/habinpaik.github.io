@@ -1948,3 +1948,8 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story)) { transition: none; }
 .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a { background-size: 100% 0, 0 0; }   /* links with no mark at rest keep none */
 .entry h3 a:hover, .table .cell .th a:hover, .work .th a:hover, .foot-contact a:hover { background-size: 100% 100%, 0 0; }
+/* "You are here" starts exactly where the other cells end; the current cell runs on past it by the
+   label's own width and the cell's inset (site.js measures the label) */
+.pre-foot li:has(a[aria-current="page"]) { margin-right: calc(-1 * var(--yah, 5rem)); }
+.pre-foot li:has(a[aria-current="page"])::after { left: calc(100% - var(--yah, 5rem) - var(--yah-ink, 0px)); right: auto; }
+@media (max-width: 40rem) { .pre-foot li:has(a[aria-current="page"]) { margin-right: calc(-1 * var(--yah, 5rem)); } }

@@ -830,3 +830,18 @@ document.addEventListener('touchstart', function () {}, { passive: true });
   set(); window.addEventListener('resize', set); window.addEventListener('load', set);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(set);
 })();
+
+/* Explore More: the current cell runs past the others by "You are here" plus the inset; the label's
+   first letter's ink starts on the others' right edge */
+(function () {
+  var li = document.querySelector('.pre-foot li:has(a[aria-current="page"])'); if (!li) return;
+  function set() {
+    var cs = getComputedStyle(li, '::after'), c = document.createElement('canvas').getContext('2d');
+    c.font = cs.fontSize + ' ' + cs.fontFamily;
+    var m = c.measureText('You are here'), inset = parseFloat(getComputedStyle(li.closest('.pre-foot')).getPropertyValue('--inset')) || 14;
+    li.style.setProperty('--yah', (m.width + inset) + 'px');
+    li.style.setProperty('--yah-ink', (-m.actualBoundingBoxLeft) + 'px');   /* the Y's left side bearing */
+  }
+  set(); window.addEventListener('resize', set);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(set);
+})();
