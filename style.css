@@ -2128,3 +2128,10 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   background-repeat: no-repeat !important; background-size: 100% 100%, 0 100% !important;
 }
 @media (hover: hover) { .pre-foot ul li a:hover::after { background-size: 0 100%, 100% 100% !important; } }
+/* Explore More hover: no pink -- the cell keeps its photo and white name; only the shade deepens */
+@media (hover: hover) {
+  .pre-foot li:hover:not(:has(a[aria-current="page"])) a::before { background: var(--pf-img) center / cover no-repeat; }
+  .pre-foot li.tall:hover:not(:has(a[aria-current="page"])) a:is([href="/portfolio"], [href="/journalism"])::before { background-position: right center; }
+  .pre-foot li:hover:not(:has(a[aria-current="page"]))::after { display: block; }
+  .pre-foot li:hover:not(:has(a[aria-current="page"])) a { color: #fff; }
+}
