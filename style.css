@@ -1951,3 +1951,5 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 .pre-foot li:has(a[aria-current="page"]) { margin-right: calc(-1 * var(--yah, 5rem)); }
 .pre-foot li:has(a[aria-current="page"])::after { left: calc(100% - var(--yah, 5rem) - var(--yah-ink, 0px)); right: auto; }
 @media (max-width: 40rem) { .pre-foot li:has(a[aria-current="page"]) { margin-right: calc(-1 * var(--yah, 5rem)); } }
+/* the headlines' highlighter fades in and out, as the link's address does */
+.kh, .kh:is(*) { transition: text-decoration-color .2s ease; }
