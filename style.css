@@ -1979,3 +1979,12 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 .filter-btn::before, .spine-nav button::before, .shelf-more button::before, .rail-btn::before, .time-rail .clock-main::before,
 .tuck-story::before, .print-tab::before, .side-head::before, .ebox::before, .ebox.split .go::before, .ebox.split .go::after,
 .nav a::after, .wordmark::after { z-index: -1; }
+
+/* Explore More: no shades at all -- not on its cells, not under its title */
+.pre-foot li::before, .pre-foot a::after, .pre-foot li:has(a[aria-current="page"])::before { display: none !important; }
+.pre-foot h2.section-title { background: none !important; }
+
+/* pointing at a highlighted link: crimson words, the highlighter gone */
+a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))):hover {
+  background-size: 100% 0, 0 0;
+}
