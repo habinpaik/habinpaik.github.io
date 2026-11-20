@@ -2193,7 +2193,7 @@ html:has(.outline) .site-head .updated { display: none !important; }
 /* the box shows down to tablet width (from 768px); below, phones, none -- there the page moves over to make
    room for it (site.js) */
 @media (max-width: 68.75rem) and (min-width: 48rem) { .outline-rail { display: block; } }
-/* the last update and the time with "Always open": one letter -- thin (Pretendard Light), in the same grey
-   as the other rows; the mail stays in the rows' own weight */
-.outline .updated, .outline .clock-main time, .outline .clock-main .city { font-weight: 300; color: var(--stone); }
+/* the last update and the time with "Always open": one letter -- Pretendard Regular, in the same grey as
+   the other rows; the mail stays in the rows' own weight */
+.outline .updated, .outline .clock-main time, .outline .clock-main .city { font-weight: 400; color: var(--stone); }
 body { padding-left: var(--shift, 0px); }   /* the page moved over beside the outline box (tablets; site.js) */
