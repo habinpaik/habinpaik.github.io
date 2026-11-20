@@ -588,16 +588,24 @@ document.addEventListener('touchstart', function () {}, { passive: true });
   }
   /* fixed in the screen's vertical middle; once the footer comes up, it is pushed up ahead of it */
   var foot = document.querySelector('.site-foot');
-  var words = 0;
-  function room() {   /* the inset: at most the gutter, at least --s2, and the box ends --s5 before the text */
-    var vw = document.documentElement.clientWidth, rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
-    var gutter = Math.min(3 * rem, Math.max(1.25 * rem, 0.04 * vw));   /* = --gutter */
+  /* where the screen is too narrow for the box beside the centred text (tablets), the page moves over to
+     the right of it: the box on the left, the text on the right; wider again, the text returns to the middle */
+  var words = 0, shift = 0, root = document.documentElement;
+  function textLeft() { return main.getBoundingClientRect().left + (parseFloat(getComputedStyle(main).paddingLeft) || 0); }
+  function room() {
+    var was = shift;
     if (nav.getClientRects().length) { var li = nav.querySelector('li'); if (li) words = nav.getBoundingClientRect().right - li.getBoundingClientRect().left; }
-    var textLeft = main.getBoundingClientRect().left + (parseFloat(getComputedStyle(main).paddingLeft) || 0);
-    var ins = Math.min(gutter, textLeft - 28 - words), none = ins < 8;
-    if (rail.classList.contains('no-room') !== none) rail.classList.toggle('no-room', none);
-    var v = none ? '' : ins.toFixed(1) + 'px';
-    if (nav.style.getPropertyValue('--ol-in') !== v) nav.style.setProperty('--ol-in', v);
+    root.style.removeProperty('--shift'); shift = 0;
+    if (nav.getClientRects().length && words) {
+      var vw = document.documentElement.clientWidth, rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+      var need = Math.min(3 * rem, Math.max(1.25 * rem, 0.04 * vw)) + words + 28;   /* the gutter, the words, and a gap */
+      for (var i = 0; i < 5; i++) {
+        var gap = need - textLeft(); if (gap <= 0.5) break;
+        shift += gap; root.style.setProperty('--shift', shift + 'px');
+      }
+      shift = Math.round(shift * 10) / 10; if (shift) root.style.setProperty('--shift', shift + 'px'); else root.style.removeProperty('--shift');
+    }
+    if (Math.abs(shift - was) > 0.5) setTimeout(function () { window.dispatchEvent(new Event('resize')); }, 0);   /* the rest of the page re-measures */
   }
   function lift() {
     var h = nav.offsetHeight, t = (window.innerHeight - h) / 2;

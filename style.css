@@ -465,7 +465,7 @@ main > p.dek:first-child + section { margin-top: 0; }   /* the opener is larger:
    title, aligned to a common baseline (a shelf). Height/thickness vary by
    category: classic = short & thick, science = tall & thin, humanities = mid. */
 .spine-panel {
-  width: calc(100vw - var(--sbw, 0px)); margin-left: calc(50% - (100vw - var(--sbw, 0px)) / 2); transform: none;
+  width: calc(100vw - var(--sbw, 0px) - var(--shift, 0px)); margin-left: calc(50% - (100vw - var(--sbw, 0px) - var(--shift, 0px)) / 2); transform: none;
   padding-top: 4px; padding-bottom: 0;   /* the tags sit close over the shelf */   /* 트랙 위 여유 4px과 합쳐 박스 위→첫 책 20px */   /* 트랙 위 여유 4px과 합쳐 박스 위→첫 책 8px 유지 */
 }
 .spine-wrap { max-width: 46rem; margin-inline: auto; padding-inline: var(--gutter); position: relative; }
@@ -581,7 +581,7 @@ main > p.dek:first-child + section { margin-top: 0; }   /* the opener is larger:
 }
 /* the panel is full-bleed but the shelf grid is capped to the text column */
 .shelf-panel {
-  width: calc(100vw - var(--sbw, 0px)); margin-left: calc(50% - (100vw - var(--sbw, 0px)) / 2); transform: none;
+  width: calc(100vw - var(--sbw, 0px) - var(--shift, 0px)); margin-left: calc(50% - (100vw - var(--sbw, 0px) - var(--shift, 0px)) / 2); transform: none;
 }
 .shelf-wrap { max-width: 46rem; margin-inline: auto; padding-inline: var(--gutter); }
 
@@ -657,12 +657,12 @@ main > p.dek:first-child + section { margin-top: 0; }   /* the opener is larger:
 figure.ph { margin: var(--s6) 0; }
 figure.ph img { width: 100%; display: block; filter: grayscale(1); background: var(--line); }
 figure.ph figcaption { font-size: var(--t-small); color: var(--stone); margin-top: var(--s2); }
-figure.ph.wide  { width: min(84rem, 96vw); margin-left: 50%; transform: translateX(-50%); }
-figure.ph.full  { width: calc(100vw - var(--sbw, 0px)); margin-left: calc(50% - (100vw - var(--sbw, 0px)) / 2); transform: none; }
+figure.ph.wide  { width: min(84rem, (100vw - var(--shift, 0px)) * .96); margin-left: 50%; transform: translateX(-50%); }
+figure.ph.full  { width: calc(100vw - var(--sbw, 0px) - var(--shift, 0px)); margin-left: calc(50% - (100vw - var(--sbw, 0px) - var(--shift, 0px)) / 2); transform: none; }
 figure.ph.wide img, figure.ph.full img { max-height: 78vh; object-fit: cover; }
 /* phones: a wide photo runs edge to edge; its caption stays on the text column */
 @media (max-width: 34rem) {
-  figure.ph.wide { width: calc(100vw - var(--sbw, 0px)); margin-left: calc(50% - (100vw - var(--sbw, 0px)) / 2); transform: none; }
+  figure.ph.wide { width: calc(100vw - var(--sbw, 0px) - var(--shift, 0px)); margin-left: calc(50% - (100vw - var(--sbw, 0px) - var(--shift, 0px)) / 2); transform: none; }
   figure.ph.wide figcaption, figure.ph.full figcaption { padding-inline: var(--gutter); }
 }
 figure.ph.left  { float: left;  width: 46%; margin: var(--s1) var(--s5) var(--s4) 0; }
@@ -1012,7 +1012,7 @@ a:focus-visible { outline: 2px solid var(--crimson); outline-offset: 3px; }
 
 /* ---------- 책장 박스: 분류 버튼 줄 + 가로책장 + 표지책장을 하나의 회색 박스로 ---------- */
 .shelf-box {
-  width: calc(100vw - var(--sbw, 0px)); margin-left: calc(50% - (100vw - var(--sbw, 0px)) / 2);
+  width: calc(100vw - var(--sbw, 0px) - var(--shift, 0px)); margin-left: calc(50% - (100vw - var(--sbw, 0px) - var(--shift, 0px)) / 2);
   background: none;   /* no grey box: the shelves sit straight on the page */
   margin-top: var(--s3);
 }
@@ -1050,7 +1050,7 @@ main.shelf-end { padding-bottom: 0; }
 .card-rail {
   margin-top: var(--s4);   /* the paragraph gap */
   /* from the text column's left edge to the right edge of the screen */
-  margin-right: calc((100% - (100vw - var(--sbw, 0px))) / 2);
+  margin-right: calc((100% - (100vw - var(--sbw, 0px) - var(--shift, 0px))) / 2);
 }
 .rail-track {
   display: flex; gap: var(--s4);
@@ -1121,7 +1121,7 @@ main.shelf-end { padding-bottom: 0; }
 /* phones: two card-news cards side by side in view (half the text column each) */
 @media (max-width: 40rem) {
   .blur-rail .rail-track { gap: var(--s3); }   /* the same gap as the portfolio cards */
-  .blur-card { flex-basis: calc((100vw - var(--sbw, 0px) - 2 * var(--gutter) - var(--s3)) / 2); }
+  .blur-card { flex-basis: calc((100vw - var(--sbw, 0px) - var(--shift, 0px) - 2 * var(--gutter) - var(--s3)) / 2); }
   .blur-card { aspect-ratio: 3 / 5; }   /* taller, so the date, headline and description still fit at half width */
 }
 .blur-card img {
@@ -1311,7 +1311,7 @@ section:has(.spine-panel) + section > h2.section-title { background: none; borde
    in the column stay exactly where they were: the shelf only widens outward, padded by the same
    amount), and there, outside the column, it blurs progressively away -- a cue that more lies that
    way. The blur lives only in the margins; nothing in the column is touched. */
-.spine-wrap { --ext: max(var(--gutter), min((100vw - var(--sbw, 0px) - 46rem) / 2 + var(--gutter), var(--gutter) + 5rem)); }   /* at most 5rem past the column */
+.spine-wrap { --ext: max(var(--gutter), min((100vw - var(--sbw, 0px) - var(--shift, 0px) - 46rem) / 2 + var(--gutter), var(--gutter) + 5rem)); }   /* at most 5rem past the column */
 .spine-shelf { margin-inline: calc(var(--gutter) - var(--ext)); padding-inline: calc(var(--ext) - var(--gutter)); }
 .desk-edge { position: absolute; top: 0; bottom: 8px; width: calc(var(--ext) - var(--gutter) + var(--gutter)); z-index: 2; pointer-events: none; opacity: 0; transition: opacity .35s ease; }
 .desk-edge.on { opacity: 1; }
@@ -1615,7 +1615,7 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 
 /* Journalism card news: the cards closer together -- 14px apart (10 on phones), the tab's inset */
 .blur-rail .rail-track { gap: var(--inset); }
-@media (max-width: 40rem) { .blur-card { flex-basis: calc((100vw - var(--sbw, 0px) - 2 * var(--gutter) - var(--inset)) / 2); } }
+@media (max-width: 40rem) { .blur-card { flex-basis: calc((100vw - var(--sbw, 0px) - var(--shift, 0px) - 2 * var(--gutter) - var(--inset)) / 2); } }
 
 /* the minimap sits between the two arrows, as tall as they are -- on the desk and under the card news alike */
 .spine-nav .desk-map, .rail-map { position: relative; right: auto; bottom: auto; flex: 0 0 7.5rem; height: auto; align-self: stretch; }
@@ -1626,7 +1626,7 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
    arrow buttons with the minimap between them (no scroll bar) */
 .card-rail.blur-rail { margin-right: 0; }
 .blur-rail .rail-track {
-  --ext: max(var(--gutter), min((100vw - var(--sbw, 0px) - 46rem) / 2 + var(--gutter), var(--gutter) + 5rem));
+  --ext: max(var(--gutter), min((100vw - var(--sbw, 0px) - var(--shift, 0px) - 46rem) / 2 + var(--gutter), var(--gutter) + 5rem));
   --fade: max(3rem, var(--ext) - var(--gutter) + 2rem);
   margin-inline: calc(var(--gutter) - var(--ext)); padding-inline: calc(var(--ext) - var(--gutter));
   scroll-padding-inline: calc(var(--ext) - var(--gutter));
@@ -1635,7 +1635,7 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 }
 .blur-rail .rail-foot { justify-content: center; align-items: stretch; padding-right: 0; gap: var(--s2); }
 .blur-rail .rail-btn { display: flex; }   /* on phones too, as the desk's */
-@media (max-width: 40rem) { .blur-card { flex-basis: calc((100vw - var(--sbw, 0px) - 2 * var(--gutter) - var(--inset)) / 2); } }
+@media (max-width: 40rem) { .blur-card { flex-basis: calc((100vw - var(--sbw, 0px) - var(--shift, 0px) - 2 * var(--gutter) - var(--inset)) / 2); } }
 
 /* the fades only where there is more to see: at the start of a row its left edge stays sharp, at the
    end its right edge (site.js / research.html set .at-start / .at-end); they ease in and out */
@@ -1652,7 +1652,7 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 /* the rows run out to the screen's edge wherever the margin is narrow (phones included): the desk and
    the card news both use the whole margin beyond the column, up to 5rem; the fade covers that margin
    and runs 2rem into the column (1rem on phones) -- and only on a side with more to see */
-.spine-wrap, .blur-rail .rail-track { --ext: calc(var(--gutter) + min(5rem, max(var(--gutter), (100vw - var(--sbw, 0px) - 46rem) / 2 + var(--gutter)))); }
+.spine-wrap, .blur-rail .rail-track { --ext: calc(var(--gutter) + min(5rem, max(var(--gutter), (100vw - var(--sbw, 0px) - var(--shift, 0px) - 46rem) / 2 + var(--gutter)))); }
 .spine-wrap, .spine-shelf, .spine-wrap .spine-board, .blur-rail .rail-track { --fade-in: 2rem; }
 @media (max-width: 40rem) { .spine-wrap, .spine-shelf, .spine-wrap .spine-board, .blur-rail .rail-track { --fade-in: 1rem; } }
 .spine-wrap, .blur-rail .rail-track { --fade: calc(var(--ext) - var(--gutter) + var(--fade-in)); }
@@ -1718,7 +1718,7 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 :root { --card-gap: 10px; }
 @media (max-width: 40rem) { :root { --card-gap: 6px; } }
 .blur-rail .rail-track, .card-rail:not(.blur-rail) .rail-track, .overlay-duo, .overlay-duo.tall { gap: var(--card-gap); }
-@media (max-width: 40rem) { .blur-card { flex-basis: calc((100vw - var(--sbw, 0px) - 2 * var(--gutter) - var(--card-gap)) / 2); } }
+@media (max-width: 40rem) { .blur-card { flex-basis: calc((100vw - var(--sbw, 0px) - var(--shift, 0px) - 2 * var(--gutter) - var(--card-gap)) / 2); } }
 
 /* ---- the boxes under a featured photo take the width their words need (no set fraction): the
    companion story at most the photo's width less a step each side, the PDF tab just its label ---- */
@@ -1736,7 +1736,7 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 .spine-wrap, .spine-shelf, .spine-wrap .spine-board, .blur-rail .rail-track { --fade-in: 2rem; }
 @media (max-width: 40rem) { .spine-wrap, .spine-shelf, .spine-wrap .spine-board, .blur-rail .rail-track, .card-rail.blur-rail { --fade-in: 0rem; } }
 .card-rail.blur-rail { position: relative;
-  --ext: calc(var(--gutter) + min(5rem, max(var(--gutter), (100vw - var(--sbw, 0px) - 46rem) / 2 + var(--gutter))));
+  --ext: calc(var(--gutter) + min(5rem, max(var(--gutter), (100vw - var(--sbw, 0px) - var(--shift, 0px) - 46rem) / 2 + var(--gutter))));
   --fade: calc(var(--ext) - var(--gutter) + var(--fade-in)); }
 @media (min-width: 40.01rem) { .card-rail.blur-rail { --fade-in: 2rem; } }
 .spine-shelf, .blur-rail .rail-track { -webkit-mask-image: none; mask-image: none; }   /* the edges do it now */
@@ -2182,14 +2182,18 @@ html:has(.outline) .site-head .updated { display: none !important; }
 .outline li a, .outline li a:hover, .outline li a.cur { margin: 0; }   /* not a text link's reach past its words: every line starts on the gutter */
 /* the words' inset from the screen's edge: the gutter, narrowed by site.js where the screen is tight so the
    box always ends --s5 short of the text column; where even a small inset won't do, the box hides */
-.outline li, .outline .updated, .outline .clock-main { margin-left: var(--ol-in, var(--gutter)); }
-.outline-rail.no-room { display: none; }
 /* the lines between the rows run from the words' first letter to the box's right end (the end of the
    widest line, the mail); only the box's top and bottom lines reach the screen's edge */
-.outline li, .outline .updated, .outline .clock-main { margin-left: var(--ol-in, var(--gutter)); }
+.outline li, .outline .updated, .outline .clock-main { margin-left: var(--gutter); }
 .outline li a, .outline li a:hover, .outline li a.cur, .outline .updated, .outline .clock-main { padding-left: 0; padding-right: 0; }
 @media (hover: hover) {
   .outline li a:hover, .outline li a.cur:hover, .outline .clock-main:hover { background-image: var(--shade-light); background-repeat: no-repeat; background-position: 0 0; background-size: 100% var(--s2); }
 }
 .outline .updated { margin-top: 0; margin-bottom: 0; }
-.outline .updated { font-weight: 200; color: var(--ink); }   /* thin, not pale: Pretendard ExtraLight in the words' own colour (Light read as regular at this size) */
+/* the box shows down to tablet width (from 768px); below, phones, none -- there the page moves over to make
+   room for it (site.js) */
+@media (max-width: 68.75rem) and (min-width: 48rem) { .outline-rail { display: block; } }
+/* the last update and the time with "Always open": one letter -- thin (Pretendard Light), in the same grey
+   as the other rows; the mail stays in the rows' own weight */
+.outline .updated, .outline .clock-main time, .outline .clock-main .city { font-weight: 300; color: var(--stone); }
+body { padding-left: var(--shift, 0px); }   /* the page moved over beside the outline box (tablets; site.js) */
