@@ -2192,4 +2192,4 @@ html:has(.outline) .site-head .updated { display: none !important; }
   .outline li a:hover, .outline li a.cur:hover, .outline .clock-main:hover { background-image: var(--shade-light); background-repeat: no-repeat; background-position: 0 0; background-size: 100% var(--s2); }
 }
 .outline .updated { margin-top: 0; margin-bottom: 0; }
-.outline .updated { font-weight: 300; color: var(--ink); }   /* thin, not pale: Pretendard Light in the words' own colour */
+.outline .updated { font-weight: 200; color: var(--ink); }   /* thin, not pale: Pretendard ExtraLight in the words' own colour (Light read as regular at this size) */
