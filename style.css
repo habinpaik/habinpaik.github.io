@@ -54,8 +54,8 @@
      strong -- the top edge of each page only (under the menu, or where the page meets the photo
      above it); light -- everything else: section lines and the openers' lines, the footer's top
      line, the mail box, story boxes, portfolio cards, shelves */
-  --sh-strong: #6D6D6B; --sh-light: #E0DDD7;   /* the two shades: the words' grey and the lines' grey, each fading out (night: their night values) */
-  --shade-strong: linear-gradient(to bottom, var(--sh-strong), transparent 12px);
+  --sh-strong: #E0DDD7; --sh-light: #E0DDD7;   /* both shades in the lines' grey, fading out: light over 8px, strong over 15px (night: the night's line grey) */
+  --shade-strong: linear-gradient(to bottom, var(--sh-strong), transparent 15px);
   --shade-light:  linear-gradient(to bottom, var(--sh-light), transparent var(--s2));   /* a short fade, 8px */
   --dial-rim: #E0DDD7; --dial-home: #E0DDD7; --dial-city: #862633; --dial-pin: #1A1A1A; --dial-lab: var(--stone);   /* the dial's colours, by day */
   /* the section rhythm, in two numbers: the last line of text -> a section line (--sec-above), and the
@@ -1393,7 +1393,7 @@ html.night {
   --paper: #1C1B19; --ink: #E6E3DD; --stone: #A9A59D;   /* the night grey, exactly (the day's is mixed from ink and paper) */ --line: #3A3834; --brand: #252421; --brand-deep: #C9C6BF;
   --crimson: #C25466;
   --c-meche: #D08B4A; --c-phys: #6FA6D0; --c-math: #4DB585; --c-gensci: #4FA893; --c-classics: #A3B84E;
-  --sh-strong: #A9A59D; --sh-light: #3A3834;   /* at night: the night's words grey and lines grey, fading out */
+  --sh-strong: #3A3834; --sh-light: #3A3834;   /* at night: the night's line grey */
   --dial-rim: #A9A59D; --dial-home: #A9A59D; --dial-city: #E3808F; --dial-pin: #A9A59D; --dial-lab: #A9A59D;   /* the dial at night: one grey (the words' grey) and pink */
   color-scheme: dark;
 }
@@ -1426,9 +1426,9 @@ html.night { --crimson-light: color-mix(in srgb, var(--crimson) 45%, var(--paper
 .pre-foot, .site-foot {
   --paper: #1C1B19; --ink: #E6E3DD; --line: #3A3834; --brand: #252421; --brand-deep: #C9C6BF;
   --crimson: #C25466; --c-journalism: var(--crimson);
-  --sh-strong: #A9A59D; --sh-light: #3A3834;
+  --sh-strong: #3A3834; --sh-light: #3A3834;
   --stone: #A9A59D;
-  --shade-strong: linear-gradient(to bottom, var(--sh-strong), transparent 12px);
+  --shade-strong: linear-gradient(to bottom, var(--sh-strong), transparent 15px);
   --shade-light:  linear-gradient(to bottom, var(--sh-light), transparent var(--s2));
   --on-fill: var(--paper); --link-hover: var(--on-fill);
   --crimson-light: color-mix(in srgb, var(--crimson) 45%, var(--paper));
