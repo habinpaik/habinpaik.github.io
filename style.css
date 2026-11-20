@@ -2039,3 +2039,11 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))):hover { box-shadow: none; }
 /* while selecting: no link box line, no highlighter -- nothing to break the selection's crimson */
 html.selecting a { box-shadow: none !important; background-image: none !important; -webkit-text-stroke: 0 !important; }
+
+/* text links: a real underline that breaks where letters dip through it (descenders cut it clean, as
+   on MIT's pages) -- the words' grey, 2px, a little under the baseline; no box line */
+a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))) {
+  box-shadow: none; -webkit-text-stroke: 0; background-size: 100% 0, 0 0;
+  text-decoration-line: underline; text-decoration-color: var(--stone); text-decoration-thickness: 2px;
+  text-underline-offset: 0.18em; text-decoration-skip-ink: auto;
+}
