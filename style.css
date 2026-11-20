@@ -2001,3 +2001,14 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))):hover {
   color: var(--ink); --hl: var(--line); background-size: 100% 0, calc(100% - 0.24em) 0.5em;
 }
+
+/* text links: at rest black words on a 2px grey underline (at the highlighter's bottom edge); pointed
+   at, crimson words on the light grey highlighter */
+a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))) {
+  color: var(--ink); --hl: var(--stone); background-size: 100% 0, calc(100% - 0.24em) 2px;
+}
+a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))):hover {
+  color: var(--crimson); --hl: var(--line); background-size: 100% 0, calc(100% - 0.24em) 0.5em;
+}
+.entry .desc a { color: var(--ink); }
+.entry .desc a:hover { color: var(--crimson); }
