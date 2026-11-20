@@ -874,7 +874,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   -webkit-box-decoration-break: clone; box-decoration-break: clone;   /* a link over two lines gets a box on each */
   background-image: linear-gradient(var(--crimson), var(--crimson)), linear-gradient(var(--crimson), var(--crimson));   /* the fill, and a crimson hairline underline */
   background-repeat: no-repeat;
-  background-position: 0 100%, 0.12em calc(100% - (1lh - 1.0556em) / 2);   /* the underline where it always was: under the descenders, not at the line's foot */
+  background-position: 0 100%, 0.12em calc(100% - (1lh - 1.0556em) / 4);   /* the underline a little under the descenders: halfway to the line's foot */
   background-size: 100% 0, calc(100% - 0.24em) 1px;
   transition: background-size .45s cubic-bezier(.45, 0, .25, 1), color .45s ease;   /* rises from the underline, unhurried */
 }
