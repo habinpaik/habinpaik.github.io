@@ -852,3 +852,13 @@ document.addEventListener('touchstart', function () {}, { passive: true });
   set(); window.addEventListener('resize', set);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(set);
 })();
+
+/* while text is selected, the links drop their own marks (box line, highlighter), so the selection's
+   crimson runs through them unbroken */
+(function () {
+  var root = document.documentElement;
+  document.addEventListener('selectionchange', function () {
+    var s = window.getSelection && window.getSelection();
+    root.classList.toggle('selecting', !!(s && !s.isCollapsed && String(s).length));
+  });
+})();
