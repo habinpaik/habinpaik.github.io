@@ -2047,3 +2047,8 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   text-decoration-line: underline; text-decoration-color: var(--stone); text-decoration-thickness: 2px;
   text-underline-offset: 0.18em; text-decoration-skip-ink: auto;
 }
+/* pointed at: the words and their underline crimson, nothing else */
+a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))):hover {
+  color: var(--crimson); text-decoration-color: var(--crimson); background-size: 100% 0, 0 0;
+}
+.entry .desc a:hover { color: var(--crimson); }
