@@ -54,8 +54,8 @@
      strong -- the top edge of each page only (under the menu, or where the page meets the photo
      above it); light -- everything else: section lines and the openers' lines, the footer's top
      line, the mail box, story boxes, portfolio cards, shelves */
-  --sh-strong: #E0DDD7; --sh-light: #E0DDD7;   /* both shades in the lines' grey, fading out: light over 8px, strong over 15px (night: the night's line grey) */
-  --shade-strong: linear-gradient(to bottom, var(--sh-strong), transparent 15px);
+  --sh-strong: #E0DDD7; --sh-light: #E0DDD7;   /* both shades in the lines' grey, fading out: light over 8px, strong over 20px (night: the night's line grey) */
+  --shade-strong: linear-gradient(to bottom, var(--sh-strong), transparent 20px);
   --shade-light:  linear-gradient(to bottom, var(--sh-light), transparent var(--s2));   /* a short fade, 8px */
   --dial-rim: #E0DDD7; --dial-home: #E0DDD7; --dial-city: #862633; --dial-pin: #1A1A1A; --dial-lab: var(--stone);   /* the dial's colours, by day */
   /* the section rhythm, in two numbers: the last line of text -> a section line (--sec-above), and the
@@ -179,7 +179,7 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
 .nav a[aria-current="page"]::after,
 .wordmark[aria-current="page"]::after {
   content: ""; position: absolute; left: 0; right: 0; top: calc(-1 * var(--up, var(--s2)));
-  height: 15px; background: var(--shade-strong); pointer-events: none;
+  height: 20px; background: var(--shade-strong); pointer-events: none;
 }
 @media (hover: hover) {
   .nav a:not([aria-current="page"]):hover::after,
@@ -1261,7 +1261,7 @@ section:has(.spine-panel) + section > h2.section-title { background: none; borde
 .shelf-more button:hover .kh { background-size: 100% 0; color: inherit; }
 .spine-nav button:disabled, .spine-nav button:disabled:hover, .rail-btn:disabled, .rail-btn:disabled:hover { color: var(--line); }
 .spine-nav button::before, .shelf-more button::before, .rail-btn::before {
-  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 15px; background: var(--shade-strong);
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 20px; background: var(--shade-strong);
   opacity: 0; pointer-events: none; transition: opacity .45s ease;
 }
 .spine-nav button:active::before, .shelf-more button:active::before, .rail-btn:active::before { opacity: 1; transition-duration: .06s; }
@@ -1365,7 +1365,7 @@ section:has(.spine-panel) + section > h2.section-title { background: none; borde
 }
 
 /* subject tags: hovering only deepens the shade inside the top (to the strong one); the border never changes */
-.filter-btn::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 15px; background: var(--shade-strong); opacity: 0; pointer-events: none; transition: opacity .45s ease; }
+.filter-btn::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 20px; background: var(--shade-strong); opacity: 0; pointer-events: none; transition: opacity .45s ease; }
 @media (hover: hover) { .filter-btn:hover::before { opacity: 1; } }
 
 /* arrows pressed: like the other buttons when on -- a dark ground and a white arrow for a moment, then back */
@@ -1428,7 +1428,7 @@ html.night { --crimson-light: color-mix(in srgb, var(--crimson) 45%, var(--paper
   --crimson: #C25466; --c-journalism: var(--crimson);
   --sh-strong: #3A3834; --sh-light: #3A3834;
   --stone: #A9A59D;
-  --shade-strong: linear-gradient(to bottom, var(--sh-strong), transparent 15px);
+  --shade-strong: linear-gradient(to bottom, var(--sh-strong), transparent 20px);
   --shade-light:  linear-gradient(to bottom, var(--sh-light), transparent var(--s2));
   --on-fill: var(--paper); --link-hover: var(--on-fill);
   --crimson-light: color-mix(in srgb, var(--crimson) 45%, var(--paper));
@@ -1455,9 +1455,9 @@ html.night { --crimson-light: color-mix(in srgb, var(--crimson) 45%, var(--paper
 .pre-foot li::before {   /* the light shade along the left side of each cell only */
   content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: var(--s2); background: linear-gradient(to right, var(--sh-light), transparent); pointer-events: none; z-index: 1;
 }
-.pre-foot li:has(a[aria-current="page"])::before { width: 15px; background: linear-gradient(to right, var(--sh-strong), transparent); }   /* the page you are on: the strong shade, as well as its words */
+.pre-foot li:has(a[aria-current="page"])::before { width: 20px; background: linear-gradient(to right, var(--sh-strong), transparent); }   /* the page you are on: the strong shade, as well as its words */
 .pre-foot a::after {   /* hover: the strong shade along the cell's top */
-  content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 15px; background: linear-gradient(to right, var(--sh-strong), transparent);
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 20px; background: linear-gradient(to right, var(--sh-strong), transparent);
   opacity: 0; transition: opacity .45s ease; pointer-events: none;   /* hover: the strong shade on the left side */
 }
 @media (hover: hover) { .pre-foot a:hover::after { opacity: 1; } }
@@ -1500,7 +1500,7 @@ section > .fact:last-child { padding-bottom: 0.068em; }   /* the sans list sits 
    fills the box crimson (words white) and opens the mail */
 .time-rail .clock-main { cursor: pointer; background: var(--paper) var(--shade-light) no-repeat; background-image: var(--shade-light);
   transition: background-color .45s ease, color .45s ease, border-color .45s ease; }
-.time-rail .clock-main::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 15px; background: var(--shade-strong);
+.time-rail .clock-main::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 20px; background: var(--shade-strong);
   opacity: 0; pointer-events: none; transition: opacity .45s ease; }
 @media (hover: hover) { .time-rail .clock-main:hover::before { opacity: 1; } }
 .time-rail .clock-main:active { background-color: var(--crimson); border-color: var(--crimson); color: var(--on-fill); transition-duration: .06s; }
@@ -1530,7 +1530,7 @@ html.night-switch .night-veil { transition: opacity .3s ease !important; }
 /* Journalism and Portfolio: every box with a shade inside its top deepens it (light -> strong) on hover,
    as the time box and the research buttons do; the tucked boxes' shade starts where the box above ends */
 .tuck-story::before, .print-tab::before, .side-head::before, .ebox::before, .ebox.split .go::before, .card-txt::before {
-  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 15px; background: var(--shade-strong);
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 20px; background: var(--shade-strong);
   opacity: 0; pointer-events: none; transition: opacity .45s ease;
 }
 .tuck-story::before, .print-tab::before { top: calc(var(--s2) - 1px); }
@@ -1963,3 +1963,11 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 :root { --hl-k: color-mix(in srgb, var(--stone) 26%, transparent); }
 /* the highlighter is the lines' grey: one light grey for lines and highlights */
 :root, html.night, .pre-foot, .site-foot { --hl: var(--line); --hl-k: var(--line); }
+/* the companion story under a photo shows a box line at its top edge, as the PDF tab does under it
+   (there the line is the story box's own bottom edge; under a photo there is none, so it draws one) */
+.tuck-story {
+  background-image: linear-gradient(var(--line), var(--line)), var(--shade-light) !important;
+  background-size: 100% 1px, auto; background-repeat: no-repeat;
+  background-position: 0 calc(var(--s2) - 1px), 0 var(--s2);
+}
+.tuck-story::before { top: var(--s2); }
