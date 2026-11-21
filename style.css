@@ -2203,3 +2203,9 @@ body { padding-left: var(--shift, 0px); }   /* the page moved over beside the ou
 /* at night the outline keeps the day's two tones: its grey is the words' colour at the day's share over
    the night ground (the night's own grey is nearly the words' white), so the section being read still stands out */
 html.night .outline { --stone: color-mix(in srgb, var(--ink) var(--stone-mix), var(--paper)); }
+/* lines: short above the last update (from the first letter), long below it; short between the sections;
+   long above the time and at the bottom */
+.outline { border-top: 0; }
+.outline .updated { border-top: 1px solid var(--line); border-bottom: 0; }
+.outline ol { border-block: 1px solid var(--line); }
+.outline .clock-main { border-top: 0; }
