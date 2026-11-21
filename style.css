@@ -48,7 +48,6 @@
   --stone: color-mix(in srgb, var(--ink) var(--stone-mix), var(--paper));   /* grey = a fixed share of the words' colour over the paper, so in the day/night change it moves with the words */
   --stone-mix: 63%;
   --line:  #E0DDD7;   /* NYT 광고 띠 경계선 */
-  --brand:      #F3F1EC;   /* NYT 광고 띠 배경: 배너·표지책장 배경 */
   --brand-deep: #424245;   /* 같은 계열의 진한 회색: 본문 링크 */
   /* two shades only, each laid just under a top edge:
      strong -- the top edge of each page only (under the menu, or where the page meets the photo
@@ -78,7 +77,7 @@
   --sans:  "Pretendard", -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
 
   --s1: 0.25rem; --s2: 0.5rem; --s3: 0.875rem; --s4: 1.25rem;
-  --s5: 1.75rem; --s6: 2.5rem; --s7: 3.5rem; --s8: 5rem;
+  --s5: 1.75rem; --s6: 2.5rem; --s7: 3.5rem;
 
   --t-small: clamp(0.875rem, 0.76rem + 0.19vw, 0.92rem);
   --t-body:  clamp(1.0625rem, 0.875rem + 0.3vw, 1.125rem);   /* 15 -> 18px (was 16 -> 19.2) */
@@ -91,7 +90,6 @@
   --t-name: clamp(1.75rem, 0.75rem + 4.6vw, 3.5rem);   /* big name = clocks: 56px on desktop, ~29–31px on phones */
 
   --page-max: 62rem;      /* full content width (grids, tables, wide photos) */
-  --measure:  34rem;      /* the single text measure — ALL body copy uses this */
   --gutter: clamp(1.25rem, 4vw, 3rem);
 }
 
@@ -117,8 +115,7 @@ body {
 :lang(ko), .ko { font-family: var(--sans); font-feature-settings: normal; }
 
 /* Secondary metadata (dates, authors, years) in sans. Captions stay serif. */
-.date, .years, .fact .sep, .book .a,
-.work .desc, .table .cell .desc, .entry .date, .table .cell .date {
+.date, .years, .book .a, .entry .date {
   font-family: var(--sans);
   font-feature-settings: normal;
 }
@@ -140,8 +137,6 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
 
 .home .lead, body:not(.home) > main.wrap { position: relative; }   /* holds the outline rail */
 
-
-
 /* ---------- Header (sticky; state changes on scroll) ---------- */
 .site-head {
   position: sticky; top: 0; z-index: 50;
@@ -149,9 +144,9 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
   border-bottom: 1px solid transparent;   /* at the very top of a page: no line under the bar */
   transition: background .25s ease, border-color .25s ease;
 }
-.site-head.scrolled { border-bottom-color: var(--line); }   /* the page has moved: the line shows */
+   /* the page has moved: the line shows */
 /* scrolled or not, the bar is the page's own solid ground (no see-through blur); the line under it stays */
-.site-head.scrolled { background: var(--paper); }
+.site-head.scrolled { border-bottom-color: var(--line); background: var(--paper); }
 .site-head .bar {
   display: flex; align-items: baseline; justify-content: space-between;
   gap: var(--s4); padding-top: var(--s2); padding-bottom: var(--s1);   /* a slim bar: about the same small gap above the letters and below them */
@@ -188,9 +183,7 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
     height: var(--s2); background: var(--shade-light); pointer-events: none;
   }
   .hero-on .nav a:not([aria-current="page"]):hover::after,
-  .hero-on .wordmark:not([aria-current="page"]):hover::after,
-  .j-page.cover-on .nav a:not([aria-current="page"]):hover::after,
-  .j-page.cover-on .wordmark:not([aria-current="page"]):hover::after { background: linear-gradient(to bottom, rgba(255,255,255,.10), transparent var(--s2)); }
+  .hero-on .wordmark:not([aria-current="page"]):hover::after { background: linear-gradient(to bottom, rgba(255,255,255,.10), transparent var(--s2)); }
 }
 
 /* ---------- Hero (HOME ONLY) ----------
@@ -283,15 +276,6 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
 /* while the cover is in view: no bar at all, white text straight on the picture.
    Once the page has filled the screen, the bar turns into the usual blurred one. */
 .j-page .site-head { transition: background .15s ease, border-color .15s ease; }
-.j-page.cover-on .site-head,
-.j-page.cover-on .site-head.scrolled {
-  background: transparent; border-bottom-color: transparent;
-  backdrop-filter: none; -webkit-backdrop-filter: none;
-}
-.j-page.cover-on .wordmark,
-.j-page.cover-on .nav a { color: var(--on-dark); }
-.j-page.cover-on .nav a[aria-current="page"] { color: #fff; }
-.j-page.cover-on .nav a[aria-current="page"]::after { background: linear-gradient(to bottom, rgba(255,255,255,.17), transparent 12px); }   /* on the photo: the same shades, light (as at night) */
 
 /* the page: its first --head-h is see-through (the menu bar sits there over the photo) */
 .sheet {
@@ -329,12 +313,12 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
 .hero-on .nav a[aria-current="page"]::after { background: linear-gradient(to bottom, rgba(255,255,255,.17), transparent 12px); }
 
 /* the leading top block (home) shares the plain <p> rule */
-.lead { padding-top: calc(var(--s6) + 1px); padding-bottom: var(--s7); }   /* the same top gap as the other pages' main column (+1px: the bar stops 1px into the page) */
+   /* the same top gap as the other pages' main column (+1px: the bar stops 1px into the page) */
 .bio { margin-bottom: var(--s7); }
 
 /* Home: the opener, then "Engineer, Physician, Journalist." and the rest, all one run of text --
    no line between the top block and the paragraphs that follow */
-.lead { padding-bottom: 0; }
+.lead { padding-top: calc(var(--s6) + 1px); padding-bottom: 0; }
 .lead + main { padding-top: var(--s4); }   /* the last line above runs on into the paragraphs below at the paragraph gap */
 /* a page's one-sentence opener (.dek), at the band's size in the body face -- one sentence only,
    standing as a section of its own (after the NYT's article deks) */
@@ -348,9 +332,6 @@ p.dek {
 }
 p.dek, main > p.dek:first-child { margin: 0 0 calc(var(--s2) + var(--sec-below) - 0.265 * var(--t-body)); }
 p.dek::after { content: ""; position: absolute; left: 0; right: 0; top: calc(100% + 1px);   /* under the line, not over it */ height: var(--s2); background: var(--shade-light); pointer-events: none; }
-
-
-main { padding-block: var(--s6); }
 
 h2.section-title {
   font-family: var(--sans);
@@ -388,12 +369,10 @@ main > p:first-child { margin-bottom: var(--sec-gap); }
 .fact { line-height: 1.6; margin: 0 0 var(--s2); font-family: var(--sans); }   /* a list, not prose: in the sans */
 .fact:last-child { margin-bottom: 0; }
 .fact .primary { font-weight: 400; }   /* the facts in the body weight, not bold */
-.fact .sep { color: var(--stone); }
+
 .fact .years { color: var(--stone); font-size: var(--t-small); }
 .fact .nowrap { white-space: nowrap; }   /* a Korean name and its years stay together on one line */
 .contact-note a { white-space: nowrap; }
-.linklist { list-style: none; margin: 0; padding: 0; display: flex; gap: var(--s2) var(--s4); flex-wrap: wrap; }
-.linklist a { font-family: var(--sans); font-size: var(--t-small); }
 
 /* ---------- Featured entries ---------- */
 .entry { margin-bottom: var(--s6); }
@@ -405,59 +384,29 @@ main > p:first-child { margin-bottom: var(--sec-gap); }
 .shelf-note { margin: var(--s5) 0 0; font-family: var(--sans); font-size: var(--t-small); line-height: 1.6; color: var(--stone); }   /* a credit line: small and grey */
 .shelf-note a { color: inherit; }
 .entry .date { color: var(--stone); font-size: var(--t-small); white-space: nowrap; }
-.entry .desc { margin: var(--s2) 0 0; }
+
 /* opt-in divider: centered in the EXISTING gap, adds no extra height.
    Entries above have --s6 bottom margin; the rule sits in that gap. */
 /* opt-in divider centred in the existing --s6 gap with no net extra height:
    pull up half the gap, then push the next entry down half the gap. */
-hr.rule { border: 0; border-top: 1px solid var(--line); height: 0; margin: calc(var(--s6) / -2) 0 calc(var(--s6) / 2); }
 
 /* centred closing line (portfolio) */
-main > p.epigraph:first-child { margin-bottom: var(--s3); }
+
 main > p.dek:first-child + section { margin-top: 0; }   /* the opener is larger: its own measure sets the 25px */   /* the opener is a section of its own: the same gap below it as between sections */   /* the Korean of the opener, right under it at body size */
-.epigraph {
-  text-align: left; max-width: none;
-  margin: 0 0 var(--s3); color: var(--ink);
-  line-height: 1.6;
-}
-.epigraph .ko { color: var(--stone); font-size: 0.95em; }
+
 /* date — description separator */
-.entry .desc .date + .dash { color: var(--stone); }
+
 .dash { color: var(--stone); }
 
 /* ---------- Key reporting TABLE: 3 cols, equal cells ---------- */
 /* Gap-based grid so every cell (and its image) is identical width. */
-.table {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--s5) var(--s4);
-}
-.table .cell { position: relative; }
+
 /* vertical divider centred in the column gap; not after the last col in a row */
-.table .cell::after {
-  content: ""; position: absolute; top: 0; bottom: 0;
-  right: calc(var(--s4) / -2); width: 1px; background: var(--line);
-}
-.table .cell:nth-child(3n)::after { display: none; }  /* no line on the right edge */
-.table .cell img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; filter: grayscale(1); background: var(--line); display: block; margin-bottom: var(--s2); }
-.table .cell .th { }
-.table .cell .th a { font-family: var(--serif-ko); color: var(--ink); text-decoration: none; font-weight: 400; font-size: var(--t-body); line-height: 1.6; letter-spacing: -0.02em; }
-.table .cell .th a:hover { color: var(--on-fill); }
-.table .cell .desc { color: var(--stone); font-size: var(--t-small); margin: var(--s2) 0 0; line-height: 1.6; max-width: none; }
-.table .cell .date { color: var(--stone); font-size: var(--t-small); }
-@media (max-width: 52rem) {
-  .table { grid-template-columns: repeat(2, 1fr); }
-  .table .cell:nth-child(3n)::after { display: block; }
-  .table .cell:nth-child(2n)::after { display: none; }
-}
+
 @media (max-width: 30rem) {
-  .table { grid-template-columns: 1fr; gap: var(--s4); }
-  .table .cell::after { display: none; }
+
   /* compact horizontal layout: small thumbnail left, text right */
-  .table .cell { display: grid; grid-template-columns: 5.5rem 1fr; gap: var(--s3); align-items: start; }
-  .table .cell img { aspect-ratio: 1 / 1; margin-bottom: 0; grid-row: 1 / span 2; }
-  .table .cell .th { grid-column: 2; }
-  .table .cell .desc { grid-column: 2; }
+
 }
 
 /* ---------- Spine shelf: books stood on end, browse by swiping ----------
@@ -499,7 +448,7 @@ main > p.dek:first-child + section { margin-top: 0; }   /* the opener is larger:
 .pair > .spine { margin-top: 0; }   /* 맨 위 책은 올리지 않음 → 위쪽 경계에 안 잘림 */
 /* 눕힌 책: 옆면(책등)이 보이는 띠. 채움 없이 테두리와 글자만 */
 .spine {
-  --cat: var(--stone); --rot: 0deg;
+  --cat: var(--stone);
   display: flex; align-items: center; box-sizing: border-box;
   position: relative; z-index: 1;
   background: var(--paper);           /* every spine the page's own colour ... */
@@ -519,7 +468,7 @@ main > p.dek:first-child + section { margin-top: 0; }   /* the opener is larger:
 .spine { width: max-content; max-width: 225px; }   /* as long as its title, up to the longest book */
 .spine.humanities { --cat: var(--c-classics); height: 44px; }  /* Classics */
 .spine.journalism { --cat: var(--c-journalism); height: 34px; }  /* Journalism */
-.spine.science    { --cat: var(--c-gensci); height: 22px; }  /* General Sci */
+.spine.science { --cat: var(--c-gensci); height: 22px; }  /* General Sci */
 @media (max-width: 40rem) {
   .spine-shelf { --pile-max: 220px; }
   .spine { max-width: 192px; }
@@ -556,21 +505,6 @@ main > p.dek:first-child + section { margin-top: 0; }   /* the opener is larger:
 /* ---------- Cover shelf: books at their natural proportions on a shelf ----------
    Covers keep their own aspect ratio (only height is normalised), standing
    side by side on a long shelf board. Scrolls horizontally. */
-.cover-shelf-wrap { max-width: 46rem; margin-inline: auto; padding-inline: var(--gutter); position: relative; margin-top: var(--s5); }
-.cover-shelf {
-  display: flex; align-items: flex-end; gap: 8px;
-  overflow-x: auto; scroll-behavior: smooth;
-  padding: 0 2px 10px;
-  position: relative;
-}
-.cover-shelf::-webkit-scrollbar { height: 6px; }
-.cover-shelf::-webkit-scrollbar-thumb { background: var(--line); border-radius: 0; }
-.cover-shelf .bk { flex: 0 0 auto; text-decoration: none; display: block; transition: transform .15s ease; }
-.cover-shelf .bk img {
-  height: 130px; width: auto; display: block;
-}
-.cover-shelf .bk:hover { transform: translateY(-5px); }
-@media (max-width: 40rem) { .cover-shelf .bk img { height: 105px; } }
 
 /* ---------- Research bookshelf (legacy cover grid) ---------- */
 .shelf-panel {
@@ -604,19 +538,19 @@ main > p.dek:first-child + section { margin-top: 0; }   /* the opener is larger:
 }
 .shelf .book { position: relative; }   /* no stacking of its own: cover (1), lip shade (2), title (3) */
 .book { text-decoration: none; color: inherit; position: relative; }
-.book .cover { position: relative; }
+
 .book .cover img { position: relative; z-index: 1; }
-.book .cover { position: relative; }
+
 /* 틀은 2:3로 고정, 표지는 원본 비율 그대로 틀 바닥에 세움 */
-.book .cover { display: flex; flex-direction: column; justify-content: flex-end; aspect-ratio: 2 / 3; width: 100%; min-height: 0; overflow: visible; }
-.book .face { flex: 0 0 auto; align-self: flex-start; }   /* 표지 왼쪽 정렬 */
-.book[data-subject="MechE"]       { --cat: var(--c-meche); }
-.book[data-subject="Phys"]        { --cat: var(--c-phys); }
-.book[data-subject="Math"]        { --cat: var(--c-math); }
+.book .cover { position: relative; display: flex; flex-direction: column; justify-content: flex-end; aspect-ratio: 2 / 3; width: 100%; min-height: 0; overflow: visible; }
+   /* 표지 왼쪽 정렬 */
+.book[data-subject="MechE"] { --cat: var(--c-meche); }
+.book[data-subject="Phys"] { --cat: var(--c-phys); }
+.book[data-subject="Math"] { --cat: var(--c-math); }
 .book[data-subject="General Sci"] { --cat: var(--c-gensci); }
-.book .face { position: relative; display: block; }
-.book img { width: 100%; height: auto; display: block; }
-.book img { outline: 1px solid var(--cat, var(--line)); outline-offset: -1px; }   /* the subject in a hairline round the cover, as on the spines */
+.book .face { flex: 0 0 auto; align-self: flex-start; position: relative; display: block; }
+
+.book img { width: 100%; height: auto; display: block; outline: 1px solid var(--cat, var(--line)); outline-offset: -1px; }   /* the subject in a hairline round the cover, as on the spines */
 .book .t { position: relative; z-index: 3; display: block; margin-top: var(--s2); color: var(--stone); font-size: var(--t-small); line-height: 1.6; font-family: var(--sans); }
 
 /* books past the first row start hidden; revealed downward by 더보기 */
@@ -638,7 +572,6 @@ main > p.dek:first-child + section { margin-top: 0; }   /* the opener is larger:
 .shelf-more button:hover, .shelf-panel .shelf-more button:hover { background-size: 100% 100%; color: var(--on-fill); border-color: var(--crimson); }
 .shelf-more button[hidden] { display: none; }
 
-
 @media (max-width: 34rem) { .shelf { grid-template-columns: repeat(3, 1fr); } }
 
 /* ---------- Portfolio grid ---------- */
@@ -651,21 +584,20 @@ main > p.dek:first-child + section { margin-top: 0; }   /* the opener is larger:
 .work .th a { color: var(--ink); text-decoration: none; font-weight: 400; font-size: var(--t-title); line-height: 1.6; }
 .work .th a:hover { color: var(--on-fill); }
 .work .date { color: var(--stone); font-size: var(--t-small); white-space: nowrap; }
-.work .desc { color: var(--stone); font-size: var(--t-small); margin: var(--s2) 0 0; max-width: none; }
 
 /* ---------- Free photo utilities (Journalism etc.) ---------- */
 figure.ph { margin: var(--s6) 0; }
 figure.ph img { width: 100%; display: block; filter: grayscale(1); background: var(--line); }
 figure.ph figcaption { font-size: var(--t-small); color: var(--stone); margin-top: var(--s2); }
-figure.ph.wide  { width: min(84rem, (100vw - var(--shift, 0px)) * .96); margin-left: 50%; transform: translateX(-50%); }
-figure.ph.full  { width: calc(100vw - var(--sbw, 0px) - var(--shift, 0px)); margin-left: calc(50% - (100vw - var(--sbw, 0px) - var(--shift, 0px)) / 2); transform: none; }
+figure.ph.wide { width: min(84rem, (100vw - var(--shift, 0px)) * .96); margin-left: 50%; transform: translateX(-50%); }
+figure.ph.full { width: calc(100vw - var(--sbw, 0px) - var(--shift, 0px)); margin-left: calc(50% - (100vw - var(--sbw, 0px) - var(--shift, 0px)) / 2); transform: none; }
 figure.ph.wide img, figure.ph.full img { max-height: 78vh; object-fit: cover; }
 /* phones: a wide photo runs edge to edge; its caption stays on the text column */
 @media (max-width: 34rem) {
   figure.ph.wide { width: calc(100vw - var(--sbw, 0px) - var(--shift, 0px)); margin-left: calc(50% - (100vw - var(--sbw, 0px) - var(--shift, 0px)) / 2); transform: none; }
   figure.ph.wide figcaption, figure.ph.full figcaption { padding-inline: var(--gutter); }
 }
-figure.ph.left  { float: left;  width: 46%; margin: var(--s1) var(--s5) var(--s4) 0; }
+figure.ph.left { float: left;  width: 46%; margin: var(--s1) var(--s5) var(--s4) 0; }
 figure.ph.right { float: right; width: 46%; margin: var(--s1) 0 var(--s4) var(--s5); }
 figure.ph.small.left, figure.ph.small.right { width: 32%; }
 .clear { clear: both; }
@@ -674,12 +606,11 @@ figure.ph.land:not(.wide):not(.full) img { aspect-ratio: 3 / 2; object-fit: cove
 figure.ph.pano img { aspect-ratio: 16 / 6; object-fit: cover; }
 
 /* two or three photos splitting the width, flush together */
-figure.ph.duo, figure.ph.trio { display: grid; gap: var(--s2); }
-figure.ph.duo  { grid-template-columns: 1fr 1fr; }
-figure.ph.trio { grid-template-columns: 1fr 1fr 1fr; }
-figure.ph.duo img, figure.ph.trio img { aspect-ratio: 3 / 4; object-fit: cover; margin: 0; }
-figure.ph.duo figcaption, figure.ph.trio figcaption { grid-column: 1 / -1; }
-@media (max-width: 34rem) { figure.ph.trio { grid-template-columns: 1fr 1fr; } }
+
+figure.ph.duo { display: grid; gap: var(--s2); grid-template-columns: 1fr 1fr; }
+
+figure.ph.duo img { aspect-ratio: 3 / 4; object-fit: cover; margin: 0; }
+figure.ph.duo figcaption { grid-column: 1 / -1; }
 
 /* text laid over the image (bottom-left), for a dramatic titled photo */
 figure.ph.overlay { position: relative; margin-inline: calc(-1 * var(--s4)); }   /* wider by the caption's inset, so the caption lines up with the text column */
@@ -733,19 +664,8 @@ figure.ph.overlay figcaption {
    outside the column into the left/right gutter. On narrow screens where the
    gutter is too small, it falls back to a normal inline photo below the text. */
 .entry { position: relative; }
-figure.ph.side-left, figure.ph.side-right {
-  position: absolute; top: 0; width: 12rem; margin: 0;
-}
-figure.ph.side-left  { right: calc(100% + var(--s5)); }  /* just left of the column */
-figure.ph.side-right { left:  calc(100% + var(--s5)); }  /* just right of the column */
-figure.ph.side-left img, figure.ph.side-right img { aspect-ratio: 3 / 4; object-fit: cover; }
 
 /* When the viewport can't fit a side photo (narrow), show it inline instead. */
-@media (max-width: 72rem) {
-  figure.ph.side-left, figure.ph.side-right {
-    position: static; width: 14rem; margin: var(--s4) 0;
-  }
-}
 
 /* legacy margin-left/right kept as simple inline blocks (no negative margins) */
 figure.ph.margin-left, figure.ph.margin-right { width: 12rem; margin: var(--s4) 0; }
@@ -836,19 +756,11 @@ figure.ph.margin-left, figure.ph.margin-right { width: 12rem; margin: var(--s4) 
 
 /* 2. headline box overlapping the photo */
 .side-row { display: grid; grid-template-columns: 6fr 1fr 5fr; align-items: center; }
-.side-head {
-  grid-column: 1 / 3; grid-row: 1; position: relative; z-index: 1;
-  /* the box inset (see "Box insets" below): 14px from the edge to the letters on every side */
-  padding: calc(var(--inset) + 0.13em) var(--inset) var(--inset); text-box-trim: trim-both; text-box-edge: cap alphabetic; background: var(--paper);   /* +0.13em: Hangul stands above the capitals */ border: 1px solid var(--line);
-  color: var(--ink); text-decoration: none;
-}
-.side-head .en { color: var(--stone); }
+
 .side-head.sm { font-size: var(--t-body); }   /* a smaller side story: the box headlines' size */
 .en .date, .en .dash, .feat .en .date + .dash { font-size: inherit; color: inherit; }   /* date leads the English head */
-.side-head {
-  background-image: var(--shade-light); background-repeat: no-repeat; background-origin: padding-box;
-}
-.side-head .en { transition: color .15s ease; }
+.side-head { grid-column: 1 / 3; grid-row: 1; position: relative; z-index: 1; padding: calc(var(--inset) + 0.13em) var(--inset) var(--inset); text-box-trim: trim-both; text-box-edge: cap alphabetic; background: var(--paper); border: 1px solid var(--line); color: var(--ink); text-decoration: none; background-image: var(--shade-light); background-repeat: no-repeat; background-origin: padding-box; }
+.side-head .en { color: var(--stone); transition: color .15s ease; }
 .side-photo { grid-column: 2 / 4; grid-row: 1; display: block; overflow: hidden; background: var(--line); border: 1px solid var(--line); }   /* same hairline as the box: a pale photo or chart still has an edge */
 .side-photo img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; filter: grayscale(1); }
 
@@ -883,8 +795,8 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   background-size: 100% 100%, calc(100% - 0.24em) 0.5em;
   transition: none;   /* the crimson at once, not rising */
 }
-.entry h3 a, .table .cell .th a, .work .th a, .foot-contact a { background-size: 100% 0, 0 1px; }
-.entry h3 a:hover, .table .cell .th a:hover, .work .th a:hover, .foot-contact a:hover { background-size: 100% 100%, 0 1px; }
+.entry h3 a, .work .th a, .foot-contact a { background-size: 100% 0, 0 1px; }
+.entry h3 a:hover, .work .th a:hover, .foot-contact a:hover { background-size: 100% 100%, 0 1px; }
 
 /* address that follows the pointer over a link (site.js) */
 .link-tip {
@@ -910,16 +822,13 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
    --fg (40px) for every small gap -- top, mail -> clocks, address -> copyright, bottom --
    and the body's section gap for clocks -> address. The em offsets below remove each
    font's built-in space above/below its letters so the visible gaps come out equal. */
-.site-foot { --fg: var(--s6); }
 .site-foot .wrap { padding-block: var(--s5) calc(var(--s5) - 0.5em); }   /* tight above the time and under the copyright: 28px */
 /* clocks (with the mail), then the address with the copyright on its right */
 .foot-main { display: grid; grid-template-columns: auto 1fr; column-gap: var(--s6); row-gap: 0; }
 .foot-side { display: contents; }
 .foot-side > .clocks { grid-column: 1 / -1; grid-row: 1; }
-.foot-side > .foot-contact { grid-column: 1; grid-row: 2;
-  margin-top: var(--s4); }   /* the mail's line -> address: the paragraph gap, two paragraphs of text */
-.foot-copy { grid-column: 2; grid-row: 2; justify-self: end; align-self: end; white-space: nowrap; }   /* level with the last address line */
-
+   /* the mail's line -> address: the paragraph gap, two paragraphs of text */
+   /* level with the last address line */
 
 /* one dial for all five cities: the minutes are the same everywhere, so one minute hand and an hour
    hand per city. Every line in it -- rim, hour marks, hands -- is the same 1px hairline. The rim,
@@ -927,7 +836,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
    hour hands are dark. Each hour hand is named just outside the dial where it points; hands
    pointing the same way share one label. Size and place are worked out by site.js: as large as
    fits beside the time and mail, down to the address or the copyright below it. */
-.clocks { position: relative; }
+
 .aclock { position: absolute; left: 0; top: 0; width: 88px; height: 88px; }
 @media (max-width: 40rem) { .clocks .aclock .lab { font-size: 0.75rem; } }   /* phones: names a size down, to leave the dial room */
 .aclock svg { display: block; position: relative; width: 100%; height: 100%; overflow: visible; }
@@ -961,7 +870,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
    1) Seoul -- the time large (twice the body, regular weight), then the weekday
       (Thursday) small, then "in Seoul" small and grey
    2) New York, California, London, Beijing -- the city small and grey, the time at body size */
-.clocks { margin-top: -0.24em; }   /* the space above the figures in Newsreader: the top gap then reads as --fg */
+.clocks { position: relative; margin-top: -0.24em; }   /* the space above the figures in Newsreader: the top gap then reads as --fg */
 /* the clock reads as a paragraph of text: "22:12 Saturday in Seoul," / "Always open" / the mail,
    all at the body size and grey, the mail a link like any other */
 .clocks p { margin: 0; font-size: var(--t-body); line-height: 1.5; color: var(--stone); }
@@ -969,7 +878,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   font-family: var(--serif); color: var(--stone); letter-spacing: -0.01em;   /* the body's own tracking; grey, as all the footer's words */
   font-feature-settings: "lnum" 1, "pnum" 1, "kern" 1;               /* natural-width lining figures */
 }
-.foot-copy { margin: 0; font-family: var(--serif); font-weight: 400; font-size: var(--t-body); color: var(--stone); }   /* same grey as the city names */
+.foot-copy { grid-column: 2; grid-row: 2; justify-self: end; align-self: end; white-space: nowrap; margin: 0; font-family: var(--serif); font-weight: 400; font-size: var(--t-body); color: var(--stone); }   /* same grey as the city names */
 .foot-copy .ko { font-weight: 600; }
 
 @media (max-width: 40rem) {
@@ -1020,9 +929,9 @@ a:focus-visible { outline: 2px solid var(--crimson); outline-offset: 3px; }
 main.shelf-end { padding-bottom: 0; }
 .shelf-box [hidden] { display: none !important; }
 .shelf-box:has(.spine-panel) { padding-bottom: calc(var(--sec-above) - var(--sec-gap)); }   /* the desk closes like text: arrow buttons -> section line 25px */
-.shelf-box.no-covers .spine-panel { padding-bottom: 20px; }
-.shelf-box.no-spines .shelf-panel { padding-top: 20px; }   /* 가로책장이 숨으면 박스 위→표지 첫 줄도 20px */   /* 표지책장이 숨으면 바닥 막대 아래 여백 8px */
-.shelf-filter { margin-top: var(--s3); }   /* 각주 아래, 회색 박스 밖 */
+
+   /* 표지책장이 숨으면 바닥 막대 아래 여백 8px */
+   /* 각주 아래, 회색 박스 밖 */
 .filter-wrap { display: flex; flex-wrap: wrap; gap: 6px; }
 
 .filter-btn {
@@ -1069,20 +978,14 @@ main.shelf-end { padding-bottom: 0; }
 }
 .card-img { display: block; aspect-ratio: 3 / 2; overflow: hidden; background: var(--line); }
 .card-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s ease; }
-.card:hover .card-img img { transform: scale(1.04); }
+
 .card-txt { flex: 1; display: flex; flex-direction: column; padding: calc(var(--inset) + 1px) var(--inset) var(--inset); min-height: 11rem; background: var(--shade-light) no-repeat; }   /* 3.99px: the space above the title's capitals */   /* light shade under the photo's edge */
-.card-date { font-family: var(--sans); font-size: var(--t-small); line-height: 1.5; color: var(--stone);   /* dates are grey, as everywhere */ }
-.card-title {
-  margin-top: 0; text-box-trim: trim-start; text-box-edge: cap alphabetic;
-  font-family: var(--serif); font-size: var(--t-body); line-height: 1.5; letter-spacing: -0.01em;
-  word-break: keep-all;
-}
+
 .card-foot { margin-top: auto; padding-top: var(--s4); display: flex; align-items: flex-end; justify-content: space-between; gap: var(--s2); }   /* the date, at the foot */
-.card-date { white-space: nowrap; text-box-trim: trim-end; text-box-edge: cap alphabetic; }   /* baseline -> card edge = the inset, as the other sides */
+.card-date { font-family: var(--sans); font-size: var(--t-small); line-height: 1.5; color: var(--stone); white-space: nowrap; text-box-trim: trim-end; text-box-edge: cap alphabetic; }   /* baseline -> card edge = the inset, as the other sides */
 .rail-foot { display: flex; align-items: center; gap: var(--s2); margin-top: var(--s4); padding-right: var(--gutter); }
 .rail-bar { position: relative; flex: 1; height: 12px; background: var(--shade-light) no-repeat; }   /* the track: the light shade (no line) */
 .rail-thumb { position: absolute; left: 0; top: 0; height: 12px; width: 20%; background: var(--shade-strong); }   /* where you are: the strong shade */
-
 
 /* Portfolio: the cards no longer scroll sideways -- they fill the text column in rows and the
    page simply carries on down (Journalism's blur-card rails keep scrolling) */
@@ -1101,13 +1004,9 @@ main.shelf-end { padding-bottom: 0; }
 /* ---------- Journalism: headlines in Noto Serif KR SemiBold, as JoongAng's opinion headlines
    (their "400" is in fact the SemiBold file), tracking -0.4px at 32px = -0.0125em ---------- */
 .j-page .entry h3,
-.j-page .table .cell .th a,
 .j-page .overlay-card .cap .title { font-weight: 600; letter-spacing: -0.0125em; }
 
 /* small label above a headline (e.g. "세종시장 후보 인터뷰") */
-.entry .kicker { margin: 0 0 var(--s1); font-family: var(--sans); font-size: var(--t-small); color: var(--stone); }
-.entry .desc a { color: var(--crimson); }   /* crimson at rest, as every text link */
-.entry .desc a:hover { color: var(--ink); }   /* black on the highlighter, as every text link pointed at */
 
 /* ---------- Journalism: blur cards, in a sideways-scrolling rail (same rail as Portfolio) ----------
    Same family as the overlay cards above (grey photo, title on the picture, square corners);
@@ -1178,7 +1077,7 @@ main.shelf-end { padding-bottom: 0; }
    the strip below opens the analysis */
 .ebox.split { padding: 0; }
 .eup { position: relative; display: block; padding: calc(var(--inset) + 0.1 * var(--t-small)) var(--inset) calc(var(--inset) + 0.1 * var(--t-body)); text-box-trim: trim-both; text-box-edge: cap alphabetic; }
-.ebox.split .go { display: block; margin: 0; border-top: 1px solid var(--line); padding: var(--inset); text-box-trim: trim-both; text-box-edge: cap alphabetic; }
+
 .election > p { margin: 0; }
 .election > p + p { margin-top: var(--s4); }   /* paragraph gap, as elsewhere */   /* the essay runs beside the boxes, as text beside a figure in a book */
 .election .date { color: var(--stone); font-size: var(--t-small); white-space: nowrap; }
@@ -1243,7 +1142,6 @@ main.shelf-end { padding-bottom: 0; }
   border: 1px solid var(--line); background: var(--paper) var(--shade-light) no-repeat;
   background-image: var(--shade-light); background-size: auto; background-origin: padding-box;
 }
-.shelf-panel .shelf-more button:hover, .shelf-more button:hover { color: var(--stone); border-color: var(--line); background-size: auto; }
 
 /* Research buttons, one height: every button's words trimmed to capitals and baseline, with --s3 above
    and below them (the arrows drawn as tall as the capitals) -- tags, arrows and "more" all alike */
@@ -1258,7 +1156,7 @@ main.shelf-end { padding-bottom: 0; }
 .spine-nav button, .spine-nav button:hover, .rail-btn, .rail-btn:hover { background-size: 100% 0; color: var(--stone); border-color: var(--line); }   /* arrows grey */
 .shelf-panel .shelf-more button:hover, .shelf-more button:hover { background-size: auto; color: var(--stone); border-color: var(--line); }
 .shelf-more button:hover .kh { background-size: 100% 0; color: inherit; }
-.spine-nav button:disabled, .spine-nav button:disabled:hover, .rail-btn:disabled, .rail-btn:disabled:hover { color: var(--line); }
+
 .spine-nav button::before, .shelf-more button::before, .rail-btn::before {
   content: ""; position: absolute; left: 0; right: 0; top: 0; height: 20px; background: var(--shade-strong);
   opacity: 0; pointer-events: none; transition: opacity .15s ease;
@@ -1266,7 +1164,7 @@ main.shelf-end { padding-bottom: 0; }
 .spine-nav button:active::before, .shelf-more button:active::before, .rail-btn:active::before { opacity: 1; transition-duration: .06s; }
 
 /* "Pledge analysis" strips: the light shade under their top line, as every top edge */
-.ebox.split .go { position: relative; }
+.ebox.split .go { display: block; margin: 0; border-top: 1px solid var(--line); padding: var(--inset); text-box-trim: trim-both; text-box-edge: cap alphabetic; position: relative; }
 .ebox.split .go::after { content: ""; position: absolute; left: 0; right: 0; top: 0; height: var(--s2); background: var(--shade-light); pointer-events: none; }
 
 /* Magnet (front page): between the photo and the page there is no resting place -- the browser's own
@@ -1314,12 +1212,11 @@ main.shelf-end { padding-bottom: 0; }
 .spine-shelf { margin-inline: calc(var(--gutter) - var(--ext)); padding-inline: calc(var(--ext) - var(--gutter)); }
 .desk-edge { position: absolute; top: 0; bottom: 8px; width: calc(var(--ext) - var(--gutter) + var(--gutter)); z-index: 2; pointer-events: none; opacity: 0; transition: opacity .35s ease; }
 .desk-edge.on { opacity: 1; }
-.desk-edge.r { left: calc(100% - var(--gutter)); }
-.desk-edge.l { right: calc(100% - var(--gutter)); transform: scaleX(-1); }
+
 .desk-edge span { position: absolute; inset: 0; }
 .desk-edge span:nth-child(1) { backdrop-filter: blur(0.6px); -webkit-backdrop-filter: blur(0.6px); -webkit-mask-image: linear-gradient(to right, transparent, #000 25%); mask-image: linear-gradient(to right, transparent, #000 25%); }
 .desk-edge span:nth-child(2) { backdrop-filter: blur(1.4px); -webkit-backdrop-filter: blur(1.4px); -webkit-mask-image: linear-gradient(to right, transparent 15%, #000 50%); mask-image: linear-gradient(to right, transparent 15%, #000 50%); }
-.desk-edge span:nth-child(3) { backdrop-filter: blur(2.6px); -webkit-backdrop-filter: blur(2.6px); -webkit-mask-image: linear-gradient(to right, transparent 40%, #000 80%); mask-image: linear-gradient(to right, transparent 40%, #000 80%); }
+
 .desk-edge::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to right, transparent 75%, color-mix(in srgb, var(--paper) 70%, transparent)); }   /* a light fade only at the far edge */
 
 /* Bookshelf: the next books, a blurred glimpse in the background where "A prime more" and the note sit
@@ -1344,12 +1241,12 @@ main.shelf-end { padding-bottom: 0; }
 /* Messy Desk minimap (as an editor's overview): at the right end of the tag row, the whole desk in
    miniature -- each pile a small grey block, standing on a hairline -- with a frame for the part in
    view. Click or drag on it to move the desk. Hidden where the tags leave no room. */
-.shelf-filter { position: relative; }
+.shelf-filter { margin-top: var(--s3); position: relative; }
 .desk-map { position: absolute; right: 0; bottom: 0; width: 7.5rem; height: 1.6rem; cursor: pointer; touch-action: none; }
 .desk-map .floor { position: absolute; left: 0; right: 0; bottom: 0; border-top: 1px solid var(--line); }
 .desk-map .mp { position: absolute; bottom: 1px; background: var(--line); }
 .desk-map .view { position: absolute; top: 0; bottom: 0; border: 1px solid var(--stone); transition: border-color .15s ease; }
-.desk-map:hover .view { border-color: var(--ink); }
+
 .desk-map[hidden] { display: none; }
 /* arrows: the stem weight of Pretendard SemiBold at the button size (0.125em -- 1.8px on desktop), square ends and sharp corners, as the letters */
 
@@ -1378,7 +1275,7 @@ main.shelf-end { padding-bottom: 0; }
 .outline-rail { position: absolute; bottom: 0; width: max-content; max-width: 12rem; z-index: 1; pointer-events: none; }   /* as wide as its longest item: its right edge on the same line as the time box's below (--s6 off the column) */
 .outline { position: sticky; width: max-content; max-width: 12rem; font-family: var(--sans); font-size: var(--t-small); line-height: 1.4; pointer-events: auto; }
 .outline ol { list-style: none; margin: 0; padding: 0; position: relative; border-left: 1px solid var(--line); }
-.outline li + li { margin-top: var(--s2); }
+
 .outline a { display: block; padding: 2px 0 2px var(--s3); color: var(--stone); text-decoration: none; background: none; transition: color .15s ease; }
 .outline a:hover, .outline a.cur { color: var(--ink); }
 .outline .bar { position: absolute; left: -3px; width: 5px; background: var(--crimson); transition: top .35s cubic-bezier(.3,0,.2,1), height .35s cubic-bezier(.3,0,.2,1); }
@@ -1388,17 +1285,9 @@ h2.section-title { scroll-margin-top: calc(var(--head-h, 4rem) + var(--s5)); }
 /* Night at the end: scroll to the very bottom of a page and the cream gives way to a soft warm black
    (not pure black), the words to a soft off-white; subject colours and crimson lift so they still read.
    Scroll back up and it returns. The change eases over .7s. */
-html.night {
-  --paper: #1C1B19; --ink: #E6E3DD; --stone: #E0DDD7;   /* the night grey, exactly (the day's is mixed from ink and paper) */ --line: #3A3834; --brand: #252421; --brand-deep: #C9C6BF;
-  --crimson: #C25466;
-  --c-meche: #D08B4A; --c-phys: #6FA6D0; --c-math: #4DB585; --c-gensci: #4FA893; --c-classics: #A3B84E;
-  --sh-strong: #3A3834; --sh-light: #3A3834;   /* at night: the night's line grey */
-  --dial-rim: #E0DDD7; --dial-home: #E0DDD7; --dial-city: #E3808F; --dial-pin: #E0DDD7; --dial-lab: #E0DDD7;   /* the dial at night: one grey (the words' grey) and pink */
-  color-scheme: dark;
-}
+
 html.night, html.night body { background-color: var(--paper); color: var(--ink); }
 /* day <-> night: the page cross-fades as one picture (site.js starts a view transition) */
-
 
 /* wide screens (the sketch areas are roomy): the time, "Always open" and the mail leave the footer and
    stay in the left sketch area, at its foot, lined up with the outline above; the footer keeps one
@@ -1416,14 +1305,13 @@ html.night, html.night body { background-color: var(--paper); color: var(--ink);
    the names; pink for the cities' hands and the sweep, under which the hands turn dark */
 html.night .aclock .face, html.night .aclock line, .site-foot .aclock .face, .site-foot .aclock line { stroke-width: 1.5; }   /* a hair heavier at night, so the dial holds on the dark */
 /* at night the sweep's light leading edge fades into the dark ground, not toward white (which read as cream) */
-html.night { --crimson-light: color-mix(in srgb, var(--crimson) 45%, var(--paper));
-  --dial-fill: #D9707F; --dial-edge: color-mix(in srgb, #D9707F 35%, var(--paper)); --dial-on: var(--paper); }
+html.night { --paper: #1C1B19; --ink: #E6E3DD; --stone: #E0DDD7; --line: #3A3834; --brand-deep: #C9C6BF; --crimson: #C25466; --c-meche: #D08B4A; --c-phys: #6FA6D0; --c-math: #4DB585; --c-gensci: #4FA893; --c-classics: #A3B84E; --sh-strong: #3A3834; --sh-light: #3A3834; --dial-rim: #E0DDD7; --dial-home: #E0DDD7; --dial-city: #E3808F; --dial-pin: #E0DDD7; --dial-lab: #E0DDD7; color-scheme: dark; --crimson-light: color-mix(in srgb, var(--crimson) 45%, var(--paper)); --dial-fill: #D9707F; --dial-edge: color-mix(in srgb, #D9707F 35%, var(--paper)); --dial-on: var(--paper); }
 
 /* from the bar over Explore More down, the page is night all the time; only what lies above it turns.
    The night colours are set again on these two, and every colour made from them is worked out again
    here (a custom property is resolved where it is declared, so :root's would stay day's) */
 .pre-foot, .site-foot {
-  --paper: #1C1B19; --ink: #E6E3DD; --line: #3A3834; --brand: #252421; --brand-deep: #C9C6BF;
+  --paper: #1C1B19; --ink: #E6E3DD; --line: #3A3834; --brand-deep: #C9C6BF;
   --crimson: #C25466; --c-journalism: var(--crimson);
   --sh-strong: #3A3834; --sh-light: #3A3834;
   --stone: #E0DDD7;
@@ -1460,12 +1348,12 @@ html.night { --crimson-light: color-mix(in srgb, var(--crimson) 45%, var(--paper
   opacity: 0; transition: opacity .15s ease; pointer-events: none;   /* hover: the strong shade on the left side */
 }
 @media (hover: hover) { .pre-foot a:hover::after { opacity: 1; } }
-.pre-foot a[aria-current="page"] { color: var(--ink); }
+
 .pre-foot .pf-name { display: block; font-family: var(--serif); font-size: var(--t-display); line-height: 1.2; text-box-trim: trim-both; text-box-edge: cap alphabetic; overflow-wrap: anywhere; }
 
 /* the end of a page's text -> the Explore More line: the same 25px as before every section line
    (the main's own bottom padding and the last block's margin give way to it) */
-main { padding-bottom: 0; }
+main { padding-block: var(--s6); padding-bottom: 0; }
 main > section:last-of-type, main > section:last-of-type > :last-child { margin-bottom: 0; }
 .shelf-panel { padding-bottom: 0; }   /* the note is the bookshelf's last line of text */
 /* a page that ends on a box (a rail of cards, its arrow buttons) keeps the box's edge 25px off the line, as the desk's arrows */
@@ -1502,14 +1390,14 @@ section > .fact:last-child { padding-bottom: 0.068em; }   /* the sans list sits 
 .time-rail .clock-main::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 20px; background: var(--shade-strong);
   opacity: 0; pointer-events: none; transition: opacity .15s ease; }
 @media (hover: hover) { .time-rail .clock-main:hover::before { opacity: 1; } }
-.time-rail .clock-main:active { background-color: var(--crimson); border-color: var(--crimson); color: var(--on-fill); transition-duration: .06s; }
+
 .time-rail .clock-main:active::before { opacity: 0; }
 .time-rail .clock-main:active .foot-mail { color: var(--on-fill) !important; text-decoration-color: var(--on-fill) !important; background: none !important; }
 .time-rail .clock-main .foot-mail:hover { background: none; color: inherit; }   /* the box is the button: no separate hover on the address */
-.time-rail .clock-main .foot-mail { transition: color .15s ease, text-decoration-color .15s ease; }
+
 .time-rail .clock-main:active .foot-mail { transition-duration: .06s; }   /* turns white with the rest of the box, not after it */
 /* in the box the address is just words: no underline, no link of its own -- the box is the button */
-.time-rail .clock-main .foot-mail { text-decoration: none !important; pointer-events: none; color: inherit !important; background: none !important; }
+.time-rail .clock-main .foot-mail { transition: color .15s ease, text-decoration-color .15s ease; text-decoration: none !important; pointer-events: none; color: inherit !important; background: none !important; }
 .time-rail .clock-main { color: var(--ink); }   /* the box's words in the body's colour */
 
 /* day <-> night: the page changes at once under a veil of the old ground that fades out (site.js) */
@@ -1613,25 +1501,18 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 .pre-foot a { padding: var(--inset); }
 
 /* Journalism card news: the cards closer together -- 14px apart (10 on phones), the tab's inset */
-.blur-rail .rail-track { gap: var(--inset); }
+
 @media (max-width: 40rem) { .blur-card { flex-basis: calc((100vw - var(--sbw, 0px) - var(--shift, 0px) - 2 * var(--gutter) - var(--inset)) / 2); } }
 
 /* the minimap sits between the two arrows, as tall as they are -- on the desk and under the card news alike */
-.spine-nav .desk-map, .rail-map { position: relative; right: auto; bottom: auto; flex: 0 0 7.5rem; height: auto; align-self: stretch; }
+
 .spine-nav { align-items: stretch; }
 
 /* Journalism card news: the same as the Research desk -- the row runs on into the margins beyond the
    column (at most 5rem) and fades in and out there (1.5rem on phones); under it, centred, the two
    arrow buttons with the minimap between them (no scroll bar) */
-.card-rail.blur-rail { margin-right: 0; }
-.blur-rail .rail-track {
-  --ext: max(var(--gutter), min((100vw - var(--sbw, 0px) - var(--shift, 0px) - 46rem) / 2 + var(--gutter), var(--gutter) + 5rem));
-  --fade: max(3rem, var(--ext) - var(--gutter) + 2rem);
-  margin-inline: calc(var(--gutter) - var(--ext)); padding-inline: calc(var(--ext) - var(--gutter));
-  scroll-padding-inline: calc(var(--ext) - var(--gutter));
-  -webkit-mask-image: linear-gradient(to right, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent);
-          mask-image: linear-gradient(to right, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent);
-}
+
+.blur-rail .rail-track { gap: var(--inset); --ext: max(var(--gutter), min((100vw - var(--sbw, 0px) - var(--shift, 0px) - 46rem) / 2 + var(--gutter), var(--gutter) + 5rem)); --fade: max(3rem, var(--ext) - var(--gutter) + 2rem); margin-inline: calc(var(--gutter) - var(--ext)); padding-inline: calc(var(--ext) - var(--gutter)); scroll-padding-inline: calc(var(--ext) - var(--gutter)); -webkit-mask-image: linear-gradient(to right, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent); mask-image: linear-gradient(to right, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent); }
 .blur-rail .rail-foot { justify-content: center; align-items: stretch; padding-right: 0; gap: var(--s2); }
 .blur-rail .rail-btn { display: flex; }   /* on phones too, as the desk's */
 @media (max-width: 40rem) { .blur-card { flex-basis: calc((100vw - var(--sbw, 0px) - var(--shift, 0px) - 2 * var(--gutter) - var(--inset)) / 2); } }
@@ -1651,10 +1532,9 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 /* the rows run out to the screen's edge wherever the margin is narrow (phones included): the desk and
    the card news both use the whole margin beyond the column, up to 5rem; the fade covers that margin
    and runs 2rem into the column (1rem on phones) -- and only on a side with more to see */
-.spine-wrap, .blur-rail .rail-track { --ext: calc(var(--gutter) + min(5rem, max(var(--gutter), (100vw - var(--sbw, 0px) - var(--shift, 0px) - 46rem) / 2 + var(--gutter)))); }
-.spine-wrap, .spine-shelf, .spine-wrap .spine-board, .blur-rail .rail-track { --fade-in: 2rem; }
+
 @media (max-width: 40rem) { .spine-wrap, .spine-shelf, .spine-wrap .spine-board, .blur-rail .rail-track { --fade-in: 1rem; } }
-.spine-wrap, .blur-rail .rail-track { --fade: calc(var(--ext) - var(--gutter) + var(--fade-in)); }
+.spine-wrap, .blur-rail .rail-track { --ext: calc(var(--gutter) + min(5rem, max(var(--gutter), (100vw - var(--sbw, 0px) - var(--shift, 0px) - 46rem) / 2 + var(--gutter)))); --fade: calc(var(--ext) - var(--gutter) + var(--fade-in)); }
 
 /* Portfolio cards: the words go inside the photo, at its lower left, on the card news' frosted band --
    the title white, the date in the dark-ground grey; cards 14px apart (10 on phones), as on Journalism,
@@ -1670,14 +1550,7 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
   padding: var(--s7) var(--inset) var(--inset); background: none; color: #fff; text-align: left;
 }
 .card-txt::before { display: none !important; }   /* no shade strip: the band is the ground */
-.card-txt::after {   /* the frosted band of the card news: blur + a little dark, fading out upward */
-  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
-  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-  background: linear-gradient(to top, var(--veil), rgba(0,0,0,.14));
-  -webkit-mask-image: linear-gradient(to top, #000 55%, transparent);
-          mask-image: linear-gradient(to top, #000 55%, transparent);
-}
-.card-title { color: #fff; }
+
 .card-foot { padding-top: var(--s2); margin-top: 0; }
 .card .card-date { color: #E0DDD7; }
 @media (max-width: 40rem) { .card-txt { min-height: 0; } }
@@ -1688,29 +1561,29 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
    right, right-aligned, one line each */
 .card-img { aspect-ratio: 16 / 9; }
 .card-txt { text-align: right; padding-top: var(--s6); }
-.card-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
 .card-foot { justify-content: flex-end; }
 @media (max-width: 40rem) { .card-txt { padding-top: var(--s4); } }   /* phones: the band no taller than it needs */
 
 /* thumbnail titles: up to two lines, then … */
-.card-title { white-space: normal; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; }
-.card-title { text-wrap: balance; }   /* two even lines, not one long and a word */
+
+   /* two even lines, not one long and a word */
 
 /* thumbnail words: the title (two lines) at the lower left, the date at the lower right, on one foot */
 .card-txt { display: flex; flex-direction: row; align-items: flex-end; justify-content: space-between; gap: var(--s4); text-align: left; }
-.card-title { flex: 1 1 auto; min-width: 0; text-box-trim: trim-both; text-box-edge: cap alphabetic; }
+
 .card-foot { flex: 0 0 auto; padding-top: 0; margin: 0; }
 /* the title's last line and the date share one baseline, --inset above the photo's foot; the title
    keeps its whole line box (no trimming), so the clamp never cuts its descenders */
 .card-txt { align-items: last baseline; }
-.card-title { text-box-trim: none; margin-bottom: -0.5em; padding-bottom: 0; }
+.card-title { margin-top: 0; font-family: var(--serif); font-size: var(--t-body); line-height: 1.5; letter-spacing: -0.01em; word-break: keep-all; color: #fff; overflow: hidden; text-overflow: ellipsis; white-space: normal; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; text-wrap: balance; flex: 1 1 auto; min-width: 0; text-box-edge: cap alphabetic; text-box-trim: none; margin-bottom: -0.5em; padding-bottom: 0; }
 @media (max-width: 40rem) {   /* phones: too narrow for both on one foot -- the title over the date */
   .card-txt { flex-direction: column; align-items: stretch; gap: var(--s2); }
   .card-title { margin-bottom: 0; }
   .card-foot { align-self: flex-end; }
 }
 /* thumbnails: a lighter dark under the words -- the blur does most of the work */
-.card-txt::after { background: linear-gradient(to top, rgba(0,0,0,.32), rgba(0,0,0,.06)); }
+.card-txt::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); -webkit-mask-image: linear-gradient(to top, #000 55%, transparent); mask-image: linear-gradient(to top, #000 55%, transparent); background: linear-gradient(to top, rgba(0,0,0,.32), rgba(0,0,0,.06)); }
 
 /* ---- one gap between cards, everywhere: 10px (6px on phones) -- card news, the photo pairs, the
    portfolio thumbnails ---- */
@@ -1734,9 +1607,7 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
    paper; on phones only over the margin ---- */
 .spine-wrap, .spine-shelf, .spine-wrap .spine-board, .blur-rail .rail-track { --fade-in: 2rem; }
 @media (max-width: 40rem) { .spine-wrap, .spine-shelf, .spine-wrap .spine-board, .blur-rail .rail-track, .card-rail.blur-rail { --fade-in: 0rem; } }
-.card-rail.blur-rail { position: relative;
-  --ext: calc(var(--gutter) + min(5rem, max(var(--gutter), (100vw - var(--sbw, 0px) - var(--shift, 0px) - 46rem) / 2 + var(--gutter))));
-  --fade: calc(var(--ext) - var(--gutter) + var(--fade-in)); }
+.card-rail.blur-rail { margin-right: 0; position: relative; --ext: calc(var(--gutter) + min(5rem, max(var(--gutter), (100vw - var(--sbw, 0px) - var(--shift, 0px) - 46rem) / 2 + var(--gutter)))); --fade: calc(var(--ext) - var(--gutter) + var(--fade-in)); }
 @media (min-width: 40.01rem) { .card-rail.blur-rail { --fade-in: 2rem; } }
 .spine-shelf, .blur-rail .rail-track { -webkit-mask-image: none; mask-image: none; }   /* the edges do it now */
 .desk-edge { display: block !important; top: 0; width: var(--fade); }
@@ -1746,7 +1617,7 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 .blur-rail > .desk-edge.l { left: calc(var(--gutter) - var(--ext)); }
 .desk-edge span:nth-child(1) { backdrop-filter: blur(1.5px); -webkit-backdrop-filter: blur(1.5px); }
 .desk-edge span:nth-child(2) { backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
-.desk-edge span:nth-child(3) { backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+.desk-edge span:nth-child(3) { -webkit-mask-image: linear-gradient(to right, transparent 40%, #000 80%); mask-image: linear-gradient(to right, transparent 40%, #000 80%); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
 .desk-edge::after { background: linear-gradient(to right, transparent, color-mix(in srgb, var(--paper) 55%, transparent) 60%, var(--paper)); }
 
 /* ---- portfolio thumbnails on phones: taller, and a little more dark under the words ---- */
@@ -1759,7 +1630,7 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 @media (max-width: 40rem) { .card-img { aspect-ratio: 2 / 3; } }   /* portfolio thumbnails on phones: 2:3 */
 /* the arrow buttons as tall as the overview's filled pieces (not its frame): they stand on the same
    floor and reach as high as the tallest piece */
-.spine-nav button, .blur-rail .rail-btn { margin-block: 3px 1px; }
+
 /* the overview's frame: a dark grey, not near-black; pointing at it takes it to the words' grey */
 .desk-map .view { border-color: color-mix(in srgb, var(--stone) 65%, var(--paper)); }
 .desk-map:hover .view { border-color: var(--stone); }
@@ -1770,14 +1641,14 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 /* the overview's floor is its own bottom edge, and the pieces stand right on it (no separately placed
    line that can round apart from them); the arrow buttons end on that same edge */
 .desk-map .floor { display: none; }
-.spine-nav .desk-map, .rail-map { box-sizing: border-box; border-bottom: 1px solid var(--line); }
+
 .desk-map .mp { bottom: 0; }
 .desk-map .view { bottom: -1px; }
-.spine-nav .desk-map, .rail-map { border-bottom-color: transparent; }   /* no floor line */
+   /* no floor line */
 /* the overview exactly as tall as the arrow buttons, and everything in it on the same two edges: its
    frame, its tallest piece and the buttons share top and bottom -- one row, no stray pixel */
-.spine-nav button, .blur-rail .rail-btn { margin-block: 0; }
-.spine-nav .desk-map, .rail-map { border-bottom: 0; }
+
+.spine-nav .desk-map, .rail-map { position: relative; right: auto; bottom: auto; flex: 0 0 7.5rem; height: auto; align-self: stretch; box-sizing: border-box; border-bottom-color: transparent; border-bottom: 0; }
 .desk-map .view { top: 0; bottom: 0; box-sizing: border-box; }
 .desk-map .mp { bottom: 0; }
 /* bottoms only: the buttons, the frame and the pieces end on one line; the frame still rises 3px above
@@ -1818,17 +1689,17 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
    its crimson, laid over its photo. Pointing at a cell enlarges its photo (as the stories do) and the
    strong shade comes along its top. Where a cell is taller than wide, the two photos with the name in
    them are cropped to their right-hand part ---- */
-.pre-foot a[href="/"]           { --pf-img: url("images/explore/home.jpg"); }
-.pre-foot a[href="/research"]   { --pf-img: url("images/explore/research.jpg"); }
+.pre-foot a[href="/"] { --pf-img: url("images/explore/home.jpg"); }
+.pre-foot a[href="/research"] { --pf-img: url("images/explore/research.jpg"); }
 .pre-foot a[href="/journalism"] { --pf-img: url("images/explore/journalism.jpg"); }
-.pre-foot a[href="/portfolio"]  { --pf-img: url("images/explore/portfolio.jpg"); }
+.pre-foot a[href="/portfolio"] { --pf-img: url("images/explore/portfolio.jpg"); }
 .pre-foot a { color: #fff; }
 .pre-foot a::before {
   content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
   background: linear-gradient(rgba(0,0,0,.48), rgba(0,0,0,.48)), var(--pf-img) center / cover no-repeat;
   transition: transform .4s ease;
 }
-.pre-foot li.tall a:is([href="/portfolio"], [href="/journalism"])::before { background-position: center, right center; }
+
 @media (hover: hover) { .pre-foot a:hover::before { transform: scale(1.05); } }
 .pre-foot .pf-name { position: relative; z-index: 2; }
 .pre-foot li:has(a[aria-current="page"]) { background: none; }
@@ -1866,7 +1737,6 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 @media (hover: hover) { .pre-foot .clocks a.foot-mail:hover { color: var(--ink); text-decoration: underline; text-decoration-color: var(--stone); text-underline-offset: 0.25em; text-decoration-thickness: 1px; } }
 /* the page you are on: plain crimson, no photo, no blur */
 .pre-foot a[aria-current="page"]::before, .pre-foot li.tall a[aria-current="page"]::before { background: var(--crimson); transform: none; }
-.pre-foot li:has(a[aria-current="page"])::after { display: none; }
 
 /* the footer as before (the dial beside the copyright and the address), and a little room under it:
    --s5 from the last baseline to the page's end */
@@ -1879,11 +1749,7 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 /* the side stories' photos: blurred on phones (the box sits in the middle of them); on wider screens
    only their left part, under the box, blurs, fading out to the right */
 .side-photo { position: relative; }
-.side-photo::after {
-  content: ""; position: absolute; inset: 0; pointer-events: none;
-  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-  -webkit-mask-image: linear-gradient(to right, #000 25%, transparent 55%); mask-image: linear-gradient(to right, #000 25%, transparent 55%);
-}
+
 @media (max-width: 34rem) { .side-photo::after { -webkit-mask-image: none; mask-image: none; } }
 /* Explore More hover: no zoom -- the cell widens a little to the right instead (the current one stays as it is) */
 @media (hover: hover) {
@@ -1907,7 +1773,7 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 /* the headlines' hover underline as thick as the links' */
 .kh, .pre-foot .clocks a.foot-mail:hover { text-decoration-thickness: 2px; }
 .kh { text-underline-offset: 0.3em; }   /* a hair lower, as the links' */
-.side-photo::after { backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); }   /* side-story photos: only a touch of blur */
+.side-photo::after { content: ""; position: absolute; inset: 0; pointer-events: none; -webkit-mask-image: linear-gradient(to right, #000 25%, transparent 55%); mask-image: linear-gradient(to right, #000 25%, transparent 55%); backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); }   /* side-story photos: only a touch of blur */
 @media (max-width: 40rem) { .pf-row { grid-template-columns: 3fr 2fr; } }   /* phones: Explore More's cells 60% of the column wide */
 /* Explore More hover: no widening -- the cell turns crimson (the night's pink) with black words, as the current one */
 @media (hover: hover) {
@@ -1918,12 +1784,7 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 }
 /* the current page's cell runs out further, and says so at its right end */
 .pre-foot li:has(a[aria-current="page"]) { margin-right: -5rem; }
-.pre-foot li:has(a[aria-current="page"])::after {
-  display: block; content: "You are here"; position: absolute; left: auto; right: var(--inset); top: 50%; bottom: auto; width: auto;
-  transform: translateY(-50%); z-index: 2; pointer-events: none;
-  backdrop-filter: none; -webkit-backdrop-filter: none; -webkit-mask-image: none; mask-image: none;
-  font-family: var(--sans); font-size: var(--t-small); line-height: 1; color: #1C1B19; white-space: nowrap;
-}
+
 /* phones: Explore More larger all round -- the cells 75% of the column wide, and a little taller */
 @media (max-width: 40rem) {
   .pf-row { grid-template-columns: 3fr 1fr; }
@@ -1934,7 +1795,6 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 /* underlines become a highlighter: a light grey stroke behind the lower half of the words -- links at
    rest, and headlines when pointed at (on photos a light stroke of the dark-ground grey) */
 :root { --hl: color-mix(in srgb, var(--stone) 26%, transparent); --hl-photo: color-mix(in srgb, #E0DDD7 45%, transparent); }
-.kh, .kh:is(*) { text-decoration-thickness: 0.5em; text-underline-offset: -0.32em; text-decoration-skip-ink: none; }
 
 /* pressing an arrow: its colours swap -- the frame's dark grey fills the box, the arrow turns white */
 .spine-nav button:not(:disabled):active, .rail-btn:not(:disabled):active,
@@ -1948,10 +1808,10 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 /* "You are here" starts exactly where the other cells end; the current cell runs on past it by the
    label's own width and the cell's inset (site.js measures the label) */
 .pre-foot li:has(a[aria-current="page"]) { margin-right: calc(-1 * var(--yah, 5rem)); }
-.pre-foot li:has(a[aria-current="page"])::after { left: calc(100% - var(--yah, 5rem) - var(--yah-ink, 0px)); right: auto; }
+.pre-foot li:has(a[aria-current="page"])::after { display: block; content: "You are here"; position: absolute; top: 50%; bottom: auto; width: auto; transform: translateY(-50%); z-index: 2; pointer-events: none; backdrop-filter: none; -webkit-backdrop-filter: none; -webkit-mask-image: none; mask-image: none; font-family: var(--sans); font-size: var(--t-small); line-height: 1; color: #1C1B19; white-space: nowrap; left: calc(100% - var(--yah, 5rem) - var(--yah-ink, 0px)); right: auto; }
 @media (max-width: 40rem) { .pre-foot li:has(a[aria-current="page"]) { margin-right: calc(-1 * var(--yah, 5rem)); } }
 /* the headlines' highlighter fades in and out, as the link's address does */
-.kh, .kh:is(*) { transition: text-decoration-color .15s ease; }
+.kh, .kh:is(*) { text-decoration-thickness: 0.5em; text-underline-offset: -0.32em; text-decoration-skip-ink: none; transition: text-decoration-color .15s ease; }
 
 /* pointing at a highlighted link: the words turn crimson and the highlighter black -- no crimson fill */
 a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))):hover {
@@ -2008,11 +1868,9 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))):hover {
   color: var(--crimson); --hl: var(--line); background-size: 100% 0, calc(100% - 0.24em) 0.5em;
 }
-.entry .desc a { color: var(--ink); }
-.entry .desc a:hover { color: var(--crimson); }
+
 /* text links stay black when pointed at too (only the underline turns into the highlighter) */
 a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))):hover { color: var(--ink); }
-.entry .desc a:hover { color: var(--ink); }
 
 /* the copyright and the address are one paragraph (one element, lines broken by <br>): it stands where
    the copyright stood -- first in the footer on wide screens and phones, under the time and mail between */
@@ -2049,7 +1907,6 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))):hover {
   color: var(--crimson); text-decoration-color: var(--crimson); background-size: 100% 0, 0 0;
 }
-.entry .desc a:hover { color: var(--crimson); }
 
 /* a filled (chosen or pressed) box has no shade: the filled tag buttons, a pressed arrow */
 .filter-btn[aria-pressed="true"]::before, .filter-btn[aria-pressed="true"]::after,
@@ -2062,13 +1919,12 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   color: var(--ink); text-decoration: none; background: none; box-shadow: none; padding-right: var(--s2);
   position: relative; z-index: 1; transition: none;
 }
-.outline a.cur, .outline a.cur:hover { color: var(--on-fill); }
+
 .outline .bar { left: 0; right: 0; width: auto; z-index: 0; }
 /* the outline without its left line; the crimson box fits the current item's words */
 .outline ol { border-left: 0; }
 .outline .bar { display: none; }
 .outline a, .outline a:hover, .outline a.cur { width: fit-content; padding: 2px var(--s2); }
-.outline a.cur, .outline a.cur:hover { background: var(--crimson); }
 
 /* the section outline in the PDF tab's weight */
 .outline { font-weight: 600; }
@@ -2084,11 +1940,11 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 }
 @media (hover: hover) { .time-rail .clock-main:hover { background-size: 100% 8px, 100% 100%; } }
 .time-rail .clock-main:hover::before { opacity: 0 !important; }
-.time-rail .clock-main:active { background-color: var(--paper); border-color: var(--line); color: var(--ink); }
+.time-rail .clock-main:active { transition-duration: .06s; background-color: var(--paper); border-color: var(--line); color: var(--ink); }
 .time-rail .clock-main:active .foot-mail { color: inherit !important; }
 /* as the PDF tab: grey words -- the outline's items and the time box (the current item stays on its crimson) */
 .outline a, .outline a:hover { color: var(--stone); }
-.outline a.cur, .outline a.cur:hover { color: var(--on-fill); }
+
 .time-rail .clock-main, .time-rail .clock-main:active { color: var(--stone); }
 /* the outline: no crimson box -- the section being read is simply black, the others grey */
 .outline a.cur, .outline a.cur:hover { background: none; color: var(--ink); }
@@ -2146,7 +2002,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 /* the section outline, always afloat on the left: a thin line between its items, one more line after
    the last, and under it the time and the mail (moved in by site.js) in the outline's own letter */
 .outline li + li { margin-top: 0; border-top: 1px solid var(--line); }
-.outline li a, .outline li a:hover, .outline li a.cur { padding-block: var(--s2); }
+
 .outline .clock-main {
   display: block; margin: 0; padding: var(--s2) var(--s2) 0; border-top: 1px solid var(--line);
   font-family: var(--sans); font-size: var(--t-small); font-weight: 600; line-height: 1.4; color: var(--stone);
@@ -2166,7 +2022,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   display: block; padding: var(--s2) var(--s2) var(--s2) var(--gutter); border-bottom: 1px solid var(--line);
   font-weight: 400; color: var(--stone); white-space: nowrap;
 }
-.outline li a, .outline li a:hover, .outline li a.cur { width: auto; padding-left: var(--gutter); padding-right: var(--s2); }
+
 .outline .clock-main { padding: var(--s2) var(--s2) var(--s2) var(--gutter); }
 .outline .clock-main time, .outline .clock-main .city { color: color-mix(in srgb, var(--stone) 55%, var(--paper)); transition: color .15s ease; }
 .outline li a, .outline .clock-main {
@@ -2177,7 +2033,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   .outline .clock-main:hover time, .outline .clock-main:hover .city { color: var(--ink); }
 }
 html:has(.outline) .site-head .updated { display: none !important; }
-.outline li a, .outline li a:hover, .outline li a.cur { margin: 0; }   /* not a text link's reach past its words: every line starts on the gutter */
+.outline li a, .outline li a:hover, .outline li a.cur { padding-block: var(--s2); width: auto; padding-left: var(--gutter); padding-right: var(--s2); margin: 0; }   /* not a text link's reach past its words: every line starts on the gutter */
 /* the words' inset from the screen's edge: the gutter, narrowed by site.js where the screen is tight so the
    box always ends --s5 short of the text column; where even a small inset won't do, the box hides */
 /* the lines between the rows run from the words' first letter to the box's right end (the end of the
