@@ -1234,7 +1234,6 @@ main.shelf-end { padding-bottom: 0; }
 }
 
 /* Messy Desk: no line or shade where it closes */
-section:has(.spine-panel) + section > h2.section-title { background: none; border-top-color: transparent; }   /* line and shade both gone; the spacing stays */
 
 /* "A prime more": the print-edition box -- hairline, light shade inside its top, the box inset on every
    side of the words (trimmed to capitals and baseline), small grey sans; on hover only the words fill */
@@ -1980,9 +1979,8 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 .tuck-story::before, .print-tab::before, .side-head::before, .ebox::before, .ebox.split .go::before, .ebox.split .go::after,
 .nav a::after, .wordmark::after { z-index: -1; }
 
-/* Explore More: no shades at all -- not on its cells, not under its title */
+/* Explore More: no shades on its cells; its title opens with the line and light shade, like every section */
 .pre-foot li::before, .pre-foot a::after, .pre-foot li:has(a[aria-current="page"])::before { display: none !important; }
-.pre-foot h2.section-title { background: none !important; }
 
 /* pointing at a highlighted link: crimson words, the highlighter gone */
 a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))):hover {
