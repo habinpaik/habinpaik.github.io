@@ -535,7 +535,7 @@ main > p.dek:first-child + section { margin-top: 0; }   /* the opener is larger:
   padding: var(--s2) var(--s4); border: 1px solid var(--line); border-radius: 0;
   color: var(--ink); cursor: pointer; line-height: 1;
   background: linear-gradient(var(--crimson), var(--crimson)) no-repeat 0 100% / 100% 0;
-  transition: background-size .45s cubic-bezier(.45, 0, .25, 1), color .45s ease, border-color .45s ease;
+  transition: background-size .15s cubic-bezier(.45, 0, .25, 1), color .15s ease, border-color .15s ease;
 }
 .spine-nav button:hover, .rail-btn:hover { background-size: 100% 100%; color: var(--on-fill); border-color: var(--crimson); }
 .spine-nav button, .rail-btn { font-size: var(--t-small); }
@@ -548,7 +548,7 @@ main > p.dek:first-child + section { margin-top: 0; }   /* the opener is larger:
   max-width: 16rem; padding: var(--s2) var(--s3);
   background: var(--crimson); color: var(--on-fill); border-radius: 0;
   font-family: var(--sans); font-size: var(--t-small); line-height: 1.4;
-  opacity: 0; transition: opacity .12s ease;
+  opacity: 0; transition: opacity .15s ease;
 }
 .spine-tip.show { opacity: 1; }
 .spine-tip i { font-style: italic; }   /* one line of reference, one colour and weight; only a Latin-script title in italics */
@@ -633,7 +633,7 @@ main > p.dek:first-child + section { margin-top: 0; }   /* the opener is larger:
 .shelf-more button {
   background-image: linear-gradient(var(--crimson), var(--crimson)); background-repeat: no-repeat;
   background-position: 0 100%; background-size: 100% 0;
-  transition: background-size .45s cubic-bezier(.45, 0, .25, 1), color .45s ease, border-color .45s ease;
+  transition: background-size .15s cubic-bezier(.45, 0, .25, 1), color .15s ease, border-color .15s ease;
 }
 .shelf-more button:hover, .shelf-panel .shelf-more button:hover { background-size: 100% 100%; color: var(--on-fill); border-color: var(--crimson); }
 .shelf-more button[hidden] { display: none; }
@@ -816,7 +816,7 @@ figure.ph.margin-left, figure.ph.margin-right { width: 12rem; margin: var(--s4) 
   background-repeat: no-repeat; background-position: 0 calc(var(--s2) - 1px);
   background-origin: padding-box;
   text-decoration: none; text-align: center;
-  transition: background-size .45s cubic-bezier(.45, 0, .25, 1), border-color .45s ease;
+  transition: background-size .15s cubic-bezier(.45, 0, .25, 1), border-color .15s ease;
 }
 .tuck-story { z-index: 2; width: 75%; padding: calc(var(--s2) + var(--inset) + 0.15 * var(--t-body)) var(--inset) var(--inset); text-box-trim: trim-both; text-box-edge: cap alphabetic; }   /* --s2 of it hides behind the photo */
 .print-tab {
@@ -826,11 +826,11 @@ figure.ph.margin-left, figure.ph.margin-right { width: 12rem; margin: var(--s4) 
 .tuck-story + .print-tab { width: 45%; }   /* under the companion story: narrower again */
 .tuck-head {
   display: block; font-family: var(--serif-ko); font-size: var(--t-body); font-weight: 600; line-height: 1.3;
-  letter-spacing: -0.0125em; word-break: keep-all; text-wrap: balance; color: var(--ink); transition: color .45s ease;
+  letter-spacing: -0.0125em; word-break: keep-all; text-wrap: balance; color: var(--ink); transition: color .15s ease;
 }
 .tuck-story .en {
   display: block; margin-top: var(--s2); font-family: var(--sans); font-size: var(--t-small); line-height: 1.5;
-  color: var(--stone); transition: color .45s ease;
+  color: var(--stone); transition: color .15s ease;
 }
 @media (max-width: 34rem) { .tuck-story { width: 85%; } .tuck-story + .print-tab { width: 60%; } }
 
@@ -848,7 +848,7 @@ figure.ph.margin-left, figure.ph.margin-right { width: 12rem; margin: var(--s4) 
 .side-head {
   background-image: var(--shade-light); background-repeat: no-repeat; background-origin: padding-box;
 }
-.side-head .en { transition: color .45s ease; }
+.side-head .en { transition: color .15s ease; }
 .side-photo { grid-column: 2 / 4; grid-row: 1; display: block; overflow: hidden; background: var(--line); border: 1px solid var(--line); }   /* same hairline as the box: a pale photo or chart still has an edge */
 .side-photo img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; filter: grayscale(1); }
 
@@ -876,7 +876,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   background-repeat: no-repeat;
   background-position: 0 100%, 0.12em calc(100% - (1lh - 1.0556em) / 2 - 0.14em);   /* the stroke from just under the baseline up through the lower half of the letters */   /* the underline a little under the descenders: halfway to the line's foot */
   background-size: 100% 0, calc(100% - 0.24em) 0.5em;   /* the highlighter: the lower half of the letters */
-  transition: background-size .45s cubic-bezier(.45, 0, .25, 1), color .45s ease;   /* rises from the underline, unhurried */
+  transition: background-size .15s cubic-bezier(.45, 0, .25, 1), color .15s ease;   /* rises from the underline, unhurried */
 }
 a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story)):hover {
   color: var(--link-hover);
@@ -893,7 +893,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   color: var(--on-fill); background: var(--crimson);
   padding: 6px; border-radius: 0; text-box-trim: trim-both; text-box-edge: cap alphabetic;
   white-space: nowrap; max-width: 60vw; overflow: hidden; text-overflow: ellipsis;
-  opacity: 0; transition: opacity .12s ease;
+  opacity: 0; transition: opacity .15s ease;
 }
 .link-tip.on { opacity: 1; }
 
@@ -1169,10 +1169,10 @@ main.shelf-end { padding-bottom: 0; }
 .ebox + .ebox { margin-top: calc(-1 * var(--s2)); }   /* overlaps the box above -- by 8px, so the "Pledge analysis" line above stays clear */
 .ebox:nth-child(2) { margin-left: var(--s4); z-index: 1; }
 .ebox:nth-child(3) { margin-left: calc(2 * var(--s4)); z-index: 2; }
-.ebox .ekick { display: block; margin-bottom: var(--s1); font-family: var(--sans); font-size: var(--t-small); color: var(--crimson); transition: color .45s ease; }   /* which race, small, above the headline */
+.ebox .ekick { display: block; margin-bottom: var(--s1); font-family: var(--sans); font-size: var(--t-small); color: var(--crimson); transition: color .15s ease; }   /* which race, small, above the headline */
 .ebox h3 { margin: 0; font-family: var(--serif-ko); font-size: var(--t-body); font-weight: 600; line-height: 1.3; letter-spacing: -0.0125em; word-break: keep-all; }
-.ebox h3 a { color: var(--ink); transition: color .45s ease; }
-.ebox .go { display: inline-block; margin-top: var(--s1); font-family: var(--sans); font-size: var(--t-small); color: var(--stone); transition: color .45s ease; }
+.ebox h3 a { color: var(--ink); transition: color .15s ease; }
+.ebox .go { display: inline-block; margin-top: var(--s1); font-family: var(--sans); font-size: var(--t-small); color: var(--stone); transition: color .15s ease; }
 .ebox h3 a, .ebox .go { background-image: none !important; padding: 0; margin-inline: 0; }   /* the box does the hover */
 /* A box with a pledge analysis is split by a hairline: the top (race + headline) opens the interview,
    the strip below opens the analysis */
@@ -1196,7 +1196,7 @@ main.shelf-end { padding-bottom: 0; }
 
 .epair .ebox + .ebox { margin: var(--s5) 0 0 calc(-1 * var(--s4)); z-index: 1; }
 .epair.big .ebox h3 { font-size: var(--t-title); }   /* at the side-story headline size */
-.ebox .en { display: block; margin-top: var(--s2); font-family: var(--sans); font-size: var(--t-small); line-height: 1.5; color: var(--stone); transition: color .45s ease; }   /* English title, as under the side headlines */
+.ebox .en { display: block; margin-top: var(--s2); font-family: var(--sans); font-size: var(--t-small); line-height: 1.5; color: var(--stone); transition: color .15s ease; }   /* English title, as under the side headlines */
 @media (max-width: 34rem) {   /* still side by side on phones, with tighter padding and overlap */
   .epair .ebox + .ebox { margin: var(--s4) 0 0 calc(-1 * var(--s3)); }
 }
@@ -1219,7 +1219,7 @@ main.shelf-end { padding-bottom: 0; }
   /* the fill is a band 1.22em tall from the bottom of each line's box -- never the full font box, which
      in the Korean serif runs taller than the line and so reached up over the line above */
   background: linear-gradient(to top, var(--crimson) 1.22em, transparent 1.22em) no-repeat 0 100% / 100% 0;
-  transition: background-size .45s cubic-bezier(.45, 0, .25, 1), color .45s ease;
+  transition: background-size .15s cubic-bezier(.45, 0, .25, 1), color .15s ease;
 }
 /* every story box and photo story already answers a hover -- its shade deepens or its photo enlarges --
    so the headline itself stays as it is: no crimson fill there (it is kept for plain text links) */
@@ -1262,7 +1262,7 @@ section:has(.spine-panel) + section > h2.section-title { background: none; borde
 .spine-nav button:disabled, .spine-nav button:disabled:hover, .rail-btn:disabled, .rail-btn:disabled:hover { color: var(--line); }
 .spine-nav button::before, .shelf-more button::before, .rail-btn::before {
   content: ""; position: absolute; left: 0; right: 0; top: 0; height: 20px; background: var(--shade-strong);
-  opacity: 0; pointer-events: none; transition: opacity .45s ease;
+  opacity: 0; pointer-events: none; transition: opacity .15s ease;
 }
 .spine-nav button:active::before, .shelf-more button:active::before, .rail-btn:active::before { opacity: 1; transition-duration: .06s; }
 
@@ -1284,14 +1284,14 @@ section:has(.spine-panel) + section > h2.section-title { background: none; borde
 @media (hover: hover) {
   .spine-nav button:not(:disabled):hover::before, .shelf-more button:hover::before, .rail-btn:not(:disabled):hover::before { opacity: 1; }
 }
-.spine-nav button, .shelf-more button, .rail-btn { transition: color .45s ease; }
+.spine-nav button, .shelf-more button, .rail-btn { transition: color .15s ease; }
 .spine-nav button:not(:disabled):active, .shelf-panel .shelf-more button:active, .shelf-more button:active, .rail-btn:not(:disabled):active { color: var(--ink); transition-duration: .06s; }
 
 /* "A prime more" pressed: it swells downward into a crimson block with a big "+n" (white), the shelf
    opens beneath the covers carrying it down, the new books fade in; then it settles back */
 .shelf-more button .big { display: none; }
 .shelf-more button { white-space: nowrap; box-sizing: border-box; }
-.shelf-more button { transition: color .45s ease, height .38s cubic-bezier(.3,0,.2,1), background-color .25s ease, border-color .25s ease; overflow: hidden; vertical-align: top; }
+.shelf-more button { transition: color .15s ease, height .38s cubic-bezier(.3,0,.2,1), background-color .25s ease, border-color .25s ease; overflow: hidden; vertical-align: top; }
 .shelf-panel .shelf-more button.burst, .shelf-more button.burst { background: var(--crimson); border-color: var(--crimson); color: var(--on-fill); }
 .shelf-more button.burst::before { opacity: 0 !important; }
 .shelf-more button.burst .kh { display: none; }
@@ -1349,7 +1349,7 @@ section:has(.spine-panel) + section > h2.section-title { background: none; borde
 .desk-map { position: absolute; right: 0; bottom: 0; width: 7.5rem; height: 1.6rem; cursor: pointer; touch-action: none; }
 .desk-map .floor { position: absolute; left: 0; right: 0; bottom: 0; border-top: 1px solid var(--line); }
 .desk-map .mp { position: absolute; bottom: 1px; background: var(--line); }
-.desk-map .view { position: absolute; top: 0; bottom: 0; border: 1px solid var(--stone); transition: border-color .2s ease; }
+.desk-map .view { position: absolute; top: 0; bottom: 0; border: 1px solid var(--stone); transition: border-color .15s ease; }
 .desk-map:hover .view { border-color: var(--ink); }
 .desk-map[hidden] { display: none; }
 /* arrows: the stem weight of Pretendard SemiBold at the button size (0.125em -- 1.8px on desktop), square ends and sharp corners, as the letters */
@@ -1365,11 +1365,11 @@ section:has(.spine-panel) + section > h2.section-title { background: none; borde
 }
 
 /* subject tags: hovering only deepens the shade inside the top (to the strong one); the border never changes */
-.filter-btn::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 20px; background: var(--shade-strong); opacity: 0; pointer-events: none; transition: opacity .45s ease; }
+.filter-btn::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 20px; background: var(--shade-strong); opacity: 0; pointer-events: none; transition: opacity .15s ease; }
 @media (hover: hover) { .filter-btn:hover::before { opacity: 1; } }
 
 /* arrows pressed: like the other buttons when on -- a dark ground and a white arrow for a moment, then back */
-.spine-nav button { transition: color .45s ease, background-color .45s ease, border-color .45s ease; }
+.spine-nav button { transition: color .15s ease, background-color .15s ease, border-color .15s ease; }
 .spine-nav button:not(:disabled):active, .rail-btn:not(:disabled):active { background-color: var(--ink); border-color: var(--ink); color: var(--on-fill); transition-duration: .06s; }
 .spine-nav button:not(:disabled):active::before, .rail-btn:not(:disabled):active::before { opacity: 0; }
 
@@ -1380,7 +1380,7 @@ section:has(.spine-panel) + section > h2.section-title { background: none; borde
 .outline { position: sticky; width: max-content; max-width: 12rem; font-family: var(--sans); font-size: var(--t-small); line-height: 1.4; pointer-events: auto; }
 .outline ol { list-style: none; margin: 0; padding: 0; position: relative; border-left: 1px solid var(--line); }
 .outline li + li { margin-top: var(--s2); }
-.outline a { display: block; padding: 2px 0 2px var(--s3); color: var(--stone); text-decoration: none; background: none; transition: color .3s ease; }
+.outline a { display: block; padding: 2px 0 2px var(--s3); color: var(--stone); text-decoration: none; background: none; transition: color .15s ease; }
 .outline a:hover, .outline a.cur { color: var(--ink); }
 .outline .bar { position: absolute; left: -3px; width: 5px; background: var(--crimson); transition: top .35s cubic-bezier(.3,0,.2,1), height .35s cubic-bezier(.3,0,.2,1); }
 @media (max-width: 68.75rem) { .outline-rail { display: none; } }
@@ -1458,7 +1458,7 @@ html.night { --crimson-light: color-mix(in srgb, var(--crimson) 45%, var(--paper
 .pre-foot li:has(a[aria-current="page"])::before { width: 20px; background: linear-gradient(to right, var(--sh-strong), transparent); }   /* the page you are on: the strong shade, as well as its words */
 .pre-foot a::after {   /* hover: the strong shade along the cell's top */
   content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 20px; background: linear-gradient(to right, var(--sh-strong), transparent);
-  opacity: 0; transition: opacity .45s ease; pointer-events: none;   /* hover: the strong shade on the left side */
+  opacity: 0; transition: opacity .15s ease; pointer-events: none;   /* hover: the strong shade on the left side */
 }
 @media (hover: hover) { .pre-foot a:hover::after { opacity: 1; } }
 .pre-foot a[aria-current="page"] { color: var(--ink); }
@@ -1499,15 +1499,15 @@ section > .fact:last-child { padding-bottom: 0.068em; }   /* the sans list sits 
 /* the time box is one button for the mail: the light shade inside its top; hovering deepens it; a press
    fills the box crimson (words white) and opens the mail */
 .time-rail .clock-main { cursor: pointer; background: var(--paper) var(--shade-light) no-repeat; background-image: var(--shade-light);
-  transition: background-color .45s ease, color .45s ease, border-color .45s ease; }
+  transition: background-color .15s ease, color .15s ease, border-color .15s ease; }
 .time-rail .clock-main::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 20px; background: var(--shade-strong);
-  opacity: 0; pointer-events: none; transition: opacity .45s ease; }
+  opacity: 0; pointer-events: none; transition: opacity .15s ease; }
 @media (hover: hover) { .time-rail .clock-main:hover::before { opacity: 1; } }
 .time-rail .clock-main:active { background-color: var(--crimson); border-color: var(--crimson); color: var(--on-fill); transition-duration: .06s; }
 .time-rail .clock-main:active::before { opacity: 0; }
 .time-rail .clock-main:active .foot-mail { color: var(--on-fill) !important; text-decoration-color: var(--on-fill) !important; background: none !important; }
 .time-rail .clock-main .foot-mail:hover { background: none; color: inherit; }   /* the box is the button: no separate hover on the address */
-.time-rail .clock-main .foot-mail { transition: color .45s ease, text-decoration-color .45s ease; }
+.time-rail .clock-main .foot-mail { transition: color .15s ease, text-decoration-color .15s ease; }
 .time-rail .clock-main:active .foot-mail { transition-duration: .06s; }   /* turns white with the rest of the box, not after it */
 /* in the box the address is just words: no underline, no link of its own -- the box is the button */
 .time-rail .clock-main .foot-mail { text-decoration: none !important; pointer-events: none; color: inherit !important; background: none !important; }
@@ -1531,7 +1531,7 @@ html.night-switch .night-veil { transition: opacity .3s ease !important; }
    as the time box and the research buttons do; the tucked boxes' shade starts where the box above ends */
 .tuck-story::before, .print-tab::before, .side-head::before, .ebox::before, .ebox.split .go::before, .card-txt::before {
   content: ""; position: absolute; left: 0; right: 0; top: 0; height: 20px; background: var(--shade-strong);
-  opacity: 0; pointer-events: none; transition: opacity .45s ease;
+  opacity: 0; pointer-events: none; transition: opacity .15s ease;
 }
 .tuck-story::before, .print-tab::before { top: calc(var(--s2) - 1px); }
 .card-txt { position: relative; }
@@ -1891,7 +1891,7 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
   .pre-foot a:hover::before { transform: none; }
   .pre-foot li:hover:not(:has(a[aria-current="page"])) { margin-right: calc(-1 * var(--s4)); }
 }
-.pre-foot li { transition: margin-right .25s ease; }   /* the widening eases out, and back */
+.pre-foot li { transition: margin-right .15s ease; }   /* the widening eases out, and back */
 /* phones: no "Always open" line under the time */
 @media (max-width: 40rem) { .site-foot .clock-main { display: none; } }   /* phones: no time line and no mail -- the dial alone, beside the copyright */
 @media (max-width: 40rem) {   /* phones: the copyright, then the address, the dial beside them (as on wide screens) */
@@ -1952,7 +1952,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 .pre-foot li:has(a[aria-current="page"])::after { left: calc(100% - var(--yah, 5rem) - var(--yah-ink, 0px)); right: auto; }
 @media (max-width: 40rem) { .pre-foot li:has(a[aria-current="page"]) { margin-right: calc(-1 * var(--yah, 5rem)); } }
 /* the headlines' highlighter fades in and out, as the link's address does */
-.kh, .kh:is(*) { transition: text-decoration-color .2s ease; }
+.kh, .kh:is(*) { transition: text-decoration-color .15s ease; }
 
 /* pointing at a highlighted link: the words turn crimson and the highlighter black -- no crimson fill */
 a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))):hover {
@@ -2082,7 +2082,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
   background-color: var(--paper);
   background-image: var(--shade-light), linear-gradient(var(--line), var(--line));
   background-repeat: no-repeat; background-position: 0 0, 0 0; background-size: 100% 8px, 0% 100%;
-  transition: background-size .35s cubic-bezier(.3, 0, .2, 1);
+  transition: background-size .15s cubic-bezier(.3, 0, .2, 1);
 }
 @media (hover: hover) { .time-rail .clock-main:hover { background-size: 100% 8px, 100% 100%; } }
 .time-rail .clock-main:hover::before { opacity: 0 !important; }
@@ -2170,7 +2170,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 }
 .outline li a, .outline li a:hover, .outline li a.cur { width: auto; padding-left: var(--gutter); padding-right: var(--s2); }
 .outline .clock-main { padding: var(--s2) var(--s2) var(--s2) var(--gutter); }
-.outline .clock-main time, .outline .clock-main .city { color: color-mix(in srgb, var(--stone) 55%, var(--paper)); transition: color .3s ease; }
+.outline .clock-main time, .outline .clock-main .city { color: color-mix(in srgb, var(--stone) 55%, var(--paper)); transition: color .15s ease; }
 .outline li a, .outline .clock-main {
   background-image: var(--shade-light); background-repeat: no-repeat; background-position: 0 0; background-size: 100% 0;
 }
@@ -2209,3 +2209,15 @@ html.night .outline { --stone: color-mix(in srgb, var(--ink) var(--stone-mix), v
 .outline .updated { border-top: 1px solid var(--line); border-bottom: 0; }
 .outline ol { border-block: 1px solid var(--line); }
 .outline .clock-main { border-top: 0; }
+
+/* every hover eases in and out over .15s, and the highlighter is one colour by its ground: on paper the
+   lines' grey, on a photo the photos' grey -- Explore More's cells are photos, so theirs is the card news' */
+.pre-foot .pf-name { text-decoration: underline; text-decoration-color: transparent; text-decoration-thickness: 0.5em; text-underline-offset: -0.32em; text-decoration-skip-ink: none; transition: text-decoration-color .15s ease; }
+@media (hover: hover) { .pre-foot ul li a:hover .pf-name { text-decoration-color: var(--hl-photo); } }
+.pre-foot a::after { transition: opacity .15s ease !important; }
+.outline li a, .outline li a:hover, .outline li a.cur, .outline .clock-main { transition: color .15s ease, background-size .15s ease; }
+.outline .clock-main time, .outline .clock-main .city { transition: color .15s ease; }
+a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))) { transition: color .15s ease, text-decoration-color .15s ease; }
+/* the last update goes to the bottom, under the mail, a short line between */
+.outline { display: flex; flex-direction: column; }
+.outline .updated { order: 3; }
