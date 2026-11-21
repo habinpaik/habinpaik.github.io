@@ -2023,3 +2023,9 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 .outline .updated { order: 3; }
 /* phones: a school's Korean name and years go to their own line under it -- every entry alike */
 @media (max-width: 40rem) { .fact .sub { display: block; } }
+/* Explore More and the footer: their dark ground runs the whole width too when the page has moved right */
+.pre-foot, .site-foot { margin-left: calc(-1 * var(--shift, 0px)); padding-left: var(--shift, 0px); }
+/* the outline's mail: the same Regular as the time and the last update */
+.outline .clock-main .foot-mail { font-weight: 400; }
+/* buttons: the words as far from the side edges as from the top and bottom (--s2), every button alike */
+.filter-btn, .spine-nav button, .shelf-panel .shelf-more button, .shelf-more button, .rail-btn { padding-inline: var(--s2); }
