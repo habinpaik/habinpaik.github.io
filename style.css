@@ -1262,7 +1262,6 @@ main.shelf-end { padding-bottom: 0; }
 
 .outline a { display: block; padding: 2px 0 2px var(--s3); color: var(--stone); text-decoration: none; background: none; transition: color .15s ease; }
 .outline a:hover, .outline a.cur { color: var(--ink); }
-.outline .bar { position: absolute; left: -3px; width: 5px; background: var(--crimson); transition: top .35s cubic-bezier(.3,0,.2,1), height .35s cubic-bezier(.3,0,.2,1); }
 @media (max-width: 68.75rem) { .outline-rail { display: none; } }
 h2.section-title { scroll-margin-top: calc(var(--head-h, 4rem) + var(--s5)); }
 
@@ -1360,29 +1359,12 @@ section > .fact:last-child { padding-bottom: 0.068em; }   /* the sans list sits 
 @media (min-width: 80rem) { .foot-main { padding-top: calc(var(--s2) + var(--sec-below) - 0.28em); } }
 
 /* wide screens: the rail the time and mail ride in the right sketch area (laid by site.js) */
-.time-rail { position: absolute; top: 0; z-index: 40; display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-end; padding-right: var(--s5); box-sizing: border-box; pointer-events: none; }
-.time-rail[hidden] { display: none; }
-.time-rail .clock-main { position: sticky; bottom: calc(50vh - var(--tb-h, 0px) / 2);   /* the screen's vertical middle */ pointer-events: auto; width: max-content;
-  margin: 0; font-family: var(--serif); font-size: var(--t-body); line-height: 1.5; color: var(--stone);
-  padding: var(--s3); border: 1px solid var(--line); background: var(--paper);
-  text-box-trim: trim-both; text-box-edge: cap alphabetic; }
 
 /* the time box is one button for the mail: the light shade inside its top; hovering deepens it; a press
    fills the box crimson (words white) and opens the mail */
-.time-rail .clock-main { cursor: pointer; background: var(--paper) var(--shade-light) no-repeat; background-image: var(--shade-light);
-  transition: background-color .15s ease, color .15s ease, border-color .15s ease; }
-.time-rail .clock-main::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 20px; background: var(--shade-strong);
-  opacity: 0; pointer-events: none; transition: opacity .15s ease; }
-@media (hover: hover) { .time-rail .clock-main:hover::before { opacity: 1; } }
 
-.time-rail .clock-main:active::before { opacity: 0; }
-.time-rail .clock-main:active .foot-mail { color: var(--on-fill) !important; text-decoration-color: var(--on-fill) !important; background: none !important; }
-.time-rail .clock-main .foot-mail:hover { background: none; color: inherit; }   /* the box is the button: no separate hover on the address */
 
-.time-rail .clock-main:active .foot-mail { transition-duration: .06s; }   /* turns white with the rest of the box, not after it */
 /* in the box the address is just words: no underline, no link of its own -- the box is the button */
-.time-rail .clock-main .foot-mail { transition: color .15s ease, text-decoration-color .15s ease; text-decoration: none !important; pointer-events: none; color: inherit !important; background: none !important; }
-.time-rail .clock-main { color: var(--ink); }   /* the box's words in the body's colour */
 
 /* day <-> night: the page changes at once under a veil of the old ground that fades out (site.js) */
 .night-veil { position: absolute; top: 0; left: 0; right: 0; z-index: 9999; pointer-events: none; opacity: 1; transition: opacity .3s ease; }
@@ -1805,9 +1787,9 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 
 /* the shades are opaque grey now: they lie over a box's ground but under its words (each box its own
    stacking context, the shade at -1 in it) */
-.filter-btn, .spine-nav button, .shelf-more button, .rail-btn, .time-rail .clock-main, .tuck-story, .print-tab,
+.filter-btn, .spine-nav button, .shelf-more button, .rail-btn, .tuck-story, .print-tab,
 .side-head, .ebox, .ebox.split .go, .nav a, .wordmark { isolation: isolate; }
-.filter-btn::before, .spine-nav button::before, .shelf-more button::before, .rail-btn::before, .time-rail .clock-main::before,
+.filter-btn::before, .spine-nav button::before, .shelf-more button::before, .rail-btn::before,
 .tuck-story::before, .print-tab::before, .side-head::before, .ebox::before, .ebox.split .go::before, .ebox.split .go::after,
 .nav a::after, .wordmark::after { z-index: -1; }
 
@@ -1859,32 +1841,21 @@ html.selecting a { box-shadow: none !important; background-image: none !importan
   position: relative; z-index: 1; transition: none;
 }
 
-.outline .bar { left: 0; right: 0; width: auto; z-index: 0; }
 /* the outline without its left line; the crimson box fits the current item's words */
 .outline ol { border-left: 0; }
-.outline .bar { display: none; }
 .outline a, .outline a:hover, .outline a.cur { width: fit-content; padding: 2px var(--s2); }
 
 /* the section outline in the PDF tab's weight */
 .outline { font-weight: 600; }
 
 /* the floating time box in the outline's letter: small sans, the same weight and line height */
-.time-rail .clock-main { font-family: var(--sans); font-size: var(--t-small); font-weight: 600; line-height: 1.4; }
+
 /* pointing at it: a light grey highlight sweeps across it from the left; pressing it no longer turns it crimson */
-.time-rail .clock-main {
-  background-color: var(--paper);
-  background-image: var(--shade-light), linear-gradient(var(--line), var(--line));
-  background-repeat: no-repeat; background-position: 0 0, 0 0; background-size: 100% 8px, 0% 100%;
-  transition: background-size .15s cubic-bezier(.3, 0, .2, 1);
-}
-@media (hover: hover) { .time-rail .clock-main:hover { background-size: 100% 8px, 100% 100%; } }
-.time-rail .clock-main:hover::before { opacity: 0 !important; }
-.time-rail .clock-main:active { transition-duration: .06s; background-color: var(--paper); border-color: var(--line); color: var(--ink); }
-.time-rail .clock-main:active .foot-mail { color: inherit !important; }
+
+
 /* as the PDF tab: grey words -- the outline's items and the time box (the current item stays on its crimson) */
 .outline a, .outline a:hover { color: var(--stone); }
 
-.time-rail .clock-main, .time-rail .clock-main:active { color: var(--stone); }
 /* the outline: no crimson box -- the section being read is simply black, the others grey */
 .outline a.cur, .outline a.cur:hover { background: none; color: var(--ink); }
 /* the arrows drawn with the box's own line weight: 1px */

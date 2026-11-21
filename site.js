@@ -556,7 +556,7 @@ document.addEventListener('touchstart', function () {}, { passive: true });
   var main = document.querySelector('main.wrap'), heads = [].slice.call(document.querySelectorAll('main h2.section-title, .pre-foot h2.section-title'));   /* Explore More too */
   if (!main || heads.length < 2) return;
   var nav = document.createElement('nav'); nav.className = 'outline'; nav.setAttribute('aria-label', 'On this page');
-  var ol = document.createElement('ol'), bar = document.createElement('span'); bar.className = 'bar';
+  var ol = document.createElement('ol');
   var links = heads.map(function (h, i) {
     if (!h.id) h.id = 'sec-' + h.textContent.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
     var li = document.createElement('li'), a = document.createElement('a');
@@ -572,7 +572,7 @@ document.addEventListener('touchstart', function () {}, { passive: true });
      end of the page's text, and sticks (css position: sticky) under the menu bar -- the browser moves it
      with the scroll itself, so it never trails or shakes */
   var rail = document.createElement('div'); rail.className = 'outline-rail';
-  ol.appendChild(bar); nav.appendChild(ol); rail.appendChild(nav); main.appendChild(rail);
+  nav.appendChild(ol); rail.appendChild(nav); main.appendChild(rail);
   if (getComputedStyle(main).position === 'static') main.style.position = 'relative';
   var head = document.querySelector('.site-head'), cur = -1;
   var pinned = null, pinT = 0;
@@ -591,6 +591,10 @@ document.addEventListener('touchstart', function () {}, { passive: true });
   /* where the screen is too narrow for the box beside the centred text (tablets), the page moves over to
      the right of it: the box on the left, the text on the right; wider again, the text returns to the middle */
   var words = 0, shift = 0, root = document.documentElement;
+  function gapPx(v) {   /* a spacing variable (rem) in px */
+    var d = document.documentElement, r = parseFloat(getComputedStyle(d).fontSize) || 16;
+    return parseFloat(getComputedStyle(d).getPropertyValue(v)) * r || 0;
+  }
   function textLeft() { return main.getBoundingClientRect().left + (parseFloat(getComputedStyle(main).paddingLeft) || 0); }
   function room() {
     var was = shift;
@@ -598,7 +602,7 @@ document.addEventListener('touchstart', function () {}, { passive: true });
     root.style.removeProperty('--shift'); shift = 0;
     if (nav.getClientRects().length && words) {
       var vw = document.documentElement.clientWidth, rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
-      var need = Math.min(3 * rem, Math.max(1.25 * rem, 0.04 * vw)) + words + 28;   /* the gutter, the words, and a gap */
+      var need = Math.min(3 * rem, Math.max(1.25 * rem, 0.04 * vw)) + words + gapPx('--s5');   /* the gutter, the words, and a gap */
       if (textLeft() < need) {   /* no room beside the centred text: the text goes to the screen's right edge */
         shift = Math.max(0, root.clientWidth - main.getBoundingClientRect().width);
         if (shift) root.style.setProperty('--shift', shift + 'px');
@@ -613,8 +617,8 @@ document.addEventListener('touchstart', function () {}, { passive: true });
   }
   function lift() {
     var h = nav.offsetHeight, t = (window.innerHeight - h) / 2;
-    if (hero) t = Math.max(t, hero.getBoundingClientRect().bottom + 40);   /* below Home's photo, never over it */
-    if (foot) t = Math.min(t, foot.getBoundingClientRect().top - 40 - h);
+    if (hero) t = Math.max(t, hero.getBoundingClientRect().bottom + gapPx('--s6'));   /* below Home's photo, never over it */
+    if (foot) t = Math.min(t, foot.getBoundingClientRect().top - gapPx('--s6') - h);
     nav.style.top = t + 'px';
   }
   function place() {
@@ -628,7 +632,6 @@ document.addEventListener('touchstart', function () {}, { passive: true });
     if (pinned !== null) k = pinned;
     if (k !== cur) {
       cur = k; links.forEach(function (a, i) { a.classList.toggle('cur', i === k); });
-      var li = links[k].parentNode; bar.style.top = li.offsetTop + 'px'; bar.style.height = li.offsetHeight + 'px';
     }
   }
   var raf = 0; function soon() { if (!raf) raf = requestAnimationFrame(function () { raf = 0; place(); }); }
@@ -672,78 +675,41 @@ document.addEventListener('touchstart', function () {}, { passive: true });
   check();
 })();
 
-/* wide screens: where the left sketch area begins (the outline and the time/mail line up on it) */
+/* the time and mail: inside the section outline wherever it floats on the left (under its last line,
+   the whole box the mail button); elsewhere in the footer, the address a link again */
 (function () {
   var main = document.querySelector('main.wrap'); if (!main) return;
-  var wide = window.matchMedia('(min-width: 80rem)');
-  var rail = document.createElement('div'); rail.className = 'time-rail'; rail.hidden = true; document.body.appendChild(rail);
-  /* in the rail the whole box is the mail button */
   var href = '';
-  rail.addEventListener('click', function (e) { if (href) window.location.href = href; });
-  rail.addEventListener('keydown', function (e) {
-    if (e.key !== 'Enter' && e.key !== ' ') return;
-    if (href) { e.preventDefault(); window.location.href = href; }
-  });
-  /* the address itself is never a link in the box -- plain words (a span); the box carries the mailto.
-     Back in the footer (narrower screens) it is a link again */
+  /* the address itself is never a link in the box -- plain words (a span); the box carries the mailto */
   function swap(el, tag) {
     if (!el || el.tagName.toLowerCase() === tag) return;
     var n = document.createElement(tag); n.className = el.className; n.textContent = el.textContent;
     if (tag === 'a') n.href = href;
     el.parentNode.replaceChild(n, el);
   }
+  function go(e) {
+    if (!href || !e.currentTarget.closest('.outline')) return;
+    if (e.type === 'keydown') { if (e.key !== 'Enter' && e.key !== ' ') return; e.preventDefault(); }
+    window.location.href = href;
+  }
+  var bound = false;
   function set() {
-    var m = main.getBoundingClientRect(), pad = parseFloat(getComputedStyle(main).paddingLeft) || 0;
-    var rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
-    document.documentElement.style.setProperty('--sketch-l', (m.left + pad - 56 - 9 * rem) + 'px');
-    /* wide screens: the time and mail sit at the bottom right of the screen (--s5 in from both
-       edges), and are carried up by the page so they never touch the footer: they ride a rail that
-       ends --sec-above above Explore More's line, stuck (css sticky) to the bottom of the screen until the
-       rail's end comes up */
     var cm = document.querySelector('.clock-main'), home = document.querySelector('.clocks');
     if (!cm || !home) return;
-    /* where the section outline floats on the left, the time and mail go into it, under its last line */
+    if (!bound) { cm.addEventListener('click', go); cm.addEventListener('keydown', go); bound = true; }
     var ol = document.querySelector('.outline'), olOn = ol && ol.getClientRects().length > 0;
-    if (olOn) {
-      if (!ol.contains(cm)) {
-        var a0 = cm.querySelector('.foot-mail'); if (a0 && a0.href) href = a0.getAttribute('href');
-        ol.appendChild(cm);
-        cm.setAttribute('role', 'link'); cm.tabIndex = 0; swap(a0, 'span');
-        cm.setAttribute('aria-label', 'Email ' + href.replace(/^mailto:/, ''));
-      }
-      rail.hidden = true; return;
-    }
-    if (ol && ol.contains(cm)) {   /* the outline gone (narrower screen): back to the footer, then as below */
+    if (olOn && !ol.contains(cm)) {
+      var a0 = cm.querySelector('.foot-mail'); if (a0 && a0.href) href = a0.getAttribute('href');
+      ol.appendChild(cm);
+      cm.setAttribute('role', 'link'); cm.tabIndex = 0; swap(a0, 'span');
+      cm.setAttribute('aria-label', 'Email ' + href.replace(/^mailto:/, ''));
+    } else if (!olOn && ol && ol.contains(cm)) {
       home.insertBefore(cm, home.firstChild); cm.removeAttribute('role'); cm.removeAttribute('tabindex'); cm.removeAttribute('aria-label');
       swap(cm.querySelector('.foot-mail'), 'a');
-    }
-    if (wide.matches) {
-      if (!rail.contains(cm)) {
-        rail.appendChild(cm);
-        cm.setAttribute('role', 'link'); cm.tabIndex = 0;   /* the box is the button (keyboard too) */
-        var a = cm.querySelector('.foot-mail'); if (a && a.href) href = a.getAttribute('href');
-        swap(a, 'span');
-        cm.setAttribute('aria-label', 'Email ' + href.replace(/^mailto:/, ''));
-      }
-      var line = document.querySelector('.pre-foot') || document.querySelector('.foot-main') || document.querySelector('.site-foot');   /* stop before Explore More's line */
-      rail.style.left = '0px'; rail.style.width = document.documentElement.clientWidth + 'px';   /* the box sits at the screen's right, --s5 in */
-      var above = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--sec-above')) * rem || 36;   /* the gap above every section line */
-      rail.style.height = Math.max(0, line.getBoundingClientRect().top + window.scrollY - above) + 'px';
-      rail.hidden = false;
-      document.documentElement.style.setProperty('--tb-h', cm.offsetHeight + 'px');   /* for centring it on the screen's height */
-    } else {
-      if (rail.contains(cm)) {
-        home.insertBefore(cm, home.firstChild);
-        cm.removeAttribute('role'); cm.removeAttribute('tabindex');
-        cm.removeAttribute('aria-label');
-        swap(cm.querySelector('.foot-mail'), 'a');
-      }
-      rail.hidden = true;
     }
   }
   window.addEventListener('resize', set); set();
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(set);
-  if (window.ResizeObserver) new ResizeObserver(set).observe(document.body);   /* the page's height changes (more books, etc.) */
 })();
 
 /* menu shades: each item's distance from its own top up to the top edge of its row in the menu bar
