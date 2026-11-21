@@ -521,7 +521,7 @@ main > p.dek:first-child + section { margin-top: 0; }   /* the opener is larger:
 
 .shelf {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));   /* equal columns whatever the titles: a long word never widens one */
   gap: 32px var(--s4);   /* 줄 사이 간격 32px */
   position: relative;
 }
@@ -572,7 +572,7 @@ main > p.dek:first-child + section { margin-top: 0; }   /* the opener is larger:
 .shelf-more button:hover, .shelf-panel .shelf-more button:hover { background-size: 100% 100%; color: var(--on-fill); border-color: var(--crimson); }
 .shelf-more button[hidden] { display: none; }
 
-@media (max-width: 34rem) { .shelf { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 34rem) { .shelf { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 
 /* ---------- Portfolio grid ---------- */
 .works {
@@ -2029,3 +2029,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 .outline .clock-main .foot-mail { font-weight: 400; }
 /* buttons: the words as far from the side edges as from the top and bottom (--s2), every button alike */
 .filter-btn, .spine-nav button, .shelf-panel .shelf-more button, .shelf-more button, .rail-btn { padding-inline: var(--s2); }
+/* Bookshelf titles: room for two lines under every cover, so a long title never moves the next shelf */
+.shelf-panel .book .t { min-height: 3.2em; }
+.shelf-panel .book .t { overflow-wrap: anywhere; }
+.spine-track { min-height: calc(var(--pile-max) + 12px); }   /* the desk as tall as its tallest possible pile, whichever books are on it: a filter never moves what is below */

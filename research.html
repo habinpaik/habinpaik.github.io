@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
-<link rel="stylesheet" href="style.css?v=20261127m">
+<link rel="stylesheet" href="style.css?v=20261127p">
   <link rel="icon" href="/favicon.svg?v=5" type="image/svg+xml">
   <link rel="icon" href="/favicon-32.png?v=5" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=5">
@@ -596,19 +596,18 @@ f(); window.addEventListener('resize',f);})();
   // 독서대: 표지 그리드의 각 줄 뒤에 긴 직사각형을 그린다 (표지 아래 1/3 높이)
   var grid = document.querySelector('.shelf');
   // 줄마다 틀 높이 = 그 줄에서 가장 키 큰 표지 높이 → 표지 위 빈 공간 제거
+  /* every row one height: the tallest cover of the whole shelf (not of the row, nor of the books shown),
+     so filtering or opening more never moves a shelf */
+  var coverRatio = {};
   function sizeRows() {
-    var rows = {};
-    grid.querySelectorAll('.book:not(.is-hidden):not(.is-filtered)').forEach(function (b) {
-      (rows[b.offsetTop] = rows[b.offsetTop] || []).push(b);
+    var vis = grid.querySelector('.book:not(.is-hidden):not(.is-filtered)'); if (!vis) return;
+    var w = vis.clientWidth, h = 0;
+    grid.querySelectorAll('.book').forEach(function (b) {
+      var img = b.querySelector('img'), pct = parseFloat(b.querySelector('.face').style.width) / 100, id = b.dataset.id;
+      if (img && img.naturalWidth) coverRatio[id] = img.naturalHeight / img.naturalWidth;   /* kept, for a cover not yet loaded again */
+      if (coverRatio[id]) h = Math.max(h, w * pct * coverRatio[id]);   // 칸 폭 × 표지 폭 비율 × 세로/가로
     });
-    Object.keys(rows).forEach(function (k) {
-      var h = 0;
-      rows[k].forEach(function (b) {
-        var img = b.querySelector('img'), pct = parseFloat(b.querySelector('.face').style.width) / 100;
-        if (img.naturalWidth) h = Math.max(h, b.clientWidth * pct * img.naturalHeight / img.naturalWidth);   // 칸 폭 × 표지 폭 비율 × 세로/가로
-      });
-      if (h) rows[k].forEach(function (b) { b.querySelector('.cover').style.height = h + 'px'; });
-    });
+    if (h) grid.querySelectorAll('.book .cover').forEach(function (c) { c.style.height = h + 'px'; });
   }
   function drawBoards() {
     if (!grid) return;
