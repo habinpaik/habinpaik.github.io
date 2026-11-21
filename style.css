@@ -2033,3 +2033,4 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 .shelf-panel .book .t { min-height: 3.2em; }
 .shelf-panel .book .t { overflow-wrap: anywhere; }
 .spine-track { min-height: calc(var(--pile-max) + 12px); }   /* the desk as tall as its tallest possible pile, whichever books are on it: a filter never moves what is below */
+.filter-btn, .filter-btn:hover { border-color: var(--cat, var(--stone)); }   /* the border in the words' own subject colour */
