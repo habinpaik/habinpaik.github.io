@@ -778,23 +778,7 @@ figure.ph.margin-left, figure.ph.margin-right { width: 12rem; margin: var(--s4) 
    the letters turn white. (Menu, wordmark, image cards and the footer's buttons are excluded.)
    Links with no underline at rest (headlines, the footer address) fill the same way. */
 :root { --link-hover: var(--on-fill); }
-a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story)) {
-  text-decoration: none;
-  /* the box reaches a hair past the letters on every side -- above the capitals, below the
-     descenders -- so the fill rises from under the whole word to over it; the text doesn't move */
-  padding: calc((1lh - 1.0556em) / 2) 0.12em; margin: 0 -0.12em;   /* top and bottom: the selection's band -- the whole line (the font's ascent + descent is 1.0556em; the rest of the line height shared above and below) */
-  -webkit-box-decoration-break: clone; box-decoration-break: clone;   /* a link over two lines gets a box on each */
-  background-image: linear-gradient(var(--crimson), var(--crimson)), linear-gradient(var(--hl), var(--hl));   /* the fill, and a light grey highlighter stroke */
-  background-repeat: no-repeat;
-  background-position: 0 100%, 0.12em calc(100% - (1lh - 1.0556em) / 2 - 0.14em);   /* the stroke from just under the baseline up through the lower half of the letters */   /* the underline a little under the descenders: halfway to the line's foot */
-  background-size: 100% 0, calc(100% - 0.24em) 0.5em;   /* the highlighter: the lower half of the letters */
-  transition: background-size .15s cubic-bezier(.45, 0, .25, 1), color .15s ease;   /* rises from the underline, unhurried */
-}
-a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story)):hover {
-  color: var(--link-hover);
-  background-size: 100% 100%, calc(100% - 0.24em) 0.5em;
-  transition: none;   /* the crimson at once, not rising */
-}
+
 .entry h3 a, .work .th a, .foot-contact a { background-size: 100% 0, 0 1px; }
 .entry h3 a:hover, .work .th a:hover, .foot-contact a:hover { background-size: 100% 100%, 0 1px; }
 
@@ -1804,7 +1788,7 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 }
 .spine-nav button:not(:disabled):active::before, .rail-btn:not(:disabled):active::before,
 .spine-nav button:not(:disabled):active::after, .rail-btn:not(:disabled):active::after { opacity: 0; }
-a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story)) { transition: none; }
+
 /* "You are here" starts exactly where the other cells end; the current cell runs on past it by the
    label's own width and the cell's inset (site.js measures the label) */
 .pre-foot li:has(a[aria-current="page"]) { margin-right: calc(-1 * var(--yah, 5rem)); }
@@ -1814,10 +1798,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 .kh, .kh:is(*) { text-decoration-thickness: 0.5em; text-underline-offset: -0.32em; text-decoration-skip-ink: none; transition: text-decoration-color .15s ease; }
 
 /* pointing at a highlighted link: the words turn crimson and the highlighter black -- no crimson fill */
-a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))):hover {
-  color: var(--crimson); --hl: var(--ink);
-  background-size: 100% 0, calc(100% - 0.24em) 0.5em;
-}
+
 /* the headlines' highlighter keeps its own grey (never the black of a pointed link around it) */
 :root { --hl-k: color-mix(in srgb, var(--stone) 26%, transparent); }
 /* the highlighter is the lines' grey: one light grey for lines and highlights */
@@ -1843,34 +1824,16 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 .pre-foot li::before, .pre-foot a::after, .pre-foot li:has(a[aria-current="page"])::before { display: none !important; }
 
 /* pointing at a highlighted link: crimson words, the highlighter gone */
-a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))):hover {
-  background-size: 100% 0, 0 0;
-}
+
 /* ...and a 2px crimson underline on the highlighter's bottom edge */
-a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))):hover {
-  --hl: var(--crimson); background-size: 100% 0, calc(100% - 0.24em) 2px;
-}
 
 /* text links, the other way round: at rest crimson words on a 2px crimson underline (at the
    highlighter's bottom edge); pointed at, the words go black on the light grey highlighter */
-a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))) {
-  color: var(--crimson); --hl: var(--crimson); background-size: 100% 0, calc(100% - 0.24em) 2px;
-}
-a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))):hover {
-  color: var(--ink); --hl: var(--line); background-size: 100% 0, calc(100% - 0.24em) 0.5em;
-}
 
 /* text links: at rest black words on a 2px grey underline (at the highlighter's bottom edge); pointed
    at, crimson words on the light grey highlighter */
-a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))) {
-  color: var(--ink); --hl: var(--stone); background-size: 100% 0, calc(100% - 0.24em) 2px;
-}
-a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))):hover {
-  color: var(--crimson); --hl: var(--line); background-size: 100% 0, calc(100% - 0.24em) 0.5em;
-}
 
 /* text links stay black when pointed at too (only the underline turns into the highlighter) */
-a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))):hover { color: var(--ink); }
 
 /* the copyright and the address are one paragraph (one element, lines broken by <br>): it stands where
    the copyright stood -- first in the footer on wide screens and phones, under the time and mail between */
@@ -1878,35 +1841,20 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 .foot-side > .foot-contact, .foot-side > .foot-contact:is(*) { grid-column: 1; grid-row: 2; margin-top: var(--s4); align-self: start; }
 @media (min-width: 80rem), (max-width: 40rem) { .foot-side > .foot-contact, .foot-side > .foot-contact:is(*) { margin-top: 0; } }
 /* the links' underline is a line: the lines' grey (#E0DDD7), like every other line */
-a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))) { --hl: var(--line); }
+
 /* text links at rest: no underline -- the letters themselves outlined in the lines' grey (a halo drawn
    under the black, so the words keep their weight); pointed at: the outline goes, the highlighter comes */
-a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))) {
-  background-size: 100% 0, 0 0; -webkit-text-stroke: 3px var(--line); paint-order: stroke fill;
-}
-a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))):hover {
-  -webkit-text-stroke: 0; background-size: 100% 0, calc(100% - 0.24em) 0.5em;
-}
+
 /* text links at rest: a rectangle round them in the lines' grey (the band the highlighter fills), no
    outlined letters; pointed at: the rectangle goes, the highlighter comes */
-a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))) {
-  -webkit-text-stroke: 0; box-shadow: inset 0 0 0 1px var(--line);
-}
-a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))):hover { box-shadow: none; }
+
 /* while selecting: no link box line, no highlighter -- nothing to break the selection's crimson */
 html.selecting a { box-shadow: none !important; background-image: none !important; -webkit-text-stroke: 0 !important; }
 
 /* text links: a real underline that breaks where letters dip through it (descenders cut it clean, as
    on MIT's pages) -- the words' grey, 2px, a little under the baseline; no box line */
-a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))) {
-  box-shadow: none; -webkit-text-stroke: 0; background-size: 100% 0, 0 0;
-  text-decoration-line: underline; text-decoration-color: var(--stone); text-decoration-thickness: 2px;
-  text-underline-offset: 0.18em; text-decoration-skip-ink: auto;
-}
+
 /* pointed at: the words and their underline crimson, nothing else */
-a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))):hover {
-  color: var(--crimson); text-decoration-color: var(--crimson); background-size: 100% 0, 0 0;
-}
 
 /* a filled (chosen or pressed) box has no shade: the filled tag buttons, a pressed arrow */
 .filter-btn[aria-pressed="true"]::before, .filter-btn[aria-pressed="true"]::after,
@@ -2071,7 +2019,43 @@ html.night .outline { --stone: color-mix(in srgb, var(--ink) var(--stone-mix), v
 .pre-foot a::after { transition: opacity .15s ease !important; }
 .outline li a, .outline li a:hover, .outline li a.cur, .outline .clock-main { transition: color .15s ease, background-size .15s ease; }
 .outline .clock-main time, .outline .clock-main .city { transition: color .15s ease; }
-a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))) { transition: color .15s ease, text-decoration-color .15s ease; }
+/* ---- text links, in one place ----
+   The first selector is every link but the navigation, wordmark, book, photo and story boxes; the second
+   also leaves out the headline links and the footer's (they keep the first's box, highlighter and fill). */
+a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story)) {
+  text-decoration: none;
+  padding: calc((1lh - 1.0556em) / 2) 0.12em;
+  margin: 0 -0.12em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  background-image: linear-gradient(var(--crimson), var(--crimson)), linear-gradient(var(--hl), var(--hl));
+  background-repeat: no-repeat;
+  background-position: 0 100%, 0.12em calc(100% - (1lh - 1.0556em) / 2 - 0.14em);
+  background-size: 100% 0, calc(100% - 0.24em) 0.5em;
+}
+a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story)):hover {
+  color: var(--link-hover);
+  background-size: 100% 100%, calc(100% - 0.24em) 0.5em;
+}
+/* text links: black words on a 2px grey underline that breaks where letters dip through it; pointed at,
+   the words and the underline crimson */
+a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))) {
+  color: var(--ink);
+  --hl: var(--line);
+  background-size: 100% 0, 0 0;
+  text-decoration-line: underline;
+  text-decoration-color: var(--stone);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.18em;
+  text-decoration-skip-ink: auto;
+  transition: color .15s ease, text-decoration-color .15s ease;
+}
+a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-head, .side-photo, .blur-card, .card, .print-tab, .tuck-story, .entry h3 a, .table .cell .th a, .work .th a, .foot-contact a, :has(.kh))):hover {
+  color: var(--crimson);
+  text-decoration-color: var(--crimson);
+  background-size: 100% 0, 0 0;
+}
+
 /* the last update goes to the bottom, under the mail, a short line between */
 .outline { display: flex; flex-direction: column; }
 .outline .updated { order: 3; }
