@@ -1464,24 +1464,16 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 @media (hover: hover) and (pointer: fine) { .rail-btn { display: flex; } }
 .rail-btn:disabled { cursor: default; }
 
-/* the three stacked boxes of a featured story (photo, companion story, print PDF): a little tighter
-   than the site's box inset -- 16px from edge to letters (12px on phones) instead of 20 (14) */
-.feat { --inset: 16px; }
-@media (max-width: 34rem) { .feat { --inset: 12px; } }
+/* the tighter box inset: 14px from edge to letters (10 on phones) instead of the site's 20 (14) --
+   the featured story's three boxes, every Journalism box and button, Explore More's cells */
+:root { --inset-tight: 14px; }
+@media (max-width: 34rem) { :root { --inset-tight: 10px; } }
+.feat, .j-page { --inset: var(--inset-tight); }
+.pre-foot { --inset: 14px; }   /* on phones too: its cells are larger there */
 .feat .feat-head { bottom: var(--inset); }   /* the photo's headline as close to its foot as the boxes below keep their letters */
-/* a touch tighter still, and the boxes under the photo two thirds, then one third, of its width */
-.feat { --inset: 14px; }
-@media (max-width: 34rem) { .feat { --inset: 10px; } }
+/* the boxes under the photo two thirds, then one third, of its width */
 .feat .tuck-story, .feat .print-tab { width: calc(100% * 2 / 3); }
 .feat .tuck-story + .print-tab { width: calc(100% / 3); }
-/* Journalism: every story box and button keeps the featured story's tighter inset -- 14px from edge
-   to letters (10px on phones) instead of the site's 20 (14) */
-.j-page { --inset: 14px; }
-@media (max-width: 34rem) { .j-page { --inset: 10px; } }
-
-/* Explore More: the tighter inset as on Journalism -- 14px from each cell's edge to its name (10 on phones) */
-.pre-foot { --inset: 14px; }
-@media (max-width: 34rem) { .pre-foot { --inset: 10px; } }
 .pre-foot a { padding: var(--inset); }
 
 /* Journalism card news: the cards closer together -- 14px apart (10 on phones), the tab's inset */
@@ -1772,7 +1764,6 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
 /* phones: Explore More larger all round -- the cells 75% of the column wide, and a little taller */
 @media (max-width: 40rem) {
   .pf-row { grid-template-columns: 3fr 1fr; }
-  .pre-foot { --inset: 14px; }
   .pre-foot li:has(a[aria-current="page"]) { margin-right: -5.4rem; }   /* out to near the column's edge */
 }
 
