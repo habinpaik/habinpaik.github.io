@@ -2021,3 +2021,5 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 /* the last update goes to the bottom, under the mail, a short line between */
 .outline { display: flex; flex-direction: column; }
 .outline .updated { order: 3; }
+/* phones: a school's Korean name and years go to their own line under it -- every entry alike */
+@media (max-width: 40rem) { .fact .sub { display: block; } }
