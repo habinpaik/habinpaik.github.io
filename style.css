@@ -1289,24 +1289,24 @@ html.night, html.night body { background-color: var(--paper); color: var(--ink);
    the names; pink for the cities' hands and the sweep, under which the hands turn dark */
 html.night .aclock .face, html.night .aclock line, .site-foot .aclock .face, .site-foot .aclock line { stroke-width: 1.5; }   /* a hair heavier at night, so the dial holds on the dark */
 /* at night the sweep's light leading edge fades into the dark ground, not toward white (which read as cream) */
-html.night { --paper: #1C1B19; --ink: #E6E3DD; --stone: #E0DDD7; --line: #3A3834; --brand-deep: #C9C6BF; --crimson: #C25466; --c-meche: #D08B4A; --c-phys: #6FA6D0; --c-math: #4DB585; --c-gensci: #4FA893; --c-classics: #A3B84E; --sh-strong: #3A3834; --sh-light: #3A3834; --dial-rim: #E0DDD7; --dial-home: #E0DDD7; --dial-city: #E3808F; --dial-pin: #E0DDD7; --dial-lab: #E0DDD7; color-scheme: dark; --crimson-light: color-mix(in srgb, var(--crimson) 45%, var(--paper)); --dial-fill: #D9707F; --dial-edge: color-mix(in srgb, #D9707F 35%, var(--paper)); --dial-on: var(--paper); }
 
 /* from the bar over Explore More down, the page is night all the time; only what lies above it turns.
    The night colours are set again on these two, and every colour made from them is worked out again
    here (a custom property is resolved where it is declared, so :root's would stay day's) */
-.pre-foot, .site-foot {
-  --paper: #1C1B19; --ink: #E6E3DD; --line: #3A3834; --brand-deep: #C9C6BF;
+.pre-foot, .site-foot, html.night {   /* one night palette: the page at night, and Explore More and the footer always */
+  --paper: #1C1B19; --ink: #E6E3DD; --line: #3A3834; --stone: #E0DDD7; --brand-deep: #C9C6BF;
   --crimson: #C25466; --c-journalism: var(--crimson);
-  --sh-strong: #3A3834; --sh-light: #3A3834;
-  --stone: #E0DDD7;
+  --c-meche: #D08B4A; --c-phys: #6FA6D0; --c-math: #4DB585; --c-gensci: #4FA893; --c-classics: #A3B84E;
+  --sh-strong: var(--line); --sh-light: var(--line);
   --shade-strong: linear-gradient(to bottom, var(--sh-strong), transparent 20px);
   --shade-light:  linear-gradient(to bottom, var(--sh-light), transparent var(--s2));
   --on-fill: var(--paper); --link-hover: var(--on-fill);
   --crimson-light: color-mix(in srgb, var(--crimson) 45%, var(--paper));
-  --dial-rim: #E0DDD7; --dial-home: #E0DDD7; --dial-city: #E3808F; --dial-pin: #E0DDD7; --dial-lab: #E0DDD7;
-  --dial-fill: #D9707F; --dial-edge: color-mix(in srgb, #D9707F 35%, var(--paper)); --dial-on: var(--paper);
-  color-scheme: dark; background-color: var(--paper); color: var(--ink);
-}   /* the sweep a clear pink at night, its edge fading into the dark; hands under it go dark */
+  --dial-rim: var(--stone); --dial-home: var(--stone); --dial-city: #E3808F; --dial-pin: var(--stone); --dial-lab: var(--stone);
+  --dial-fill: #D9707F; --dial-edge: color-mix(in srgb, var(--dial-fill) 35%, var(--paper)); --dial-on: var(--paper);
+  color-scheme: dark;
+}
+.pre-foot, .site-foot { background-color: var(--paper); color: var(--ink); }   /* the sweep a clear pink at night, its edge fading into the dark; hands under it go dark */
 
 /* the buffer before the footer, "Explore More": the four pages in a 2 x 2 grid, each name at its
    cell's top-left. Each cell carries the light shade on its left side only; the page you are on, and
