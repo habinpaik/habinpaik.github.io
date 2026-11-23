@@ -53,7 +53,8 @@
   function load() {
     var r = need();
     if (!EP || covered(r[0], r[1])) return;
-    pending++; cal.classList.add('loading');
+    pending++;
+    var dr = dayRange(); if (!covered(dr[0], dr[1])) cal.classList.add('loading');   /* the days hidden only if theirs are not in yet */
     var url = EP + (EP.indexOf('?') < 0 ? '?' : '&') + 'start=' + encodeURIComponent(new Date(r[0] - KST).toISOString()) + '&end=' + encodeURIComponent(new Date(r[1] - KST).toISOString());
     fetch(url).then(function (res) { return res.json(); }).then(function (j) {
       cache.push({ a: r[0], b: r[1], ev: (j.events || []).map(function (e) {
