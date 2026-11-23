@@ -572,7 +572,12 @@ document.addEventListener('touchstart', function () {}, { passive: true });
      end of the page's text, and sticks (css position: sticky) under the menu bar -- the browser moves it
      with the scroll itself, so it never trails or shakes */
   var rail = document.createElement('div'); rail.className = 'outline-rail';
-  nav.appendChild(ol); rail.appendChild(nav); main.appendChild(rail);
+  nav.appendChild(ol);
+  /* Meet Habin Paik: a row of its own under the sections, over the time */
+  var mt = document.createElement('a'); mt.className = 'ol-meet'; mt.href = '/meet'; mt.textContent = 'Meet Habin Paik';
+  if (/^\/meet(\.html)?$/.test(location.pathname)) mt.setAttribute('aria-current', 'page');
+  nav.appendChild(mt);
+  rail.appendChild(nav); main.appendChild(rail);
   if (getComputedStyle(main).position === 'static') main.style.position = 'relative';
   var head = document.querySelector('.site-head'), cur = -1;
   var pinned = null, pinT = 0;

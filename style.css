@@ -2041,3 +2041,90 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 .j-cover.folded .jc-card { opacity: 0 !important; transition: opacity .3s ease .3s; }
 .jc-face { opacity: 0; transition: opacity .3s ease; }
 .j-cover.folded .jc-face { opacity: 1; }
+
+/* ---- Meet Habin Paik ---- */
+.meet-now a { color: inherit; }
+.cal-bar { display: flex; justify-content: space-between; align-items: center; gap: var(--s3); margin-bottom: var(--s4); }
+.cal-views, .mf-mode { display: flex; gap: var(--s2); }
+.cal-views .filter-btn, .mf-mode .filter-btn { --cat: var(--ink); }
+.cal-nav { display: flex; align-items: center; gap: var(--s3); }
+.cal-nav .rail-btn { display: block; }
+.cal-title { font-family: var(--sans); font-size: var(--t-small); font-weight: 600; min-width: 9.5em; text-align: center; }
+.cal-grid { --cal-row: 2.25rem; font-family: var(--sans); font-size: var(--t-small); border-top: 1px solid var(--line); transition: opacity .15s ease; }
+.cal-grid.loading { opacity: .5; }
+@media (max-width: 34rem) { .cal-grid { --cal-row: 2rem; font-size: 0.75rem; } }
+.cw-head, .cw-all, .cw-body, .cm-head, .cm-body { display: grid; grid-template-columns: 3.25rem repeat(7, minmax(0, 1fr)); }
+.cm-head, .cm-body { grid-template-columns: repeat(7, minmax(0, 1fr)); }
+@media (max-width: 34rem) { .cw-head, .cw-all, .cw-body { grid-template-columns: 2.5rem repeat(7, minmax(0, 1fr)); } }
+.cw-head > span, .cm-head > span { padding: var(--s2) 0; color: var(--stone); text-align: center; border-bottom: 1px solid var(--line); }
+.cw-day b { font-weight: 600; }
+.cw-day.today, .cm-day.today .cm-n { color: var(--crimson); }
+.cw-all > span { border-bottom: 1px solid var(--line); padding: 2px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.cw-hours span { display: block; height: var(--cal-row); color: var(--stone); font-size: 0.75rem; line-height: 1; padding-top: 2px; }
+.cw-col { position: relative; border-left: 1px solid var(--line); }
+.cw-slot { display: block; width: 100%; height: var(--cal-row); margin: 0; padding: 0; border: 0; border-bottom: 1px solid var(--line); background: none; cursor: pointer; transition: background-color .15s ease; }
+.cw-slot.past { cursor: default; background: color-mix(in srgb, var(--line) 35%, transparent); }
+@media (hover: hover) { .cw-slot:not(.past):hover { background: color-mix(in srgb, var(--crimson) 12%, transparent); } }
+.cw-slot.picked { background: color-mix(in srgb, var(--crimson) 22%, transparent); }
+.cw-ev, .cm-ev { display: block; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.cw-col .cw-ev { position: absolute; left: 2px; right: 2px; padding: 2px 4px; background: var(--paper); border: 1px solid var(--ink); border-left-width: 3px; pointer-events: auto; white-space: normal; line-height: 1.25; }
+.cw-all .cw-ev { padding: 1px 4px; border: 1px solid var(--ink); border-left-width: 3px; }
+.cw-t { display: block; font-weight: 600; overflow: hidden; text-overflow: ellipsis; }
+.cw-when { display: block; color: var(--stone); font-size: 0.75rem; }
+.cw-now { position: absolute; left: 0; right: 0; height: 0; border-top: 2px solid var(--crimson); pointer-events: none; }
+.cm-day { display: flex; flex-direction: column; align-items: stretch; gap: 2px; min-width: 0; min-height: 5.5rem; padding: var(--s2) 4px; margin: 0; border: 0; border-bottom: 1px solid var(--line); border-left: 1px solid var(--line); background: none; text-align: left; font: inherit; color: var(--ink); cursor: pointer; transition: background-color .15s ease; }
+.cm-day:nth-child(7n+1) { border-left: 0; }
+.cm-day.other { color: var(--stone); }
+.cm-day.past { background: color-mix(in srgb, var(--line) 35%, transparent); }
+@media (hover: hover) { .cm-day:hover { background: color-mix(in srgb, var(--crimson) 12%, transparent); } }
+.cm-n { font-weight: 600; }
+.cm-ev { font-size: 0.75rem; }
+.cm-more { font-size: 0.75rem; color: var(--stone); }
+@media (max-width: 34rem) { .cm-day { min-height: 3.5rem; } .cm-ev { font-size: 0.625rem; } .cw-when { display: none; } }
+.cal-note { margin-top: var(--s3); font-family: var(--sans); font-size: var(--t-small); color: var(--stone); }
+
+.meet-form { display: flex; flex-direction: column; gap: var(--s4); font-family: var(--sans); font-size: var(--t-small); }
+.mf-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s4); }
+@media (max-width: 34rem) { .mf-row { grid-template-columns: 1fr; } }
+.meet-form label { display: flex; flex-direction: column; gap: var(--s2); font-weight: 600; }
+.meet-form input, .meet-form textarea {
+  font: 400 var(--t-body)/1.5 var(--serif); color: var(--ink); background: var(--paper);
+  border: 1px solid var(--line); border-radius: 0; padding: var(--s2); width: 100%; box-sizing: border-box;
+  transition: border-color .15s ease;
+}
+.meet-form input:focus, .meet-form textarea:focus { outline: none; border-color: var(--ink); }
+.meet-form textarea { resize: vertical; }
+.mf-trap { position: absolute !important; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+.mf-send { display: flex; align-items: center; gap: var(--s3); margin: 0; }
+.mf-send button {
+  font-family: var(--sans); font-size: var(--t-small); font-weight: 600; color: var(--ink);
+  border: 1px solid var(--ink); border-radius: 0; padding: var(--s2); cursor: pointer;
+  background: linear-gradient(var(--crimson), var(--crimson)) no-repeat 0 100% / 100% 0;
+  transition: background-size .15s ease, color .15s ease, border-color .15s ease;
+}
+.mf-send button:hover { background-size: 100% 100%; color: var(--on-fill); border-color: var(--crimson); }
+.mf-send button:disabled { opacity: .5; cursor: default; }
+.mf-status { color: var(--stone); }
+
+/* the way in: a button opening the Contact section, and a row in the outline over the time */
+.meet-link {
+  display: inline-block; margin: 0 0 var(--s3); font-family: var(--sans); font-size: var(--t-small); font-weight: 600;
+  color: var(--ink); text-decoration: none; border: 1px solid var(--ink); padding: var(--s2);
+  background: linear-gradient(var(--crimson), var(--crimson)) no-repeat 0 100% / 100% 0;
+  transition: background-size .15s ease, color .15s ease, border-color .15s ease;
+}
+.meet-link:hover { background-size: 100% 100%; color: var(--on-fill); border-color: var(--crimson); }
+.outline .ol-meet { order: 1; display: block; margin: 0 0 0 var(--gutter); padding: var(--s2) 0; color: var(--stone); text-decoration: none; font-weight: 600;
+  background-image: var(--shade-light); background-repeat: no-repeat; background-size: 100% 0; transition: color .15s ease, background-size .15s ease; }
+.outline .ol-meet[aria-current] { color: var(--ink); }
+@media (hover: hover) { .outline .ol-meet:hover { color: var(--ink); background-size: 100% var(--s2); } }
+.outline .clock-main { order: 2; border-top: 1px solid var(--line); }
+/* Meet: the time line's own line opens the calendar -- no second line under it */
+main > p.meet-now + section { margin-top: 0; }
+main > p.meet-now + section > h2.section-title { border-top: 0; background: none; padding-top: 0; margin-top: 0; }
+.cw-col .cw-ev { word-break: keep-all; overflow-wrap: normal; }
+@media (max-width: 34rem) {
+  .cal-bar { flex-wrap: wrap; }
+  .cal-nav { flex: 1 1 100%; justify-content: space-between; }
+  .cal-title { min-width: 0; }
+}
