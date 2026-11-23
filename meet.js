@@ -72,10 +72,10 @@
     months.textContent = '';
     var n = nMonths(), today = dayStart(now), rr = dayRange();
     var a = f(first), b = f(addMonths(first, n - 1));
-    title.textContent = (n > 1 ? MON[a.m] + ' – ' + MON[b.m] : MONTH[a.m]) + ' ' + b.y;
+    title.textContent = a.y === b.y ? a.y : a.y + ' – ' + b.y;   /* the year only: each month is named over its days */
     for (var k = 0; k < n; k++) {
       var m0 = addMonths(first, k), x = f(m0), box = el('div', 'mc');
-      if (n > 1) box.appendChild(el('p', 'mc-name', MONTH[x.m]));
+      box.appendChild(el('p', 'mc-name', MON[x.m]));
       var g = el('div', 'mc-grid');
       ['M', 'T', 'W', 'T', 'F', 'S', 'S'].forEach(function (c) { g.appendChild(el('span', 'mc-dow', c)); });
       var start = m0 - x.dw * D, end = addMonths(m0, 1), ev = eventsIn(m0, end);
