@@ -2106,14 +2106,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 .mf-send button:disabled { opacity: .5; cursor: default; }
 .mf-status { color: var(--stone); }
 
-/* the way in: a button opening the Contact section, and a row in the outline over the time */
-.meet-link {
-  display: inline-block; margin: 0 0 var(--s3); font-family: var(--sans); font-size: var(--t-small); font-weight: 600;
-  color: var(--ink); text-decoration: none; border: 1px solid var(--ink); padding: var(--s2);
-  background: linear-gradient(var(--crimson), var(--crimson)) no-repeat 0 100% / 100% 0;
-  transition: background-size .15s ease, color .15s ease, border-color .15s ease;
-}
-.meet-link:hover { background-size: 100% 100%; color: var(--on-fill); border-color: var(--crimson); }
+/* the way in: a row in the outline over the time (and a link opening the Contact paragraph) */
 .outline .ol-meet { order: 1; display: block; margin: 0 0 0 var(--gutter); padding: var(--s2) 0; color: var(--stone); text-decoration: none; font-weight: 600;
   background-image: var(--shade-light); background-repeat: no-repeat; background-size: 100% 0; transition: color .15s ease, background-size .15s ease; }
 .outline .ol-meet[aria-current] { color: var(--ink); }
