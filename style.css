@@ -2135,3 +2135,10 @@ main.imp .cd-ev.free { opacity: .3; pointer-events: none; }
 .cal-today { --cat: var(--ink); margin-left: var(--s2); }
 .mc-day.near { background: var(--line); }
 .mc-name, .mc-dow { color: var(--ink); }
+/* loading: the calendar hidden where it stands (its room kept, nothing below moves), the word in its place */
+.cal-months { position: relative; }
+.cal.loading .cal-months > *, .cal.loading .cal-days { visibility: hidden; }
+.cal.loading .cal-months::after {
+  content: attr(data-loading); position: absolute; left: 0; right: 0; top: 0; text-align: center;
+  padding-top: var(--s6); color: var(--stone);
+}

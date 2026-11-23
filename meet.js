@@ -30,7 +30,7 @@
   }
 
   var months = main.querySelector('.cal-months'), days = main.querySelector('.cal-days');
-  var title = main.querySelector('.cal-title'), loadEl = main.querySelector('.cal-load');
+  var title = main.querySelector('.cal-title'), cal = main.querySelector('section.cal');
   var impBtn = main.querySelector('.cal-imp'), tip = document.querySelector('.cal-tip');
   var sel = dayStart(wallNow()), first = monthStart(sel), important = false, cache = [], pending = 0, picked = null;
 
@@ -53,14 +53,14 @@
   function load() {
     var r = need();
     if (!EP || covered(r[0], r[1])) return;
-    pending++; loadEl.textContent = 'Loading…';
+    pending++; cal.classList.add('loading');
     var url = EP + (EP.indexOf('?') < 0 ? '?' : '&') + 'start=' + encodeURIComponent(new Date(r[0] - KST).toISOString()) + '&end=' + encodeURIComponent(new Date(r[1] - KST).toISOString());
     fetch(url).then(function (res) { return res.json(); }).then(function (j) {
       cache.push({ a: r[0], b: r[1], ev: (j.events || []).map(function (e) {
         return { t: e.title || 'Busy', s: Date.parse(e.start) + KST, e: Date.parse(e.end) + KST, all: !!e.allDay, free: !!e.free };
       }) });
     }).catch(function () {}).then(function () {
-      if (--pending === 0) loadEl.textContent = '';
+      if (--pending === 0) cal.classList.remove('loading');
       draw();
     });
   }
