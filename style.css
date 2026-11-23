@@ -2038,11 +2038,10 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 
 
 /* the outline's last rows: Book a Meeting under the sections; the time and mail gone from the box. The
-   line over the last update runs the box's width; the one under it, short, from the first letter */
+   line over the last update runs the box's width; nothing under it */
 .outline li a[aria-current] { color: var(--ink); }
 .outline .updated { border-top: 0; }
 .outline { border-bottom: 0; }
-.outline::after { content: ""; order: 4; margin-left: var(--gutter); border-top: 1px solid var(--line); }
 /* the line over Book a Meeting runs the box's width too */
 .outline li.ol-meet { margin-left: 0; padding-left: var(--gutter); }
 
@@ -2153,3 +2152,17 @@ main > p.meet-now + section > h2.section-title { border-top: 0; background: none
 /* buttons that act once: filled while pressed */
 .cal-today:active, .mf-send .filter-btn:active { background: var(--cat); color: var(--on-fill); }
 .mf-send .mf-imp { --cat: var(--crimson); }
+
+/* Book a Meeting: its row filled, the box's width */
+.outline li.ol-meet { background: var(--line); }
+/* under the months, one row: earlier, Today, later -- centred */
+.cal-bar { justify-content: center; gap: var(--s2); margin: var(--s4) 0 0; }
+.cal-bar .rail-btn { display: flex; }
+.cal-today { margin-left: 0; }
+.cal-days { margin-top: var(--s4); }
+/* the message box: an ink border, as the boxes pressed into */
+.meet-form textarea { border-color: var(--ink); }
+.mc-head { display: block; text-align: center; }
+.cd-zone { white-space: nowrap; }
+/* phones: the When box across the whole width, so its sentence is read in full; Offline / Online under it */
+@media (max-width: 34rem) { .mf-row.mf-when { grid-template-columns: 1fr; } }

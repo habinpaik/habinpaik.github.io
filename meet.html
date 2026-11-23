@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
-<link rel="stylesheet" href="style.css?v=20261128p">
+<link rel="stylesheet" href="style.css?v=20261128q">
   <link rel="icon" href="/favicon.svg?v=5" type="image/svg+xml">
   <link rel="icon" href="/favicon-32.png?v=5" sizes="32x32" type="image/png">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=5">
@@ -47,10 +47,12 @@ f(); window.addEventListener('resize',f);})();
 
   <section class="cal">
     <h2 class="section-title">Find an Open Hour</h2>
-    <div class="cal-bar">
-      <button type="button" class="filter-btn cal-today">Today</button>
-    </div>
     <div class="cal-months"></div>
+    <div class="cal-bar">
+      <button type="button" class="rail-btn cal-prev" aria-label="Earlier months"><svg viewBox="0 0 28 12" aria-hidden="true"><path d="M27 6H1M6 1 1 6l5 5"/></svg></button>
+      <button type="button" class="filter-btn cal-today">Today</button>
+      <button type="button" class="rail-btn cal-next" aria-label="Later months"><svg viewBox="0 0 28 12" aria-hidden="true"><path d="M1 6h26M22 1l5 5-5 5"/></svg></button>
+    </div>
     <div class="cal-days"></div>
   </section>
 
@@ -62,7 +64,7 @@ f(); window.addEventListener('resize',f);})();
         <input name="email" type="email" autocomplete="email" required maxlength="120" placeholder="Email" aria-label="Email">
       </div>
       <div class="mf-row mf-when">
-        <input name="when" type="text" maxlength="120" placeholder="When — pick an hour above, or write whatever times suit you" aria-label="When">
+        <input name="when" type="text" maxlength="120" placeholder="Click an open hour above, or write times that suit you." aria-label="When">
         <div class="mf-mode" role="group" aria-label="Where">
           <button type="button" class="filter-btn" data-mode="Offline" aria-pressed="true">Offline</button>
           <button type="button" class="filter-btn" data-mode="Online" aria-pressed="false">Online</button>
@@ -120,6 +122,6 @@ f(); window.addEventListener('resize',f);})();
 })();
 </script>
 <script src="site.js?v=20261128c"></script>
-<script src="meet.js?v=12"></script>
+<script src="meet.js?v=13"></script>
 </body>
 </html>

@@ -75,13 +75,7 @@
     for (var k = 0; k < n; k++) {
       var m0 = addMonths(first, k), x = f(m0), box = el('div', 'mc');
       var hd = el('div', 'mc-head'), py = k ? f(addMonths(first, k - 1)).y : null;
-      var prev = el('button', 'rail-btn cal-prev'), next = el('button', 'rail-btn cal-next');
-      prev.type = next.type = 'button'; prev.setAttribute('aria-label', 'Earlier months'); next.setAttribute('aria-label', 'Later months');
-      prev.innerHTML = '<svg viewBox="0 0 28 12" aria-hidden="true"><path d="M27 6H1M6 1 1 6l5 5"/></svg>';
-      next.innerHTML = '<svg viewBox="0 0 28 12" aria-hidden="true"><path d="M1 6h26M22 1l5 5-5 5"/></svg>';
-      hd.appendChild(k === 0 ? prev : el('span'));
-      hd.appendChild(el('span', 'mc-name', (py === x.y ? '' : x.y + ' ') + MON[x.m]));   /* 2026 Nov, then Dec (a new year named again) */
-      hd.appendChild(k === n - 1 ? next : el('span'));
+      hd.appendChild(el('span', 'mc-name', (py === x.y ? '' : x.y + ' ') + MON[x.m]));   /* 2026 Nov, then Dec (a new year named again); the arrows are in the row under the months */
       box.appendChild(hd);
       var g = el('div', 'mc-grid');
       ['M', 'T', 'W', 'T', 'F', 'S', 'S'].forEach(function (c) { g.appendChild(el('span', 'mc-dow', c)); });
@@ -182,9 +176,9 @@
 
   /* controls */
     main.querySelector('.cal-today').addEventListener('click', function () { sel = dayStart(wallNow()); first = monthStart(sel); go(); });
+    main.querySelector('.cal-prev').addEventListener('click', function () { first = addMonths(first, -nMonths()); go(); });
+    main.querySelector('.cal-next').addEventListener('click', function () { first = addMonths(first, nMonths()); go(); });
   months.addEventListener('click', function (e) {
-    if (e.target.closest('.cal-prev')) { first = addMonths(first, -nMonths()); go(); return; }
-    if (e.target.closest('.cal-next')) { first = addMonths(first, nMonths()); go(); return; }
     var b = e.target.closest('.mc-day[data-day]'); if (!b) return;
     sel = +b.dataset.day; go();
   });
@@ -230,6 +224,18 @@
 
   /* the form */
   var form = main.querySelector('.meet-form'), status = main.querySelector('.mf-status'), mode = 'Offline';
+  /* the When box's sentence, said in full where it fits; on narrow phones the same, shorter */
+  (function () {
+    var w = form.querySelector('input[name=when]'), full = w.placeholder, short = 'Click an hour above, or write one.';
+    var ctx = document.createElement('canvas').getContext('2d');
+    function say() {
+      var s = getComputedStyle(w); ctx.font = s.font;
+      var room = w.clientWidth - parseFloat(s.paddingLeft) - parseFloat(s.paddingRight);
+      w.placeholder = ctx.measureText(full).width <= room ? full : short;
+    }
+    say(); window.addEventListener('resize', say);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(say);
+  })();
   [].forEach.call(form.querySelectorAll('.mf-mode .filter-btn'), function (b) {
     b.addEventListener('click', function () {
       mode = b.dataset.mode;
