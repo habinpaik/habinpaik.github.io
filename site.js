@@ -442,6 +442,7 @@
   function label(a) {
     var h = a.getAttribute('href') || '';
     if (a.hasAttribute('data-no-tip')) return '';
+    if (a.hasAttribute('data-tip')) return a.getAttribute('data-tip');   /* a link within the site that still shows where it goes */
     if (!h || h.charAt(0) === '#' || /^javascript:/i.test(h)) return '';
     if (/^mailto:/i.test(h)) return h.replace(/^mailto:/i, '').split('?')[0];
     if (/^tel:/i.test(h)) return h.replace(/^tel:/i, '');
