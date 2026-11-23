@@ -126,7 +126,9 @@
       faces[2 * i].style.transform = 'translate3d(' + x + 'px,0,' + (-d / 2) + 'px) rotateY(' + (-th) + 'deg)';
       faces[2 * i + 1].style.transform = 'translate3d(' + (x + p / 2) + 'px,0,' + (d / 2) + 'px) rotateY(' + th + 'deg)';
     }
-    board.style.transform = 'rotateY(' + phi + 'deg)';
+    /* held at the folded width throughout: flat, the faces would run twice as wide, past the screen's
+       left part, and shrink back as they fold */
+    board.style.transform = 'rotateY(' + phi + 'deg) scaleX(' + (BW / w).toFixed(4) + ')';
     /* light: a face darkens as it turns away from you */
     var la = Math.cos((phi - th) * Math.PI / 180), lb = Math.cos((phi + th) * Math.PI / 180);
     board.style.setProperty('--da', (0.42 * (1 - Math.max(0, la))).toFixed(3));

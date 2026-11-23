@@ -2034,3 +2034,10 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 .shelf-panel .book .t { overflow-wrap: anywhere; }
 .spine-track { min-height: calc(var(--pile-max) + 12px); }   /* the desk as tall as its tallest possible pile, whichever books are on it: a filter never moves what is below */
 .filter-btn, .filter-btn:hover { border-color: var(--cat, var(--stone)); }   /* the border in the words' own subject colour */
+/* the ring and the board fade by their cards and faces, never as a whole: opacity on a 3D group flattens
+   it, which threw a card out to the side for a frame. The two cards stay until the board is up over them */
+.jc-ring, .j-cover.folded .jc-ring, .jc-board, .j-cover.folded .jc-board { opacity: 1; transition: none; }
+.j-cover.folded .jc-ring { pointer-events: none; }
+.j-cover.folded .jc-card { opacity: 0 !important; transition: opacity .3s ease .3s; }
+.jc-face { opacity: 0; transition: opacity .3s ease; }
+.j-cover.folded .jc-face { opacity: 1; }
