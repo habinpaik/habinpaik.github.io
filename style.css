@@ -2132,3 +2132,4 @@ main.imp .cd-ev.free { opacity: .3; pointer-events: none; }
 .mf-send button:hover { background-size: 100% 100%; color: var(--on-fill); border-color: var(--crimson); }
 .mf-send button:disabled { opacity: .5; cursor: default; }
 .mf-status { color: var(--stone); }
+.cal-today { --cat: var(--ink); margin-left: var(--s2); }

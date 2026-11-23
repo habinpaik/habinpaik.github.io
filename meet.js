@@ -72,7 +72,7 @@
     months.textContent = '';
     var n = nMonths(), today = dayStart(now);
     var a = f(first), b = f(addMonths(first, n - 1));
-    title.textContent = MONTH[a.m] + (n > 1 ? ' – ' + MONTH[b.m] : '') + ' ' + b.y;
+    title.textContent = (n > 1 ? MON[a.m] + ' – ' + MON[b.m] : MONTH[a.m]) + ' ' + b.y;
     for (var k = 0; k < n; k++) {
       var m0 = addMonths(first, k), x = f(m0), box = el('div', 'mc');
       if (n > 1) box.appendChild(el('p', 'mc-name', MONTH[x.m]));
@@ -177,6 +177,7 @@
   /* controls */
   main.querySelector('.cal-prev').addEventListener('click', function () { first = addMonths(first, -nMonths()); go(); });
   main.querySelector('.cal-next').addEventListener('click', function () { first = addMonths(first, nMonths()); go(); });
+  main.querySelector('.cal-today').addEventListener('click', function () { sel = dayStart(wallNow()); first = monthStart(sel); go(); });
   impBtn.addEventListener('click', function () { important = !important; impBtn.setAttribute('aria-pressed', important); draw(); });
   months.addEventListener('click', function (e) {
     var b = e.target.closest('.mc-day[data-day]'); if (!b) return;
