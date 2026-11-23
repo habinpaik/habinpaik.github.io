@@ -2133,3 +2133,4 @@ main.imp .cd-ev.free { opacity: .3; pointer-events: none; }
 .mf-send button:disabled { opacity: .5; cursor: default; }
 .mf-status { color: var(--stone); }
 .cal-today { --cat: var(--ink); margin-left: var(--s2); }
+.mc-day.near { background: var(--line); }

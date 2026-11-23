@@ -70,7 +70,7 @@
   /* the small month calendars: always six weeks tall, so nothing below moves */
   function drawMonths(now) {
     months.textContent = '';
-    var n = nMonths(), today = dayStart(now);
+    var n = nMonths(), today = dayStart(now), rr = dayRange();
     var a = f(first), b = f(addMonths(first, n - 1));
     title.textContent = (n > 1 ? MON[a.m] + ' – ' + MON[b.m] : MONTH[a.m]) + ' ' + b.y;
     for (var k = 0; k < n; k++) {
@@ -87,6 +87,7 @@
         b2.setAttribute('aria-label', DOW[f(d).dw] + ' ' + f(d).d + ' ' + MON[f(d).m]);
         if (d === today) b2.classList.add('today');
         if (d === sel) { b2.classList.add('sel'); b2.setAttribute('aria-pressed', 'true'); }
+        else if (d >= rr[0] && d < rr[1]) b2.classList.add('near');   /* the other days shown below: grey */
         if (d + D <= now) b2.classList.add('past');
         if (ev.some(function (e) { return e.s < d + D && e.e > d; })) b2.classList.add('has');
         g.appendChild(b2);
