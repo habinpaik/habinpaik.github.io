@@ -1363,7 +1363,6 @@ section > .fact:last-child { padding-bottom: 0.068em; }   /* the sans list sits 
 /* the time box is one button for the mail: the light shade inside its top; hovering deepens it; a press
    fills the box crimson (words white) and opens the mail */
 
-
 /* in the box the address is just words: no underline, no link of its own -- the box is the button */
 
 /* day <-> night: the page changes at once under a veil of the old ground that fades out (site.js) */
@@ -1852,7 +1851,6 @@ html.selecting a { box-shadow: none !important; background-image: none !importan
 
 /* pointing at it: a light grey highlight sweeps across it from the left; pressing it no longer turns it crimson */
 
-
 /* as the PDF tab: grey words -- the outline's items and the time box (the current item stays on its crimson) */
 .outline a, .outline a:hover { color: var(--stone); }
 
@@ -1913,15 +1911,7 @@ html.selecting a { box-shadow: none !important; background-image: none !importan
    the last, and under it the time and the mail (moved in by site.js) in the outline's own letter */
 .outline li + li { margin-top: 0; border-top: 1px solid var(--line); }
 
-.outline .clock-main {
-  display: block; margin: 0; padding: var(--s2) var(--s2) 0; border-top: 1px solid var(--line);
-  font-family: var(--sans); font-size: var(--t-small); font-weight: 600; line-height: 1.4; color: var(--stone);
-  cursor: pointer; white-space: nowrap; background: none;
-}
-.outline .clock-main .foot-mail { color: inherit; text-decoration: none; background: none; }
-@media (hover: hover) { .outline .clock-main:hover { color: var(--ink); } }
 .outline, .outline-rail { max-width: none; }   /* as wide as its widest line -- the mail address */
-.outline .clock-main { text-box-trim: none; }
 
 /* the outline box, fixed at the screen's far left, in its vertical middle: lines at its top and bottom
    too; its words start on the menu bar's left edge (the gutter); the last update above its first item,
@@ -1933,14 +1923,12 @@ html.selecting a { box-shadow: none !important; background-image: none !importan
   font-weight: 400; color: var(--stone); white-space: nowrap;
 }
 
-.outline .clock-main { padding: var(--s2) var(--s2) var(--s2) var(--gutter); }
-.outline .clock-main time, .outline .clock-main .city { color: color-mix(in srgb, var(--stone) 55%, var(--paper)); transition: color .15s ease; }
-.outline li a, .outline .clock-main {
+.outline li a{
   background-image: var(--shade-light); background-repeat: no-repeat; background-position: 0 0; background-size: 100% 0;
 }
 @media (hover: hover) {
-  .outline li a:hover, .outline .clock-main:hover { background-size: 100% var(--s2); }
-  .outline .clock-main:hover time, .outline .clock-main:hover .city { color: var(--ink); }
+  .outline li a:hover{ background-size: 100% var(--s2); }
+
 }
 html:has(.outline) .site-head .updated { display: none !important; }
 .outline li a, .outline li a:hover, .outline li a.cur { padding-block: var(--s2); width: auto; padding-left: var(--gutter); padding-right: var(--s2); margin: 0; }   /* not a text link's reach past its words: every line starts on the gutter */
@@ -1948,10 +1936,10 @@ html:has(.outline) .site-head .updated { display: none !important; }
    box always ends --s5 short of the text column; where even a small inset won't do, the box hides */
 /* the lines between the rows run from the words' first letter to the box's right end (the end of the
    widest line, the mail); only the box's top and bottom lines reach the screen's edge */
-.outline li, .outline .updated, .outline .clock-main { margin-left: var(--gutter); }
-.outline li a, .outline li a:hover, .outline li a.cur, .outline .updated, .outline .clock-main { padding-left: 0; padding-right: 0; }
+.outline li, .outline .updated{ margin-left: var(--gutter); }
+.outline li a, .outline li a:hover, .outline li a.cur, .outline .updated{ padding-left: 0; padding-right: 0; }
 @media (hover: hover) {
-  .outline li a:hover, .outline li a.cur:hover, .outline .clock-main:hover { background-image: var(--shade-light); background-repeat: no-repeat; background-position: 0 0; background-size: 100% var(--s2); }
+  .outline li a:hover, .outline li a.cur:hover{ background-image: var(--shade-light); background-repeat: no-repeat; background-position: 0 0; background-size: 100% var(--s2); }
 }
 .outline .updated { margin-top: 0; margin-bottom: 0; }
 /* the box shows down to tablet width (from 768px); below, phones, none -- there the page moves over to make
@@ -1959,7 +1947,7 @@ html:has(.outline) .site-head .updated { display: none !important; }
 @media (max-width: 68.75rem) and (min-width: 48rem) { .outline-rail { display: block; } }
 /* the last update and the time with "Always open": one letter -- Pretendard Regular, in the same grey as
    the other rows; the mail stays in the rows' own weight */
-.outline .updated, .outline .clock-main time, .outline .clock-main .city { font-weight: 400; color: var(--stone); }
+.outline .updated{ font-weight: 400; color: var(--stone); }
 body { padding-left: var(--shift, 0px); }   /* the page moved over beside the outline box (tablets; site.js) */
 .hero { margin-left: calc(-1 * var(--shift, 0px)); padding-left: var(--shift, 0px); }   /* Home's photo fills the whole width; its words stay over the text column */
 .sheet { margin-left: calc(-1 * var(--shift, 0px)); padding-left: var(--shift, 0px); }   /* the page under it spans the whole width too, so the photo never shows beside the text */
@@ -1972,15 +1960,14 @@ html.night .outline { --stone: color-mix(in srgb, var(--ink) var(--stone-mix), v
 .outline { border-top: 0; }
 .outline .updated { border-top: 1px solid var(--line); border-bottom: 0; }
 .outline ol { border-block: 1px solid var(--line); }
-.outline .clock-main { border-top: 0; }
 
 /* every hover eases in and out over .15s, and the highlighter is one colour by its ground: on paper the
    lines' grey, on a photo the photos' grey -- Explore More's cells are photos, so theirs is the card news' */
 .pre-foot .pf-name { text-decoration: underline; text-decoration-color: transparent; text-decoration-thickness: 0.5em; text-underline-offset: -0.32em; text-decoration-skip-ink: none; transition: text-decoration-color .15s ease; }
 @media (hover: hover) { .pre-foot ul li a:hover .pf-name { text-decoration-color: var(--hl-photo); } }
 .pre-foot a::after { transition: opacity .15s ease !important; }
-.outline li a, .outline li a:hover, .outline li a.cur, .outline .clock-main { transition: color .15s ease, background-size .15s ease; }
-.outline .clock-main time, .outline .clock-main .city { transition: color .15s ease; }
+.outline li a, .outline li a:hover, .outline li a.cur{ transition: color .15s ease, background-size .15s ease; }
+
 /* ---- text links, in one place ----
    The first selector is every link but the navigation, wordmark, book, photo and story boxes; the second
    also leaves out the headline links and the footer's (they keep the first's box, highlighter and fill). */
@@ -2026,7 +2013,7 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 /* Explore More and the footer: their dark ground runs the whole width too when the page has moved right */
 .pre-foot, .site-foot { margin-left: calc(-1 * var(--shift, 0px)); padding-left: var(--shift, 0px); }
 /* the outline's mail: the same Regular as the time and the last update */
-.outline .clock-main .foot-mail { font-weight: 400; }
+
 /* buttons: the words as far from the side edges as from the top and bottom (--s2), every button alike */
 .filter-btn, .spine-nav button, .shelf-panel .shelf-more button, .shelf-more button, .rail-btn { padding-inline: var(--s2); }
 /* Bookshelf titles: room for two lines under every cover, so a long title never moves the next shelf */
@@ -2106,12 +2093,6 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 .mf-send button:disabled { opacity: .5; cursor: default; }
 .mf-status { color: var(--stone); }
 
-/* the way in: a row in the outline over the time (and a link opening the Contact paragraph) */
-.outline .ol-meet { order: 1; display: block; margin: 0 0 0 var(--gutter); padding: var(--s2) 0; color: var(--stone); text-decoration: none; font-weight: 600;
-  background-image: var(--shade-light); background-repeat: no-repeat; background-size: 100% 0; transition: color .15s ease, background-size .15s ease; }
-.outline .ol-meet[aria-current] { color: var(--ink); }
-@media (hover: hover) { .outline .ol-meet:hover { color: var(--ink); background-size: 100% var(--s2); } }
-.outline .clock-main { order: 2; border-top: 1px solid var(--line); }
 /* Meet: the time line's own line opens the calendar -- no second line under it */
 main > p.meet-now + section { margin-top: 0; }
 main > p.meet-now + section > h2.section-title { border-top: 0; background: none; padding-top: 0; margin-top: 0; }
@@ -2121,3 +2102,9 @@ main > p.meet-now + section > h2.section-title { border-top: 0; background: none
   .cal-nav { flex: 1 1 100%; justify-content: space-between; }
   .cal-title { min-width: 0; }
 }
+/* the outline's last rows: Book a Meeting under the sections; the time and mail gone from the box. The
+   line over the last update runs the box's width; the one under it, short, from the first letter */
+.outline li a[aria-current] { color: var(--ink); }
+.outline .updated { border-top: 0; }
+.outline { border-bottom: 0; }
+.outline::after { content: ""; order: 4; margin-left: var(--gutter); border-top: 1px solid var(--line); }

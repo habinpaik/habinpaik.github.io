@@ -573,10 +573,10 @@ document.addEventListener('touchstart', function () {}, { passive: true });
      with the scroll itself, so it never trails or shakes */
   var rail = document.createElement('div'); rail.className = 'outline-rail';
   nav.appendChild(ol);
-  /* Meet Habin Paik: a row of its own under the sections, over the time */
-  var mt = document.createElement('a'); mt.className = 'ol-meet'; mt.href = '/meet'; mt.textContent = 'Meet Habin Paik';
+  /* the last row: to the Meet page, where a meeting is booked */
+  var mli = document.createElement('li'), mt = document.createElement('a'); mli.className = 'ol-meet'; mt.href = '/meet'; mt.textContent = 'Book a Meeting';
   if (/^\/meet(\.html)?$/.test(location.pathname)) mt.setAttribute('aria-current', 'page');
-  nav.appendChild(mt);
+  mli.appendChild(mt); ol.appendChild(mli);
   rail.appendChild(nav); main.appendChild(rail);
   if (getComputedStyle(main).position === 'static') main.style.position = 'relative';
   var head = document.querySelector('.site-head'), cur = -1;
@@ -678,43 +678,6 @@ document.addEventListener('touchstart', function () {}, { passive: true });
   window.addEventListener('scroll', check, { passive: true }); window.addEventListener('resize', check);
   if (window.visualViewport) window.visualViewport.addEventListener('resize', check);
   check();
-})();
-
-/* the time and mail: inside the section outline wherever it floats on the left (under its last line,
-   the whole box the mail button); elsewhere in the footer, the address a link again */
-(function () {
-  var main = document.querySelector('main.wrap'); if (!main) return;
-  var href = '';
-  /* the address itself is never a link in the box -- plain words (a span); the box carries the mailto */
-  function swap(el, tag) {
-    if (!el || el.tagName.toLowerCase() === tag) return;
-    var n = document.createElement(tag); n.className = el.className; n.textContent = el.textContent;
-    if (tag === 'a') n.href = href;
-    el.parentNode.replaceChild(n, el);
-  }
-  function go(e) {
-    if (!href || !e.currentTarget.closest('.outline')) return;
-    if (e.type === 'keydown') { if (e.key !== 'Enter' && e.key !== ' ') return; e.preventDefault(); }
-    window.location.href = href;
-  }
-  var bound = false;
-  function set() {
-    var cm = document.querySelector('.clock-main'), home = document.querySelector('.clocks');
-    if (!cm || !home) return;
-    if (!bound) { cm.addEventListener('click', go); cm.addEventListener('keydown', go); bound = true; }
-    var ol = document.querySelector('.outline'), olOn = ol && ol.getClientRects().length > 0;
-    if (olOn && !ol.contains(cm)) {
-      var a0 = cm.querySelector('.foot-mail'); if (a0 && a0.href) href = a0.getAttribute('href');
-      ol.appendChild(cm);
-      cm.setAttribute('role', 'link'); cm.tabIndex = 0; swap(a0, 'span');
-      cm.setAttribute('aria-label', 'Email ' + href.replace(/^mailto:/, ''));
-    } else if (!olOn && ol && ol.contains(cm)) {
-      home.insertBefore(cm, home.firstChild); cm.removeAttribute('role'); cm.removeAttribute('tabindex'); cm.removeAttribute('aria-label');
-      swap(cm.querySelector('.foot-mail'), 'a');
-    }
-  }
-  window.addEventListener('resize', set); set();
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(set);
 })();
 
 /* menu shades: each item's distance from its own top up to the top edge of its row in the menu bar
