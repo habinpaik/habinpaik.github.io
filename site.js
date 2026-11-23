@@ -850,3 +850,26 @@ document.addEventListener('touchstart', function () {}, { passive: true });
     root.classList.toggle('selecting', !!(s && !s.isCollapsed && String(s).length));
   });
 })();
+
+/* Frosted bands without a live filter: under each headline laid on a photo, a copy of the photo, blurred
+   once when it loads (an ordinary filter, kept with the page), instead of blurring what lies behind on
+   every frame. The fade and the darkening stay as they were. */
+(function () {
+  var hosts = document.querySelectorAll('.feat-photo, figure.ph.overlay, .overlay-card, .blur-card, .card, .side-photo');
+  if (!hosts.length) return;
+  var ro = window.ResizeObserver ? new ResizeObserver(function (es) { es.forEach(function (e) { var f = e.target.__frost; if (f) f.style.setProperty('--band', e.target.offsetHeight + 'px'); }); }) : null;
+  Array.prototype.forEach.call(hosts, function (host) {
+    var img = host.querySelector('img'); if (!img) return;
+    var side = host.classList.contains('side-photo');
+    var f = document.createElement('span'); f.className = side ? 'frost side' : 'frost'; f.setAttribute('aria-hidden', 'true');
+    var c = document.createElement('img'); c.alt = ''; c.decoding = 'async'; c.loading = img.loading || 'lazy';
+    if (img.referrerPolicy) c.referrerPolicy = img.referrerPolicy;
+    var own = getComputedStyle(img).filter;
+    c.style.filter = 'blur(' + (side ? 2 : 14) + 'px)' + (own && own !== 'none' ? ' ' + own : '');
+    c.src = img.getAttribute('src');
+    f.appendChild(c); img.parentNode.insertBefore(f, img.nextSibling);
+    var band = side ? null : host.querySelector('.cap, figcaption, .card-txt');
+    if (band) { band.__frost = f; f.style.setProperty('--band', band.offsetHeight + 'px'); if (ro) ro.observe(band); }
+  });
+  document.documentElement.classList.add('frost-on');
+})();

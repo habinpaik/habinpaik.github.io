@@ -218,10 +218,10 @@ a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1
 }
 .hero-photo::after { content: ""; position: absolute; inset: 0; background: rgba(0,0,0,var(--hero-dim)); }
 .hero-photo.portrait { --ratio: 1.5; --fy: .40; }        /* 2400x1600, focus: throat */
-.hero-photo.portrait::before { background-image: url("images/hero-portrait.jpg"); }
+.hero-photo.portrait::before { background-image: url("images/hero-portrait-1600.webp"); }
 /* sized to the visible photo area at the moment it appears (set by script) */
 .hero-photo.campus { --ratio: 1.3333; --fy: .65; height: var(--campus-h, 100%); opacity: 0; }   /* 2400x1800, focus: below centre */
-.hero-photo.campus::before { background-image: url("images/hero-campus.jpg"); }
+.hero-photo.campus::before { background-image: url("images/hero-campus-1600.webp"); }
 .hero.campus .hero-photo.campus { opacity: 1; }
 
 .hero .wrap { position: relative; z-index: 1; width: 100%; max-width: 46rem; text-align: right; }
@@ -1646,10 +1646,10 @@ figure.ph.overlay figcaption::before, .overlay-card .cap::before {
    its crimson, laid over its photo. Pointing at a cell enlarges its photo (as the stories do) and the
    strong shade comes along its top. Where a cell is taller than wide, the two photos with the name in
    them are cropped to their right-hand part ---- */
-.pre-foot a[href="/"] { --pf-img: url("images/explore/home.jpg"); }
-.pre-foot a[href="/research"] { --pf-img: url("images/explore/research.jpg"); }
-.pre-foot a[href="/journalism"] { --pf-img: url("images/explore/journalism.jpg"); }
-.pre-foot a[href="/portfolio"] { --pf-img: url("images/explore/portfolio.jpg"); }
+.pre-foot a[href="/"] { --pf-img: url("images/explore/home.webp"); }
+.pre-foot a[href="/research"] { --pf-img: url("images/explore/research.webp"); }
+.pre-foot a[href="/journalism"] { --pf-img: url("images/explore/journalism.webp"); }
+.pre-foot a[href="/portfolio"] { --pf-img: url("images/explore/portfolio.webp"); }
 .pre-foot a { color: var(--on-dark); }
 .pre-foot a::before {
   content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
@@ -2166,3 +2166,36 @@ main > p.meet-now + section > h2.section-title { border-top: 0; background: none
 .cd-zone { white-space: nowrap; }
 /* phones: the When box across the whole width, so its sentence is read in full; Offline / Online under it */
 @media (max-width: 34rem) { .mf-row.mf-when { grid-template-columns: 1fr; } }
+
+/* the two hero photos: 1600px wide (WebP), 2400px only on wide, sharp screens -- the JPEG originals stay in images/ */
+@media (min-width: 64rem) and (min-resolution: 1.5dppx) {
+  .hero-photo.portrait::before { background-image: url("images/hero-portrait-2400.webp"); }
+  .hero-photo.campus::before { background-image: url("images/hero-campus-2400.webp"); }
+}
+
+/* ---- blur without a live filter: nothing on this site needs to see through in real time, so the
+   frosted bands no longer blur what is behind them on every frame (backdrop-filter). Explore More lays a
+   blurred copy of its photo, made in advance (images/explore/*-blur.webp); the story photos get a copy
+   of their own photo, blurred once (site.js, .frost), under the same fade as before ---- */
+.pre-foot li:has(a[href="/"]) { --pf-blur: url("images/explore/home-blur.webp"); }
+.pre-foot li:has(a[href="/research"]) { --pf-blur: url("images/explore/research-blur.webp"); }
+.pre-foot li:has(a[href="/journalism"]) { --pf-blur: url("images/explore/journalism-blur.webp"); }
+.pre-foot li:has(a[href="/portfolio"]) { --pf-blur: url("images/explore/portfolio-blur.webp"); }
+.pre-foot li:not(:has(a[aria-current="page"]))::after {
+  right: 0; width: auto; backdrop-filter: none; -webkit-backdrop-filter: none;
+  background: var(--pf-blur) center / cover no-repeat;
+  -webkit-mask-image: linear-gradient(to right, #000 18%, transparent 60%); mask-image: linear-gradient(to right, #000 18%, transparent 60%);
+}
+.pre-foot li.tall:has(a:is([href="/portfolio"], [href="/journalism"]))::after { background-position: right center; }
+
+html.frost-on .feat-photo::after, html.frost-on .blur-card .cap::before, html.frost-on figure.ph.overlay figcaption::before,
+html.frost-on .overlay-card .cap::before, html.frost-on .card-txt::after, html.frost-on .side-photo::after { backdrop-filter: none; -webkit-backdrop-filter: none; }
+.card-img { position: relative; }
+.frost {
+  position: absolute; inset: 0; overflow: hidden; pointer-events: none;
+  -webkit-mask-image: linear-gradient(to top, #000 calc(var(--band, 55%) * .55), transparent var(--band, 55%));
+          mask-image: linear-gradient(to top, #000 calc(var(--band, 55%) * .55), transparent var(--band, 55%));
+}
+.frost img { display: block; width: 100%; height: 100%; object-fit: cover; transform: scale(1.1); }   /* a little larger: the blur's soft rim falls outside the photo */
+.frost.side { -webkit-mask-image: linear-gradient(to right, #000 25%, transparent 55%); mask-image: linear-gradient(to right, #000 25%, transparent 55%); }
+.frost.side img { transform: scale(1.03); }
