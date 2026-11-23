@@ -31,8 +31,8 @@
 
   var months = main.querySelector('.cal-months'), days = main.querySelector('.cal-days');
   var cal = main.querySelector('section.cal');
-  var impBtn = main.querySelector('.cal-imp'), tip = document.querySelector('.cal-tip');
-  var sel = dayStart(wallNow()), first = monthStart(sel), important = false, cache = [], pending = 0, picked = null;
+  var tip = document.querySelector('.cal-tip');
+  var sel = dayStart(wallNow()), first = monthStart(sel), cache = [], pending = 0, picked = null;
 
   function nMonths() { return phone.matches ? 1 : 2; }
   function nDays() { return phone.matches ? 3 : 5; }
@@ -59,7 +59,7 @@
     fetch(url).then(function (res) { return res.json(); }).then(function (j) {
       cache.push({ a: r[0], b: r[1], ev: (j.events || []).map(function (e) {
         return { t: e.title || 'Busy', s: Date.parse(e.start) + KST, e: Date.parse(e.end) + KST, all: !!e.allDay, free: !!e.free };
-      }) });
+      }).filter(function (e) { return !(e.all && /(['’]s birthday|생일)\s*$/i.test(e.t)); }) });   /* contacts' birthdays: not mine to show */
     }).catch(function () {}).then(function () {
       if (--pending === 0) cal.classList.remove('loading');
       draw();
@@ -74,7 +74,15 @@
     var n = nMonths(), today = dayStart(now), rr = dayRange();
     for (var k = 0; k < n; k++) {
       var m0 = addMonths(first, k), x = f(m0), box = el('div', 'mc');
-      box.appendChild(el('p', 'mc-name', x.y + ' ' + MON[x.m]));   /* 2026 Nov */
+      var hd = el('div', 'mc-head'), py = k ? f(addMonths(first, k - 1)).y : null;
+      var prev = el('button', 'rail-btn cal-prev'), next = el('button', 'rail-btn cal-next');
+      prev.type = next.type = 'button'; prev.setAttribute('aria-label', 'Earlier months'); next.setAttribute('aria-label', 'Later months');
+      prev.innerHTML = '<svg viewBox="0 0 28 12" aria-hidden="true"><path d="M27 6H1M6 1 1 6l5 5"/></svg>';
+      next.innerHTML = '<svg viewBox="0 0 28 12" aria-hidden="true"><path d="M1 6h26M22 1l5 5-5 5"/></svg>';
+      hd.appendChild(k === 0 ? prev : el('span'));
+      hd.appendChild(el('span', 'mc-name', (py === x.y ? '' : x.y + ' ') + MON[x.m]));   /* 2026 Nov, then Dec (a new year named again) */
+      hd.appendChild(k === n - 1 ? next : el('span'));
+      box.appendChild(hd);
       var g = el('div', 'mc-grid');
       ['M', 'T', 'W', 'T', 'F', 'S', 'S'].forEach(function (c) { g.appendChild(el('span', 'mc-dow', c)); });
       var start = m0 - x.dw * D, end = addMonths(m0, 1), ev = eventsIn(m0, end);
@@ -114,18 +122,15 @@
     var r = dayRange(), n = nDays(), today = dayStart(now), ev = eventsIn(r[0], r[1]);
     days.style.setProperty('--days', n);
     /* one line: the two cities over their hours, each day's name over its column; under it the all-day events */
-    var head = el('div', 'cd-head'), allRow = el('div', 'cd-allrow');
+    var head = el('div', 'cd-head');
     head.appendChild(el('span', 'cd-zone', 'Seoul')); head.appendChild(el('span', 'cd-zone', 'NYC'));
-    allRow.appendChild(el('span')); allRow.appendChild(el('span'));
     for (var i = 0; i < n; i++) {
       var d = r[0] + i * D, x = f(d), h = el('span', 'cd-day' + (d === today ? ' today' : '') + (d === sel ? ' sel' : ''), DOW[x.dw] + ' ' + x.d);
-      head.appendChild(h);
       var alls = ev.filter(function (e) { return e.all && e.s < d + D && e.e > d; });
-      var cell = el('span'), chip = el('span', 'cd-allday', alls.length === 1 ? alls[0].t : alls.length > 1 ? alls.length + ' all day' : '');
-      if (alls.length) chip.dataset.tip = alls.map(function (e) { return e.t; }).join(', ') + ', all day';
-      cell.appendChild(chip); allRow.appendChild(cell);
+      if (alls.length) { h.classList.add('has-all'); h.dataset.tip = alls.map(function (e) { return e.t; }).join('\n') + '\nAll day'; }
+      head.appendChild(h);
     }
-    days.appendChild(head); days.appendChild(allRow);
+    days.appendChild(head);
     var body = el('div', 'cd-body');
     /* the hours: 8am, then 9 10 11, 12pm, 1 2 ... -- the period named at the first hour and at noon or midnight */
     ['Asia/Seoul', 'America/New_York'].forEach(function (tz) {
@@ -160,7 +165,7 @@
         b.style.left = 'calc(' + ind + 'px + (100% - ' + ind + 'px) * ' + (e.i / e.n).toFixed(4) + ')';
         b.style.width = 'calc((100% - ' + ind + 'px) / ' + e.n + ' - 2px)';
         b.style.zIndex = 1 + e.lvl;
-        b.dataset.tip = e.t + ', ' + DOW[f(e.s).dw] + ' ' + f(e.s).d + ' ' + MON[f(e.s).m] + ', ' + clock(e.s) + '–' + clock(e.e);
+        b.dataset.tip = e.t + '\n' + DOW[f(e.s).dw] + ' ' + f(e.s).d + ' ' + MON[f(e.s).m] + '\n' + clock(e.s) + '–' + clock(e.e) + (e.free ? '\nCan move' : '');
         col2.appendChild(b);
       });
       if (d === today && now > d + FIRST * H && now < d + LAST * H) {
@@ -172,20 +177,22 @@
     days.appendChild(body);
   }
 
-  function draw() { var now = wallNow(); drawMonths(now); drawDays(now); main.classList.toggle('imp', important); }
+  function draw() { var now = wallNow(); drawMonths(now); drawDays(now); }
   function go() { draw(); load(); }
 
   /* controls */
-  main.querySelector('.cal-prev').addEventListener('click', function () { first = addMonths(first, -nMonths()); go(); });
-  main.querySelector('.cal-next').addEventListener('click', function () { first = addMonths(first, nMonths()); go(); });
-  main.querySelector('.cal-today').addEventListener('click', function () { sel = dayStart(wallNow()); first = monthStart(sel); go(); });
-  impBtn.addEventListener('click', function () { important = !important; impBtn.setAttribute('aria-pressed', important); draw(); });
+    main.querySelector('.cal-today').addEventListener('click', function () { sel = dayStart(wallNow()); first = monthStart(sel); go(); });
   months.addEventListener('click', function (e) {
+    if (e.target.closest('.cal-prev')) { first = addMonths(first, -nMonths()); go(); return; }
+    if (e.target.closest('.cal-next')) { first = addMonths(first, nMonths()); go(); return; }
     var b = e.target.closest('.mc-day[data-day]'); if (!b) return;
     sel = +b.dataset.day; go();
   });
   days.addEventListener('click', function (e) {
     var slot = e.target.closest('.cd-slot');
+    if (!slot && e.target.closest('.cd-ev.free')) {   /* an event that can move: the hour under it can be picked */
+      slot = document.elementsFromPoint(e.clientX, e.clientY).filter(function (n) { return n.classList && n.classList.contains('cd-slot'); })[0];
+    }
     if (!slot || slot.disabled) return;
     var at = +slot.dataset.at, x = f(at);
     picked = at;
@@ -234,6 +241,7 @@
   form.message.addEventListener('input', fit);
   form.addEventListener('submit', function (e) {
     e.preventDefault();
+    var important = !!(e.submitter && e.submitter.dataset.imp === '1');
     var data = { name: form.name.value.trim(), email: form.email.value.trim(), when: form.when.value.trim(), message: form.message.value.trim(), mode: mode, important: important, website: form.website.value };
     if (!data.name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email) || !data.message) {
       status.textContent = !data.name ? 'Your name, please.' : !data.message ? 'A few words, please.' : 'An email I can reply to, please.';
@@ -241,11 +249,11 @@
       return;
     }
     if (!EP) {
-      var body = 'Name: ' + data.name + '\nEmail: ' + data.email + '\nWhere: ' + data.mode + (data.important ? ' (important)' : '') + '\nWhen: ' + (data.when || '-') + '\n\n' + data.message;
-      location.href = 'mailto:downbeen100@korea.ac.kr?subject=' + encodeURIComponent((data.important ? '[중요] ' : '') + '미팅을 요청받았습니다. (hpaik.me)') + '&body=' + encodeURIComponent(body);
+      var body = 'Name: ' + data.name + '\nEmail: ' + data.email + '\nImportant: ' + (data.important ? 'Yes' : 'No') + '\nWhere: ' + data.mode + '\nWhen: ' + (data.when || '-') + '\n\n' + data.message;
+      location.href = 'mailto:downbeen100@korea.ac.kr?subject=' + encodeURIComponent('[중요] 미팅을 요청받았습니다. (hpaik.me)') + '&body=' + encodeURIComponent(body);
       return;
     }
-    var btn = form.querySelector('button[type=submit]'); btn.disabled = true; status.textContent = 'Sending…';
+    var btns = form.querySelectorAll('button[type=submit]'); [].forEach.call(btns, function (b) { b.disabled = true; }); status.textContent = 'Sending…';
     fetch(EP, { method: 'POST', body: JSON.stringify(data) })   /* text/plain: no preflight */
       .then(function (r) { return r.json(); })
       .then(function (j) {
@@ -254,6 +262,6 @@
         form.message.value = ''; form.when.value = ''; fit();
       })
       .catch(function () { status.textContent = 'Could not send. Please write to downbeen100@korea.ac.kr.'; })
-      .then(function () { btn.disabled = false; });
+      .then(function () { [].forEach.call(btns, function (b) { b.disabled = false; }); });
   });
 })();
