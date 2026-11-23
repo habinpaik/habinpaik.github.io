@@ -30,7 +30,7 @@
   }
 
   var months = main.querySelector('.cal-months'), days = main.querySelector('.cal-days');
-  var title = main.querySelector('.cal-title'), cal = main.querySelector('section.cal');
+  var cal = main.querySelector('section.cal');
   var impBtn = main.querySelector('.cal-imp'), tip = document.querySelector('.cal-tip');
   var sel = dayStart(wallNow()), first = monthStart(sel), important = false, cache = [], pending = 0, picked = null;
 
@@ -71,11 +71,9 @@
   function drawMonths(now) {
     months.textContent = '';
     var n = nMonths(), today = dayStart(now), rr = dayRange();
-    var a = f(first), b = f(addMonths(first, n - 1));
-    title.textContent = a.y === b.y ? a.y : a.y + ' – ' + b.y;   /* the year only: each month is named over its days */
     for (var k = 0; k < n; k++) {
       var m0 = addMonths(first, k), x = f(m0), box = el('div', 'mc');
-      box.appendChild(el('p', 'mc-name', MON[x.m]));
+      box.appendChild(el('p', 'mc-name', x.y + ' ' + MON[x.m]));   /* 2026 Nov */
       var g = el('div', 'mc-grid');
       ['M', 'T', 'W', 'T', 'F', 'S', 'S'].forEach(function (c) { g.appendChild(el('span', 'mc-dow', c)); });
       var start = m0 - x.dw * D, end = addMonths(m0, 1), ev = eventsIn(m0, end);
@@ -114,18 +112,19 @@
     days.textContent = '';
     var r = dayRange(), n = nDays(), today = dayStart(now), ev = eventsIn(r[0], r[1]);
     days.style.setProperty('--days', n);
-    var head = el('div', 'cd-head');
+    /* one line: the two cities over their hours, each day's name over its column; under it the all-day events */
+    var head = el('div', 'cd-head'), allRow = el('div', 'cd-allrow');
     head.appendChild(el('span', 'cd-zone', 'Seoul')); head.appendChild(el('span', 'cd-zone', 'NYC'));
+    allRow.appendChild(el('span')); allRow.appendChild(el('span'));
     for (var i = 0; i < n; i++) {
-      var d = r[0] + i * D, x = f(d), h = el('span', 'cd-day' + (d === today ? ' today' : '') + (d === sel ? ' sel' : ''));
-      h.appendChild(el('b', null, DOW[x.dw])); h.appendChild(document.createTextNode(' ' + x.d));
-      var alls = ev.filter(function (e) { return e.all && e.s < d + D && e.e > d; });   /* all-day: a chip under the day's name */
-      var chip = el('span', 'cd-allday', alls.length === 1 ? alls[0].t : alls.length > 1 ? alls.length + ' all day' : '');
-      if (alls.length) chip.dataset.tip = alls.map(function (e) { return e.t; }).join(', ') + ', all day';
-      h.appendChild(chip);
+      var d = r[0] + i * D, x = f(d), h = el('span', 'cd-day' + (d === today ? ' today' : '') + (d === sel ? ' sel' : ''), DOW[x.dw] + ' ' + x.d);
       head.appendChild(h);
+      var alls = ev.filter(function (e) { return e.all && e.s < d + D && e.e > d; });
+      var cell = el('span'), chip = el('span', 'cd-allday', alls.length === 1 ? alls[0].t : alls.length > 1 ? alls.length + ' all day' : '');
+      if (alls.length) chip.dataset.tip = alls.map(function (e) { return e.t; }).join(', ') + ', all day';
+      cell.appendChild(chip); allRow.appendChild(cell);
     }
-    days.appendChild(head);
+    days.appendChild(head); days.appendChild(allRow);
     var body = el('div', 'cd-body');
     /* the hours: 8am, then 9 10 11, 12pm, 1 2 ... -- the period named at the first hour and at noon or midnight */
     ['Asia/Seoul', 'America/New_York'].forEach(function (tz) {

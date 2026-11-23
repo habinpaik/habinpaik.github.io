@@ -2051,7 +2051,6 @@ a:where(:not(.nav a, .wordmark, .bk, .book, .overlay-card, .feat-photo, .side-he
 main > p.meet-now + section { margin-top: 0; }
 main > p.meet-now + section > h2.section-title { border-top: 0; background: none; padding-top: 0; margin-top: 0; }
 .meet-now a { color: inherit; }
-.cal-note { margin: 0 0 var(--s4); font-family: var(--sans); font-size: var(--t-small); color: var(--stone); }
 /* the bar: where the calendar is, and its arrows, on the left; the important-meeting switch on the right */
 .cal-bar { display: flex; justify-content: space-between; align-items: center; gap: var(--s3); flex-wrap: wrap; margin-bottom: var(--s4); }
 .cal-nav { display: flex; align-items: center; gap: var(--s2); font-family: var(--sans); font-size: var(--t-small); }
@@ -2088,7 +2087,6 @@ main > p.meet-now + section > h2.section-title { border-top: 0; background: none
 .cd-body { padding-top: 0.5em; }
 .cd-hours { position: relative; height: calc(var(--cal-row) * 16); }
 .cd-hours span { position: absolute; right: 6px; transform: translateY(-50%); line-height: 1; font-size: 0.75rem; color: var(--stone); white-space: nowrap; }
-.cd-hours span.noon { color: var(--ink); font-weight: 600; }
 .cd-col { position: relative; border-left: 1px solid var(--line); }
 .cd-col:last-child { border-right: 1px solid var(--line); }
 .cd-slot { display: block; width: 100%; height: var(--cal-row); margin: 0; padding: 0; border: 0; border-top: 1px solid var(--line); background: none; cursor: pointer; transition: background-color .15s ease; }
@@ -2105,7 +2103,7 @@ main > p.meet-now + section > h2.section-title { border-top: 0; background: none
 }
 /* asking for an important meeting: the events that can move fade back, and their hours can be picked */
 main.imp .cd-ev.free { opacity: .3; pointer-events: none; }
-.cd-now { position: absolute; left: 0; right: 0; height: 0; border-top: 2px solid var(--crimson); pointer-events: none; z-index: 9; }
+.cd-now { position: absolute; left: 0; right: 0; height: 0; border-top: 1px solid var(--crimson); pointer-events: none; z-index: 9; }
 
 /* the form: no labels -- each box names itself, all of one size and one letter, as the buttons */
 .meet-form { display: flex; flex-direction: column; gap: var(--s3); font-family: var(--sans); font-size: var(--t-small); }
@@ -2123,13 +2121,7 @@ main.imp .cd-ev.free { opacity: .3; pointer-events: none; }
 .meet-form textarea { resize: none; overflow: hidden; min-height: calc(3 * 1.6em + 6px); display: block; }
 .mf-trap { position: absolute !important; left: -9999px; width: 1px; height: 1px; opacity: 0; }
 .mf-send { display: flex; align-items: center; gap: var(--s3); margin: 0; }
-.mf-send button {
-  font: 600 var(--t-small)/1.6 var(--sans); color: var(--ink);
-  border: 1px solid var(--ink); border-radius: 0; padding: 2px var(--s2); cursor: pointer;
-  background: linear-gradient(var(--crimson), var(--crimson)) no-repeat 0 100% / 100% 0;
-  transition: background-size .15s ease, color .15s ease, border-color .15s ease;
-}
-.mf-send button:hover { background-size: 100% 100%; color: var(--on-fill); border-color: var(--crimson); }
+.mf-send button { --cat: var(--ink); }
 .mf-send button:disabled { opacity: .5; cursor: default; }
 .mf-status { color: var(--stone); }
 .cal-today { --cat: var(--ink); margin-left: var(--s2); }
@@ -2142,3 +2134,13 @@ main.imp .cd-ev.free { opacity: .3; pointer-events: none; }
   content: attr(data-loading); position: absolute; left: 0; right: 0; top: 0; text-align: center;
   padding-top: var(--s6); color: var(--stone);
 }
+/* the calendar all in black: arrows and their borders, days, weekdays, hours, cities */
+.cal-nav .rail-btn, .cal-nav .rail-btn:hover { color: var(--ink); border-color: var(--ink); }
+.mc-day, .mc-day.past, .mc-day.today, .cd-zone, .cd-day, .cd-day.today, .cd-hours span { color: var(--ink); }
+.mc-day.today { font-weight: 700; }
+.mc-day.sel { color: var(--paper); }
+.cd-head { grid-template-columns: var(--hrs) var(--hrs) repeat(var(--days, 5), minmax(0, 1fr)); align-items: baseline; padding-bottom: 4px; }
+.cd-day { display: block; text-align: center; font-weight: 600; white-space: nowrap; overflow: hidden; }
+.cd-allrow { display: grid; grid-template-columns: var(--hrs) var(--hrs) repeat(var(--days, 5), minmax(0, 1fr)); padding-bottom: var(--s2); }
+.cd-allrow > span { display: flex; justify-content: center; min-width: 0; }
+.mf-imp { margin: 0 0 var(--s4); }
