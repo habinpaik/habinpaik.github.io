@@ -87,10 +87,23 @@
         cell.dataset.at = at;
         col.appendChild(cell);
       }
-      ev.forEach(function (e) {
-        if (e.all || e.e <= d + FIRST * H || e.s >= d + LAST * H) return;
+      /* events at the same time sit side by side: each cluster of overlapping events shares the column */
+      var todays = ev.filter(function (e) { return !e.all && e.e > d + FIRST * H && e.s < d + LAST * H; })
+        .sort(function (a, b) { return a.s - b.s || b.e - a.e; });
+      var cl = [], clEnd = 0;
+      todays.forEach(function (e) {
+        if (!cl.length || e.s >= clEnd) { cl.push([]); clEnd = 0; }
+        var group = cl[cl.length - 1], lane = 0;
+        while (group.some(function (o) { return o.lane === lane && o.e > e.s; })) lane++;
+        e.lane = lane; group.push(e); clEnd = Math.max(clEnd, e.e);
+      });
+      cl.forEach(function (g) { var n = 0; g.forEach(function (e) { n = Math.max(n, e.lane + 1); }); g.forEach(function (e) { e.lanes = n; }); });
+      todays.forEach(function (e) {
         var s = Math.max(e.s, d + FIRST * H), en = Math.min(e.e, d + LAST * H);
         var b = el('span', 'cw-ev');
+        b.style.left = 'calc(2px + (100% - 4px) * ' + (e.lane / e.lanes) + ')';
+        b.style.width = 'calc((100% - 4px) / ' + e.lanes + ' - ' + (e.lanes > 1 ? 2 : 0) + 'px)';
+        b.style.right = 'auto';
         b.style.top = 'calc(var(--cal-row) * ' + ((s - d) / H - FIRST).toFixed(3) + ')';
         b.style.height = 'calc(var(--cal-row) * ' + Math.max((en - s) / H, 0.5).toFixed(3) + ' - 2px)';
         b.appendChild(el('span', 'cw-t', e.t)); b.appendChild(el('span', 'cw-when', hhmm(e.s) + '–' + hhmm(e.e)));
